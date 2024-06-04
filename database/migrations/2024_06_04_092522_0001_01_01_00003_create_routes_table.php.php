@@ -10,8 +10,14 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
-        //
+    {       
+        Schema::create('routes', function (Blueprint $table) {
+            $table->id();
+            
+            $table->string('start_point');
+            
+            $table->string('end_point');
+        });
     }
 
     /**
@@ -19,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::dropIfExists('routes');
     }
 };
