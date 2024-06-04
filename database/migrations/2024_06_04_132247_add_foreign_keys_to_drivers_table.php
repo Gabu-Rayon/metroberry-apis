@@ -11,7 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
+        Schema::table('drivers', function (Blueprint $table) {
+            $table->foreign('vehicle_id')->references('id')->on('vehicles');
+        });
     }
 
     /**
@@ -19,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
+        Schema::table('drivers', function (Blueprint $table) {
+            //
+        });
     }
 };
