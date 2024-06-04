@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('contact'); 
             $table->string('password'); 
             $table->string('avatar')->nullable(); 
-            $table->foreignId('car_id')->constrained('cars'); 
             $table->string('nhif_no'); 
             $table->string('nssf_no'); 
             $table->string('kra_pin');
