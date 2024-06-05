@@ -78,32 +78,106 @@ class VehicleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Vehicle $vehicle)
-    {
-        //
-    }
+    public function show($id, Request $request) {
+        try {
+            $user = $request->user();
+            $driver = $user->driver;
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Vehicle $vehicle)
-    {
-        //
+            Log::info('DRIVER INFO');
+            Log::info($driver);
+
+            $vehicle = $driver->vehicle;
+
+            Log::info('DRIVER VEHICLE INFO');
+            Log::info($vehicle);
+
+            if (!$vehicle) {
+                return response()->json([
+                    'error' => 'Driver has no vehicle'
+                ], 404);
+            }
+
+            return response()->json([
+                'vehicle' => $vehicle
+            ], 200);
+        } catch (Exception $e) {
+            Log::error('ERROR FETCHING VEHICLE');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Error occurred while fetching vehicle',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Vehicle $vehicle)
-    {
-        //
+    public function update(Request $request, $id) {
+        try {
+            $vehicle = Vehicle::find($id);
+
+            if (!$vehicle) {
+                return response()->json([
+                    'error' => 'Vehicle not found'
+                ], 404);
+            }
+
+            $data = $request->validate([
+                'make' => 'required|string',
+                'model' => 'required|string',
+                'year' => 'required|integer',
+                'color' => 'required|string',
+                'plate_number' => 'required|string',
+                'seats' => 'required|integer',
+                'fuel_type' => 'required|string',
+                'engine_size' => 'required|string',
+            ]);
+
+            Log::info('VEHICLE VALIDATION DATA');
+            Log::info($data);
+
+            $vehicle->update($data);
+
+            return response()->json([
+                'message' => 'Vehicle updated successfully',
+                'vehicle' => $vehicle
+            ], 200);
+        } catch (Exception $e) {
+            Log::error('ERROR UPDATING VEHICLE');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Error occurred while updating vehicle',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Vehicle $vehicle)
-    {
-        //
+    public function destroy($id) {
+        try {
+            $vehicle = Vehicle::find($id);
+
+            if (!$vehicle) {
+                return response()->json([
+                    'error' => 'Vehicle not found'
+                ], 404);
+            }
+
+            $vehicle->delete();
+
+            return response()->json([
+                'message' => 'Vehicle deleted successfully'
+            ], 200);
+        } catch (Exception $e) {
+            Log::error('ERROR DELETING VEHICLE');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Error occurred while deleting vehicle',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }
