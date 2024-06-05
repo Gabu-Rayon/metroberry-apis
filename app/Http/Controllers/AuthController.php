@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\Driver;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -39,6 +40,12 @@ class AuthController extends Controller {
             Log::info($role);
 
             $user->assignRole($role);
+
+            if ($role->name === 'driver') {
+                Driver::create([
+                    'user_id' => $user->id
+                ]);
+            }
 
             $token = $user->createToken('auth_token')->plainTextToken;
 

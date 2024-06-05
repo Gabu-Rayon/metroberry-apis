@@ -10,20 +10,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('drivers', function (Blueprint $table) {
-            $table->id(); 
-            $table->string('name');
-            $table->string('email')->unique(); 
-            $table->string('contact'); 
-            $table->string('password'); 
-            $table->string('avatar')->nullable(); 
-            $table->string('nhif_no'); 
-            $table->string('nssf_no'); 
-            $table->string('kra_pin');
-            $table->string('license_no'); 
-            $table->date('license_expiry_date');
-            $table->timestamps();
-        });
+        // Schema::create('drivers', function (Blueprint $table) {
+        //     $table->id(); 
+        //     $table->string('name');
+        //     $table->string('email')->unique(); 
+        //     $table->string('contact'); 
+        //     $table->string('password'); 
+        //     $table->string('avatar')->nullable(); 
+        //     $table->string('nhif_no'); 
+        //     $table->string('nssf_no'); 
+        //     $table->string('kra_pin');
+        //     $table->string('license_no'); 
+        //     $table->date('license_expiry_date');
+        //     $table->timestamps();
+        // });
     }
 
     /**

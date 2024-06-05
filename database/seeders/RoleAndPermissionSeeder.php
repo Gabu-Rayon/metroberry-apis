@@ -22,6 +22,7 @@ class RoleAndPermissionSeeder extends Seeder
         $permissions = [
             'view vehicles',
             'create vehicles',
+            'show vehicle',
             'create customer',
             'create organisation',
             'create driver',
@@ -70,6 +71,7 @@ class RoleAndPermissionSeeder extends Seeder
         ]);
 
         $driver->givePermissionTo([
+            'show vehicle',
             'start trip',
             'end trip',
         ]);

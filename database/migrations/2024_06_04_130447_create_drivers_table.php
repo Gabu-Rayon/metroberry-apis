@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('drivers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('license');
-            $table->date('license_expiry');
+            $table->string('license')->unique()->nullable();
+            $table->date('license_expiry')->nullable();
             $table->string('nhif_number')->nullable();
             $table->string('nssf_number')->nullable();
             $table->string('kra_pin')->nullable();
-            $table->unsignedBigInteger('vehicle_id');
+            $table->unsignedBigInteger('vehicle_id')->nullable();
             $table->timestamps();
         });
     }

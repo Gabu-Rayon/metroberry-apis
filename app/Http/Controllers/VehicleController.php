@@ -78,17 +78,36 @@ class VehicleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Vehicle $vehicle)
-    {
-        //
-    }
+    public function show($id, Request $request) {
+        try {
+            $user = $request->user();
+            $driver = $user->driver;
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Vehicle $vehicle)
-    {
-        //
+            Log::info('DRIVER INFO');
+            Log::info($driver);
+
+            $vehicle = $driver->vehicle;
+
+            Log::info('DRIVER VEHICLE INFO');
+            Log::info($vehicle);
+
+            if (!$vehicle) {
+                return response()->json([
+                    'error' => 'Driver has no vehicle'
+                ], 404);
+            }
+
+            return response()->json([
+                'vehicle' => $vehicle
+            ], 200);
+        } catch (Exception $e) {
+            Log::error('ERROR FETCHING VEHICLE');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Error occurred while fetching vehicle',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
