@@ -12,17 +12,25 @@ class RoleAndPermissionSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void {
+    public function run(): void
+    {
+        $roles = [
+            'admin',
+            'organisation',
+            'customer',
+            'driver'
+        ];
 
-        $admin = Role::create(['name' => 'admin']);
-        $organisation = Role::create(['name' => 'organisation']);
-        $customer = Role::create(['name' => 'customer']);
-        $driver = Role::create(['name' => 'driver']);
+        foreach ($roles as $roleName) {
+            Role::firstOrCreate(['name' => $roleName]);
+        }
 
         $permissions = [
             'view vehicles',
             'create vehicles',
             'show vehicle',
+            'edit vehicle',
+            'delete vehicle',
             'create customer',
             'create organisation',
             'create driver',
@@ -35,12 +43,19 @@ class RoleAndPermissionSeeder extends Seeder
         ];
 
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission]);
+            Permission::firstOrCreate(['name' => $permission]);
         }
 
-        $admin->givePermissionTo([
+        $admin = Role::where('name', 'admin')->first();
+        $organisation = Role::where('name', 'organisation')->first();
+        $customer = Role::where('name', 'customer')->first();
+        $driver = Role::where('name', 'driver')->first();
+
+        $admin->syncPermissions([
             'view vehicles',
             'create vehicles',
+            'edit vehicle',
+            'delete vehicle',
             'create customer',
             'create organisation',
             'create driver',
@@ -52,9 +67,11 @@ class RoleAndPermissionSeeder extends Seeder
             'end trip',
         ]);
 
-        $organisation->givePermissionTo([
+        $organisation->syncPermissions([
             'view vehicles',
             'create vehicles',
+            'edit vehicle',
+            'delete vehicle',
             'create driver',
             'create route',
             'view routes',
@@ -64,13 +81,13 @@ class RoleAndPermissionSeeder extends Seeder
             'end trip',
         ]);
 
-        $customer->givePermissionTo([
+        $customer->syncPermissions([
             'view routes',
             'create trip',
             'view trips',
         ]);
 
-        $driver->givePermissionTo([
+        $driver->syncPermissions([
             'show vehicle',
             'start trip',
             'end trip',
