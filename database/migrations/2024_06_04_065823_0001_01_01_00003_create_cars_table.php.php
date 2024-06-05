@@ -47,20 +47,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('vehicles', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('driver_id')->nullable();
-            $table->string('model');
-            $table->string('make');
-            $table->year('year');
-            $table->string('plate_number');
-            $table->string('color');
-            $table->integer('seats');
-            $table->string('fuel_type');
-            $table->string('engine_size');
-            $table->string('status');
-            $table->timestamps();
-        });
+        // Schema::create('vehicles', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->unsignedBigInteger('driver_id')->nullable();
+        //     $table->string('model');
+        //     $table->string('make');
+        //     $table->year('year');
+        //     $table->string('plate_number');
+        //     $table->string('color');
+        //     $table->integer('seats');
+        //     $table->string('fuel_type');
+        //     $table->string('engine_size');
+        //     $table->string('status');
+        //     $table->timestamps();
+        // });
     }
 
     /**
