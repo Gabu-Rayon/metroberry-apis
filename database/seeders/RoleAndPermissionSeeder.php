@@ -49,6 +49,7 @@ class RoleAndPermissionSeeder extends Seeder
             'view trips',
             'start trip',
             'end trip',
+            'view organisations',
         ]);
 
         $organisation->givePermissionTo([

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\AddRouteController;
+use App\Http\Controllers\OrganisationController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -19,3 +20,6 @@ Route::post('vehicles', [VehicleController::class, 'store'])->middleware(['auth:
 
 Route::get('routes', [AddRouteController::class, 'index'])->middleware(['auth:sanctum', 'can:view routes']);
 Route::post('routes', [AddRouteController::class, 'store'])->middleware(['auth:sanctum', 'can:create route']);
+
+Route::get('organisation', [OrganisationController::class, 'index'])->middleware(['auth:sanctum', 'can:view organisations']);
+Route::post('organisation', [OrganisationController::class, 'store'])->middleware(['auth:sanctum', 'can:create organisation']);
