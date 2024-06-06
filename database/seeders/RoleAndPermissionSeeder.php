@@ -67,6 +67,13 @@ class RoleAndPermissionSeeder extends Seeder
             'manage drivers',
             'manage orginisations',
             'manage vehicles',
+            'update profile',
+            'reset password',
+            'update avatar',
+            'book trip',
+            'cancel trip',
+            'update trip',
+            
         ];
 
         foreach ($permissions as $permission) {
@@ -121,6 +128,9 @@ class RoleAndPermissionSeeder extends Seeder
             'manage drivers',
             'manage orginisations',
             'manage vehicles',
+            'book trip',
+            'cancel trip',
+            'update trip',
         ]);
 
         $organisation->syncPermissions([
@@ -143,6 +153,12 @@ class RoleAndPermissionSeeder extends Seeder
             'view routes',
             'create trip',
             'view trips',
+            'book trip',
+            'cancel trip',
+            'update trip',
+            'update profile',
+            'reset password',
+            'update avatar',
         ]);
 
         $driver->syncPermissions([
