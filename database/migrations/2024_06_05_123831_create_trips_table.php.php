@@ -12,26 +12,26 @@ return new class extends Migration {
     {
         Schema::create('trips', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('customer_id');
-            $table->string('customer_organisation_code');
-            $table->string('customer_contact');
-            $table->text('home_address');
-            $table->unsignedBigInteger('vehicle_id');
-            $table->string('car_class');
-            $table->unsignedBigInteger('driver_id');
-            $table->string('car_license_plate');
-            $table->string('preferred_route');
-            $table->time('pick_up_time');
-            $table->date('drop_off_or_pick_up_date');
-            $table->enum('pick_up_location', ['Home', 'Office']);
-            $table->float('mileage_gps');
-            $table->float('mileage_can');
-            $table->float('engine_hours_gps');
-            $table->float('engine_hours_can');
-            $table->float('can_distance_till_service');
-            $table->float('average_fuel_consumption_litre_per_km');
-            $table->float('average_fuel_consumption_litre_per_hour');
-            $table->float('average_fuel_consumption_kg_per_km');
+            $table->unsignedBigInteger('customer_id')->nullable();
+            $table->string('customer_organisation_code')->nullable();
+            $table->string('customer_contact')->nullable();
+            $table->text('home_address')->nullable();
+            $table->unsignedBigInteger('vehicle_id')->nullable();
+            $table->string('vehicle_class')->nullable();
+            $table->unsignedBigInteger('driver_id')->nullable();
+            $table->string('car_license_plate')->nullable();
+            $table->string('preferred_route')->nullable();
+            $table->time('pick_up_time')->nullable();
+            $table->date('drop_off_or_pick_up_date')->nullable();
+            $table->enum('pick_up_location', ['Home', 'Office'])->nullable();
+            $table->float('mileage_gps')->nullable();
+            $table->float('mileage_can')->nullable();
+            $table->float('engine_hours_gps')->nullable();
+            $table->float('engine_hours_can')->nullable();
+            $table->float('can_distance_till_service')->nullable();
+            $table->float('average_fuel_consumption_litre_per_km')->nullable();
+            $table->float('average_fuel_consumption_litre_per_hour')->nullable();
+            $table->float('average_fuel_consumption_kg_per_km')->nullable();
             $table->timestamps();
 
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');

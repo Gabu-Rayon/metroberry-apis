@@ -26,6 +26,11 @@ Route::post('customerCancelTrip', [CustomerController::class, 'cancelTrip']);
 Route::post('customerBookTrip', [CustomerController::class, 'bookTrip']);
 Route::post('customerUpdateBookedTrip', [CustomerController::class, 'updateBookedTrip']);
 
+Route::post('verifyEmail', [CustomerController::class, 'verifyEmail']);
+Route::post('resendEmailVerification', [CustomerController::class, 'resendEmailVerification']);
+Route::post('verifyPhone', [CustomerController::class, 'verifyPhone']);
+Route::post('resendPhoneVerification', [CustomerController::class, 'resendPhoneVerification']);
+
 
 // Route::get('customerLogin', [CustomerController::class, 'index'])->middleware(['auth:sanctum', 'can:can login']);
 // Route::post('customerLogin', [CustomerController::class, 'store'])->middleware(['auth:sanctum', 'can:can view login page']);

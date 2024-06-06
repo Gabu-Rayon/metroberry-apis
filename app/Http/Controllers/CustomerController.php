@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Exception;
+use App\Models\Trip;
 use App\Models\User;
 use App\Models\Customer;
 use Illuminate\Support\Str;
@@ -11,69 +12,13 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 class CustomerController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
-
-
     public function customerLogin(Request $request)
     {
         $request->validate([
@@ -234,31 +179,27 @@ class CustomerController extends Controller
     /***
      *Customer A Book A trip 
      */
-
     public function bookTrip(Request $request)
     {
         $request->validate([
-            'destination' => 'required|string',
-            'pickup_location' => 'required|string',
-            'trip_date' => 'required|date',
-            'trip_time' => 'required|string',
+            'vehicle_id' => 'required|exists:vehicles,id',
+            'driver_id' => 'required|exists:drivers,id',
+            'start_location' => 'required|string',
+            'end_location' => 'required|string',
+            'start_time' => 'required|date_format:Y-m-d H:i:s',
         ]);
 
-        $user = Auth::user();
-
         $trip = Trip::create([
-            'customer_id' => $user->customer->id,
-            'destination' => $request->destination,
-            'pickup_location' => $request->pickup_location,
-            'trip_date' => $request->trip_date,
-            'trip_time' => $request->trip_time,
+            'customer_id' => Auth::id(),
+            'vehicle_id' => $request->vehicle_id,
+            'driver_id' => $request->driver_id,
+            'start_location' => $request->start_location,
+            'end_location' => $request->end_location,
+            'start_time' => $request->start_time,
             'status' => 'booked',
         ]);
 
-        return response()->json([
-            'message' => 'Trip booked successfully',
-            'trip' => $trip
-        ], 201);
+        return response()->json(['message' => 'Trip booked successfully', 'trip' => $trip], 201);
     }
     /**
      * Customer Cancel A trip 
@@ -270,44 +211,135 @@ class CustomerController extends Controller
             'trip_id' => 'required|exists:trips,id',
         ]);
 
-        $trip = Trip::where('id', $request->trip_id)
-            ->where('customer_id', Auth::user()->customer->id)
-            ->first();
+        $trip = Trip::where('id', $request->trip_id)->where('customer_id', Auth::id())->first();
 
         if (!$trip) {
-            return response()->json(['message' => 'Trip not found'], 404);
+            return response()->json(['message' => 'Trip not found or not authorized to cancel'], 404);
         }
 
-        $trip->update(['status' => 'canceled']);
+        $trip->status = 'canceled';
+        $trip->save();
 
         return response()->json(['message' => 'Trip canceled successfully'], 200);
     }
     /***
-     * 
+     * Customer Update Booked Trip
      */
 
     public function updateBookedTrip(Request $request)
     {
         $request->validate([
             'trip_id' => 'required|exists:trips,id',
-            'destination' => 'sometimes|string',
-            'pickup_location' => 'sometimes|string',
-            'trip_date' => 'sometimes|date',
-            'trip_time' => 'sometimes|string',
+            'vehicle_id' => 'required|exists:vehicles,id',
+            'driver_id' => 'required|exists:drivers,id',
+            'start_location' => 'required|string',
+            'end_location' => 'required|string',
+            'start_time' => 'required|date_format:Y-m-d H:i:s',
         ]);
 
-        $trip = Trip::where('id', $request->trip_id)
-            ->where('customer_id', Auth::user()->customer->id)
-            ->first();
+        $trip = Trip::where('id', $request->trip_id)->where('customer_id', Auth::id())->first();
 
         if (!$trip) {
-            return response()->json(['message' => 'Trip not found'], 404);
+            return response()->json(['message' => 'Trip not found or not authorized to update'], 404);
         }
 
-        $trip->update($request->only('destination', 'pickup_location', 'trip_date', 'trip_time'));
+        $trip->vehicle_id = $request->vehicle_id;
+        $trip->driver_id = $request->driver_id;
+        $trip->start_location = $request->start_location;
+        $trip->end_location = $request->end_location;
+        $trip->start_time = $request->start_time;
+        $trip->save();
 
         return response()->json(['message' => 'Trip updated successfully', 'trip' => $trip], 200);
     }
 
 
+
+    /*****
+     * Email Verification Process
+     */
+
+    public function verifyEmail(Request $request)
+    {
+        $request->validate([
+            'verification_token' => 'required|string'
+        ]);
+
+        $user = User::where('verification_token', $request->verification_token)->first();
+
+        if (!$user) {
+            return response()->json(['message' => 'Invalid verification token'], 400);
+        }
+
+        $user->email_verified_at = now();
+        $user->verification_token = null;
+        $user->email_status = true;
+        $user->save();
+
+        return response()->json(['message' => 'Email verified successfully'], 200);
+    }
+
+    public function resendEmailVerification(Request $request)
+    {
+        $user = Auth::user();
+
+        if ($user->email_status) {
+            return response()->json(['message' => 'Email already verified'], 400);
+        }
+
+        $user->verification_token = Str::random(60);
+        $user->save();
+
+        // Send email verification link
+        Mail::send('emails.verify', ['token' => $user->verification_token], function ($message) use ($user) {
+            $message->to($user->email);
+            $message->subject('Email Verification');
+        });
+
+        return response()->json(['message' => 'Verification email resent'], 200);
+    }
+
+    /****
+     * phone Verification
+     */
+
+
+    public function verifyPhone(Request $request)
+    {
+        $request->validate([
+            'verification_code' => 'required|string'
+        ]);
+
+        $user = Auth::user();
+
+        if ($user->phone_verification_code !== $request->verification_code) {
+            return response()->json(['message' => 'Invalid verification code'], 400);
+        }
+
+        $user->phone_verified_at = now();
+        $user->phone_verification_code = null;
+        $user->phone_status = true;
+        $user->save();
+
+        return response()->json(['message' => 'Phone verified successfully'], 200);
+    }
+
+    public function resendPhoneVerification(Request $request)
+    {
+        $user = Auth::user();
+
+        if ($user->phone_status) {
+            return response()->json(['message' => 'Phone already verified'], 400);
+        }
+
+        $user->phone_verification_code = Str::random(6);
+        $user->save();
+
+        // Send phone verification code via SMS
+        Log::info("Sending phone verification code {$user->phone_verification_code} to phone number {$user->phone}");
+
+        // Assume an SMS sending service is integrated here.
+
+        return response()->json(['message' => 'Verification code resent'], 200);
+    }
 }

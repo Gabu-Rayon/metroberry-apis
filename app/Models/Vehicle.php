@@ -35,4 +35,9 @@ class Vehicle extends Model
     {
         return $this->belongsTo(Driver::class);
     }
+
+    public function trips()
+    {
+        return $this->hasMany(Trip::class);
+    }
 }

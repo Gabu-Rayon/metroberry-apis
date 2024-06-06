@@ -14,4 +14,14 @@ class Customer extends Model
         'organisation_id',
         'customer_roganisation_code',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function trips()
+    {
+        return $this->hasMany(Trip::class);
+    }
 }
