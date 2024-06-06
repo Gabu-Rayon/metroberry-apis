@@ -47,11 +47,23 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'phone_verified_at' => 'datetime',
+            'phone_status' => 'boolean',
+            'email_status' => 'boolean',
+            'organisation_status' => 'boolean',
             'password' => 'hashed',
         ];
     }
 
     public function driver() {
         return $this->hasOne(Driver::class);
+    }
+
+    public function customer() {
+        return $this->hasOne(Customer::class);
+    }
+
+    public function organisation() {
+        return $this->hasOne(Organisation::class);
     }
 }
