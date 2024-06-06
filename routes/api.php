@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CustomerLoginController;
+use App\Http\Controllers\CustomerController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,7 +14,15 @@ use App\Http\Controllers\CustomerLoginController;
 |
 */
 
-Route::post('customerLogin', [CustomerLoginController::class,'customerLogin']);
+Route::post('customerLogin', [CustomerController::class,'customerLogin']);
+Route::post('customerUpdateProfile', [CustomerController::class, 'customerUpdateProfile']);
+Route::post('customeresetPassword', [CustomerController::class,'resetPassword']);
+Route::post('customerUpdateProfileAvatar', [CustomerController::class, 'customerUpdateProfileAvatar']);
+Route::post('customerBookTrip', [CustomerController::class, 'bookTrip']);
+Route::post('customerCancelTrip', [CustomerController::class, 'cancelTrip']);
+Route::post('customerBookTrip', [CustomerController::class, 'bookTrip']);
+Route::post('customerUpdateBookedTrip', [CustomerController::class, 'updateBookedTrip']);
 
-// Route::get('customerLogin', [CustomerLoginController::class, 'index'])->middleware(['auth:sanctum', 'can:can login']);
-// Route::post('customerLogin', [CustomerLoginController::class, 'store'])->middleware(['auth:sanctum', 'can:can view login page']);
+
+// Route::get('customerLogin', [CustomerController::class, 'index'])->middleware(['auth:sanctum', 'can:can login']);
+// Route::post('customerLogin', [CustomerController::class, 'store'])->middleware(['auth:sanctum', 'can:can view login page']);

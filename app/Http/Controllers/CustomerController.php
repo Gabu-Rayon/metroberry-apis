@@ -9,7 +9,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
-class CustomerLoginController extends Controller
+class CustomerController extends Controller
 {
     /**
      * Display a listing of the resource.
