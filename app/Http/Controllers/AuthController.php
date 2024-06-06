@@ -12,17 +12,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller {
-
-    public function register (Request $request) {
+    
+    public function register(Request $request) {
         try {
+            
+            DB::beginTransaction();
 
             $userdata = $request->validate([
                 'name' => 'required|string',
                 'email' => 'required|email|unique:users',
                 'password' => 'required|string',
-                'phone' => 'required|string|',
+                'phone' => 'required|string',
                 'role' => 'required|string|exists:roles,name',
                 'organisation_id' => 'required_if:role,customer|exists:organisations,id'
             ]);
@@ -63,24 +66,27 @@ class AuthController extends Controller {
                 ]);
             }
 
+            DB::commit();
+
             $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json([
                 'access_token' => $token,
                 'token_type' => 'Bearer',
-                'user' => $user,
             ], 201);
 
+    } catch (Exception $e) {
+        DB::rollBack();
 
-        } catch (Exception $e) {
-            Log::error('ERROR REGISTERING USERS');
-            Log::error($e);
-            return response()->json([
-                'message' => 'An error occurred while registering user',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        Log::error('ERROR REGISTERING USERS');
+        Log::error($e);
+        return response()->json([
+            'message' => 'An error occurred while registering user',
+            'error' => $e->getMessage()
+        ], 500);
     }
+}
+
 
     public function login (Request $request) {
         try {
@@ -105,7 +111,6 @@ class AuthController extends Controller {
             return response()->json([
                 'access_token' => $token,
                 'token_type' => 'Bearer',
-                'user' => $user,
             ], 200);
 
             

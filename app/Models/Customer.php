@@ -12,8 +12,8 @@ class Customer extends Model
 
     protected $fillable = [
         'user_id',
-         'organisation_id',
-         'customer_organisation_code',
+        'organisation_id',
+        'customer_organisation_code',
     ];
 
     protected $hidden = [
@@ -29,5 +29,9 @@ class Customer extends Model
 
     public function user() {
         return $this->belongsTo(User::class);
+    }
+
+    public function organisation() {
+        return $this->belongsTo(Organisation::class);
     }
 }

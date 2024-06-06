@@ -25,7 +25,7 @@ class User extends Authenticatable
         'password',
         'phone',
         'address',
-        'avatar'
+        'avatar',
     ];
 
     /**
@@ -68,5 +68,14 @@ class User extends Authenticatable
 
     public function organisation() {
         return $this->hasOne(Organisation::class);
+    }
+
+    public static function boot () {
+        parent::boot();
+        static::deleting(function($user) {
+            $user->driver()->delete();
+            $user->customer()->delete();
+            $user->organisation()->delete();
+        });
     }
 }
