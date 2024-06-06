@@ -11,7 +11,5 @@ class Organisation extends Model
     protected $table = 'organisations';
     protected $fillable = [
         'user_id',
-        'status',
-        'created_by',
     ];
 }
