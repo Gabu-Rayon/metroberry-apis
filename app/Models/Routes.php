@@ -5,13 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Customer extends Model
+class Routes extends Model
 {
     use HasFactory;
-    protected $table = 'customers';
+    protected $table = 'routes';
     protected $fillable = [
-        'user_id',
-        'organisation_id',
-        'customer_roganisation_code',
+       'county',
+       'location',
+       'start_location',
+       'end_location'
     ];
 }
