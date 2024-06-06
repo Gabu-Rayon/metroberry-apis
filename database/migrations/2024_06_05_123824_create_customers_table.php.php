@@ -12,6 +12,10 @@ return new class extends Migration {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->bigInteger('organisation_id');
+            $table->bigInteger('customer_organisation_code');
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->timestamps();
         });
     }
 

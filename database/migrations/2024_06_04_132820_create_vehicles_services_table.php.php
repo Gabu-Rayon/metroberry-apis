@@ -25,6 +25,7 @@ return new class extends Migration {
         //     $table->string('company_invoice_no');
         //     $table->date('servicing_date');
         //     $table->string('invoice_qr_code_url');
+        // $table->foreign('created_by')->references('id')->on('users');.
         //     $table->timestamps();
 
         //     $table->foreign('car_id')->references('id')->on('cars')->onDelete('cascade');

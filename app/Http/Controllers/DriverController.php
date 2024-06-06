@@ -15,20 +15,21 @@ class DriverController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index() {
+    public function index()
+    {
         try {
             $user = User::find(Auth::id());
             if ($user->hasRole('admin')) {
                 $drivers = Driver::all();
             } else {
-                $drivers = Driver::where('organisation_id', $user->organization_id)->get();
+                $drivers = Driver::where('user_id', $user->user_id)->get();
             }
 
             return response()->json([
                 'drivers' => $drivers
             ], 200);
-        } catch (\Exception $e) {
-            Log::error('VIEW DRIVERS ERROR');
+        } catch (Exception $e) {
+            Log::error('VIEW Organisation ERROR');
             Log::error($e);
             return response()->json([
                 'message' => 'An error occurred',
@@ -40,39 +41,41 @@ class DriverController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         try {
 
-                $creator = Organisation::find(Auth::id());
+            $creator = Organisation::find(Auth::id());
 
-                Log::info('CREATOR');
-                Log::info($creator);
+            Log::info('CREATOR');
+            Log::info($creator);
 
-                $data = $request->validate([
-                    'name' => 'required|string',
-                    'email' => 'required|email|unique:users,email',
-                    'phone' => 'required|string',
-                    'password' => 'required|string',
-                ]);
-    
-                $user = User::create([
-                    'name' => $data['name'],
-                    'email' => $data['email'],
-                    'phone' => $data['phone'],
-                    'password' => bcrypt($data['password']),
-                ]);
-    
-                $user->assignRole('driver');
-    
-                $driver = Driver::create([
-                    'user_id' => $user->id,
-                    'organisation_id' => $creator? $creator->id : $request->organisation_id,
-                ]);
+            $data = $request->validate([
+                'name' => 'required|string',
+                'email' => 'required|email|unique:users,email',
+                'phone' => 'required|string',
+                'password' => 'required|string',
+            ]);
 
-                return response()->json([
-                    'message' => 'Driver created successfully',
-                    'driver' => $driver
-                ], 201);
+            $user = User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'phone' => $data['phone'],
+                'password' => bcrypt($data['password']),
+            ]);
+
+            $user->assignRole('organisation');
+
+            $driver = Driver::create([
+                'user_id' => $user->id,
+                'created_by' => Auth::id(),
+                'status' => 'inactive'
+            ]);
+
+            return response()->json([
+                'message' => 'Driver created successfully',
+                'driver' => $driver
+            ], 201);
         } catch (Exception $e) {
             Log::error('CREATE DRIVER ERROR');
             Log::error($e);
@@ -86,7 +89,8 @@ class DriverController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Driver $driver) {
+    public function show(Driver $driver)
+    {
         try {
             return response()->json([
                 'driver' => $driver
@@ -104,7 +108,8 @@ class DriverController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Driver $driver) {
+    public function update(Request $request, Driver $driver)
+    {
         try {
             $data = $request->validate([
                 'name' => 'required|string',
@@ -135,7 +140,8 @@ class DriverController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Driver $driver) {
+    public function destroy(Driver $driver)
+    {
         try {
             $driver->user->delete();
             $driver->delete();

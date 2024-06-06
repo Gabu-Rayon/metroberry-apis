@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\User;
+use App\Models\Organisation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,28 @@ class OrganisationController extends Controller
      */
     public function index()
     {
-        
+        try {
+            $organisation = Organisation::where('created_by', Auth::id())->get();
+            return response()->json([
+                'Organisations' => $organisation
+            ], 200);
+        } catch (Exception $e) {
+            Log::error('ERROR FETCHING Organisation');
+            Log::error($e);
+            try {
+                $organisation = Organisation::where('created_by', Auth::id())->get();
+                return response()->json([
+                    'All Organisations' => $organisation
+                ], 200);
+            } catch (Exception $e) {
+                Log::error('ERROR FETCHING Organisations');
+                Log::error($e);
+                return response()->json([
+                    'message' => 'Error occurred while fetching All Organisations',
+                    'error' => $e->getMessage()
+                ], 500);
+            }
+        }
     }
 
     /**
@@ -32,8 +54,53 @@ class OrganisationController extends Controller
      */
     public function store(Request $request)
     {
-        
+        try {
+            // Validate the incoming request data
+            $data = $request->validate([
+                'name' => 'required|string',
+                'email' => 'required|email|unique:users,email',
+                'phone' => 'required|string',
+                'password' => 'required|string',
+            ]);
+
+            // Log the user creating the organisation
+            $adminUser = User::where('id', auth()->user()->id)->first();
+            Log::info('User with role of Admin Creating the Organisation');
+            Log::info($adminUser);
+
+            // Create a new user
+            $user = User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'phone' => $data['phone'],
+                'password' => bcrypt($data['password']),
+            ]);
+
+            // Create a new organisation
+            $organisation = Organisation::create([
+                // user_id is the id of organisation in the users table
+                'user_id' => $user->id,
+                // created_by is the id of user with role of admin in the users table
+                'created_by' => Auth::id(),
+            ]);
+
+            // Save the organisation
+            $organisation->save();
+
+            return response()->json([
+                'message' => 'Organisation created successfully',
+                'organisation' => $organisation
+            ], 201);
+        } catch (Exception $e) {
+            Log::error('Error Creating Organisation');
+            Log::error($e);
+            return response()->json([
+                'message' => 'An error occurred while creating organisation',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
+
 
 
     /**

@@ -44,6 +44,10 @@ class CustomerController extends Controller
     public function store(Request $request) {
        try {
 
+            // Log the authenticated user ID
+            $authenticatedUserId = Auth::id();
+            Log::info('Authenticated User ID: ' . $authenticatedUserId);
+
         $data = $request->validate([
             'name' => 'required|string',
             'email' => 'required|email|unique:users,email',
@@ -52,7 +56,7 @@ class CustomerController extends Controller
         ]);
 
         $organisation = Organisation::where('user_id', auth()->user()->id)->first();
-        Log::info('ORGANISATION');
+        Log::info('User with role of ORGANISATION Creating the Customer');
         Log::info($organisation);
 
         $user = User::create([
@@ -65,7 +69,12 @@ class CustomerController extends Controller
         $customer = Customer::create([
             'user_id' => $user->id,
             'organisation_id' => $organisation->id,
+            //Can be generated from Company Initial name
+            'customer_organisation_code' => "Org230",
+            'created_by' => Auth::id(),
         ]);
+
+        $customer->save();
 
         return response()->json([
             'message' => 'Customer created successfully',

@@ -13,76 +13,90 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Role;
 
-class AuthController extends Controller {
+class AuthController extends Controller
+{
 
-    public function register (Request $request) {
-        try {
+   public function register(Request $request)
+{
+    try {
+        $userdata = $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|string',
+            'phone' => 'required|string',
+            'role' => 'required|string|exists:roles,name',
+            'organisation_id' => 'required_if:role,customer|exists:organisations,id'
+        ]);
 
-            $userdata = $request->validate([
-                'name' => 'required|string',
-                'email' => 'required|email|unique:users',
-                'password' => 'required|string',
-                'phone' => 'required|string|',
-                'role' => 'required|string|exists:roles,name',
-                'organisation_id' => 'required_if:role,customer|exists:organisations,id'
-            ]);
+        Log::info('USER DATA');
+        Log::info($userdata);
 
-            Log::info('USER DATA');
-            Log::info($userdata);
+        $user = User::create([
+            'name' => $userdata['name'],
+            'email' => $userdata['email'],
+            'password' => bcrypt($userdata['password']),
+            'phone' => $userdata['phone']
+        ]);
 
-            $user = User::create([
-                'name' => $userdata['name'],
-                'email' => $userdata['email'],
-                'password' => bcrypt($userdata['password']),
-                'phone' => $userdata['phone']
-            ]);
+        $role = Role::findByName($userdata['role'], 'web');
 
-            $role = Role::findByName($userdata['role'], 'web');
+        Log::info('ROLE');
+        Log::info($role);
 
-            Log::info('ROLE');
-            Log::info($role);
+        // Log the authenticated user ID
+        $authenticatedUserId = $user->id;
+        Log::info('Authenticated User ID: ' . $authenticatedUserId);
 
-            $user->assignRole($role);
-
-            if ($role->name === 'driver') {
-                Driver::create([
-                    'user_id' => $user->id
-                ]);
-            }
-
-            if ($role->name === 'organisation') {
-                Organisation::create([
-                    'user_id' => $user->id
-                ]);
-            }
-
-            if ($role->name === 'customer') {
-                Customer::create([
-                    'user_id' => $user->id,
-                    'organisation_id' => $userdata['organisation_id']
-                ]);
-            }
-
-            $token = $user->createToken('auth_token')->plainTextToken;
-
-            return response()->json([
-                'access_token' => $token,
-                'token_type' => 'Bearer',
-                'user' => $user,
-            ], 201);
-
-
-        } catch (Exception $e) {
-            Log::error('ERROR REGISTERING USERS');
-            Log::error($e);
-            return response()->json([
-                'message' => 'An error occurred while registering user',
-                'error' => $e->getMessage()
-            ], 500);
+        // Check if a user is authenticated
+        if (!$authenticatedUserId) {
+            throw new Exception('No authenticated user found.');
         }
-    }
 
-    public function login (Request $request) {
+        $user->assignRole($role);
+
+        if ($role->name === 'driver') {
+            Driver::create([
+                'user_id' => $user->id,
+                'created_by' => $authenticatedUserId,
+            ]);
+        }
+
+        if ($role->name === 'organisation') {
+            Organisation::create([
+                'user_id' => $user->id,
+                'created_by' => $authenticatedUserId,
+            ]);
+        }
+
+        if ($role->name === 'customer') {
+            Customer::create([
+                'user_id' => $user->id,
+                'organisation_id' => $userdata['organisation_id'],
+                'customer_organisation_code' => "Org202",
+                'created_by' => $authenticatedUserId,
+            ]);
+        }
+
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'Bearer',
+            'user' => $user,
+        ], 201);
+
+    } catch (Exception $e) {
+        Log::error('ERROR REGISTERING USERS');
+        Log::error($e);
+        return response()->json([
+            'message' => 'An error occurred while registering user',
+            'error' => $e->getMessage()
+        ], 500);
+    }
+}
+
+    public function login(Request $request)
+    {
         try {
             $credentials = $request->validate([
                 'email' => 'required|email',
@@ -101,14 +115,14 @@ class AuthController extends Controller {
 
             Log::info('USER LOGGED IN PERMISSIONS');
             Log::info($user->getAllPermissions());
-            
+
             return response()->json([
                 'access_token' => $token,
                 'token_type' => 'Bearer',
                 'user' => $user,
             ], 200);
 
-            
+
         } catch (Exception $e) {
             Log::error('ERROR LOGGING IN USERS');
             Log::error($e);

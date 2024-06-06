@@ -11,6 +11,7 @@ class Organisation extends Model
     protected $table = 'organisations';
     protected $fillable = [
         'user_id',
+        'created_by',
     ];
 
     public function user() {

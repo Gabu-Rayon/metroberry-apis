@@ -11,13 +11,7 @@ class Driver extends Model
 
     protected $fillable = [
         'user_id',
-        'organisation_id',
-        'vehicle_id',
-        'license',
-        'license_expiry',
-        'nhif_number',
-        'nssf_number',
-        'kra_pin',
+        'created_by',
     ];
 
     public function user() {
