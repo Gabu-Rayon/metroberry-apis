@@ -12,7 +12,7 @@ class Customer extends Model
     protected $fillable = [
         'user_id',
         'organisation_id',
-        'customer_roganisation_code',
+        'customer_organisation_code',
     ];
 
     public function user()
