@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Driver;
+use App\Models\Organisation;
 use App\Models\Vehicle;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class VehicleController extends Controller
@@ -16,7 +18,7 @@ class VehicleController extends Controller
      */
     public function index() {
         try {
-            $vehicles = Vehicle::where('created_by', Auth::id())->get();
+            $vehicles = Vehicle::where('organisation_id', auth()->user()->organisation->id)->get();
             return response()->json([
                 'vehicles' => $vehicles
             ], 200);
@@ -32,8 +34,19 @@ class VehicleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request) {
+    public function store (Request $request) {
+
         try {
+            $organisation = Organisation::where('user_id', auth()->user()->id)->first();
+
+            Log::info('ORGANISATION');
+            Log::info($organisation);
+
+            if (!$organisation) {
+                return response()->json([
+                    'message' => 'Unauthorised',
+                ], 401);
+            }
 
             $data = $request->validate([
                 'make' => 'required|string',
@@ -49,7 +62,10 @@ class VehicleController extends Controller
             Log::info('VEHICLE VALIDATION DATA');
             Log::info($data);
 
+            DB::beginTransaction();
+
             $vehicle = Vehicle::create([
+                'organisation_id' => $organisation->id,
                 'make' => $data['make'],
                 'model' => $data['model'],
                 'year' => $data['year'],
@@ -62,11 +78,18 @@ class VehicleController extends Controller
                 'status' => 'inactive'
             ]);
 
+            Log::info('VEHICLE');
+            Log::info($vehicle);
+
+            DB::commit();
+
             return response()->json([
                 'message' => 'Vehicle created successfully',
                 'vehicle' => $vehicle
             ], 201);
+
         } catch (Exception $e) {
+            DB::rollBack();
             Log::error('ERROR CREATING VEHICLE');
             Log::error($e);
             return response()->json([
@@ -117,11 +140,18 @@ class VehicleController extends Controller
     public function update(Request $request, $id) {
         try {
             $vehicle = Vehicle::find($id);
+            $organisation = Organisation::where('user_id', auth()->user()->id)->first();
 
             if (!$vehicle) {
                 return response()->json([
-                    'error' => 'Vehicle not found'
+                    'message' => 'Vehicle not found',
                 ], 404);
+            }
+
+            if (!$organisation || $vehicle->organisation_id !== $organisation->id) {
+                return response()->json([
+                    'message' => 'Unauthorised',
+                ], 401);
             }
 
             $data = $request->validate([
@@ -135,15 +165,22 @@ class VehicleController extends Controller
                 'engine_size' => 'required|string',
             ]);
 
-            Log::info('VEHICLE VALIDATION DATA');
-            Log::info($data);
+            $vehicle->make = $data['make'];
+            $vehicle->model = $data['model'];
+            $vehicle->year = $data['year'];
+            $vehicle->color = $data['color'];
+            $vehicle->plate_number = $data['plate_number'];
+            $vehicle->seats = $data['seats'];
+            $vehicle->fuel_type = $data['fuel_type'];
+            $vehicle->engine_size = $data['engine_size'];
 
-            $vehicle->update($data);
+            $vehicle->save();
 
             return response()->json([
                 'message' => 'Vehicle updated successfully',
                 'vehicle' => $vehicle
             ], 200);
+
         } catch (Exception $e) {
             Log::error('ERROR UPDATING VEHICLE');
             Log::error($e);
@@ -160,11 +197,19 @@ class VehicleController extends Controller
     public function destroy($id) {
         try {
             $vehicle = Vehicle::find($id);
+            $organisation = Organisation::where('user_id', auth()->user()->id)->first();
+
 
             if (!$vehicle) {
                 return response()->json([
                     'error' => 'Vehicle not found'
                 ], 404);
+            }
+
+            if (!$organisation || $vehicle->organisation_id !== $organisation->id) {
+                return response()->json([
+                    'message' => 'Unauthorised',
+                ], 401);
             }
 
             $vehicle->delete();
@@ -190,6 +235,7 @@ class VehicleController extends Controller
         try {
 
             $car = Vehicle::find($vehicle);
+            $organisation = Organisation::where('user_id', auth()->user()->id)->first();
 
             $data = $request->validate([
                 'driver_id' => 'required|integer'
@@ -205,6 +251,18 @@ class VehicleController extends Controller
                 return response()->json([
                     'error' => 'Vehicle already has a driver'
                 ], 400);
+            }
+
+            if (!$organisation) {
+                return response()->json([
+                    'message' => 'Unauthorised',
+                ], 401);
+            }
+
+            if ($car->organisation_id !== $organisation->id) {
+                return response()->json([
+                    'message' => 'Unauthorised',
+                ], 401);
             }
 
             $driver = Driver::find($data['driver_id']);
