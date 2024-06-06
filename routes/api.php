@@ -15,8 +15,11 @@ use App\Http\Controllers\CustomerController;
 */
 
 Route::post('customerLogin', [CustomerController::class,'customerLogin']);
-Route::post('customerUpdateProfile', [CustomerController::class, 'customerUpdateProfile']);
-Route::post('customeresetPassword', [CustomerController::class,'resetPassword']);
+Route::post('customerUpdateProfile/{id}/', [CustomerController::class, 'customerUpdateProfile']);
+
+Route::post('password/email', [CustomerController::class, 'sendResetLinkEmail']);
+Route::post('password/reset', [CustomerController::class, 'reset']);
+
 Route::post('customerUpdateProfileAvatar', [CustomerController::class, 'customerUpdateProfileAvatar']);
 Route::post('customerBookTrip', [CustomerController::class, 'bookTrip']);
 Route::post('customerCancelTrip', [CustomerController::class, 'cancelTrip']);
