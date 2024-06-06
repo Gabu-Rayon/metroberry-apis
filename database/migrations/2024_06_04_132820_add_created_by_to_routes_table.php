@@ -11,22 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('organisations', function (Blueprint $table) {
-            $table->id();
-            $table->string('organisation_name');
-            $table->string('location');
-            $table->string('address');
-            $table->boolean('status')->default(false);
-            $table->timestamps();
+        Schema::table('routes', function (Blueprint $table) {
+            $table->unsignedBigInteger('created_by')->after('id');
+
+            $table->foreign('created_by')->references('id')->on('users');
         });
     }
-
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('organisations');
+        Schema::table('vehicles', function (Blueprint $table) {
+            //
+        });
     }
 };
