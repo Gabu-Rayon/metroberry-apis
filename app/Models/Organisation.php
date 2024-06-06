@@ -29,4 +29,14 @@ class Organisation extends Model
     public function customers() {
         return $this->hasMany(Customer::class);
     }
+
+    protected static function boot() {
+        parent::boot();
+        static::deleting(function($organisation) {
+            $organisation->drivers()->delete();
+            $organisation->vehicles()->delete();
+            $organisation->customers()->delete();
+            $organisation->user()->delete();
+        });
+    }
 }
