@@ -46,3 +46,6 @@ Route::delete('drivers/{driver}', [DriverController::class, 'destroy'])->middlew
 Route::get('drivers/{driver}', [DriverController::class, 'show'])->middleware(['auth:sanctum', 'can:show driver']);
 
 Route::get('customers', [CustomerController::class, 'index'])->middleware(['auth:sanctum', 'can:view customers']);
+Route::post('customers', [CustomerController::class, 'store'])->middleware(['auth:sanctum', 'can:create customer']);
+Route::post('customers/{id}', [CustomerController::class, 'show'])->middleware(['auth:sanctum', 'can:view customer']);
+Route::put('customers/{customer}', [CustomerController::class, 'update'])->middleware(['auth:sanctum', 'can:edit customer']);
