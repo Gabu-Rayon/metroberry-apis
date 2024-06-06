@@ -55,7 +55,7 @@ class RoleAndPermissionSeeder extends Seeder
             'edit route',
             'delete route',
             'view reports',
-            'create trip',
+            'create trip',            
             'view trips',
             'show trip',
             'edit trip',
@@ -73,7 +73,7 @@ class RoleAndPermissionSeeder extends Seeder
             'book trip',
             'cancel trip',
             'update trip',
-
+            
         ];
 
         foreach ($permissions as $permission) {
