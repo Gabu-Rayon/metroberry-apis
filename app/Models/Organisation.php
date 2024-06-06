@@ -12,6 +12,17 @@ class Organisation extends Model
     protected $fillable = [
         'user_id',
         'status',
-        'created_by',
     ];
+
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
+
+    public function drivers() {
+        return $this->hasMany(Driver::class);
+    }
+
+    public function vehicles() {
+        return $this->hasMany(Vehicle::class);
+    }
 }

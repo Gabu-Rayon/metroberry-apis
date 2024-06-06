@@ -9,21 +9,21 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('customers', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('username');
-            $table->string('email')->unique();
-            $table->foreignId('organisation_id')->constrained('organisations');
-            $table->string('customer_organisation_code');
-            $table->string('contact');
-            $table->string('home_address');
-            $table->string('password');
-            $table->string('avatar')->nullable(); 
-            $table->boolean('is_email_verified')->default(false); 
-            $table->boolean('is_contact_verified')->default(false);
-            $table->timestamps();
-        });
+        // Schema::create('customers', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->string('name');
+        //     $table->string('username');
+        //     $table->string('email')->unique();
+        //     $table->foreignId('organisation_id')->constrained('organisations');
+        //     $table->string('customer_organisation_code');
+        //     $table->string('contact');
+        //     $table->string('home_address');
+        //     $table->string('password');
+        //     $table->string('avatar')->nullable(); 
+        //     $table->boolean('is_email_verified')->default(false); 
+        //     $table->boolean('is_contact_verified')->default(false);
+        //     $table->timestamps();
+        // });
     }
 
     /**

@@ -11,6 +11,7 @@ class Vehicle extends Model
 
     protected $fillable = [
         'driver_id',
+        'organisation_id',
         'model',
         'make',
         'year',
@@ -33,5 +34,9 @@ class Vehicle extends Model
     
     public function driver() {
         return $this->belongsTo(Driver::class);
+    }
+
+    public function organisation() {
+        return $this->belongsTo(Organisation::class);
     }
 }

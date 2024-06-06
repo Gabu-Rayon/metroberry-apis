@@ -3,6 +3,7 @@
 use App\Http\Controllers\AddRouteController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerLoginController;
+use App\Http\Controllers\DriverController;
 use App\Http\Controllers\OrganisationController;
 use App\Http\Controllers\VehicleController;
 use Illuminate\Http\Request;
@@ -36,3 +37,9 @@ Route::post('customerLogin', [CustomerLoginController::class,'customerLogin']);
 
 // Route::get('customerLogin', [CustomerLoginController::class, 'index'])->middleware(['auth:sanctum', 'can:can login']);
 // Route::post('customerLogin', [CustomerLoginController::class, 'store'])->middleware(['auth:sanctum', 'can:can view login page']);
+
+Route::get('drivers', [DriverController::class, 'index'])->middleware(['auth:sanctum', 'can:view drivers']);
+Route::post('drivers', [DriverController::class, 'store'])->middleware(['auth:sanctum', 'can:create driver']);
+Route::put('drivers/{driver}', [DriverController::class, 'update'])->middleware(['auth:sanctum', 'can:edit driver']);
+Route::delete('drivers/{driver}', [DriverController::class, 'destroy'])->middleware(['auth:sanctum', 'can:delete driver']);
+Route::get('drivers/{driver}', [DriverController::class, 'show'])->middleware(['auth:sanctum', 'can:show driver']);

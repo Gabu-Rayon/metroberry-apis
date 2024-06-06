@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\LoginRequest;
 use App\Models\Driver;
+use App\Models\Organisation;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -43,6 +44,12 @@ class AuthController extends Controller {
 
             if ($role->name === 'driver') {
                 Driver::create([
+                    'user_id' => $user->id
+                ]);
+            }
+
+            if ($role->name === 'organisation') {
+                Organisation::create([
                     'user_id' => $user->id
                 ]);
             }
