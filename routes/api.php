@@ -15,3 +15,7 @@ use App\Http\Controllers\CustomerLoginController;
 */
 
 Route::post('customerLogin', [CustomerLoginController::class,'customerLogin']);
+
+
+// Route::get('customerLogin', [CustomerLoginController::class, 'index'])->middleware(['auth:sanctum', 'can:can login']);
+// Route::post('customerLogin', [CustomerLoginController::class, 'store'])->middleware(['auth:sanctum', 'can:can view login page']);
