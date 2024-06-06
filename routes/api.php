@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AddRouteController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerLoginController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\OrganisationController;
@@ -43,3 +44,5 @@ Route::post('drivers', [DriverController::class, 'store'])->middleware(['auth:sa
 Route::put('drivers/{driver}', [DriverController::class, 'update'])->middleware(['auth:sanctum', 'can:edit driver']);
 Route::delete('drivers/{driver}', [DriverController::class, 'destroy'])->middleware(['auth:sanctum', 'can:delete driver']);
 Route::get('drivers/{driver}', [DriverController::class, 'show'])->middleware(['auth:sanctum', 'can:show driver']);
+
+Route::get('customers', [CustomerController::class, 'index'])->middleware(['auth:sanctum', 'can:view customers']);

@@ -25,4 +25,8 @@ class Organisation extends Model
     public function vehicles() {
         return $this->hasMany(Vehicle::class);
     }
+
+    public function customers() {
+        return $this->hasMany(Customer::class);
+    }
 }

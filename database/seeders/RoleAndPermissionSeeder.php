@@ -73,7 +73,7 @@ class RoleAndPermissionSeeder extends Seeder
             'book trip',
             'cancel trip',
             'update trip',
-            
+            'view drivers'
         ];
 
         foreach ($permissions as $permission) {
@@ -93,8 +93,6 @@ class RoleAndPermissionSeeder extends Seeder
             'delete vehicle',
             'assign driver',
             'view drivers',
-            'create customer',
-            'view customers',
             'show customer',
             'edit customer',
             'delete customer',
@@ -124,7 +122,6 @@ class RoleAndPermissionSeeder extends Seeder
             'start trip',
             'end trip',
             'manage trips',
-            'manage customers',
             'manage drivers',
             'manage orginisations',
             'manage vehicles',
@@ -141,6 +138,8 @@ class RoleAndPermissionSeeder extends Seeder
             'assign driver',
             'create driver',
             'view drivers',
+            'create customer',
+            'view customers',
             'create route',
             'view routes',
             'create trip',

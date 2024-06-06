@@ -12,15 +12,7 @@ return new class extends Migration {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->string('name');
-            $table->string('username');
-            $table->string('email')->unique();
-            $table->foreignId('organisation_id')->constrained('organisations');
-            $table->string('customer_organisation_code');
-            $table->string('contact');
-            $table->string('home_address');
-            $table->string('password');
-            $table->string('avatar')->nullable(); 
+            $table->foreignId('organisation_id')->constrained('organisations')->onDelete('cascade')->nullable();
             $table->boolean('is_email_verified')->default(false); 
             $table->boolean('is_contact_verified')->default(false);
             $table->timestamps();
