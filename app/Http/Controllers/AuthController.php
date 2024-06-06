@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Auth\LoginRequest;
+use App\Models\Customer;
 use App\Models\Driver;
+use App\Models\Organisation;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -21,7 +23,8 @@ class AuthController extends Controller {
                 'email' => 'required|email|unique:users',
                 'password' => 'required|string',
                 'phone' => 'required|string|',
-                'role' => 'required|string|exists:roles,name'
+                'role' => 'required|string|exists:roles,name',
+                'organisation_id' => 'required_if:role,customer|exists:organisations,id'
             ]);
 
             Log::info('USER DATA');
@@ -44,6 +47,19 @@ class AuthController extends Controller {
             if ($role->name === 'driver') {
                 Driver::create([
                     'user_id' => $user->id
+                ]);
+            }
+
+            if ($role->name === 'organisation') {
+                Organisation::create([
+                    'user_id' => $user->id
+                ]);
+            }
+
+            if ($role->name === 'customer') {
+                Customer::create([
+                    'user_id' => $user->id,
+                    'organisation_id' => $userdata['organisation_id']
                 ]);
             }
 

@@ -11,6 +11,7 @@ class Driver extends Model
 
     protected $fillable = [
         'user_id',
+        'organisation_id',
         'vehicle_id',
         'license',
         'license_expiry',
@@ -25,5 +26,9 @@ class Driver extends Model
 
     public function vehicle() {
         return $this->hasOne(Vehicle::class);
+    }
+
+    public function organization() {
+        return $this->belongsTo(Organisation::class);
     }
 }
