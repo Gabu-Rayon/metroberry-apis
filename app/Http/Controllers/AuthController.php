@@ -51,7 +51,7 @@ class AuthController extends Controller {
             }
 
             if ($role->name === 'organisation') {
-                $organisation = Organisation::create([
+                Organisation::create([
                     'user_id' => $user->id
                 ]);
             }
