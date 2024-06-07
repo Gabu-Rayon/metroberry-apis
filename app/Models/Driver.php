@@ -25,4 +25,9 @@ class Driver extends Model
     public function organization() {
         return $this->belongsTo(Organisation::class);
     }
+
+    public function trips()
+    {
+        return $this->hasMany(Trip::class);
+    }
 }
