@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use App\Models\Organisation;
 
 class VehicleController extends Controller
 {
@@ -35,7 +34,6 @@ class VehicleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-<<<<<<< HEAD
     // public function store(Request $request) {
     //     try {
 
@@ -93,21 +91,6 @@ class VehicleController extends Controller
 
             Log::info('User with role of Admin / Organisation Creating Driver');
             Log::info($creator);
-=======
-    public function store (Request $request) {
-
-        try {
-            $organisation = Organisation::where('user_id', auth()->user()->id)->first();
-
-            Log::info('ORGANISATION');
-            Log::info($organisation);
-
-            if (!$organisation) {
-                return response()->json([
-                    'message' => 'Unauthorised',
-                ], 401);
-            }
->>>>>>> 06514025425cda377e1adccff2d0d41f456ff5a6
 
             $data = $request->validate([
                 'make' => 'required|string',
@@ -124,6 +107,8 @@ class VehicleController extends Controller
             Log::info($data);
 
             DB::beginTransaction();
+
+            $organisation = Organisation::find(Auth::id());
 
             $vehicle = Vehicle::create([
                 'organisation_id' => $organisation->id,

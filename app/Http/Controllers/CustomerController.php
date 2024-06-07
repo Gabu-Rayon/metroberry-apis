@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
+use App\Models\User;
 use App\Models\Customer;
 use App\Models\Organisation;
-use App\Models\User;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 
 class CustomerController extends Controller
 {
@@ -48,54 +49,14 @@ class CustomerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store (Request $request) {
+    public function store(Request $request)
+    {
         try {
-
-<<<<<<< HEAD
             // Log the authenticated user ID
             $authenticatedUserId = Auth::id();
             Log::info('Authenticated User ID: ' . $authenticatedUserId);
 
-        $data = $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users,email',
-            'phone' => 'required|string',
-            'password' => 'required|string',
-        ]);
-
-        $organisation = Organisation::where('user_id', auth()->user()->id)->first();
-        Log::info('User with role of ORGANISATION Creating the Customer');
-        Log::info($organisation);
-=======
-            $organisation = Organisation::where('user_id', auth()->user()->id)->first();
-
-            Log::info('ORGANISATION');
-            Log::info($organisation);
->>>>>>> 06514025425cda377e1adccff2d0d41f456ff5a6
-
-            if (!$organisation) {
-                return response()->json([
-                    'message' => 'Unauthorised',
-                ], 401);
-            }
-
-<<<<<<< HEAD
-        $customer = Customer::create([
-            'user_id' => $user->id,
-            'organisation_id' => $organisation->id,
-            //Can be generated from Company Initial name
-            'customer_organisation_code' => "Org230",
-            'created_by' => Auth::id(),
-        ]);
-
-        $customer->save();
-
-        return response()->json([
-            'message' => 'Customer created successfully',
-            'customer' => $user
-        ], 201);
-       }catch (Exception $e) {
-=======
+            // Validate the incoming request data
             $data = $request->validate([
                 'name' => 'required|string',
                 'email' => 'required|email|unique:users,email',
@@ -103,8 +64,19 @@ class CustomerController extends Controller
                 'password' => 'required|string',
             ]);
 
-            DB::beginTransaction();
+            // Find the organisation associated with the authenticated user
+            $organisation = Organisation::where('user_id', $authenticatedUserId)->first();
+            Log::info('User with role of ORGANISATION Creating the Customer');
+            Log::info($organisation);
 
+            // Check if the organisation exists
+            if (!$organisation) {
+                return response()->json([
+                    'message' => 'Unauthorised',
+                ], 401);
+            }
+
+            // Create a new user
             $user = User::create([
                 'name' => $data['name'],
                 'email' => $data['email'],
@@ -112,24 +84,19 @@ class CustomerController extends Controller
                 'password' => bcrypt($data['password']),
             ]);
 
+            // Create a new customer associated with the user and organisation
             $customer = Customer::create([
                 'user_id' => $user->id,
                 'organisation_id' => $organisation->id,
+                'customer_organisation_code' => "Org230",
+                'created_by' => $authenticatedUserId,
             ]);
-
-            Log::info('CUSTOMER');
-            Log::info($customer);
-
-            DB::commit();
 
             return response()->json([
                 'message' => 'Customer created successfully',
                 'customer' => $user
             ], 201);
         } catch (Exception $e) {
-            DB::rollBack();
-
->>>>>>> 06514025425cda377e1adccff2d0d41f456ff5a6
             Log::error('CREATE CUSTOMER ERROR');
             Log::error($e);
             return response()->json([
