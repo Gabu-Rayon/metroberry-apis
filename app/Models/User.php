@@ -78,4 +78,10 @@ class User extends Authenticatable
             $user->organisation()->delete();
         });
     }
+
+
+    public function createdVehicleServices()
+    {
+        return $this->hasMany(VehicleService::class, 'created_by');
+    }
 }

@@ -46,4 +46,9 @@ class Vehicle extends Model
     {
         return $this->hasMany(Trip::class);
     }
+
+    public function services()
+    {
+        return $this->hasMany(VehicleService::class);
+    }
 }
