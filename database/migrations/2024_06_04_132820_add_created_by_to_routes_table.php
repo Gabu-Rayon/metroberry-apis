@@ -12,9 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('routes', function (Blueprint $table) {
-            $table->unsignedBigInteger('created_by')->after('id');
-
-            $table->foreign('created_by')->references('id')->on('users');
+            if (!Schema::hasColumn('routes', 'created_by')) {
+                $table->unsignedBigInteger('created_by')->after('id');
+                $table->foreign('created_by')->references('id')->on('users');
+            }
         });
     }
 
@@ -23,8 +24,11 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('vehicles', function (Blueprint $table) {
-            //
+        Schema::table('routes', function (Blueprint $table) {
+            if (Schema::hasColumn('routes', 'created_by')) {
+                $table->dropForeign(['created_by']);
+                $table->dropColumn('created_by');
+            }
         });
     }
 };
