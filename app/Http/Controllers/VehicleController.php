@@ -18,7 +18,12 @@ class VehicleController extends Controller
      */
     public function index() {
         try {
-            $vehicles = Vehicle::where('organisation_id', auth()->user()->organisation->id)->get();
+            // $vehicles = Vehicle::where('organisation_id', auth()->user()->organisation->id)->get();
+            $vehicles = Vehicle::all();
+
+            Log::info('All VechicleS from the Api :' .$vehicles);
+            
+          
             return response()->json([
                 'vehicles' => $vehicles
             ], 200);
@@ -34,62 +39,13 @@ class VehicleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    // public function store(Request $request) {
-    //     try {
-
-
-    //         $creator = Organisation::find(Auth::id());
-
-    //         Log::info('CREATOR');
-    //         Log::info($creator);
-
-    //         $data = $request->validate([
-    //             'make' => 'required|string',
-    //             'model' => 'required|string',
-    //             'year' => 'required|integer',
-    //             'color' => 'required|string',
-    //             'plate_number' => 'required|string',
-    //             'seats' => 'required|integer',
-    //             'fuel_type' => 'required|string',
-    //             'engine_size' => 'required|string',
-    //         ]);
-
-    //         Log::info('VEHICLE VALIDATION DATA');
-    //         Log::info($data);
-
-    //         $vehicle = Vehicle::create([
-    //             'make' => $data['make'],
-    //             'model' => $data['model'],
-    //             'year' => $data['year'],
-    //             'color' => $data['color'],
-    //             'plate_number' => $data['plate_number'],
-    //             'seats' => $data['seats'],
-    //             'fuel_type' => $data['fuel_type'],
-    //             'engine_size' => $data['engine_size'],
-    //             'created_by' => Auth::id(),
-    //             'status' => 'inactive'
-    //         ]);
-
-    //         return response()->json([
-    //             'message' => 'Vehicle created successfully',
-    //             'vehicle' => $vehicle
-    //         ], 201);
-    //     } catch (Exception $e) {
-    //         Log::error('ERROR CREATING VEHICLE');
-    //         Log::error($e);
-    //         return response()->json([
-    //             'message' => 'Error occurred while creating vehicle',
-    //             'error' => $e->getMessage()
-    //         ], 500);
-    //     }
-    // }
-
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
         try {
+
+
             $creator = Organisation::find(Auth::id());
 
-            Log::info('User with role of Admin / Organisation Creating Driver');
+            Log::info('CREATOR');
             Log::info($creator);
 
             $data = $request->validate([
@@ -106,12 +62,7 @@ class VehicleController extends Controller
             Log::info('VEHICLE VALIDATION DATA');
             Log::info($data);
 
-            DB::beginTransaction();
-
-            $organisation = Organisation::find(Auth::id());
-
             $vehicle = Vehicle::create([
-                'organisation_id' => $organisation->id,
                 'make' => $data['make'],
                 'model' => $data['model'],
                 'year' => $data['year'],
@@ -124,18 +75,11 @@ class VehicleController extends Controller
                 'status' => 'inactive'
             ]);
 
-            Log::info('VEHICLE');
-            Log::info($vehicle);
-
-            DB::commit();
-
             return response()->json([
                 'message' => 'Vehicle created successfully',
                 'vehicle' => $vehicle
             ], 201);
-
         } catch (Exception $e) {
-            DB::rollBack();
             Log::error('ERROR CREATING VEHICLE');
             Log::error($e);
             return response()->json([
@@ -144,6 +88,69 @@ class VehicleController extends Controller
             ], 500);
         }
     }
+
+    // public function store(Request $request)
+    // {
+    //     try {
+    //         $creator = Organisation::find(Auth::id());
+
+    //         Log::info('User with role of Admin / Organisation Creating Vechile');
+    //         Log::info($creator);
+
+    //         $data = $request->validate([
+    //             'make' => 'required|string',
+    //             'model' => 'required|string',
+    //             'year' => 'required|integer',
+    //             'color' => 'required|string',
+    //             'plate_number' => 'required|string',
+    //             'seats' => 'required|integer',
+    //             'fuel_type' => 'required|string',
+    //             'engine_size' => 'required|string',
+    //         ]);
+
+    //         Log::info('VEHICLE VALIDATION DATA');
+    //         Log::info($data);
+
+    //         DB::beginTransaction();
+
+    //         $organisation = Organisation::find(Auth::id());
+            
+    //         Log::info('Who is creating the Vehicle : ' . $organisation);
+
+    //         $vehicle = Vehicle::create([
+    //             'organisation_id' => $organisation->id,
+    //             'make' => $data['make'],
+    //             'model' => $data['model'],
+    //             'year' => $data['year'],
+    //             'color' => $data['color'],
+    //             'plate_number' => $data['plate_number'],
+    //             'seats' => $data['seats'],
+    //             'fuel_type' => $data['fuel_type'],
+    //             'engine_size' => $data['engine_size'],
+    //             'created_by' => Auth::id(),
+    //             'status' => 'inactive'
+    //         ]);
+
+    //         Log::info('VEHICLE');
+    //         Log::info($vehicle);
+
+    //         DB::commit();
+
+    //         return response()->json([
+    //             'message' => 'Vehicle created successfully',
+    //             'vehicle' => $vehicle
+    //         ], 201);
+
+    //     } catch (Exception $e) {
+    //         DB::rollBack();
+    //         Log::error('ERROR CREATING VEHICLE');
+    //         Log::error($e);
+    //         return response()->json([
+    //             'message' => 'Error occurred while creating vehicle',
+    //             'error' => $e->getMessage()
+    //         ], 500);
+    //     }
+    // }
 
 
     /**

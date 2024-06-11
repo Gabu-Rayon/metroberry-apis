@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('drivers', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('vehicle_id')->nullable();            
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->timestamps();
+        Schema::table('customers', function (Blueprint $table) {
+            $table->unsignedBigInteger('created_by')->after('id');
+
+            $table->foreign('created_by')->references('id')->on('users');
         });
     }
 
@@ -24,6 +23,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('drivers');
+        Schema::table('vehicles', function (Blueprint $table) {
+            //
+        });
     }
 };

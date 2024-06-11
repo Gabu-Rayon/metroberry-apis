@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('location');
             $table->string('start_location');
             $table->string('end_location');
-            $table->foreign('created_by')->references('id')->on('users');
             $table->timestamps();
 
         });
