@@ -23,8 +23,11 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('vehicles', function (Blueprint $table) {
-            //
+        Schema::table('routes', function (Blueprint $table) {
+            if (Schema::hasColumn('routes', 'created_by')) {
+                $table->dropForeign(['created_by']);
+                $table->dropColumn('created_by');
+            }
         });
     }
 };

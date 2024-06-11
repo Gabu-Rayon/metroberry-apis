@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Contracts\Role;
 use App\Http\Controllers\AuthController;
@@ -13,7 +14,12 @@ use App\Http\Controllers\OrganisationController;
 
 
 Route::get('/user', function (Request $request) {
-    return $request->user();
+    $user = $request->user();
+    $permissions = $user->getAllPermissions()->pluck('name')->toArray();
+    Log::info('USER PERMISSIONS');
+    Log::info($permissions);
+    $user->permitted_to = $permissions;
+    return $user;
 })->middleware('auth:sanctum');
 
 Route::post('register', [AuthController::class, 'register']);
