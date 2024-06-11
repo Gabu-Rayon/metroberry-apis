@@ -10,6 +10,7 @@ use App\Http\Controllers\DriverController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\AddRouteController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\TripInvoiceController;
 use App\Http\Controllers\OrganisationController;
 
 
@@ -61,3 +62,10 @@ Route::post('trip', [TripController::class, 'store'])->middleware(['auth:sanctum
 Route::put('trips/{trip}', [TripController::class, 'update'])->middleware(['auth:sanctum', 'can:edit trip']);
 Route::delete('trips/{trip}', [TripController::class, 'destroy'])->middleware(['auth:sanctum', 'can:delete trip']);
 Route::get('trips/{trip}', [TripController::class, 'show'])->middleware(['auth:sanctum', 'can:show trip']);
+
+
+Route::get('invoices', [TripInvoiceController::class, 'index'])->middleware(['auth:sanctum', 'can:view trips']);
+Route::post('invoice', [TripInvoiceController::class, 'store'])->middleware(['auth:sanctum', 'can:create trip']);
+Route::put('invoices/{invoice}', [TripInvoiceController::class, 'update'])->middleware(['auth:sanctum', 'can:edit trip']);
+Route::delete('invoices/{invoice}', [TripInvoiceController::class, 'destroy'])->middleware(['auth:sanctum', 'can:delete trip']);
+Route::get('invoices/{invoice}', [TripInvoiceController::class, 'show'])->middleware(['auth:sanctum', 'can:show trip']);
