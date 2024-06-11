@@ -144,6 +144,13 @@ class RoleAndPermissionSeeder extends Seeder
             'start trip',
             'end trip',
 
+
+            'view invoices',
+            'create invoice',
+            'edit invoice',
+            'delete invoice',
+            'show invoice',
+
             'view vehicles',
             'create vehicles',
             'show vehicle',
@@ -159,6 +166,8 @@ class RoleAndPermissionSeeder extends Seeder
             'show organisation',
             'edit organisation',
             'delete organisation',
+
+            
 
             'manage trips',
             'manage drivers',

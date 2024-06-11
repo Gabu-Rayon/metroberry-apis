@@ -48,4 +48,10 @@ class Trip extends Model
     {
         return $this->belongsTo(Driver::class);
     }
+
+
+    public function billingsInvoices()
+    {
+        return $this->hasMany(Invoice::class);
+    }
 }
