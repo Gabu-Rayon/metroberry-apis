@@ -34,13 +34,8 @@ class TripController extends Controller
         try {
             $data = $request->validate([
                 'customer_id' => 'required|exists:customers,id',
-                'customer_organisation_code' => 'required|string',
-                'customer_contact' => 'required|string',
-                'home_address' => 'required|string',
                 'vehicle_id' => 'required|exists:vehicles,id',
-                'car_class' => 'required|string',
                 'driver_id' => 'required|exists:drivers,id',
-                'car_license_plate' => 'required|string',
                 'preferred_route' => 'required|string',
                 'pick_up_time' => 'required|date_format:H:i',
                 'drop_off_or_pick_up_date' => 'required|date',

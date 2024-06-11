@@ -13,17 +13,13 @@ return new class extends Migration {
         Schema::create('trips', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('customer_id')->nullable();
-            $table->string('customer_organisation_code')->nullable();
-            $table->string('customer_contact')->nullable();
-            $table->text('home_address')->nullable();
-            $table->unsignedBigInteger('vehicle_id')->nullable();
-            $table->string('car_class')->nullable();
             $table->unsignedBigInteger('driver_id')->nullable();
-            $table->string('car_license_plate')->nullable();
             $table->string('preferred_route')->nullable();
             $table->time('pick_up_time')->nullable();
             $table->date('drop_off_or_pick_up_date')->nullable();
-            $table->enum('pick_up_location', ['Home', 'Office'])->nullable();
+            $table->enum('pick_up_points', ['Home', 'Office'])->nullable();
+            $table->string('pick_up_location')->nullable();// should reference their home location || office location 
+            $table->string('drop_off_location')->nullable();
             $table->float('mileage_gps')->nullable();
             $table->float('mileage_can')->nullable();
             $table->float('engine_hours_gps')->nullable();
