@@ -39,7 +39,11 @@ class User extends Authenticatable
         'updated_at',
         'password',
         'remember_token',
+        'roles',
+        'permissions',
     ];
+
+    protected $with = ['organisation', 'driver', 'customer'];
 
     /**
      * Get the attributes that should be cast.
