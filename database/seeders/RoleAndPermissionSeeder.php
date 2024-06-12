@@ -26,6 +26,8 @@ class RoleAndPermissionSeeder extends Seeder
         }
 
         $permissions = [
+            'view dashboard',
+
             'view invoices',
             'create invoice',
             'edit invoice',
@@ -188,6 +190,8 @@ class RoleAndPermissionSeeder extends Seeder
         ]);
 
         $organisation->syncPermissions([
+            'view dashboard',
+            
             'view vehicles',
             'create vehicle',
             'edit vehicle',

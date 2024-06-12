@@ -11,6 +11,7 @@ class Driver extends Model
 
     protected $fillable = [
         'user_id',
+        'organisation_id',
         'created_by',
     ];
 
