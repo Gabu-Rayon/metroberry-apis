@@ -20,6 +20,17 @@ Route::get('/user', function (Request $request) {
     Log::info('USER PERMISSIONS');
     Log::info($permissions);
     $user->permitted_to = $permissions;
+
+    if ($user->hasRole('organisation')) {
+        // Map customers to users
+        $users = $user->organisation->customers->map(function ($customer) {
+            return $customer->user;
+        });
+
+        // Replace organisation's customers with users
+        $user->organisation->customers = $users;
+    }
+
     return $user;
 })->middleware('auth:sanctum');
 
