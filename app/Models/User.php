@@ -42,7 +42,7 @@ class User extends Authenticatable
         'permissions',
     ];
 
-    protected $with = ['organisation', 'driver', 'customer'];
+    protected $with = ['organisation'];
 
     /**
      * Get the attributes that should be cast.

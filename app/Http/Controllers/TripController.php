@@ -18,10 +18,8 @@ class TripController extends Controller
             $trips = Trip::all();
 
             Log::info('All Trips Made from the Api :' . $trips);
-
-
             return response()->json([
-                'Trips' => $trips
+                'trips' => $trips
             ], 200);
         } catch (Exception $e) {
             Log::error('ERROR FETCHING TRIPS');

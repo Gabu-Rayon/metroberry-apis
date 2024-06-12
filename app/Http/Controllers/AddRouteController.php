@@ -18,7 +18,7 @@ class AddRouteController extends Controller
         try {
             $routes = Routes::where('created_by', Auth::id())->get();
             return response()->json([
-                'All Routes' => $routes
+                'routes' => $routes
             ], 200);
         } catch (Exception $e) {
             Log::error('ERROR FETCHING All the ROUTES');

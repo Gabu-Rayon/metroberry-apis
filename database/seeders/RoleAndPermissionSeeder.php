@@ -111,6 +111,7 @@ class RoleAndPermissionSeeder extends Seeder
         $driver = Role::where('name', 'driver')->first();
 
         $admin->syncPermissions([
+            'view dashboard',
             'view routes',
             'create route',
             'edit route',

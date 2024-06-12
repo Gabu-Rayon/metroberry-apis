@@ -12,7 +12,10 @@ use App\Http\Controllers\AddRouteController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\TripInvoiceController;
 use App\Http\Controllers\OrganisationController;
-
+use App\Models\Customer;
+use App\Models\Driver;
+use App\Models\Organisation;
+use App\Models\Vehicle;
 
 Route::get('/user', function (Request $request) {
     $user = $request->user();
@@ -21,15 +24,22 @@ Route::get('/user', function (Request $request) {
     Log::info($permissions);
     $user->permitted_to = $permissions;
 
+    $admin = [];
+    $org = [];
+
     if ($user->hasRole('organisation')) {
-        $customers = $user->organisation->customers->map(function ($customer) {
-            return $customer->user;
-        });
-        $user->organisation->customers = $customers;
-        $drivers = $user->organisation->drivers->map(function ($driver) {
-            return $driver->user;
-        });
-        $user->organisation->drivers = $drivers;
+        $user->load('organisation.customers.user', 'organisation.drivers.user');
+    } else if ($user->hasRole('admin')) {
+        $org['customers'] = Customer::all();
+        $org['drivers'] = Driver::all();
+        $org['vehicles'] = Vehicle::all();
+        $admin = [
+            'permitted_to' => $permissions,
+            'name' => $user->name,
+            'organisation' => $org
+        ];
+
+        return $admin;
     }
 
     return $user;

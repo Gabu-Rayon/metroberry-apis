@@ -18,19 +18,7 @@ class CustomerController extends Controller
      */
     public function index() {
         try {
-            $organisation = Organisation::where('user_id', auth()->user()->id)->first();
-
-            if (!$organisation) {
-                return response()->json([
-                    'message' => 'Unauthorised',
-                ], 401);
-            }
-
-            $customers = [];
-
-            foreach ($organisation->customers as $customer) {
-                array_push($customers, $customer->user);
-            }
+            $customers = Customer::all();
 
             return response()->json([
                 'message' => 'Customers retrieved successfully',

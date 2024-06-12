@@ -15,6 +15,8 @@ class Driver extends Model
         'created_by',
     ];
 
+    protected $with = ['user'];
+
     protected $hidden = [
         'id',
         'user_id',
