@@ -262,5 +262,33 @@ class TripController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
-    }  
+    }
+
+
+    public function mapTripToVehicle(Request $request, $trip)
+    {
+        try {
+            $data = $request->validate([
+                'vehicle_id' => 'required|integer',
+                'driver_id' => 'required|integer',
+            ]);
+            $trip = Trip::findOrFail($trip);
+
+            $trip->update($data);            
+
+            // Return a success response
+            return response()->json([
+                'message' => 'Vehicle Mapped Successfully',
+                'Vehicle Being Mapped to Preferred Route' => $trip
+            ]);
+        } catch (Exception $e) {
+            Log::error('ERROR Mapping the Vehicle');
+            Log::error($e);
+
+            return response()->json([
+                'message' => 'An error occurred while mapping Vehicle',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }
