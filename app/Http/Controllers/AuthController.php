@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Auth\LoginRequest;
-use App\Models\Customer;
-use App\Models\Driver;
-use App\Models\Organisation;
-use App\Models\User;
 use Exception;
+use App\Models\User;
+use App\Models\Driver;
+use App\Models\Customer;
+use App\Models\Organisation;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\Auth\LoginRequest;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -96,40 +97,50 @@ class AuthController extends Controller
     // }
 
 
+         
 
-    public function register(Request $request)
-    {
-        try {
-            $userdata = $request->validate([
+          public function register(Request $request)
+{
+    try {
+        // Retrieve the array of users from the request
+        $usersData = $request->input('users');
+
+        // Check if users data is provided and is an array
+        if (!is_array($usersData)) {
+            return response()->json([
+                'message' => 'Invalid input data. Expected an array of users.',
+            ], 400);
+        }
+
+        // Loop through each user data
+        foreach ($usersData as $userdata) {
+            // Validate each user data
+            $validatedData = Validator::make($userdata, [
                 'name' => 'required|string',
                 'email' => 'required|email|unique:users',
                 'password' => 'required|string',
                 'phone' => 'required|string',
                 'role' => 'required|string|exists:roles,name',
-                'organisation_id' => 'required_if:role,customer|exists:organisations,id'
-            ]);
+                'organisation_id' => 'required_if:role,customer|exists:organisations,id',
+                'customer_organisation_code' => 'required_if:role,customer|string'
+            ])->validate();
 
-            Log::info('USER DATA');
-            Log::info($userdata);
-
+            // Create the user
             $user = User::create([
-                'name' => $userdata['name'],
-                'email' => $userdata['email'],
-                'password' => bcrypt($userdata['password']),
-                'phone' => $userdata['phone']
+                'name' => $validatedData['name'],
+                'email' => $validatedData['email'],
+                'password' => bcrypt($validatedData['password']),
+                'phone' => $validatedData['phone']
             ]);
 
-            $role = Role::findByName($userdata['role'], 'web');
-
-            Log::info('ROLE');
-            Log::info($role);
+            $role = Role::findByName($validatedData['role'], 'web');
 
             // Set the authenticated user ID as the creator
             $authenticatedUserId = $user->id;
-            Log::info('Authenticated User ID: ' . $authenticatedUserId);
 
             $user->assignRole($role);
 
+            // Check and create related entities based on the role
             if ($role->name === 'driver') {
                 Driver::create([
                     'user_id' => $user->id,
@@ -147,28 +158,29 @@ class AuthController extends Controller
             if ($role->name === 'customer') {
                 Customer::create([
                     'user_id' => $user->id,
-                    'organisation_id' => $userdata['organisation_id'],
-                    'customer_organisation_code' => "Org202",
+                    'organisation_id' => $validatedData['organisation_id'],
+                    'customer_organisation_code' => $validatedData['customer_organisation_code'],
                     'created_by' => $authenticatedUserId,
                 ]);
             }
+        }  
 
-            $token = $user->createToken('auth_token')->plainTextToken;
+        // Return success response
+        return response()->json([
+            'message' => 'Users registered successfully.',
+        ], 200);
 
-            return response()->json([
-                'access_token' => $token,
-                'token_type' => 'Bearer',
-            ], 201);
+    } catch (\Exception $e) {
+        // Log the error
+        Log::error('An error occurred while registering users: ' . $e->getMessage());
 
-        } catch (Exception $e) {
-            Log::error('ERROR REGISTERING USERS');
-            Log::error($e);
-            return response()->json([
-                'message' => 'An error occurred while registering user',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        // Return error response
+        return response()->json([
+            'message' => 'An error occurred while registering users',
+            'error' => $e->getMessage(),
+        ], 500);
     }
+}
 
 
     public function login(Request $request)

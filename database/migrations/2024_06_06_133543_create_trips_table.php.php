@@ -14,8 +14,8 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('customer_id')->nullable();
             $table->unsignedBigInteger('driver_id')->nullable();
-            $table->string('preferred_route')->nullable();
-            $table->time('pick_up_time')->nullable();
+            $table->unsignedBigInteger('preferred_route_id')->nullable();
+            $table->string('pick_up_time')->nullable();
             $table->date('drop_off_or_pick_up_date')->nullable();
             $table->enum('pick_up_points', ['Home', 'Office'])->nullable();
             $table->string('pick_up_location')->nullable();// should reference their home location || office location 
@@ -33,6 +33,7 @@ return new class extends Migration {
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
             $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
             $table->foreign('driver_id')->references('id')->on('drivers')->onDelete('cascade');
+            $table->foreign('preferred_route_id')->references('id')->on('routes')->onDelete('cascade');
         });
     }
 
