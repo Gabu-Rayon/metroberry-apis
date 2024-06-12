@@ -230,4 +230,37 @@ class TripController extends Controller
             ], 500);
         }
     }
+
+    public function showMapRouteForm($tripId)
+    {
+        $trip = Trip::findOrFail($tripId);
+        return view('map_route', compact('trip'));
+    }
+
+
+    public function mapTripToRoute(Request $request, $trip)
+    {
+        try {
+            $data = $request->validate([
+                'preferred_route_id' => 'required|integer',
+            ]);
+            $trip = Trip::findOrFail($trip);
+
+            $trip->update($data);
+
+            // Return a success response
+            return response()->json([
+                'message' => 'Route Preferred Mapped Successfully',
+                'Trip Being Mapped to Preferred Route' => $trip
+            ]);
+        } catch (Exception $e) {
+            Log::error('ERROR Mapping the Preferred Route');
+            Log::error($e);
+
+            return response()->json([
+                'message' => 'An error occurred while mapping Preferred Route',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }  
 }
