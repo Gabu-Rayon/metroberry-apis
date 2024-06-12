@@ -57,7 +57,7 @@ Route::post('customers/{id}', [CustomerController::class, 'show'])->middleware([
 Route::put('customers/{id}', [CustomerController::class, 'update'])->middleware(['auth:sanctum', 'can:edit customer']);
 Route::delete('customers/{id}', [CustomerController::class, 'destroy'])->middleware(['auth:sanctum', 'can:delete customer']);
 
-Route::get('trip', [TripController::class, 'index'])->middleware(['auth:sanctum', 'can:view trips']);
+Route::get('trips', [TripController::class, 'index'])->middleware(['auth:sanctum', 'can:view trips']);
 Route::post('trip', [TripController::class, 'store'])->middleware(['auth:sanctum', 'can:create trip']);
 Route::put('trips/{trip}', [TripController::class, 'update'])->middleware(['auth:sanctum', 'can:edit trip']);
 Route::delete('trips/{trip}', [TripController::class, 'destroy'])->middleware(['auth:sanctum', 'can:delete trip']);

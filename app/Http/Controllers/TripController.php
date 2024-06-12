@@ -16,23 +16,26 @@ class TripController extends Controller
      */
     public function index()
     {
-        try {
-            $trips = Trip::all();
+        // try {
+        //     $trips = Trip::all();
 
-            Log::info('All Trips Made from the Api :' . $trips);
+        //     Log::info('All Trips Made from the Api :' . $trips);
 
 
-            return response()->json([
-                'Trips' => $trips
-            ], 200);
-        } catch (Exception $e) {
-            Log::error('ERROR FETCHING TRIPS');
-            Log::error($e);
-            return response()->json([
-                'message' => 'Error occurred while fetching trips',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        //     return response()->json([
+        //         'Trips' => $trips
+        //     ], 200);
+        // } catch (Exception $e) {
+        //     Log::error('ERROR FETCHING TRIPS');
+        //     Log::error($e);
+        //     return response()->json([
+        //         'message' => 'Error occurred while fetching trips',
+        //         'error' => $e->getMessage()
+        //     ], 500);
+        // }
+
+        $trips = Trip::all();
+        return response()->json($trips);
     }
 
     /**
