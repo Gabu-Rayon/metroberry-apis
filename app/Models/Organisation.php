@@ -14,8 +14,6 @@ class Organisation extends Model
         'created_by',
     ];
 
-    protected $with = ['user', 'drivers', 'vehicles', 'customers'];
-
     public function user() {
         return $this->belongsTo(User::class);
     }
