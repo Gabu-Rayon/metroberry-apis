@@ -26,6 +26,11 @@ class RoleAndPermissionSeeder extends Seeder
         }
 
         $permissions = [
+            'view invoices',
+            'create invoice',
+            'edit invoice',
+            'delete invoice',
+            'show invoice',
             'view routes',
             'create route',
             'edit route',
