@@ -12,8 +12,8 @@ class Customer extends Model
 
     protected $fillable = [
         'user_id',
-         'organisation_id',
-         'customer_organisation_code',
+        'organisation_id',
+        'customer_organisation_code',
     ];
 
     protected $hidden = [

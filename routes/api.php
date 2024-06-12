@@ -22,13 +22,14 @@ Route::get('/user', function (Request $request) {
     $user->permitted_to = $permissions;
 
     if ($user->hasRole('organisation')) {
-        // Map customers to users
-        $users = $user->organisation->customers->map(function ($customer) {
+        $customers = $user->organisation->customers->map(function ($customer) {
             return $customer->user;
         });
-
-        // Replace organisation's customers with users
-        $user->organisation->customers = $users;
+        $user->organisation->customers = $customers;
+        $drivers = $user->organisation->drivers->map(function ($driver) {
+            return $driver->user;
+        });
+        $user->organisation->drivers = $drivers;
     }
 
     return $user;

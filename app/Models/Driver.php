@@ -15,6 +15,18 @@ class Driver extends Model
         'created_by',
     ];
 
+    protected $hidden = [
+        'id',
+        'user_id',
+        'organisation_id',
+        'customer_organisation_code',
+        'is_email_verified',
+        'is_contact_verified',
+        'created_at',
+        'updated_at',
+        'vehicle_id'
+    ];
+
     public function user() {
         return $this->belongsTo(User::class);
     }
