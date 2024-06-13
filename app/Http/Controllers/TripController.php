@@ -47,21 +47,15 @@ class TripController extends Controller
         try {
             $data = $request->validate([
                 'customer_id' => 'required|exists:customers,id',
-                'vehicle_id' => 'required|exists:vehicles,id',
-                'driver_id' => 'required|exists:drivers,id',
-                'preferred_route' => 'required|string',
-                'pick_up_time' => 'required|date_format:H:i',
+                'preferred_route_id' => 'required|exists:routes,id',
+                'pick_up_time' => 'required|string',
                 'drop_off_or_pick_up_date' => 'required|date',
                 'pick_up_location' => 'required|in:Home,Office',
-                'mileage_gps' => 'required|numeric',
-                'mileage_can' => 'required|numeric',
-                'engine_hours_gps' => 'required|numeric',
-                'engine_hours_can' => 'required|numeric',
-                'can_distance_till_service' => 'required|numeric',
-                'average_fuel_consumption_litre_per_km' => 'required|numeric',
-                'average_fuel_consumption_litre_per_hour' => 'required|numeric',
-                'average_fuel_consumption_kg_per_km' => 'required|numeric',
+                'drop_off_location' => 'required|in:Home,Office',
             ]);
+
+            Log::info('Trip Data');
+            Log::info($data);
 
             $trip = Trip::create($data);
 
