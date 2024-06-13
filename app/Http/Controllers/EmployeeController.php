@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
-class CustomerController extends Controller
+class EmployeeControlle extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -37,44 +37,70 @@ class CustomerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         Log::info('ACCESSED');
         try {
             // Log the authenticated user ID
             $authenticatedUserId = Auth::id();
             Log::info('Authenticated User ID: ' . $authenticatedUserId);
 
-            // Validate the incoming request data
-            $data = $request->validate([
-                'name' => 'required|string',
-                'email' => 'required|email|unique:users,email',
-                'phone' => 'required|string',
-                'password' => 'required|string',
-                'organisation_id' => 'required|integer|exists:organisations,id',
-                'organisation_code' => 'required|string',
-            ]);
+            // Is request contains an array or a single object
+            $customersData = $request->all();
+            $isSingleCustomer = isset($customersData['name']);
+            
+            if ($isSingleCustomer) {
+                $data = $request->validate([
+                    'name' => 'required|string',
+                    'email' => 'required|email|unique:users,email',
+                    'phone' => 'required|string',
+                    'password' => 'required|string',
+                    'organisation_id' => 'required|integer|exists:organisations,id',
+                    'organisation_code' => 'required|string',
+                ]);
+                //single customer in an array
+                $customers = [$customersData];
+            } else {
+                $data = $request->validate([
+                    '*.name' => 'required|string',
+                    '*.email' => 'required|email|unique:users,email',
+                    '*.phone' => 'required|string',
+                    '*.password' => 'required|string',
+                    '*.organisation_id' => 'required|integer|exists:organisations,id',
+                    '*.organisation_code' => 'required|string',
+                ]);
+                // Handle multiple customers
+                $customers = $customersData; 
+            }
 
+            $createdCustomers = [];
 
+            foreach ($customers as $customerData) {
+                // Create a new user
+                $user = User::create([
+                    'name' => $customerData['name'],
+                    'email' => $customerData['email'],
+                    'phone' => $customerData['phone'],
+                    'password' => bcrypt($customerData['password']),
+                ]);
 
-            // Create a new user
-            $user = User::create([
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'phone' => $data['phone'],
-                'password' => bcrypt($data['password']),
-            ]);
+                // Assign the "customer" role to the user
+                $user->assignRole('customer');
 
-            // Create a new customer associated with the user and organisation
-            $customer = Customer::create([
-                'user_id' => $user->id,
-                'organisation_id' => $data['organisation_id'],
-                'customer_organisation_code' => $data['organisation_code'],
-                'created_by' => $authenticatedUserId,
-            ]);
+                // Create a new customer associated with the user and organisation
+                $customer = Customer::create([
+                    'user_id' => $user->id,
+                    'organisation_id' => $customerData['organisation_id'],
+                    'customer_organisation_code' => $customerData['organisation_code'],
+                    'created_by' => $authenticatedUserId,
+                ]);
+
+                $createdCustomers[] = $customer;
+            }
 
             return response()->json([
-                'message' => 'Customer created successfully',
-                'customer' => $user
+                'message' => 'Customers created successfully',
+                'customers' => $data
             ], 201);
         } catch (Exception $e) {
             Log::error('CREATE CUSTOMER ERROR');
