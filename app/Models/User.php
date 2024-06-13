@@ -34,7 +34,6 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'id',
         'created_at',
         'updated_at',
         'password',
@@ -43,7 +42,7 @@ class User extends Authenticatable
         'permissions',
     ];
 
-    protected $with = ['organisation', 'driver', 'customer'];
+    protected $with = ['organisation'];
 
     /**
      * Get the attributes that should be cast.

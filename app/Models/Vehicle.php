@@ -28,7 +28,6 @@ class Vehicle extends Model
     protected $hidden = [
         'driver_id',
         'organisation_id',
-        'id',
         'created_by',
         'created_at',
         'updated_at',

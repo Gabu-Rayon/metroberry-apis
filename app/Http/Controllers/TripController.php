@@ -19,6 +19,19 @@ class TripController extends Controller
         // try {
         //     $trips = Trip::all();
 
+
+            Log::info('All Trips Made from the Api :' . $trips);
+            return response()->json([
+                'trips' => $trips
+            ], 200);
+        } catch (Exception $e) {
+            Log::error('ERROR FETCHING TRIPS');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Error occurred while fetching trips',
+                'error' => $e->getMessage()
+            ], 500);
+        }
         //     Log::info('All Trips Made from the Api :' . $trips);
 
 
@@ -90,6 +103,19 @@ class TripController extends Controller
     public function store(Request $request)
     {
         try {
+            $data = $request->validate([
+                'customer_id' => 'required|exists:customers,id',
+                'preferred_route_id' => 'required|exists:routes,id',
+                'pick_up_time' => 'required|string',
+                'drop_off_or_pick_up_date' => 'required|date',
+                'pick_up_location' => 'required|in:Home,Office',
+                'drop_off_location' => 'required|in:Home,Office',
+            ]);
+
+            Log::info('Trip Data');
+            Log::info($data);
+
+            $trip = Trip::create($data);
             $trips = [];
             $requestData = $request->all();
 
