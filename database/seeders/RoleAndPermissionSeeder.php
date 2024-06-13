@@ -45,6 +45,12 @@ class RoleAndPermissionSeeder extends Seeder
             'delete vehicle',
             'show vehicle',
 
+           'view invoices',
+            'create invoice',
+            'edit invoice',
+            'delete invoice',
+            'show invoice',
+
             'view organisations',
             'create organisation',
             'edit organisation',
@@ -218,6 +224,12 @@ class RoleAndPermissionSeeder extends Seeder
             'delete route',
             'show route',
 
+             'view invoices',
+            'create invoice',
+            'edit invoice',
+            'delete invoice',
+            'show invoice',
+
             'view trips',
             'create trip',
             'edit trip',
@@ -234,6 +246,12 @@ class RoleAndPermissionSeeder extends Seeder
             'update profile',
             'reset password',
             'update avatar',
+
+             'view invoices',
+            'create invoice',
+            'edit invoice',
+            'delete invoice',
+            'show invoice',
         ]);
 
         $driver->syncPermissions([

@@ -80,12 +80,19 @@ Route::post('customers/{id}', [CustomerController::class, 'show'])->middleware([
 Route::put('customers/{id}', [CustomerController::class, 'update'])->middleware(['auth:sanctum', 'can:edit customer']);
 Route::delete('customers/{id}', [CustomerController::class, 'destroy'])->middleware(['auth:sanctum', 'can:delete customer']);
 
-Route::get('trip', [TripController::class, 'index'])->middleware(['auth:sanctum', 'can:view trips']);
+Route::get('trips', [TripController::class, 'index'])->middleware(['auth:sanctum', 'can:view trips']);
 Route::post('trip', [TripController::class, 'store'])->middleware(['auth:sanctum', 'can:create trip']);
 Route::put('trips/{trip}', [TripController::class, 'update'])->middleware(['auth:sanctum', 'can:edit trip']);
 Route::delete('trips/{trip}', [TripController::class, 'destroy'])->middleware(['auth:sanctum', 'can:delete trip']);
 Route::get('trips/{trip}', [TripController::class, 'show'])->middleware(['auth:sanctum', 'can:show trip']);
 
+// Route to display the form
+Route::get('/trips/{trip}/', [TripController::class, 'showMapRouteForm'])->middleware(['auth:sanctum', 'can:edit trip']);
+Route::post('mapTripToRoute/{trip}', [TripController::class, 'mapTripToRoute'])->middleware(['auth:sanctum', 'can:edit trip']);
+
+// Route to display the form
+Route::get('/trips/{trip}/', [TripController::class, 'showMapVehicleForm'])->middleware(['auth:sanctum', 'can:edit trip']);
+Route::post('mapTripToVehicle/{trip}', [TripController::class, 'mapTripToVehicle'])->middleware(['auth:sanctum', 'can:edit trip']);
 
 Route::get('invoices', [TripInvoiceController::class, 'index'])->middleware(['auth:sanctum', 'can:view trips']);
 Route::post('invoice', [TripInvoiceController::class, 'store'])->middleware(['auth:sanctum', 'can:create trip']);
