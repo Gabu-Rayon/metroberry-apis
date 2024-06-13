@@ -31,6 +31,7 @@ class RoleAndPermissionSeeder extends Seeder
             'edit route',
             'delete route',
             'show route',
+            'view dashboard',
 
             'view vehicles',
             'create vehicle',
@@ -115,6 +116,7 @@ class RoleAndPermissionSeeder extends Seeder
             'edit route',
             'delete route',
             'show route',
+            'view dashboard',
 
             'view vehicles',
             'create vehicle',
@@ -156,7 +158,6 @@ class RoleAndPermissionSeeder extends Seeder
             'edit invoice',
             'delete invoice',
             'show invoice',
-
             'view vehicles',
             'create vehicles',
             'show vehicle',
@@ -194,6 +195,7 @@ class RoleAndPermissionSeeder extends Seeder
             'edit vehicle',
             'delete vehicle',
             'show vehicle',
+            'view dashboard',
 
             'view drivers',
             'create driver',
