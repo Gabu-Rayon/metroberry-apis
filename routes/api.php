@@ -33,10 +33,11 @@ Route::get('/user', function (Request $request) {
         $org['customers'] = Customer::all();
         $org['drivers'] = Driver::all();
         $org['vehicles'] = Vehicle::all();
+
         $admin = [
             'permitted_to' => $permissions,
             'name' => $user->name,
-            'organisation' => $org
+            'organisation' => $org,
         ];
 
         return $admin;
