@@ -18,19 +18,7 @@ class CustomerController extends Controller
      */
     public function index() {
         try {
-            $organisation = Organisation::where('user_id', auth()->user()->id)->first();
-
-            if (!$organisation) {
-                return response()->json([
-                    'message' => 'Unauthorised',
-                ], 401);
-            }
-
-            $customers = [];
-
-            foreach ($organisation->customers as $customer) {
-                array_push($customers, $customer->user);
-            }
+            $customers = Customer::all();
 
             return response()->json([
                 'message' => 'Customers retrieved successfully',
@@ -49,8 +37,8 @@ class CustomerController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
+    public function store(Request $request){
+        Log::info('ACCESSED');
         try {
             // Log the authenticated user ID
             $authenticatedUserId = Auth::id();
@@ -62,19 +50,11 @@ class CustomerController extends Controller
                 'email' => 'required|email|unique:users,email',
                 'phone' => 'required|string',
                 'password' => 'required|string',
+                'organisation_id' => 'required|integer|exists:organisations,id',
+                'organisation_code' => 'required|string',
             ]);
 
-            // Find the organisation associated with the authenticated user
-            $organisation = Organisation::where('user_id', $authenticatedUserId)->first();
-            Log::info('User with role of ORGANISATION Creating the Customer');
-            Log::info($organisation);
 
-            // Check if the organisation exists
-            if (!$organisation) {
-                return response()->json([
-                    'message' => 'Unauthorised',
-                ], 401);
-            }
 
             // Create a new user
             $user = User::create([
@@ -87,8 +67,8 @@ class CustomerController extends Controller
             // Create a new customer associated with the user and organisation
             $customer = Customer::create([
                 'user_id' => $user->id,
-                'organisation_id' => $organisation->id,
-                'customer_organisation_code' => "Org230",
+                'organisation_id' => $data['organisation_id'],
+                'customer_organisation_code' => $data['organisation_code'],
                 'created_by' => $authenticatedUserId,
             ]);
 

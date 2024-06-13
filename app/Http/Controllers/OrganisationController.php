@@ -18,26 +18,27 @@ class OrganisationController extends Controller
     public function index()
     {
         try {
+            if (Auth::user()->hasRole('admin')) {
+                $organisation = Organisation::all();
+                foreach ($organisation as $org) {
+                    $org->load('user');
+                }
+                return response()->json([
+                    'count' => count($organisation),
+                    'organisations' => $organisation
+                ], 200);
+            }
             $organisation = Organisation::where('created_by', Auth::id())->get();
             return response()->json([
-                'Organisations' => $organisation
+                'organisations' => $organisation
             ], 200);
         } catch (Exception $e) {
             Log::error('ERROR FETCHING Organisation');
             Log::error($e);
-            try {
-                $organisation = Organisation::where('created_by', Auth::id())->get();
-                return response()->json([
-                    'All Organisations' => $organisation
-                ], 200);
-            } catch (Exception $e) {
-                Log::error('ERROR FETCHING Organisations');
-                Log::error($e);
-                return response()->json([
-                    'message' => 'Error occurred while fetching All Organisations',
-                    'error' => $e->getMessage()
-                ], 500);
-            }
+            return response()->json([
+                'message' => 'An error occurred while fetching organisations',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 

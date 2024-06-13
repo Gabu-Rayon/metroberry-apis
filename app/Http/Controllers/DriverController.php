@@ -64,10 +64,9 @@ class DriverController extends Controller
                 'password' => bcrypt($data['password']),
             ]);
 
-            $user->assignRole('organisation');
-
             $driver = Driver::create([
                 'user_id' => $user->id,
+                'organisation_id' => $creator->id ?? null,
                 'created_by' => Auth::id(),
                 'status' => 'inactive'
             ]);

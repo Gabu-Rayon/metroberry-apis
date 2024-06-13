@@ -26,6 +26,13 @@ class RoleAndPermissionSeeder extends Seeder
         }
 
         $permissions = [
+            'view dashboard',
+
+            'view invoices',
+            'create invoice',
+            'edit invoice',
+            'delete invoice',
+            'show invoice',
             'view routes',
             'create route',
             'edit route',
@@ -110,6 +117,7 @@ class RoleAndPermissionSeeder extends Seeder
         $driver = Role::where('name', 'driver')->first();
 
         $admin->syncPermissions([
+            'view dashboard',
             'view routes',
             'create route',
             'edit route',
@@ -189,6 +197,8 @@ class RoleAndPermissionSeeder extends Seeder
         ]);
 
         $organisation->syncPermissions([
+            'view dashboard',
+            
             'view vehicles',
             'create vehicle',
             'edit vehicle',

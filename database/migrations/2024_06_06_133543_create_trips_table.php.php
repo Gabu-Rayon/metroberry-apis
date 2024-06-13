@@ -14,6 +14,9 @@ return new class extends Migration {
             $table->id();
             $table->unsignedBigInteger('customer_id')->nullable();
             $table->unsignedBigInteger('driver_id')->nullable();
+            $table->unsignedBigInteger('vehicle_id')->nullable();
+            $table->string('preferred_route')->nullable();
+            $table->time('pick_up_time')->nullable();
             $table->unsignedBigInteger('preferred_route_id')->nullable();
             $table->string('pick_up_time')->nullable();
             $table->date('drop_off_or_pick_up_date')->nullable();
