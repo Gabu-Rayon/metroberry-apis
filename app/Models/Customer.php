@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -8,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Customer extends Model
 {
     use HasFactory;
+
     protected $table = 'customers';
 
     protected $fillable = [
@@ -26,22 +26,32 @@ class Customer extends Model
         'updated_at',
     ];
 
-    protected $with = ['user'];
+    protected $with = ['user', 'creator', 'organisation'];
 
+    // Define the relationship to the user who is the customer
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function organisation() {
-        return $this->belongsTo(Organisation::class);
+    // Define the relationship to the user who created the customer
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 
+    // Define the relationship to the organisation
+    public function organisation()
+    {
+        return $this->belongsTo(Organisation::class, 'organisation_id');
+    }
+    // Define the relationship to the trips
     public function trips()
     {
         return $this->hasMany(Trip::class);
     }
 
+    // Define the relationship to the invoices
     public function billingsInvoices()
     {
         return $this->hasMany(Invoice::class);

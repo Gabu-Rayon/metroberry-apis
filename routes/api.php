@@ -76,7 +76,7 @@ Route::get('drivers/{driver}', [DriverController::class, 'show'])->middleware(['
 
 Route::get('customers', [EmployeeController::class, 'index'])->middleware(['auth:sanctum', 'can:view customers']);
 Route::post('customers', [EmployeeController::class, 'store'])->middleware(['auth:sanctum', 'can:create customer']);
-Route::post('customers/{id}', [EmployeeController::class, 'show'])->middleware(['auth:sanctum', 'can:view customer']);
+Route::get('customers/{id}', [EmployeeController::class, 'show'])->middleware(['auth:sanctum', 'can:view customers']);
 Route::put('customers/{id}', [EmployeeController::class, 'update'])->middleware(['auth:sanctum', 'can:edit customer']);
 Route::delete('customers/{id}', [EmployeeController::class, 'destroy'])->middleware(['auth:sanctum', 'can:delete customer']);
 

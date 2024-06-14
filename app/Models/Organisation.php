@@ -16,10 +16,6 @@ class Organisation extends Model
 
     protected $with = ['customers', 'vehicles', 'drivers'];
 
-    public function user() {
-        return $this->belongsTo(User::class);
-    }
-
     public function drivers() {
         return $this->hasMany(Driver::class);
     }
@@ -28,8 +24,26 @@ class Organisation extends Model
         return $this->hasMany(Vehicle::class);
     }
 
-    public function customers() {
-        return $this->hasMany(Customer::class);
+    public function customers()
+    {
+        return $this->hasMany(Customer::class, 'organisation_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    // Define the relationship to the user who owns the organisation
+    public function owner()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    // Define the relationship to the user who created the organisation
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 
     protected static function boot() {

@@ -115,24 +115,50 @@ class EmployeeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id) {
+    public function show(string $id)
+    {
         try {
-            $customer = Customer::find($id);
-            $customer->name = $customer->user->name;
+            // Retrieve the customer with the user, creator, and organisation details
+            $customer = Customer::with(['user', 'creator', 'organisation'])->findOrFail($id);
+
+            // Prepare the response data
+            $response = [
+                'id' => $customer->id,
+                'created_by' => [
+                    'id' => $customer->creator->id,
+                    'name' => $customer->creator->name,
+                    'email' => $customer->creator->email
+                ],
+                'user' => [
+                    'id' => $customer->user->id,
+                    'name' => $customer->user->name,
+                    'email' => $customer->user->email,
+                    'phone' => $customer->user->phone
+                ],
+                'organisation' => [
+                    'id' => $customer->organisation->id,
+                    'name' => $customer->organisation->name,
+                    'email' => $customer->organisation->owner->email // Assuming organisation's user is the owner
+                ],
+                'organisation_id' => $customer->organisation_id,
+                'customer_organisation_code' => $customer->customer_organisation_code
+            ];
 
             return response()->json([
                 'message' => 'Customer retrieved successfully',
-                'customer' => $customer
+                'customer' => $response
             ], 200);
         } catch (Exception $e) {
-            Log::info('RETRIEVE CUSTOMER ERROR');
-            Log::info($e);
+            Log::error('RETRIEVE CUSTOMER ERROR');
+            Log::error($e);
             return response()->json([
                 'message' => 'An error occurred while fetching customer',
                 'error' => $e->getMessage()
             ], 500);
         }
     }
+
+
 
     /**
      * Update the specified resource in storage.
