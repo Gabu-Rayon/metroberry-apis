@@ -33,10 +33,12 @@ class Driver extends Model
         return $this->belongsTo(User::class);
     }
 
+   
+
     public function vehicle() {
         return $this->hasOne(Vehicle::class);
     }
-
+  
     public function organization() {
         return $this->belongsTo(Organisation::class);
     }

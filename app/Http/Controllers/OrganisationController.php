@@ -109,7 +109,7 @@ class OrganisationController extends Controller
      */
     public function show(string $id)
     {
-        //
+        
     }
 
     /**

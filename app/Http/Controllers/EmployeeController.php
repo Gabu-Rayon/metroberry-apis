@@ -172,18 +172,28 @@ class EmployeeController extends Controller
                 'created_by' => [
                     'id' => $customer->creator->id,
                     'name' => $customer->creator->name,
-                    'email' => $customer->creator->email
+                    'email' => $customer->creator->email,
+                    "phone" => $customer->creator->phone,
+                    "address" => $customer->creator->address,
+                    "avatar" => $customer->creator->avatar,
+                    "organisation" => $customer->creator->organisation
                 ],
                 'user' => [
                     'id' => $customer->user->id,
                     'name' => $customer->user->name,
                     'email' => $customer->user->email,
-                    'phone' => $customer->user->phone
+                    "phone" => $customer->user->phone,
+                    "address" => $customer->user->address,
+                    "avatar" => $customer->user->avatar,
+                    "organisation" => $customer->user->organisation
                 ],
                 'organisation' => [
                     'id' => $customer->organisation->id,
                     'name' => $customer->organisation->user->name,
-                    'address' => $customer->organisation->user->address
+                    "phone" => $customer->organisation->user->phone,
+                    "address" => $customer->organisation->user->address,
+                    "avatar" => $customer->organisation->user->avatar,
+                    "organisation" => $customer->organisation->user->organisation
                 ],
                 'organisation_id' => $customer->organisation_id,
                 'customer_organisation_code' => $customer->customer_organisation_code

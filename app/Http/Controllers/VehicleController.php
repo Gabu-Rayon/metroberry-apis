@@ -16,16 +16,43 @@ class VehicleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index() {
+    public function index()
+    {
         try {
-            // $vehicles = Vehicle::where('organisation_id', auth()->user()->organisation->id)->get();
-            $vehicles = Vehicle::all();
+            // Retrieve all vehicles with related creator and driver details
+            $vehicles = Vehicle::with([
+                'creator:id,name,email',
+                'driver.user:id,name,email'
+            ])->get();
 
-            Log::info('All VechicleS from the Api :' .$vehicles);
-            
-          
+            Log::info('All Vehicles from the API:', $vehicles->toArray());
+
+            $response = $vehicles->map(function ($vehicle) {
+                return [
+                    'id' => $vehicle->id,
+                    'make' => $vehicle->make,
+                    'model' => $vehicle->model,
+                    'year' => $vehicle->year,
+                    'color' => $vehicle->color,
+                    'plate_number' => $vehicle->plate_number,
+                    'seats' => $vehicle->seats,
+                    'fuel_type' => $vehicle->fuel_type,
+                    'engine_size' => $vehicle->engine_size,
+                    'creator' => [
+                        'id' => $vehicle->creator->id,
+                        'name' => $vehicle->creator->name,
+                        'email' => $vehicle->creator->email,
+                    ],
+                    'driver' => $vehicle->driver ? [
+                        'id' => $vehicle->driver->user->id,
+                        'name' => $vehicle->driver->user->name,
+                        'email' => $vehicle->driver->user->email,
+                    ] : null,
+                ];
+            });
+
             return response()->json([
-                'vehicles' => $vehicles
+                'vehicles' => $response
             ], 200);
         } catch (Exception $e) {
             Log::error('ERROR FETCHING VEHICLES');
@@ -36,10 +63,12 @@ class VehicleController extends Controller
             ], 500);
         }
     }
+
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         try {
 
 
@@ -114,7 +143,7 @@ class VehicleController extends Controller
     //         DB::beginTransaction();
 
     //         $organisation = Organisation::find(Auth::id());
-            
+
     //         Log::info('Who is creating the Vehicle : ' . $organisation);
 
     //         $vehicle = Vehicle::create([
@@ -156,27 +185,41 @@ class VehicleController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show($id, Request $request) {
+    public function show($vehicleId, Request $request)
+    {
         try {
-            $user = $request->user();
-            $driver = $user->driver;
+            // Retrieve the vehicle with related creator and driver details
+            $vehicle = Vehicle::with([
+                'creator:id,name,email',
+                'driver.user:id,name,email'
+            ])->findOrFail($vehicleId);
 
-            Log::info('DRIVER INFO');
-            Log::info($driver);
+            Log::info('Vehicle details from the API:', $vehicle->toArray());
 
-            $vehicle = $driver->vehicle;
-
-            Log::info('DRIVER VEHICLE INFO');
-            Log::info($vehicle);
-
-            if (!$vehicle) {
-                return response()->json([
-                    'error' => 'Driver has no vehicle'
-                ], 404);
-            }
+            $response = [
+                'id' => $vehicle->id,
+                'make' => $vehicle->make,
+                'model' => $vehicle->model,
+                'year' => $vehicle->year,
+                'color' => $vehicle->color,
+                'plate_number' => $vehicle->plate_number,
+                'seats' => $vehicle->seats,
+                'fuel_type' => $vehicle->fuel_type,
+                'engine_size' => $vehicle->engine_size,
+                'creator' => [
+                    'id' => $vehicle->creator->id,
+                    'name' => $vehicle->creator->name,
+                    'email' => $vehicle->creator->email,
+                ],
+                'driver' => $vehicle->driver ? [
+                    'id' => $vehicle->driver->user->id,
+                    'name' => $vehicle->driver->user->name,
+                    'email' => $vehicle->driver->user->email,
+                ] : null,
+            ];
 
             return response()->json([
-                'vehicle' => $vehicle
+                'vehicle' => $response
             ], 200);
         } catch (Exception $e) {
             Log::error('ERROR FETCHING VEHICLE');
@@ -188,12 +231,14 @@ class VehicleController extends Controller
         }
     }
 
+
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $vehicle)
+    {
         try {
-            $vehicle = Vehicle::find($id);
+            $vehicle = Vehicle::find($vehicle);
             $organisation = Organisation::where('user_id', auth()->user()->id)->first();
 
             if (!$vehicle) {
@@ -248,7 +293,8 @@ class VehicleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id) {
+    public function destroy($id)
+    {
         try {
             $vehicle = Vehicle::find($id);
             $organisation = Organisation::where('user_id', auth()->user()->id)->first();
@@ -298,7 +344,7 @@ class VehicleController extends Controller
     //         Log::info("org  Assigning Vehicle:" . $organisation);
 
     //         $data = $request->validate([
-                
+
     //             'driver_id' => 'required|integer'
     //         ]);
 
