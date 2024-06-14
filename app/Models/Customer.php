@@ -14,6 +14,7 @@ class Customer extends Model
         'user_id',
         'organisation_id',
         'customer_organisation_code',
+        'created_by'
     ];
 
     protected $hidden = [

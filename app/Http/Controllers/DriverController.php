@@ -70,7 +70,6 @@ class DriverController extends Controller
                 'created_by' => Auth::id(),
                 'status' => 'inactive'
             ]);
-
             return response()->json([
                 'message' => 'Driver created successfully',
                 'driver' => $driver
