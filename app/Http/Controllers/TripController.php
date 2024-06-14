@@ -16,10 +16,8 @@ class TripController extends Controller
      */
     public function index()
     {
-        // try {
-        //     $trips = Trip::all();
-
-
+        try {
+            $trips = Trip::all();
             Log::info('All Trips Made from the Api :' . $trips);
             return response()->json([
                 'trips' => $trips
@@ -61,7 +59,7 @@ class TripController extends Controller
 
     /**
      * Store a newly created resource in storage.
-    //  */
+      */
     // public function store(Request $request)
     // {
     //     try {
@@ -116,35 +114,35 @@ class TripController extends Controller
             Log::info($data);
 
             $trip = Trip::create($data);
-            $trips = [];
-            $requestData = $request->all();
+            // $trips = [];
+            // $requestData = $request->all();
 
-            foreach ($requestData as $data) {
-                $validatedData = Validator::make($data, [
-                    'customer_id' => 'required|exists:customers,id',
-                    'vehicle_id' => 'required|exists:vehicles,id',
-                    'driver_id' => 'required|exists:drivers,id',
-                    'preferred_route_id' => 'required|exists:routes,id',
-                    'pick_up_time' => 'required|date_format:H:i',
-                    'drop_off_or_pick_up_date' => 'required|date',
-                    'pick_up_location' => 'required|in:Home,Office',
-                    'mileage_gps' => 'required|numeric',
-                    'mileage_can' => 'required|numeric',
-                    'engine_hours_gps' => 'required|numeric',
-                    'engine_hours_can' => 'required|numeric',
-                    'can_distance_till_service' => 'required|numeric',
-                    'average_fuel_consumption_litre_per_km' => 'required|numeric',
-                    'average_fuel_consumption_litre_per_hour' => 'required|numeric',
-                    'average_fuel_consumption_kg_per_km' => 'required|numeric',
-                ])->validate();
+            // foreach ($requestData as $data) {
+            //     $validatedData = Validator::make($data, [
+            //         'customer_id' => 'required|exists:customers,id',
+            //         'vehicle_id' => 'required|exists:vehicles,id',
+            //         'driver_id' => 'required|exists:drivers,id',
+            //         'preferred_route_id' => 'required|exists:routes,id',
+            //         'pick_up_time' => 'required|date_format:H:i',
+            //         'drop_off_or_pick_up_date' => 'required|date',
+            //         'pick_up_location' => 'required|in:Home,Office',
+            //         'mileage_gps' => 'required|numeric',
+            //         'mileage_can' => 'required|numeric',
+            //         'engine_hours_gps' => 'required|numeric',
+            //         'engine_hours_can' => 'required|numeric',
+            //         'can_distance_till_service' => 'required|numeric',
+            //         'average_fuel_consumption_litre_per_km' => 'required|numeric',
+            //         'average_fuel_consumption_litre_per_hour' => 'required|numeric',
+            //         'average_fuel_consumption_kg_per_km' => 'required|numeric',
+            //     ])->validate();
 
-                $trip = Trip::create($validatedData);
-                $trips[] = $trip;
-            }
+            //     $trip = Trip::create($validatedData);
+            //     $trips[] = $trip;
+            // }
 
             return response()->json([
                 'message' => 'Trips created successfully',
-                'trips' => $trips
+                'trip' => $trip
             ], 201);
         } catch (ValidationException $e) {
             Log::error('ERROR CREATING TRIP');
