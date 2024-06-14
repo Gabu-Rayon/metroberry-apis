@@ -62,7 +62,6 @@ Route::put('vehicles/{vehicle}', [VehicleController::class, 'update'])->middlewa
 Route::delete('vehicles/{vehicle}', [VehicleController::class, 'destroy'])->middleware(['auth:sanctum', 'can:delete vehicle']);
 Route::post('assign-driver/{vehicle}', [VehicleController::class, 'assign_driver'])->middleware(['auth:sanctum', 'can:assign driver']);
 
-
 Route::get('organisation', [OrganisationController::class, 'index'])->middleware(['auth:sanctum', 'can:view organisation']);
 Route::post('organisation', [OrganisationController::class, 'store'])->middleware(['auth:sanctum', 'can:create organisation']);
 Route::put('organisations/{organisation}', [OrganisationController::class, 'update'])->middleware(['auth:sanctum', 'can:edit organisation']);
@@ -86,6 +85,10 @@ Route::post('trip', [TripController::class, 'store'])->middleware(['auth:sanctum
 Route::put('trips/{trip}', [TripController::class, 'update'])->middleware(['auth:sanctum', 'can:edit trip']);
 Route::delete('trips/{trip}', [TripController::class, 'destroy'])->middleware(['auth:sanctum', 'can:delete trip']);
 Route::get('trips/{trip}', [TripController::class, 'show'])->middleware(['auth:sanctum', 'can:show trip']);
+//Route to Colloect each car Trip made data Colletion
+Route::post('vehicleTripDataCollection/{vehicle}', [TripController::class, 'vehicleTripDataCollection'])->middleware(['auth:sanctum', 'can:edit vehicle']);
+
+
 
 // Route to display the form
 Route::get('/trips/{trip}/', [TripController::class, 'showMapRouteForm'])->middleware(['auth:sanctum', 'can:edit trip']);
@@ -95,8 +98,8 @@ Route::post('mapTripToRoute/{trip}', [TripController::class, 'mapTripToRoute'])-
 Route::get('/trips/{trip}/', [TripController::class, 'showMapVehicleForm'])->middleware(['auth:sanctum', 'can:edit trip']);
 Route::post('mapTripToVehicle/{trip}', [TripController::class, 'mapTripToVehicle'])->middleware(['auth:sanctum', 'can:edit trip']);
 
-Route::get('invoices', [TripInvoiceController::class, 'index'])->middleware(['auth:sanctum', 'can:view trips']);
-Route::post('invoice', [TripInvoiceController::class, 'store'])->middleware(['auth:sanctum', 'can:create trip']);
-Route::put('invoices/{invoice}', [TripInvoiceController::class, 'update'])->middleware(['auth:sanctum', 'can:edit trip']);
-Route::delete('invoices/{invoice}', [TripInvoiceController::class, 'destroy'])->middleware(['auth:sanctum', 'can:delete trip']);
-Route::get('invoices/{invoice}', [TripInvoiceController::class, 'show'])->middleware(['auth:sanctum', 'can:show trip']);
+Route::get('invoices', [TripInvoiceController::class, 'index'])->middleware(['auth:sanctum', 'can:view invoices']);
+Route::post('invoice', [TripInvoiceController::class, 'store'])->middleware(['auth:sanctum', 'can:create invoice']);
+Route::put('invoices/{invoice}', [TripInvoiceController::class, 'update'])->middleware(['auth:sanctum', 'can:edit invoice']);
+Route::delete('invoices/{invoice}', [TripInvoiceController::class, 'destroy'])->middleware(['auth:sanctum', 'can:delete invoice']);
+Route::get('invoices/{invoice}', [TripInvoiceController::class, 'show'])->middleware(['auth:sanctum', 'can:show invoice']);

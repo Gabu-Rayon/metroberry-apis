@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\Trip;
+use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -30,23 +31,9 @@ class TripController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
-        //     Log::info('All Trips Made from the Api :' . $trips);
 
-
-        //     return response()->json([
-        //         'Trips' => $trips
-        //     ], 200);
-        // } catch (Exception $e) {
-        //     Log::error('ERROR FETCHING TRIPS');
-        //     Log::error($e);
-        //     return response()->json([
-        //         'message' => 'Error occurred while fetching trips',
-        //         'error' => $e->getMessage()
-        //     ], 500);
-        // }
-
-        $trips = Trip::all();
-        return response()->json($trips);
+        // $trips = Trip::all();
+        // return response()->json($trips);
     }
 
     /**
@@ -315,4 +302,47 @@ class TripController extends Controller
             ], 500);
         }
     }
+    public function vehicleTripDataCollection($vehicle, Request $request)
+    {
+        try {
+            // Retrieve the authenticated user
+            $user = auth()->user();
+            if (!$user->can('edit vehicle')) {
+                return response()->json([
+                    'message' => 'Forbidden',
+                ], 403);
+            }
+
+            // Validate the request data
+            $validatedData = $request->validate([
+                'mileage_gps' => 'required|numeric',
+                'mileage_can' => 'required|numeric',
+                'engine_hours_gps' => 'required|numeric',
+                'engine_hours_can' => 'required|numeric',
+                'can_distance_till_service' => 'required|numeric',
+                'average_fuel_consumption_litre_per_km' => 'required|numeric',
+                'average_fuel_consumption_litre_per_hour' => 'required|numeric',
+                'average_fuel_consumption_kg_per_km' => 'required|numeric',
+            ]);
+            //trip associated with the provided vehicle ID
+            $trip = Trip::where('vehicle_id', $vehicle)->firstOrFail();
+
+            // Update trip Vehicle Data Collected record with validated data
+            $trip->update($validatedData);
+
+            Log::info('Trip updated successfully', ['trip_id' => $trip->id]);
+
+            return response()->json([
+                'message' => 'Trip updated successfully',
+                'trip' => $trip,
+            ], 200);
+        } catch (Exception $e) {
+            Log::error('Error updating trip: ' . $e->getMessage());
+            return response()->json([
+                'message' => 'Error occurred while updating trip',
+                'error' => $e->getMessage(),
+            ], 500); 
+        }
+    }
+
 }
