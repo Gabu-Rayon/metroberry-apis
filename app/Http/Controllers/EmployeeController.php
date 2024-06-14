@@ -138,7 +138,7 @@ class EmployeeController extends Controller
                 'organisation' => [
                     'id' => $customer->organisation->id,
                     'name' => $customer->organisation->name,
-                    'email' => $customer->organisation->owner->email // Assuming organisation's user is the owner
+                    'email' => $customer->organisation->owner->email
                 ],
                 'organisation_id' => $customer->organisation_id,
                 'customer_organisation_code' => $customer->customer_organisation_code
