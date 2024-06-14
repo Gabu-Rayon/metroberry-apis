@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Organisation extends Model
 {
@@ -24,12 +25,15 @@ class Organisation extends Model
         return $this->hasMany(Vehicle::class);
     }
 
-    public function customers()
-    {
-        return $this->hasMany(Customer::class, 'organisation_id');
-    }
 
-    public function user()
+    /**
+     * Get the customers that belong to the organisation.
+     */
+    public function customers(): HasMany
+    {
+        return $this->hasMany(Customer::class, 'organisation_id', 'id');
+    }
+        public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }

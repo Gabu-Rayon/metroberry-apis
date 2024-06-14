@@ -153,6 +153,51 @@ class EmployeeController extends Controller
         }
     }
 
+
+
+    // public function show(string $id)
+    // {
+    //     try {
+    //         // Retrieve the customer with the user, creator, and organisation details
+    //         $customer = Customer::with(['user', 'creator', 'organisation'])->findOrFail($id);
+
+    //         // Prepare the response data
+    //         $response = [
+    //             'id' => $customer->id,
+    //             'created_by' => [
+    //                 'id' => $customer->creator->id,
+    //                 'name' => $customer->creator->name,
+    //                 'email' => $customer->creator->email
+    //             ],
+    //             'user' => [
+    //                 'id' => $customer->user->id,
+    //                 'name' => $customer->user->name,
+    //                 'email' => $customer->user->email,
+    //                 'phone' => $customer->user->phone
+    //             ],
+    //             'organisation' => [
+    //                 'id' => $customer->organisation->id,
+    //                 'name' => $customer->organisation->name,
+    //                 'address' => $customer->organisation->address
+    //             ],
+    //             'organisation_id' => $customer->organisation_id,
+    //             'customer_organisation_code' => $customer->customer_organisation_code
+    //         ];
+
+    //         return response()->json([
+    //             'message' => 'Customer retrieved successfully',
+    //             'customer' => $response
+    //         ], 200);
+    //     } catch (Exception $e) {
+    //         Log::error('RETRIEVE CUSTOMER ERROR');
+    //         Log::error($e);
+    //         return response()->json([
+    //             'message' => 'An error occurred while fetching customer',
+    //             'error' => $e->getMessage()
+    //         ], 500);
+    //     }
+    // }
+
     /**
      * Update the specified resource in storage.
      */
