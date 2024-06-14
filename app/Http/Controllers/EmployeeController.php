@@ -16,7 +16,8 @@ class EmployeeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index() {
+    public function index()
+    {
         try {
             $customers = Customer::all();
 
@@ -48,7 +49,7 @@ class EmployeeController extends Controller
             // Is request contains an array or a single object
             $customersData = $request->all();
             $isSingleCustomer = isset($customersData['name']);
-            
+
             if ($isSingleCustomer) {
                 $data = $request->validate([
                     'name' => 'required|string',
@@ -70,7 +71,7 @@ class EmployeeController extends Controller
                     '*.organisation_code' => 'required|string',
                 ]);
                 // Handle multiple customers
-                $customers = $customersData; 
+                $customers = $customersData;
             }
 
             $createdCustomers = [];
@@ -114,12 +115,56 @@ class EmployeeController extends Controller
 
     /**
      * Display the specified resource.
-     */
+    //  */
+    // public function show(string $id)
+    // {
+    //     try {
+    //         // Retrieve the customer with the user and creator details
+    //         $customer = Customer::with(['user', 'creator'])->findOrFail($id);
+
+    //         // Prepare the response data
+    //         $response = [
+    //             'id' => $customer->id,
+    //             'created_by' => [
+    //                 'id' => $customer->creator->id,
+    //                 'name' => $customer->creator->name,
+    //                 'email' => $customer->creator->email
+    //             ],
+    //             'user' => [
+    //                 'id' => $customer->user->id,
+    //                 'name' => $customer->user->name,
+    //                 'email' => $customer->user->email,
+    //                 'phone' => $customer->user->phone
+    //             ],
+    //             'organisation_id' => $customer->organisation_id,
+    //             'customer_organisation_code' => $customer->customer_organisation_code
+    //         ];
+
+    //         return response()->json([
+    //             'message' => 'Customer retrieved successfully',
+    //             'customer' => $response
+    //         ], 200);
+    //     } catch (Exception $e) {
+    //         Log::error('RETRIEVE CUSTOMER ERROR');
+    //         Log::error($e);
+    //         return response()->json([
+    //             'message' => 'An error occurred while fetching customer',
+    //             'error' => $e->getMessage()
+    //         ], 500);
+    //     }
+    // }
+
+
+
     public function show(string $id)
     {
         try {
-            // Retrieve the customer with the user and creator details
-            $customer = Customer::with(['user', 'creator'])->findOrFail($id);
+            // Retrieve the customer with the user, creator, and organisation details
+            $customer = Customer::with([
+                'user',
+                'creator',
+                'organisation.user'
+            ])->findOrFail($id);
 
             // Prepare the response data
             $response = [
@@ -134,6 +179,11 @@ class EmployeeController extends Controller
                     'name' => $customer->user->name,
                     'email' => $customer->user->email,
                     'phone' => $customer->user->phone
+                ],
+                'organisation' => [
+                    'id' => $customer->organisation->id,
+                    'name' => $customer->organisation->user->name,
+                    'address' => $customer->organisation->user->address
                 ],
                 'organisation_id' => $customer->organisation_id,
                 'customer_organisation_code' => $customer->customer_organisation_code
@@ -154,54 +204,11 @@ class EmployeeController extends Controller
     }
 
 
-
-    // public function show(string $id)
-    // {
-    //     try {
-    //         // Retrieve the customer with the user, creator, and organisation details
-    //         $customer = Customer::with(['user', 'creator', 'organisation'])->findOrFail($id);
-
-    //         // Prepare the response data
-    //         $response = [
-    //             'id' => $customer->id,
-    //             'created_by' => [
-    //                 'id' => $customer->creator->id,
-    //                 'name' => $customer->creator->name,
-    //                 'email' => $customer->creator->email
-    //             ],
-    //             'user' => [
-    //                 'id' => $customer->user->id,
-    //                 'name' => $customer->user->name,
-    //                 'email' => $customer->user->email,
-    //                 'phone' => $customer->user->phone
-    //             ],
-    //             'organisation' => [
-    //                 'id' => $customer->organisation->id,
-    //                 'name' => $customer->organisation->name,
-    //                 'address' => $customer->organisation->address
-    //             ],
-    //             'organisation_id' => $customer->organisation_id,
-    //             'customer_organisation_code' => $customer->customer_organisation_code
-    //         ];
-
-    //         return response()->json([
-    //             'message' => 'Customer retrieved successfully',
-    //             'customer' => $response
-    //         ], 200);
-    //     } catch (Exception $e) {
-    //         Log::error('RETRIEVE CUSTOMER ERROR');
-    //         Log::error($e);
-    //         return response()->json([
-    //             'message' => 'An error occurred while fetching customer',
-    //             'error' => $e->getMessage()
-    //         ], 500);
-    //     }
-    // }
-
     /**
      * Update the specified resource in storage.
      */
-    public function update (Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         try {
             $customer = Customer::find($id);
             $organisation = Organisation::where('user_id', auth()->user()->id)->first();
@@ -256,7 +263,8 @@ class EmployeeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id) {
+    public function destroy(string $id)
+    {
         try {
 
             $customer = Customer::find($id);
