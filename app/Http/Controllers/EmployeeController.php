@@ -118,8 +118,8 @@ class EmployeeController extends Controller
     public function show(string $id)
     {
         try {
-            // Retrieve the customer with the user, creator, and organisation details
-            $customer = Customer::with(['user', 'creator', 'organisation'])->findOrFail($id);
+            // Retrieve the customer with the user and creator details
+            $customer = Customer::with(['user', 'creator'])->findOrFail($id);
 
             // Prepare the response data
             $response = [
@@ -134,11 +134,6 @@ class EmployeeController extends Controller
                     'name' => $customer->user->name,
                     'email' => $customer->user->email,
                     'phone' => $customer->user->phone
-                ],
-                'organisation' => [
-                    'id' => $customer->organisation->id,
-                    'name' => $customer->organisation->name,
-                    'email' => $customer->organisation->owner->email
                 ],
                 'organisation_id' => $customer->organisation_id,
                 'customer_organisation_code' => $customer->customer_organisation_code
@@ -157,8 +152,6 @@ class EmployeeController extends Controller
             ], 500);
         }
     }
-
-
 
     /**
      * Update the specified resource in storage.
