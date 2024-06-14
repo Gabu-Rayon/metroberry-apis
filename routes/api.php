@@ -9,7 +9,7 @@ use App\Http\Controllers\TripController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\AddRouteController;
-use App\Http\Controllers\EmployeeControlle;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\TripInvoiceController;
 use App\Http\Controllers\OrganisationController;
 use App\Models\Customer;
@@ -74,11 +74,11 @@ Route::put('drivers/{driver}', [DriverController::class, 'update'])->middleware(
 Route::delete('drivers/{driver}', [DriverController::class, 'destroy'])->middleware(['auth:sanctum', 'can:delete driver']);
 Route::get('drivers/{driver}', [DriverController::class, 'show'])->middleware(['auth:sanctum', 'can:show driver']);
 
-Route::get('customers', [EmployeeControlle::class, 'index'])->middleware(['auth:sanctum', 'can:view customers']);
-Route::post('customers', [EmployeeControlle::class, 'store'])->middleware(['auth:sanctum', 'can:create customer']);
-Route::post('customers/{id}', [EmployeeControlle::class, 'show'])->middleware(['auth:sanctum', 'can:view customer']);
-Route::put('customers/{id}', [EmployeeControlle::class, 'update'])->middleware(['auth:sanctum', 'can:edit customer']);
-Route::delete('customers/{id}', [EmployeeControlle::class, 'destroy'])->middleware(['auth:sanctum', 'can:delete customer']);
+Route::get('customers', [EmployeeController::class, 'index'])->middleware(['auth:sanctum', 'can:view customers']);
+Route::post('customers', [EmployeeController::class, 'store'])->middleware(['auth:sanctum', 'can:create customer']);
+Route::post('customers/{id}', [EmployeeController::class, 'show'])->middleware(['auth:sanctum', 'can:view customer']);
+Route::put('customers/{id}', [EmployeeController::class, 'update'])->middleware(['auth:sanctum', 'can:edit customer']);
+Route::delete('customers/{id}', [EmployeeController::class, 'destroy'])->middleware(['auth:sanctum', 'can:delete customer']);
 
 Route::get('trips', [TripController::class, 'index'])->middleware(['auth:sanctum', 'can:view trips']);
 Route::post('trip', [TripController::class, 'store'])->middleware(['auth:sanctum', 'can:create trip']);
