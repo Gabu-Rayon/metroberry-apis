@@ -2,14 +2,44 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 
 class TripInvoiceController extends Controller
 {
+
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        try {
+            $tripInvoice = Invoice::all();
+
+            Log::info('All Trips Made from the Api :' . $tripInvoice);
+
+
+            return response()->json([
+                'Trip Invoice' => $tripInvoice
+            ], 200);
+        } catch (Exception $e) {
+            Log::error('ERROR FETCHING tripInvoice');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Error occurred while fetching tripInvoice',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+
+        // $tripInvoice = Invoice::all();
+        // return response()->json($tripInvoice);
+    }
     /**
      * Store a newly created resource in storage.
      */
