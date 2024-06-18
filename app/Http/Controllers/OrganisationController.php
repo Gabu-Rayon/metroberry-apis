@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Exception;
+use App\Models\User;
 use App\Models\Organisation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -17,26 +18,27 @@ class OrganisationController extends Controller
     public function index()
     {
         try {
+            if (Auth::user()->hasRole('admin')) {
+                $organisation = Organisation::all();
+                foreach ($organisation as $org) {
+                    $org->load('user');
+                }
+                return response()->json([
+                    'count' => count($organisation),
+                    'organisations' => $organisation
+                ], 200);
+            }
             $organisation = Organisation::where('created_by', Auth::id())->get();
             return response()->json([
-                'Organisations' => $organisation
+                'organisations' => $organisation
             ], 200);
         } catch (Exception $e) {
             Log::error('ERROR FETCHING Organisation');
             Log::error($e);
-            try {
-                $organisation = Organisation::where('created_by', Auth::id())->get();
-                return response()->json([
-                    'All Organisations' => $organisation
-                ], 200);
-            } catch (Exception $e) {
-                Log::error('ERROR FETCHING Organisations');
-                Log::error($e);
-                return response()->json([
-                    'message' => 'Error occurred while fetching All Organisations',
-                    'error' => $e->getMessage()
-                ], 500);
-            }
+            return response()->json([
+                'message' => 'An error occurred while fetching organisations',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 
@@ -54,63 +56,52 @@ class OrganisationController extends Controller
     public function store(Request $request)
     {
         try {
-            $data = $request->all();
+            // Validate the incoming request data
+            $data = $request->validate([
+                'name' => 'required|string',
+                'email' => 'required|email|unique:users,email',
+                'phone' => 'required|string',
+                'password' => 'required|string',
+            ]);
 
-            if (isset($data[0])) {
-                // The data is an array of organisations
-                $response = [];
-                foreach ($data as $organisationData) {
-                    $validatedData = Validator::make($organisationData, [
-                        'organisation_name' => 'required|string',
-                        'location' => 'required|string',
-                        'address' => 'required|string',
-                    ])->validate();
+            // Log the user creating the organisation
+            $adminUser = User::where('id', auth()->user()->id)->first();
+            Log::info('User with role of Admin Creating the Organisation');
+            Log::info($adminUser);
 
-                    $organisation = Organisation::create([
-                        'organisation_name' => $validatedData['organisation_name'],
-                        'location' => $validatedData['location'],
-                        'address' => $validatedData['address'],
-                        'created_by' => Auth::id(),
-                        'status' => true
-                    ]);
+            // Create a new user
+            $user = User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'phone' => $data['phone'],
+                'password' => bcrypt($data['password']),
+            ]);
 
-                    $response[] = $organisation;
-                }
+            // Create a new organisation
+            $organisation = Organisation::create([
+                // user_id is the id of organisation in the users table
+                'user_id' => $user->id,
+                // created_by is the id of user with role of admin in the users table
+                'created_by' => Auth::id(),
+            ]);
 
-                return response()->json([
-                    'message' => 'Organisations added successfully',
-                    'organisations' => $response
-                ], 201);
-            } else {
-                // The data is a single organisation
-                $validatedData = $request->validate([
-                    'organisation_name' => 'required|string',
-                    'location' => 'required|string',
-                    'address' => 'required|string',
-                ]);
+            // Save the organisation
+            $organisation->save();
 
-                $organisation = Organisation::create([
-                    'organisation_name' => $validatedData['organisation_name'],
-                    'location' => $validatedData['location'],
-                    'address' => $validatedData['address'],
-                    'created_by' => Auth::id(),
-                    'status' => true
-                ]);
-
-                return response()->json([
-                    'message' => 'Organisation added successfully',
-                    'organisation' => $organisation
-                ], 201);
-            }
+            return response()->json([
+                'message' => 'Organisation created successfully',
+                'organisation' => $organisation
+            ], 201);
         } catch (Exception $e) {
-            Log::error('ERROR CREATING Organisation');
+            Log::error('Error Creating Organisation');
             Log::error($e);
             return response()->json([
-                'message' => 'Error occurred while adding organisation(s)',
+                'message' => 'An error occurred while creating organisation',
                 'error' => $e->getMessage()
             ], 500);
         }
     }
+
 
 
     /**
@@ -118,7 +109,25 @@ class OrganisationController extends Controller
      */
     public function show(string $id)
     {
-        //
+        try {
+            $organisation = Organisation::where('id', $id)->first();
+            if (!$organisation) {
+                return response()->json([
+                    'message' => 'Organisation not found'
+                ], 404);
+            }
+            $organisation->load('user');
+            return response()->json([
+                'organisation' => $organisation
+            ], 200);
+        } catch (Exception $e) {
+            Log::error('ERROR FETCHING Organisation');
+            Log::error($e);
+            return response()->json([
+                'message' => 'An error occurred while fetching organisation',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**

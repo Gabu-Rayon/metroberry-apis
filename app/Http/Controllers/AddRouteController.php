@@ -18,7 +18,7 @@ class AddRouteController extends Controller
         try {
             $routes = Routes::where('created_by', Auth::id())->get();
             return response()->json([
-                'All Routes' => $routes
+                'routes' => $routes
             ], 200);
         } catch (Exception $e) {
             Log::error('ERROR FETCHING All the ROUTES');
@@ -41,44 +41,86 @@ class AddRouteController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    // public function store(Request $request)
+    // {
+    //     try {
+
+    //         $routedata = $request->validate([
+    //             'county' => 'required|string',
+    //             'location' => 'required|string',
+    //             'start_location' => 'required|string',
+    //             'end_location' => 'required|string',
+    //         ]);
+
+    //         Log::info('Route za kwetu na ya kwetu tu');
+    //         Log::info($routedata);
+
+    //         $route = Routes::create([
+    //             'county' => $routedata['county'],
+    //             'location' => $routedata['location'],
+    //             'start_location' => $routedata['start_location'],
+    //             'end_location' => $routedata['end_location'],
+    //             'created_by' => Auth::id(),
+    //         ]);
+
+    //         $route->save();
+
+    //         return response()->json([
+    //             'Routes' => $route,
+    //         ], 201);
+
+
+    //     } catch (Exception $e) {
+    //         Log::error('Error Adding A new Route');
+    //         Log::error($e);
+    //         return response()->json([
+    //             'message' => 'An error occurred while Adding A new Route',
+    //             'error' => $e->getMessage()
+    //         ], 500);
+    //     }
+    // }
+
+
     public function store(Request $request)
     {
         try {
-
-            $routedata = $request->validate([
-                'county' => 'required|string',
-                'location' => 'required|string',
-                'start_location' => 'required|string',
-                'end_location' => 'required|string',
+            $routesData = $request->validate([
+                'routes.*.county' => 'required|string',
+                'routes.*.location' => 'required|string',
+                'routes.*.start_location' => 'required|string',
+                'routes.*.end_location' => 'required|string',
             ]);
 
-            Log::info('Route za kwetu na ya kwetu tu');
-            Log::info($routedata);
+            Log::info('Routes za kwetu na ya kwetu tu');
+            Log::info($routesData);
 
-            $route = Routes::create([
-                'county' => $routedata['county'],
-                'location' => $routedata['location'],
-                'start_location' => $routedata['start_location'],
-                'end_location' => $routedata['end_location'],
-                'created_by' => Auth::id(),
-            ]);
+            $routes = [];
 
-            $route->save();
+            foreach ($routesData['routes'] as $routeData) {
+                $route = Routes::create([
+                    'county' => $routeData['county'],
+                    'location' => $routeData['location'],
+                    'start_location' => $routeData['start_location'],
+                    'end_location' => $routeData['end_location'],
+                    'created_by' => Auth::id(),
+                ]);
+
+                $routes[] = $route;
+            }
 
             return response()->json([
-                'Routes' => $route,
+                'routes' => $routes,
             ], 201);
-
-
         } catch (Exception $e) {
-            Log::error('Error Adding A new Route');
+            Log::error('Error Adding New Routes');
             Log::error($e);
             return response()->json([
-                'message' => 'An error occurred while Adding A new Route',
+                'message' => 'An error occurred while Adding New Routes',
                 'error' => $e->getMessage()
             ], 500);
         }
     }
+
 
     /**
      * Display the specified resource.

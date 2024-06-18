@@ -11,6 +11,7 @@ class Routes extends Model
     protected $table = 'routes';
     protected $fillable = [
        'county',
+       'created_by',
        'location',
        'start_location',
        'end_location'

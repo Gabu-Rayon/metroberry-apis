@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('location');
             $table->string('start_location');
             $table->string('end_location');
-            $table->bigInteger('created_by');
             $table->timestamps();
 
         });

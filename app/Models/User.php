@@ -3,12 +3,13 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasPermissions;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-use Spatie\Permission\Traits\HasPermissions;
-use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
@@ -25,7 +26,8 @@ class User extends Authenticatable
         'password',
         'phone',
         'address',
-        'avatar'
+        'avatar',
+        'created_by'
     ];
 
     /**
@@ -34,9 +36,15 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
+        'created_at',
+        'updated_at',
         'password',
         'remember_token',
+        'roles',
+        'permissions',
     ];
+
+    protected $with = ['organisation'];
 
     /**
      * Get the attributes that should be cast.
@@ -47,11 +55,38 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'phone_verified_at' => 'datetime',
+            'phone_status' => 'boolean',
+            'email_status' => 'boolean',
+            'organisation_status' => 'boolean',
             'password' => 'hashed',
         ];
     }
 
     public function driver() {
         return $this->hasOne(Driver::class);
+    }
+
+    public function customers(): HasMany
+    {
+        return $this->hasMany(Customer::class, 'user_id', 'id');
+    }
+    public function organisation() {
+        return $this->hasOne(Organisation::class);
+    }
+
+    public static function boot () {
+        parent::boot();
+        static::deleting(function($user) {
+            $user->driver()->delete();
+            $user->customer()->delete();
+            $user->organisation()->delete();
+        });
+    }
+
+
+    public function createdVehicleServices()
+    {
+        return $this->hasMany(VehicleService::class, 'created_by');
     }
 }
