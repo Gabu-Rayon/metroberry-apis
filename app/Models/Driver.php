@@ -13,6 +13,18 @@ class Driver extends Model
         'user_id',
         'organisation_id',
         'created_by',
+        'status',
+        'national_id_no',
+        'national_id_avatar_front',
+        'national_id_avatar_behind',
+        'sex',
+        'date_of_birth',
+        'driving_license_no',
+        'driving_license_date_issued',
+        'driving_license_date_expiry',
+        'dl_county_of_residence',
+        'dl_avatar_front',
+        'dl_avatar_behind',
     ];
 
     protected $with = ['user'];
