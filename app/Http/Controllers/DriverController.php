@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
+use App\Models\User;
 use App\Models\Driver;
 use App\Models\Organisation;
-use App\Models\User;
-use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
+
 
 class DriverController extends Controller
 {
@@ -41,11 +45,54 @@ class DriverController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    // public function store(Request $request)
+    // {
+    //     try {
+
+    //         $creator = Organisation::find(Auth::id());
+
+    //         Log::info('CREATOR');
+    //         Log::info($creator);
+
+    //         $data = $request->validate([
+    //             'name' => 'required|string',
+    //             'email' => 'required|email|unique:users,email',
+    //             'phone' => 'required|string',
+    //             'password' => 'required|string',
+    //         ]);
+
+    //         $user = User::create([
+    //             'name' => $data['name'],
+    //             'email' => $data['email'],
+    //             'phone' => $data['phone'],
+    //             'password' => bcrypt($data['password']),
+    //             // next we will add avatar when creating Driver 
+    //         ]);
+
+    //         $driver = Driver::create([
+    //             'user_id' => $user->id,
+    //             'organisation_id' => $creator->id ?? null,
+    //             'created_by' => Auth::id(),
+    //             'status' => 'inactive'
+    //         ]);
+    //         return response()->json([
+    //             'message' => 'Driver created successfully !',
+    //             'driver' => $driver
+    //         ], 201);
+    //     } catch (Exception $e) {
+    //         Log::error('CREATE DRIVER ERROR');
+    //         Log::error($e);
+    //         return response()->json([
+    //             'message' => 'An error occurred',
+    //             'error' => $e->getMessage()
+    //         ], 500);
+    //     }
+    // }
+
     public function store(Request $request)
     {
         try {
-
-            $creator = Organisation::find(Auth::id());
+            $creator = User::find(Auth::id());
 
             Log::info('CREATOR');
             Log::info($creator);
@@ -55,13 +102,20 @@ class DriverController extends Controller
                 'email' => 'required|email|unique:users,email',
                 'phone' => 'required|string',
                 'password' => 'required|string',
+                'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
+
+            $avatarPath = null;
+            if ($request->hasFile('avatar')) {
+                $avatarPath = $request->file('avatar')->store('DriversAvatars', 'public');
+            }
 
             $user = User::create([
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'phone' => $data['phone'],
                 'password' => bcrypt($data['password']),
+                'avatar' => $avatarPath,
             ]);
 
             $driver = Driver::create([
@@ -70,6 +124,7 @@ class DriverController extends Controller
                 'created_by' => Auth::id(),
                 'status' => 'inactive'
             ]);
+
             return response()->json([
                 'message' => 'Driver created successfully',
                 'driver' => $driver
@@ -83,6 +138,7 @@ class DriverController extends Controller
             ], 500);
         }
     }
+
 
     /**
      * Display the specified resource.
@@ -106,34 +162,96 @@ class DriverController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    // public function update(Request $request, Driver $driver)
+    // {
+    //     try {
+    //         $data = $request->validate([
+    //             'name' => 'required|string',
+    //             'email' => 'required|email|unique:users,email,' . $driver->user_id,
+    //             'phone' => 'required|string',
+    //         ]);
+
+    //         $driver->user->update([
+    //             'name' => $data['name'],
+    //             'email' => $data['email'],
+    //             'phone' => $data['phone'],
+    //         ]);
+
+    //         return response()->json([
+    //             'message' => 'Driver updated successfully',
+    //             'driver' => $driver
+    //         ], 200);
+    //     } catch (Exception $e) {
+    //         Log::error('UPDATE DRIVER ERROR');
+    //         Log::error($e);
+    //         return response()->json([
+    //             'message' => 'An error occurred',
+    //             'error' => $e->getMessage()
+    //         ], 500);
+    //     }
+    // }
+
     public function update(Request $request, Driver $driver)
     {
         try {
+            $creator = User::find(Auth::id());
+
+            Log::info('Creator Updating the Driver Details :');
+            Log::info($creator);
+
+            // Log request data for debugging
+            Log::info('Request Data:', $request->all());
+
+            // Validate the request data
             $data = $request->validate([
                 'name' => 'required|string',
                 'email' => 'required|email|unique:users,email,' . $driver->user_id,
                 'phone' => 'required|string',
+                'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
-            $driver->user->update([
+            $user = $driver->user;
+            $avatarPath = $user->avatar;
+
+            if ($request->hasFile('avatar')) {
+                // Delete the old avatar if it exists
+                if ($avatarPath) {
+                    Storage::disk('public')->delete($avatarPath);
+                }
+
+                // Store the new avatar in the public/DriversAvatars directory
+                $avatarPath = $request->file('avatar')->store('DriversAvatars', 'public');
+            }
+
+            $user->update([
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'phone' => $data['phone'],
+                'avatar' => $avatarPath,
             ]);
 
             return response()->json([
                 'message' => 'Driver updated successfully',
-                'driver' => $driver
+                'driver' => $driver->load('user')
             ], 200);
+        } catch (ValidationException $e) {
+            Log::error('Validation Error:', $e->errors());
+            return response()->json([
+                'message' => 'Validation Error',
+                'errors' => $e->errors()
+            ], 422);
         } catch (Exception $e) {
-            Log::error('UPDATE DRIVER ERROR');
-            Log::error($e);
+            Log::error('UPDATE DRIVER ERROR: ' . $e->getMessage());
             return response()->json([
                 'message' => 'An error occurred',
                 'error' => $e->getMessage()
             ], 500);
         }
     }
+
+
+
+
 
     /**
      * Remove the specified resource from storage.
