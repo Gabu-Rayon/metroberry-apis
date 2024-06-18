@@ -10,8 +10,8 @@ class Vehicle extends Model
     use HasFactory;
 
     protected $fillable = [
+        'created_by',
         'driver_id',
-        'organisation_id',
         'model',
         'make',
         'year',
@@ -20,10 +20,14 @@ class Vehicle extends Model
         'seats',
         'fuel_type',
         'engine_size',
+        'vehicle_insurance_issue_date',
+        'vehicle_insurance_expiry',
+        'vehicle_insurance_issue_organisation',
+        'vehicle_avatar',
         'status',
-        'created_by',
+        'organisation_id'
     ];
-
+    
 
     protected $hidden = [
         'organisation_id',
@@ -31,6 +35,7 @@ class Vehicle extends Model
         'created_at',
         'updated_at',
     ];
+    
 
 
     public function creator()

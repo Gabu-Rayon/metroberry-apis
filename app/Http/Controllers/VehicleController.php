@@ -70,13 +70,17 @@ class VehicleController extends Controller
     public function store(Request $request)
     {
         try {
+            $userId = Auth::id();
+            if (!$userId) {
+                Log::error('User not authenticated');
+                return response()->json(['message' => 'User not authenticated'], 401);
+            }
 
+            Log::info('Authenticated User ID: ' . $userId);
 
-            $creator = Organisation::find(Auth::id());
-
-            Log::info('CREATOR');
-            Log::info($creator);
-
+            $creator = Organisation::find($userId);
+            Log::info('CREATOR', ['creator' => $creator]);
+            
             $data = $request->validate([
                 'make' => 'required|string',
                 'model' => 'required|string',
@@ -86,10 +90,20 @@ class VehicleController extends Controller
                 'seats' => 'required|integer',
                 'fuel_type' => 'required|string',
                 'engine_size' => 'required|string',
+                'organisation_id' => 'required|integer',
+                'vehicle_insurance_issue_date' => 'nullable|date_format:Y-m-d',
+                'vehicle_insurance_expiry' => 'nullable|date_format:Y-m-d',
+                'vehicle_insurance_issue_organisation' => 'nullable|string',
+                'vehicle_avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
-            Log::info('VEHICLE VALIDATION DATA');
-            Log::info($data);
+            Log::info('VEHICLE VALIDATION DATA', ['data' => $data]);
+
+            $avatarPath = null;
+            if ($request->hasFile('vehicle_avatar')) {
+                $avatarPath = $request->file('vehicle_avatar')->store('VehicleAvatars', 'public');
+                Log::info('Avatar Path: ' . $avatarPath);
+            }
 
             $vehicle = Vehicle::create([
                 'make' => $data['make'],
@@ -100,23 +114,30 @@ class VehicleController extends Controller
                 'seats' => $data['seats'],
                 'fuel_type' => $data['fuel_type'],
                 'engine_size' => $data['engine_size'],
-                'created_by' => Auth::id(),
+                'organisation_id' => $data['organisation_id'],
+                'vehicle_insurance_issue_date' => $data['vehicle_insurance_issue_date'],
+                'vehicle_insurance_expiry' => $data['vehicle_insurance_expiry'],
+                'vehicle_insurance_issue_organisation' => $data['vehicle_insurance_issue_organisation'],
+                'vehicle_avatar' => $avatarPath,
+                'created_by' => $userId,
                 'status' => 'inactive'
             ]);
+
+            Log::info('VEHICLE CREATED', ['vehicle' => $vehicle]);
 
             return response()->json([
                 'message' => 'Vehicle created successfully',
                 'vehicle' => $vehicle
             ], 201);
         } catch (Exception $e) {
-            Log::error('ERROR CREATING VEHICLE');
-            Log::error($e);
+            Log::error('ERROR CREATING VEHICLE', ['error' => $e->getMessage()]);
             return response()->json([
                 'message' => 'Error occurred while creating vehicle',
                 'error' => $e->getMessage()
             ], 500);
         }
     }
+
 
     // public function store(Request $request)
     // {
