@@ -13,7 +13,8 @@ return new class extends Migration {
         Schema::table('vehicles', function (Blueprint $table) {
             $table->dateTime('vehicle_insurance_issue_date')->nullable()->after('engine_size');
             $table->dateTime('vehicle_insurance_expiry')->nullable()->after('vehicle_insurance_issue_date');
-            $table->string('vehicle_insurance_issue_organisations')->nullable()->after('vehicle_insurance_expiry');
+            $table->string('vehicle_insurance_issue_organisation')->nullable()->after('vehicle_insurance_expiry');
+            $table->string('vehicle_avatar')->nullable()->after('vehicle_insurance_issue_organisation');
         });
     }
 
@@ -26,7 +27,7 @@ return new class extends Migration {
             $table->dropColumn([
                 'vehicle_insurance_issue_date',
                 'vehicle_insurance_expiry',
-                'vehicle_insurance_issue_organisations',
+                'vehicle_insurance_issue_organisation',
             ]);
         });
     }
