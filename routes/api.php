@@ -10,9 +10,38 @@ use App\Http\Controllers\AddRouteController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\TripInvoiceController;
 use App\Http\Controllers\OrganisationController;
+use App\Models\Customer;
+use App\Models\Driver;
+use App\Models\Vehicle;
+use Illuminate\Support\Facades\Log;
 
 Route::get('/user', function (Request $request) {
-    return $request->user();
+    $user = $request->user();
+    $permissions = $user->getAllPermissions()->pluck('name')->toArray();
+    Log::info('USER PERMISSIONS');
+    Log::info($permissions);
+    $user->permitted_to = $permissions;
+
+    $admin = [];
+    $org = [];
+
+    if ($user->hasRole('organisation')) {
+        $user->load('organisation.customers.user', 'organisation.drivers.user');
+    } else if ($user->hasRole('admin')) {
+        $org['customers'] = Customer::all();
+        $org['drivers'] = Driver::all();
+        $org['vehicles'] = Vehicle::all();
+
+        $admin = [
+            'permitted_to' => $permissions,
+            'name' => $user->name,
+            'organisation' => $org,
+        ];
+
+        return $admin;
+    }
+
+    return $user;
 })->middleware('auth:sanctum');
 
 Route::post('register', [AuthController::class, 'register']);
@@ -31,6 +60,8 @@ Route::post('vehicles', [VehicleController::class, 'store'])->middleware(['auth:
 Route::put('vehicles/{vehicle}', [VehicleController::class, 'update'])->middleware(['auth:sanctum', 'can:edit vehicle']);
 Route::delete('vehicles/{vehicle}', [VehicleController::class, 'destroy'])->middleware(['auth:sanctum', 'can:delete vehicle']);
 Route::post('assign-driver/{vehicle}', [VehicleController::class, 'assign_driver'])->middleware(['auth:sanctum', 'can:assign driver']);
+Route::post('activate-vehicle/{vehicle}', [VehicleController::class, 'activate_vehicle'])->middleware(['auth:sanctum', 'can:activate vehicle']);
+Route::post('deactivate-vehicle/{vehicle}', [VehicleController::class, 'deactivate_vehicle'])->middleware(['auth:sanctum', 'can:activate vehicle']);
 
 Route::get('organisation', [OrganisationController::class, 'index'])->middleware(['auth:sanctum', 'can:view organisation']);
 Route::post('organisation', [OrganisationController::class, 'store'])->middleware(['auth:sanctum', 'can:create organisation']);
@@ -55,16 +86,11 @@ Route::post('trip', [TripController::class, 'store'])->middleware(['auth:sanctum
 Route::put('trips/{trip}', [TripController::class, 'update'])->middleware(['auth:sanctum', 'can:edit trip']);
 Route::delete('trips/{trip}', [TripController::class, 'destroy'])->middleware(['auth:sanctum', 'can:delete trip']);
 Route::get('trips/{trip}', [TripController::class, 'show'])->middleware(['auth:sanctum', 'can:show trip']);
-//Route to Colloect each car Trip made data Colletion
 Route::post('vehicleTripDataCollection/{vehicle}', [TripController::class, 'vehicleTripDataCollection'])->middleware(['auth:sanctum', 'can:edit vehicle']);
 
-
-
-// Route to display the form
 Route::get('/trips/{trip}/', [TripController::class, 'showMapRouteForm'])->middleware(['auth:sanctum', 'can:edit trip']);
 Route::post('mapTripToRoute/{trip}', [TripController::class, 'mapTripToRoute'])->middleware(['auth:sanctum', 'can:edit trip']);
 
-// Route to display the form
 Route::get('/trips/{trip}/', [TripController::class, 'showMapVehicleForm'])->middleware(['auth:sanctum', 'can:edit trip']);
 Route::post('mapTripToVehicle/{trip}', [TripController::class, 'mapTripToVehicle'])->middleware(['auth:sanctum', 'can:edit trip']);
 
