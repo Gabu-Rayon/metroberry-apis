@@ -101,7 +101,8 @@ class DriverController extends Controller
             'name' => 'required|string',
             'email' => 'required|email|unique:users,email',
             'phone' => 'required|string',
-            'password' => 'required|string',
+            'password' => 'required|integer',
+           'organisation_id' => 'required|string',
             'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'national_id_no' => 'required|string|unique:drivers',
             'national_id_avatar_front' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -131,7 +132,7 @@ class DriverController extends Controller
 
         $driver = Driver::create([
             'user_id' => $user->id,
-            'organisation_id' => $creator->organisation_id ?? null,
+            'organisation_id' => $data['organisation_id'],
             'created_by' => Auth::id(),
             'status' => 'inactive',
             'national_id_no' => $data['national_id_no'],
