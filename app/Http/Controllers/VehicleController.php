@@ -569,7 +569,57 @@ class VehicleController extends Controller
         }
     }
 
+    public function activate_vehicle($id) {
+        try {
+            $vehicle = Vehicle::find($id);
 
+            if (!$vehicle) {
+                return response()->json([
+                    'error' => 'Vehicle not found'
+                ], 404);
+            }
 
+            $vehicle->status = 'active';
+            $vehicle->save();
 
+            return response()->json([
+                'message' => 'Vehicle activated successfully',
+                'vehicle' => $vehicle
+            ], 200);
+        } catch (Exception $e) {
+            Log::error('ERROR ACTIVATING VEHICLE');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Error occurred while activating vehicle',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function deactivate_vehicle($id) {
+        try {
+            $vehicle = Vehicle::find($id);
+
+            if (!$vehicle) {
+                return response()->json([
+                    'error' => 'Vehicle not found'
+                ], 404);
+            }
+
+            $vehicle->status = 'inactive';
+            $vehicle->save();
+
+            return response()->json([
+                'message' => 'Vehicle deactivated successfully',
+                'vehicle' => $vehicle
+            ], 200);
+        } catch (Exception $e) {
+            Log::error('ERROR DEACTIVATING VEHICLE');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Error occurred while deactivating vehicle',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

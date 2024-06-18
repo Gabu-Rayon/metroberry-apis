@@ -27,6 +27,7 @@ class RoleAndPermissionSeeder extends Seeder
 
         $permissions = [
             'view dashboard',
+            'activate vehicle',
 
             'view invoices',
             'create invoice',
@@ -119,6 +120,8 @@ class RoleAndPermissionSeeder extends Seeder
 
         $admin->syncPermissions([
             'view dashboard',
+            'activate vehicle',
+            
             'view routes',
             'create route',
             'edit route',
@@ -199,6 +202,7 @@ class RoleAndPermissionSeeder extends Seeder
 
         $organisation->syncPermissions([
             'view dashboard',
+            'activate vehicle',
             
             'view vehicles',
             'create vehicle',
