@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('address')->nullable();
             $table->string('avatar')->nullable();
+            $table->string('role')->default('admin');
+            $table->foreignId('created_by')->nullable()->constrained('users');
             $table->rememberToken();
             $table->timestamps();
         });

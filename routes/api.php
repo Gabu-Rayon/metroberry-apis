@@ -1,9 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
-use Spatie\Permission\Contracts\Role;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\DriverController;
@@ -12,38 +10,9 @@ use App\Http\Controllers\AddRouteController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\TripInvoiceController;
 use App\Http\Controllers\OrganisationController;
-use App\Models\Customer;
-use App\Models\Driver;
-use App\Models\Organisation;
-use App\Models\Vehicle;
 
 Route::get('/user', function (Request $request) {
-    $user = $request->user();
-    $permissions = $user->getAllPermissions()->pluck('name')->toArray();
-    Log::info('USER PERMISSIONS');
-    Log::info($permissions);
-    $user->permitted_to = $permissions;
-
-    $admin = [];
-    $org = [];
-
-    if ($user->hasRole('organisation')) {
-        $user->load('organisation.customers.user', 'organisation.drivers.user');
-    } else if ($user->hasRole('admin')) {
-        $org['customers'] = Customer::all();
-        $org['drivers'] = Driver::all();
-        $org['vehicles'] = Vehicle::all();
-
-        $admin = [
-            'permitted_to' => $permissions,
-            'name' => $user->name,
-            'organisation' => $org,
-        ];
-
-        return $admin;
-    }
-
-    return $user;
+    return $request->user();
 })->middleware('auth:sanctum');
 
 Route::post('register', [AuthController::class, 'register']);
