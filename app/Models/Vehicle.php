@@ -43,13 +43,12 @@ class Vehicle extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    
     public function driver() {
-        return $this->belongsTo(Driver::class);
+        return $this->belongsTo(Driver::class,'driver_id');
     }
 
     public function organisation() {
-        return $this->belongsTo(Organisation::class);
+        return $this->belongsTo(Organisation::class,'organisation_id');
     }
 
     public function trips()

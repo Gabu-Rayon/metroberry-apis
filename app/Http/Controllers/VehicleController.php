@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Gate;
 
 class VehicleController extends Controller
 {
@@ -38,15 +39,23 @@ class VehicleController extends Controller
                     'seats' => $vehicle->seats,
                     'fuel_type' => $vehicle->fuel_type,
                     'engine_size' => $vehicle->engine_size,
+                    'organisation_id' => $vehicle->engine_size,
+                    'vehicle_insurance_issue_date' => $vehicle->vehicle_insurance_issue_date,
+                    'vehicle_insurance_expiry' => $vehicle->vehicle_insurance_expiry,
+                    'vehicle_insurance_issue_organisation' => $vehicle->vehicle_insurance_issue_organisation,
+                    'vehicle_avatar' => $vehicle->vehicle_avatar,
+                    'status' => 'inactive',
                     'creator' => [
                         'id' => $vehicle->creator->id,
                         'name' => $vehicle->creator->name,
                         'email' => $vehicle->creator->email,
+                        'address' => $vehicle->creator->address,
                     ],
                     'driver' => $vehicle->driver ? [
                         'id' => $vehicle->driver->user->id,
                         'name' => $vehicle->driver->user->name,
                         'email' => $vehicle->driver->user->email,
+                        'address' => $vehicle->driver->user->address,
                     ] : null,
                 ];
             });
@@ -80,7 +89,7 @@ class VehicleController extends Controller
 
             $creator = Organisation::find($userId);
             Log::info('CREATOR', ['creator' => $creator]);
-            
+
             $data = $request->validate([
                 'make' => 'required|string',
                 'model' => 'required|string',
@@ -227,16 +236,31 @@ class VehicleController extends Controller
                 'seats' => $vehicle->seats,
                 'fuel_type' => $vehicle->fuel_type,
                 'engine_size' => $vehicle->engine_size,
+                'organisation_id' => $vehicle->engine_size,
+                'vehicle_insurance_issue_date' => $vehicle->vehicle_insurance_issue_date,
+                'vehicle_insurance_expiry' => $vehicle->vehicle_insurance_expiry,
+                'vehicle_insurance_issue_organisation' => $vehicle->vehicle_insurance_issue_organisation,
+                'vehicle_avatar' => $vehicle->vehicle_avatar,
+                'status' => 'inactive',
                 'creator' => [
                     'id' => $vehicle->creator->id,
                     'name' => $vehicle->creator->name,
                     'email' => $vehicle->creator->email,
+                    'address' => $vehicle->creator->address,
                 ],
                 'driver' => $vehicle->driver ? [
                     'id' => $vehicle->driver->user->id,
                     'name' => $vehicle->driver->user->name,
                     'email' => $vehicle->driver->user->email,
+                    'address' => $vehicle->driver->user->address,
                 ] : null,
+
+                // 'organisation' => $vehicle->driver ? [
+                //     'id' => $vehicle->driver->user->id,
+                //     'name' => $vehicle->driver->user->name,
+                //     'email' => $vehicle->driver->user->email,
+                //     'address' => $vehicle->driver->user->address,
+                // ] : null,
             ];
 
             return response()->json([
@@ -256,24 +280,28 @@ class VehicleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $vehicle)
+    public function update(Request $request, $vehicleId)
     {
         try {
-            $vehicle = Vehicle::find($vehicle);
-            $organisation = Organisation::where('user_id', auth()->user()->id)->first();
+            // Find the vehicle by its ID
+            $vehicle = Vehicle::find($vehicleId);
 
+            // Check if the vehicle exists
             if (!$vehicle) {
                 return response()->json([
                     'message' => 'Vehicle not found',
                 ], 404);
             }
 
-            if (!$organisation || $vehicle->organisation_id !== $organisation->id) {
+            // Use Gate to check if the authenticated user can edit the vehicle
+            if (Gate::denies('edit-vehicle', $vehicle)) {
                 return response()->json([
-                    'message' => 'Unauthorised',
+                    'message' => 'Unauthorized',
                 ], 401);
             }
 
+
+            // Validate the request data
             $data = $request->validate([
                 'make' => 'required|string',
                 'model' => 'required|string',
@@ -283,8 +311,14 @@ class VehicleController extends Controller
                 'seats' => 'required|integer',
                 'fuel_type' => 'required|string',
                 'engine_size' => 'required|string',
+                'organisation_id' => 'required|integer',
+                'vehicle_insurance_issue_date' => 'nullable|date_format:Y-m-d',
+                'vehicle_insurance_expiry' => 'nullable|date_format:Y-m-d',
+                'vehicle_insurance_issue_organisation' => 'nullable|string',
+                'vehicle_avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
+            // Update the vehicle attributes
             $vehicle->make = $data['make'];
             $vehicle->model = $data['model'];
             $vehicle->year = $data['year'];
@@ -294,13 +328,33 @@ class VehicleController extends Controller
             $vehicle->fuel_type = $data['fuel_type'];
             $vehicle->engine_size = $data['engine_size'];
 
+            $vehicle->organisation_id = $data['organisation_id'];
+            $vehicle->vehicle_insurance_issue_date = $data['vehicle_insurance_issue_date'];
+            $vehicle->vehicle_insurance_expiry = $data['vehicle_insurance_expiry'];
+            $vehicle->vehicle_insurance_issue_organisation = $data['vehicle_insurance_issue_organisation'];
+            $vehicle->vehicle_avatar = $data['vehicle_avatar'];
+
+            // Handle vehicle avatar update if provided
+            if ($request->hasFile('vehicle_avatar')) {
+                $avatarPath = $request->file('vehicle_avatar')->store('VehicleAvatars', 'public');
+                $vehicle->vehicle_avatar = $avatarPath;
+            }
+
+            // Save the updated vehicle
             $vehicle->save();
 
+            // Return success response
             return response()->json([
                 'message' => 'Vehicle updated successfully',
                 'vehicle' => $vehicle
             ], 200);
 
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            Log::error('Vehicle not found with ID: ' . $vehicleId);
+            return response()->json([
+                'message' => 'Vehicle not found',
+                'error' => $e->getMessage()
+            ], 404);
         } catch (Exception $e) {
             Log::error('ERROR UPDATING VEHICLE');
             Log::error($e);
