@@ -80,7 +80,7 @@ class VehicleController extends Controller
 
             $creator = Organisation::find($userId);
             Log::info('CREATOR', ['creator' => $creator]);
-
+            
             $data = $request->validate([
                 'make' => 'required|string',
                 'model' => 'required|string',
