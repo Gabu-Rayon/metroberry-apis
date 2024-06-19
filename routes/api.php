@@ -38,7 +38,7 @@ Route::post('assign-driver/{vehicle}', [VehicleController::class, 'assign_driver
 Route::post('activate-vehicle/{vehicle}', [VehicleController::class, 'activate_vehicle'])->middleware(['auth:sanctum', 'can:activate vehicle']);
 Route::post('deactivate-vehicle/{vehicle}', [VehicleController::class, 'deactivate_vehicle'])->middleware(['auth:sanctum', 'can:activate vehicle']);
 
-//Insurance Apis 
+
 Route::put('insurances/{vehicleId}', [InsuranceController::class,'update'])->middleware(['auth:sanctum', 'can:edit vehicle']);
 
 Route::get('organisation', [OrganisationController::class, 'index'])->middleware(['auth:sanctum', 'can:view organisation']);
