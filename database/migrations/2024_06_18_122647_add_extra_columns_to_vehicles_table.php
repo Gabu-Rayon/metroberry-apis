@@ -11,8 +11,12 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('vehicles', function (Blueprint $table) {
-            $table->dateTime('vehicle_insurance_issue_date')->nullable()->after('engine_size');
-            $table->dateTime('vehicle_insurance_expiry')->nullable()->after('vehicle_insurance_issue_date');
+            // $table->dateTime('vehicle_insurance_issue_date')->nullable()->after('engine_size');
+            $table->date('vehicle_insurance_issue_date')->nullable()->after('engine_size');
+            
+            // $table->dateTime('vehicle_insurance_expiry')->nullable()->after('vehicle_insurance_issue_date');            
+            $table->date('vehicle_insurance_expiry')->nullable()->after('vehicle_insurance_issue_date');
+            
             $table->string('vehicle_insurance_issue_organisation')->nullable()->after('vehicle_insurance_expiry');
             $table->string('vehicle_avatar')->nullable()->after('vehicle_insurance_issue_organisation');
         });

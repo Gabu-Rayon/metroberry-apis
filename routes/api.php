@@ -8,6 +8,7 @@ use App\Http\Controllers\DriverController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\AddRouteController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\TripInvoiceController;
 use App\Http\Controllers\OrganisationController;
 
@@ -40,6 +41,9 @@ Route::post('assign-driver/{vehicle}', [VehicleController::class, 'assign_driver
 Route::post('activate-vehicle/{vehicle}', [VehicleController::class, 'activate_vehicle'])->middleware(['auth:sanctum', 'can:activate vehicle']);
 Route::post('deactivate-vehicle/{vehicle}', [VehicleController::class, 'deactivate_vehicle'])->middleware(['auth:sanctum', 'can:activate vehicle']);
 
+//Insurance Apis 
+Route::put('insurances/{vehicleId}', [InsuranceController::class,'update'])->middleware(['auth:sanctum', 'can:edit vehicle']);
+
 Route::get('organisation', [OrganisationController::class, 'index'])->middleware(['auth:sanctum', 'can:view organisation']);
 Route::post('organisation', [OrganisationController::class, 'store'])->middleware(['auth:sanctum', 'can:create organisation']);
 Route::put('organisations/{organisation}', [OrganisationController::class, 'update'])->middleware(['auth:sanctum', 'can:edit organisation']);
@@ -64,6 +68,7 @@ Route::put('trips/{trip}', [TripController::class, 'update'])->middleware(['auth
 Route::delete('trips/{trip}', [TripController::class, 'destroy'])->middleware(['auth:sanctum', 'can:delete trip']);
 Route::get('trips/{trip}', [TripController::class, 'show'])->middleware(['auth:sanctum', 'can:show trip']);
 Route::post('vehicleTripDataCollection/{vehicle}', [TripController::class, 'vehicleTripDataCollection'])->middleware(['auth:sanctum', 'can:edit vehicle']);
+
 
 Route::get('/trips/{trip}/', [TripController::class, 'showMapRouteForm'])->middleware(['auth:sanctum', 'can:edit trip']);
 Route::post('mapTripToRoute/{trip}', [TripController::class, 'mapTripToRoute'])->middleware(['auth:sanctum', 'can:edit trip']);
