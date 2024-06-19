@@ -10,37 +10,11 @@ use App\Http\Controllers\AddRouteController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\TripInvoiceController;
 use App\Http\Controllers\OrganisationController;
-use App\Models\Customer;
-use App\Models\Driver;
-use App\Models\Vehicle;
-use Illuminate\Support\Facades\Log;
 
 Route::get('/user', function (Request $request) {
     $user = $request->user();
     $permissions = $user->getAllPermissions()->pluck('name')->toArray();
-    Log::info('USER PERMISSIONS');
-    Log::info($permissions);
     $user->permitted_to = $permissions;
-
-    $admin = [];
-    $org = [];
-
-    if ($user->hasRole('organisation')) {
-        $user->load('organisation.customers.user', 'organisation.drivers.user');
-    } else if ($user->hasRole('admin')) {
-        $org['customers'] = Customer::all();
-        $org['drivers'] = Driver::all();
-        $org['vehicles'] = Vehicle::all();
-
-        $admin = [
-            'permitted_to' => $permissions,
-            'name' => $user->name,
-            'organisation' => $org,
-        ];
-
-        return $admin;
-    }
-
     return $user;
 })->middleware('auth:sanctum');
 
