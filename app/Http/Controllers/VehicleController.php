@@ -44,7 +44,7 @@ class VehicleController extends Controller
                     'vehicle_insurance_expiry' => $vehicle->vehicle_insurance_expiry,
                     'vehicle_insurance_issue_organisation' => $vehicle->vehicle_insurance_issue_organisation,
                     'vehicle_avatar' => $vehicle->vehicle_avatar,
-                    'status' => 'inactive',
+                    'status' => $vehicle->status,
                     'creator' => [
                         'id' => $vehicle->creator->id,
                         'name' => $vehicle->creator->name,
