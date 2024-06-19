@@ -5,18 +5,23 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Routes extends Model
+class RideType extends Model
 {
     use HasFactory;
-    protected $table = 'routes';
+
+    protected $table = 'ride_type';
+
     protected $fillable = [
-       'county',
-       'created_by',
-       'location',
-       'start_location',
-       'end_location'
+        'type',
+        'description',
+        'status',
+        'created_by',
     ];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 
     public function tripPricings()
     {

@@ -107,6 +107,11 @@ class RoleAndPermissionSeeder extends Seeder
             'update profile',
             'reset password',
             'update avatar',
+
+            'view trip pricing',
+            'create trip pricing',
+            'edit trip pricing',
+            'delete trip pricing'
         ];
 
         foreach ($permissions as $permission) {
@@ -197,6 +202,11 @@ class RoleAndPermissionSeeder extends Seeder
             'update profile',
             'reset password',
             'update avatar',
+
+            'view trip pricing',
+            'create trip pricing',
+            'edit trip pricing',
+            'delete trip pricing'
             
         ]);
 

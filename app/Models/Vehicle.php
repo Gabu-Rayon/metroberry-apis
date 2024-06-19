@@ -25,7 +25,8 @@ class Vehicle extends Model
         'vehicle_insurance_issue_organisation',
         'vehicle_avatar',
         'status',
-        'organisation_id'
+        'organisation_id',
+        'ride_type_id'
     ];
 
     
@@ -60,5 +61,10 @@ class Vehicle extends Model
     public function services()
     {
         return $this->hasMany(VehicleService::class);
+    }
+
+    public function rideType()
+    {
+        return $this->belongsTo(RideType::class, 'ride_type_id');
     }
 }

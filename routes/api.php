@@ -10,6 +10,7 @@ use App\Http\Controllers\AddRouteController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\TripInvoiceController;
+use App\Http\Controllers\TripPricingController;
 use App\Http\Controllers\OrganisationController;
 
 Route::get('/user', function (Request $request) {
@@ -73,6 +74,26 @@ Route::post('mapTripToRoute/{trip}', [TripController::class, 'mapTripToRoute'])-
 Route::get('/trips/{trip}/', [TripController::class, 'showMapVehicleForm'])->middleware(['auth:sanctum', 'can:edit trip']);
 Route::post('mapTripToVehicle/{trip}', [TripController::class, 'mapTripToVehicle'])->middleware(['auth:sanctum', 'can:edit trip']);
 
+
+//TripPricing
+Route::get('trip-pricing', [TripPricingController::class, 'index'])->middleware(['auth:sanctum', 'can:view trip pricing']);
+Route::post('trip-pricing', [TripPricingController::class, 'store'])->middleware(['auth:sanctum', 'can:create trip pricing']);
+Route::get('trip-pricing/{id}', [TripPricingController::class, 'show'])->middleware(['auth:sanctum', 'can:view trip pricing']);
+Route::put('trip-pricing/{id}', [TripPricingController::class, 'update'])->middleware(['auth:sanctum', 'can:edit trip pricing']);
+Route::delete('trip-pricing/{id}', [TripPricingController::class, 'destroy'])->middleware(['auth:sanctum', 'can:delete trip pricing']);
+
+
+
+//RideType 
+use App\Http\Controllers\RideTypeController;
+
+Route::get('ride-types', [RideTypeController::class, 'index'])->middleware(['auth:sanctum', 'can:view ride types']);
+Route::post('ride-types', [RideTypeController::class, 'store'])->middleware(['auth:sanctum', 'can:create ride type']);
+Route::get('ride-types/{id}', [RideTypeController::class, 'show'])->middleware(['auth:sanctum', 'can:view ride types']);
+Route::put('ride-types/{id}', [RideTypeController::class, 'update']) ->middleware(['auth:sanctum', 'can:edit ride type']);
+Route::delete('ride-types/{id}', [RideTypeController::class, 'destroy'])->middleware(['auth:sanctum', 'can:delete ride type']);
+
+    
 Route::get('invoices', [TripInvoiceController::class, 'index'])->middleware(['auth:sanctum', 'can:view invoices']);
 Route::post('invoice', [TripInvoiceController::class, 'store'])->middleware(['auth:sanctum', 'can:create invoice']);
 Route::put('invoices/{invoice}', [TripInvoiceController::class, 'update'])->middleware(['auth:sanctum', 'can:edit invoice']);

@@ -32,6 +32,7 @@ class Trip extends Model
         'average_fuel_consumption_litre_per_km',
         'average_fuel_consumption_litre_per_hour',
         'average_fuel_consumption_kg_per_km',
+        'ride_type_id'
     ];
 
 
@@ -54,5 +55,10 @@ class Trip extends Model
     public function billingsInvoices()
     {
         return $this->hasMany(Invoice::class);
+    }
+
+    public function rideType()
+    {
+        return $this->belongsTo(RideType::class, 'ride_type_id');
     }
 }
