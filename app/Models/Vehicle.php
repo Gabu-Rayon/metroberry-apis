@@ -27,6 +27,7 @@ class Vehicle extends Model
         'status',
         'organisation_id'
     ];
+
     
 
     protected $hidden = [
