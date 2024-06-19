@@ -303,11 +303,6 @@ class VehicleController extends Controller
                 'seats' => 'nullable|integer',
                 'fuel_type' => 'nullable|string',
                 'engine_size' => 'nullable|string',
-                'organisation_id' => 'nullable|integer',
-                'vehicle_insurance_issue_date' => 'nullable|date_format:Y-m-d',
-                'vehicle_insurance_expiry' => 'nullable|date_format:Y-m-d',
-                'vehicle_insurance_issue_organisation' => 'nullable|string',
-                'vehicle_avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
             // Update the vehicle attributes if present in the request
@@ -326,26 +321,14 @@ class VehicleController extends Controller
             if (isset($data['fuel_type']))
                 $vehicle->fuel_type = $data['fuel_type'];
             if (isset($data['engine_size']))
-                $vehicle->engine_size = $data['engine_size'];
-            if (isset($data['organisation_id']))
-                $vehicle->organisation_id = $data['organisation_id'];
-            if (isset($data['vehicle_insurance_issue_date']))
-                $vehicle->vehicle_insurance_issue_date = $data['vehicle_insurance_issue_date'];
-            if (isset($data['vehicle_insurance_expiry']))
-                $vehicle->vehicle_insurance_expiry = $data['vehicle_insurance_expiry'];
-            if (isset($data['vehicle_insurance_issue_organisation']))
-                $vehicle->vehicle_insurance_issue_organisation = $data['vehicle_insurance_issue_organisation'];
 
-            // Handle vehicle avatar update if provided
             if ($request->hasFile('vehicle_avatar')) {
                 $avatarPath = $request->file('vehicle_avatar')->store('VehicleAvatars', 'public');
                 $vehicle->vehicle_avatar = $avatarPath;
             }
 
-            // Save the updated vehicle
             $vehicle->save();
 
-            // Return success response
             return response()->json([
                 'message' => 'Vehicle updated successfully',
                 'vehicle' => $vehicle
