@@ -60,8 +60,9 @@ class User extends Authenticatable
         ];
     }
 
-    public function driver() {
-        return $this->hasOne(Driver::class);
+    public function driver(): HasMany
+    {
+        return $this->hasMany(Driver::class, 'user_id', 'id');
     }
 
     public function customers(): HasMany
@@ -69,19 +70,17 @@ class User extends Authenticatable
         return $this->hasMany(Customer::class, 'user_id', 'id');
     }
     public function organisation() {
-        return $this->hasOne(Organisation::class);
+        return $this->hasOne(Organisation::class, 'user_id', 'id');
     }
 
     public static function boot () {
         parent::boot();
         static::deleting(function($user) {
             $user->driver()->delete();
-            $user->customer()->delete();
+            $user->customers()->delete();
             $user->organisation()->delete();
         });
     }
-
-
     public function createdVehicleServices()
     {
         return $this->hasMany(VehicleService::class, 'created_by');

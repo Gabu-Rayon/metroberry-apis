@@ -184,34 +184,6 @@ class DriverController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    // public function update(Request $request, Driver $driver)
-    // {
-    //     try {
-    //         $data = $request->validate([
-    //             'name' => 'required|string',
-    //             'email' => 'required|email|unique:users,email,' . $driver->user_id,
-    //             'phone' => 'required|string',
-    //         ]);
-
-    //         $driver->user->update([
-    //             'name' => $data['name'],
-    //             'email' => $data['email'],
-    //             'phone' => $data['phone'],
-    //         ]);
-
-    //         return response()->json([
-    //             'message' => 'Driver updated successfully',
-    //             'driver' => $driver
-    //         ], 200);
-    //     } catch (Exception $e) {
-    //         Log::error('UPDATE DRIVER ERROR');
-    //         Log::error($e);
-    //         return response()->json([
-    //             'message' => 'An error occurred',
-    //             'error' => $e->getMessage()
-    //         ], 500);
-    //     }
-    // }
 
     public function update(Request $request, Driver $driver)
     {
@@ -226,31 +198,89 @@ class DriverController extends Controller
 
             // Validate the request data
             $data = $request->validate([
-                'name' => 'required|string',
-                'email' => 'required|email|unique:users,email,' . $driver->user_id,
-                'phone' => 'required|string',
+                'name' => 'nullable|string',
+                'email' => 'nullable|email|unique:users,email,' . $driver->user_id,
+                'phone' => 'nullable|string',
                 'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+
+                'national_id_no' => 'nullable|string|unique:drivers,national_id_no,' . $driver->id,
+                'national_id_avatar_front' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'national_id_avatar_behind' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+
+                'sex' => 'nullable|string',
+                'date_of_birth' => 'nullable|date_format:Y-m-d',
+
+                'driving_license_no' => 'nullable|string|unique:drivers,driving_license_no,' . $driver->id,
+                'driving_license_date_issued' => 'nullable|date_format:Y-m-d',
+                'driving_license_date_expiry' => 'nullable|date_format:Y-m-d',
+
+                'dl_county_of_residence' => 'nullable|string',
+                'dl_avatar_front' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'dl_avatar_behind' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
             $user = $driver->user;
-            $avatarPath = $user->avatar;
 
-            if ($request->hasFile('avatar')) {
-                // Delete the old avatar if it exists
-                if ($avatarPath) {
-                    Storage::disk('public')->delete($avatarPath);
-                }
-
-                // Store the new avatar in the public/DriversAvatars directory
-                $avatarPath = $request->file('avatar')->store('DriversAvatars', 'public');
+            if ($request->hasFile('avatar') && $user->avatar) {
+                Storage::disk('public')->delete($user->avatar);
             }
 
+            $user->avatar = $request->hasFile('avatar') ? $request->file('avatar')->store('DriversAvatars', 'public') : $user->avatar;
+
             $user->update([
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'phone' => $data['phone'],
-                'avatar' => $avatarPath,
+                'name' => $data['name'] ?? $user->name,
+                'email' => $data['email'] ?? $user->email,
+                'phone' => $data['phone'] ?? $user->phone,
+                'avatar' => $user->avatar,
             ]);
+
+            // Handle national ID avatars
+            if ($request->hasFile('national_id_avatar_front') && $driver->national_id_avatar_front) {
+                Storage::disk('public')->delete($driver->national_id_avatar_front);
+            }
+
+            $driver->national_id_avatar_front = $request->hasFile('national_id_avatar_front') ? $request->file('national_id_avatar_front')->store('DriversNationalIdAvatars', 'public') : $driver->national_id_avatar_front;
+
+            if ($request->hasFile('national_id_avatar_behind') && $driver->national_id_avatar_behind) {
+                Storage::disk('public')->delete($driver->national_id_avatar_behind);
+            }
+
+            $driver->national_id_avatar_behind = $request->hasFile('national_id_avatar_behind') ? $request->file('national_id_avatar_behind')->store('DriversNationalIdAvatars', 'public') : $driver->national_id_avatar_behind;
+
+            // Handle driving license avatars
+            if ($request->hasFile('dl_avatar_front') && $driver->dl_avatar_front) {
+                Storage::disk('public')->delete($driver->dl_avatar_front);
+            }
+
+            $driver->dl_avatar_front = $request->hasFile('dl_avatar_front') ? $request->file('dl_avatar_front')->store('DriversDLAvatars', 'public') : $driver->dl_avatar_front;
+
+            if ($request->hasFile('dl_avatar_behind') && $driver->dl_avatar_behind) {
+                Storage::disk('public')->delete($driver->dl_avatar_behind);
+            }
+
+            $driver->dl_avatar_behind = $request->hasFile('dl_avatar_behind') ? $request->file('dl_avatar_behind')->store('DriversDLAvatars', 'public') : $driver->dl_avatar_behind;
+
+            // Update driver data
+            $driverData = [
+                'national_id_no' => $data['national_id_no'] ?? $driver->national_id_no,
+                'national_id_avatar_front' => $driver->national_id_avatar_front,
+                'national_id_avatar_behind' => $driver->national_id_avatar_behind,
+                'sex' => $data['sex'] ?? $driver->sex,
+                'date_of_birth' => $data['date_of_birth'] ?? $driver->date_of_birth,
+                'driving_license_no' => $data['driving_license_no'] ?? $driver->driving_license_no,
+                'driving_license_date_issued' => $data['driving_license_date_issued'] ?? $driver->driving_license_date_issued,
+                'driving_license_date_expiry' => $data['driving_license_date_expiry'] ?? $driver->driving_license_date_expiry,
+                'dl_county_of_residence' => $data['dl_county_of_residence'] ?? $driver->dl_county_of_residence,
+                'dl_avatar_front' => $driver->dl_avatar_front,
+                'dl_avatar_behind' => $driver->dl_avatar_behind,
+            ];
+
+            // Filter out null values from driver data before updating
+            $driverData = array_filter($driverData, function ($value) {
+                return !is_null($value);
+            });
+
+            $driver->update($driverData);
 
             return response()->json([
                 'message' => 'Driver updated successfully',
@@ -271,29 +301,29 @@ class DriverController extends Controller
         }
     }
 
-
-
-
-
     /**
      * Remove the specified resource from storage.
+     * 
      */
     public function destroy(Driver $driver)
     {
         try {
+            // Delete associated user
             $driver->user->delete();
+
+            // Delete driver record
             $driver->delete();
 
             return response()->json([
                 'message' => 'Driver deleted successfully'
             ], 200);
         } catch (Exception $e) {
-            Log::error('DELETE DRIVER ERROR');
-            Log::error($e);
+            Log::error('DELETE DRIVER ERROR: ' . $e->getMessage());
             return response()->json([
                 'message' => 'An error occurred',
                 'error' => $e->getMessage()
             ], 500);
         }
     }
+
 }
