@@ -22,7 +22,7 @@ class Organisation extends Model
     }
 
     public function vehicles() {
-        return $this->hasMany(Vehicle::class);
+        return $this->hasMany(Vehicle::class, 'organisation_id', 'id');
     }
 
 
