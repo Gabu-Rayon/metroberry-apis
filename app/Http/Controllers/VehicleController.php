@@ -293,46 +293,48 @@ class VehicleController extends Controller
                 ], 404);
             }
 
-            // Use Gate to check if the authenticated user can edit the vehicle
-            if (Gate::denies('edit-vehicle', $vehicle)) {
-                return response()->json([
-                    'message' => 'Unauthorized',
-                ], 401);
-            }
-
-
             // Validate the request data
             $data = $request->validate([
-                'make' => 'required|string',
-                'model' => 'required|string',
-                'year' => 'required|integer',
-                'color' => 'required|string',
-                'plate_number' => 'required|string',
-                'seats' => 'required|integer',
-                'fuel_type' => 'required|string',
-                'engine_size' => 'required|string',
-                'organisation_id' => 'required|integer',
+                'make' => 'nullable|string',
+                'model' => 'nullable|string',
+                'year' => 'nullable|integer',
+                'color' => 'nullable|string',
+                'plate_number' => 'nullable|string',
+                'seats' => 'nullable|integer',
+                'fuel_type' => 'nullable|string',
+                'engine_size' => 'nullable|string',
+                'organisation_id' => 'nullable|integer',
                 'vehicle_insurance_issue_date' => 'nullable|date_format:Y-m-d',
                 'vehicle_insurance_expiry' => 'nullable|date_format:Y-m-d',
                 'vehicle_insurance_issue_organisation' => 'nullable|string',
                 'vehicle_avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
-            // Update the vehicle attributes
-            $vehicle->make = $data['make'];
-            $vehicle->model = $data['model'];
-            $vehicle->year = $data['year'];
-            $vehicle->color = $data['color'];
-            $vehicle->plate_number = $data['plate_number'];
-            $vehicle->seats = $data['seats'];
-            $vehicle->fuel_type = $data['fuel_type'];
-            $vehicle->engine_size = $data['engine_size'];
-
-            $vehicle->organisation_id = $data['organisation_id'];
-            $vehicle->vehicle_insurance_issue_date = $data['vehicle_insurance_issue_date'];
-            $vehicle->vehicle_insurance_expiry = $data['vehicle_insurance_expiry'];
-            $vehicle->vehicle_insurance_issue_organisation = $data['vehicle_insurance_issue_organisation'];
-            $vehicle->vehicle_avatar = $data['vehicle_avatar'];
+            // Update the vehicle attributes if present in the request
+            if (isset($data['make']))
+                $vehicle->make = $data['make'];
+            if (isset($data['model']))
+                $vehicle->model = $data['model'];
+            if (isset($data['year']))
+                $vehicle->year = $data['year'];
+            if (isset($data['color']))
+                $vehicle->color = $data['color'];
+            if (isset($data['plate_number']))
+                $vehicle->plate_number = $data['plate_number'];
+            if (isset($data['seats']))
+                $vehicle->seats = $data['seats'];
+            if (isset($data['fuel_type']))
+                $vehicle->fuel_type = $data['fuel_type'];
+            if (isset($data['engine_size']))
+                $vehicle->engine_size = $data['engine_size'];
+            if (isset($data['organisation_id']))
+                $vehicle->organisation_id = $data['organisation_id'];
+            if (isset($data['vehicle_insurance_issue_date']))
+                $vehicle->vehicle_insurance_issue_date = $data['vehicle_insurance_issue_date'];
+            if (isset($data['vehicle_insurance_expiry']))
+                $vehicle->vehicle_insurance_expiry = $data['vehicle_insurance_expiry'];
+            if (isset($data['vehicle_insurance_issue_organisation']))
+                $vehicle->vehicle_insurance_issue_organisation = $data['vehicle_insurance_issue_organisation'];
 
             // Handle vehicle avatar update if provided
             if ($request->hasFile('vehicle_avatar')) {
@@ -365,6 +367,74 @@ class VehicleController extends Controller
         }
     }
 
+    // public function update(Request $request, $vehicle)
+    // {
+    //     try {
+    //         // Log the incoming request data
+    //         Log::info('Request data for car being edited:', $request->all());
+
+    //         // Find the vehicle by its ID
+    //         $vehicleInstance = Vehicle::find($vehicle);
+
+    //         // Check if the vehicle exists
+    //         if (!$vehicleInstance) {
+    //             return response()->json([
+    //                 'message' => 'Vehicle not found',
+    //             ], 404);
+    //         }
+
+    //         // Validate the request data
+    //         $data = $request->validate([
+    //             'make' => 'nullable|string',
+    //             'model' => 'nullable|string',
+    //             'year' => 'nullable|integer',
+    //             'color' => 'nullable|string',
+    //             'plate_number' => 'nullable|string',
+    //             'seats' => 'nullable|integer',
+    //             'fuel_type' => 'nullable|string',
+    //             'engine_size' => 'nullable|string',
+    //             'organisation_id' => 'nullable|integer',
+    //             'vehicle_insurance_issue_date' => 'nullable|date_format:Y-m-d',
+    //             'vehicle_insurance_expiry' => 'nullable|date_format:Y-m-d',
+    //             'vehicle_insurance_issue_organisation' => 'nullable|string',
+    //             'vehicle_avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    //         ]);
+
+    //         // Log the validated data
+    //         Log::info('Validated data for updating car:', $data);
+
+    //         // Update the vehicle attributes if present in the request
+    //         foreach ($data as $key => $value) {
+    //             if (!is_null($value)) {
+    //                 $vehicleInstance->$key = $value;
+    //             }
+    //         }
+
+    //         // Handle vehicle avatar update if provided
+    //         if ($request->hasFile('vehicle_avatar')) {
+    //             $avatarPath = $request->file('vehicle_avatar')->store('VehicleAvatars', 'public');
+    //             $vehicleInstance->vehicle_avatar = $avatarPath;
+    //         }
+
+    //         // Save the updated vehicle
+    //         $vehicleInstance->save();
+
+    //         // Return success response
+    //         return response()->json([
+    //             'message' => 'Vehicle updated successfully',
+    //             'vehicle' => $vehicleInstance
+    //         ], 200);
+
+    //     } catch (Exception $e) {
+    //         Log::error('Error occurred while updating vehicle: ' . $e->getMessage());
+    //         return response()->json([
+    //             'message' => 'Error occurred while updating vehicle',
+    //             'error' => $e->getMessage()
+    //         ], 500);
+    //     }
+    // }
+
+
     /**
      * Remove the specified resource from storage.
      */
@@ -372,19 +442,11 @@ class VehicleController extends Controller
     {
         try {
             $vehicle = Vehicle::find($id);
-            $organisation = Organisation::where('user_id', auth()->user()->id)->first();
-
 
             if (!$vehicle) {
                 return response()->json([
                     'error' => 'Vehicle not found'
                 ], 404);
-            }
-
-            if (!$organisation || $vehicle->organisation_id !== $organisation->id) {
-                return response()->json([
-                    'message' => 'Unauthorised',
-                ], 401);
             }
 
             $vehicle->delete();
@@ -569,7 +631,59 @@ class VehicleController extends Controller
         }
     }
 
+    public function activate_vehicle($id)
+    {
+        try {
+            $vehicle = Vehicle::find($id);
 
+            if (!$vehicle) {
+                return response()->json([
+                    'error' => 'Vehicle not found'
+                ], 404);
+            }
 
+            $vehicle->status = 'active';
+            $vehicle->save();
 
+            return response()->json([
+                'message' => 'Vehicle activated successfully',
+                'vehicle' => $vehicle
+            ], 200);
+        } catch (Exception $e) {
+            Log::error('ERROR ACTIVATING VEHICLE');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Error occurred while activating vehicle',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function deactivate_vehicle($id)
+    {
+        try {
+            $vehicle = Vehicle::find($id);
+
+            if (!$vehicle) {
+                return response()->json([
+                    'error' => 'Vehicle not found'
+                ], 404);
+            }
+
+            $vehicle->status = 'inactive';
+            $vehicle->save();
+
+            return response()->json([
+                'message' => 'Vehicle deactivated successfully',
+                'vehicle' => $vehicle
+            ], 200);
+        } catch (Exception $e) {
+            Log::error('ERROR DEACTIVATING VEHICLE');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Error occurred while deactivating vehicle',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }
