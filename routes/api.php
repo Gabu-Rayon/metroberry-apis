@@ -34,6 +34,8 @@ Route::put('vehicles/{vehicle}', [VehicleController::class, 'update'])->middlewa
 
 Route::delete('vehicles/{vehicle}', [VehicleController::class, 'destroy'])->middleware(['auth:sanctum', 'can:delete vehicle']);
 Route::post('assign-driver/{vehicle}', [VehicleController::class, 'assign_driver'])->middleware(['auth:sanctum', 'can:assign driver']);
+Route::post('activate-vehicle/{vehicle}', [VehicleController::class, 'activate_vehicle'])->middleware(['auth:sanctum', 'can:activate vehicle']);
+Route::post('deactivate-vehicle/{vehicle}', [VehicleController::class, 'deactivate_vehicle'])->middleware(['auth:sanctum', 'can:activate vehicle']);
 
 Route::get('organisation', [OrganisationController::class, 'index'])->middleware(['auth:sanctum', 'can:view organisation']);
 Route::post('organisation', [OrganisationController::class, 'store'])->middleware(['auth:sanctum', 'can:create organisation']);
