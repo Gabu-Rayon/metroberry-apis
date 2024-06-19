@@ -559,13 +559,6 @@ class VehicleController extends Controller
     public function assign_driver($vehicle, Request $request)
     {
         try {
-            // Check if the authenticated user has the 'assign driver' permission
-            if (!auth()->user()->can('assign driver')) {
-                return response()->json([
-                    'message' => 'Forbidden',
-                ], 403);
-            }
-
             $car = Vehicle::find($vehicle);
 
             Log::info("Vehicle being assigned: " . $car);
@@ -580,7 +573,7 @@ class VehicleController extends Controller
                 ], 404);
             }
 
-            if ($car->status === 'active') {
+            if ($car->driver_id) {
                 return response()->json([
                     'error' => 'Vehicle already has a driver'
                 ], 400);
