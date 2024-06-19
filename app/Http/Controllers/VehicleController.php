@@ -630,6 +630,7 @@ class VehicleController extends Controller
             ], 500);
         }
     }
+    
     public function activate_vehicle($id)
     {
         try {
