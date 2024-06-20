@@ -554,19 +554,8 @@ class VehicleController extends Controller
                 ], 400);
             }
 
-            // if (!$driver->license) {
-            //     return response()->json([
-            //         'error' => 'Driver has no license'
-            //     ], 400);
-            // }
-
-            // if (!$driver->license_expiry || strtotime($driver->license_expiry) < time()) {
-            //     return response()->json([
-            //         'error' => 'Driver license has expired'
-            //     ], 400);
-            // }
-
             $car->driver_id = $driver->id;
+            $driver->vehicle_id = $car->id;
             $car->status = 'active';
             $car->save();
 

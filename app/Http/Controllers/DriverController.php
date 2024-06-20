@@ -22,18 +22,22 @@ class DriverController extends Controller
     public function index()
     {
         try {
-            $user = User::find(Auth::id());
+            $user = Auth::user();
+            
+            // Query based on user role
             if ($user->hasRole('admin')) {
-                $drivers = Driver::all();
+                // Eager load vehicles for all drivers
+                $drivers = Driver::with('vehicle')->get();
             } else {
-                $drivers = Driver::where('user_id', $user->user_id)->get();
+                // Eager load vehicles for drivers associated with the authenticated user
+                $drivers = Driver::where('user_id', $user->id)->with('vehicle')->get();
             }
-
+    
             return response()->json([
                 'drivers' => $drivers
             ], 200);
         } catch (Exception $e) {
-            Log::error('VIEW Organisation ERROR');
+            Log::error('Error fetching drivers');
             Log::error($e);
             return response()->json([
                 'message' => 'An error occurred',
@@ -138,6 +142,7 @@ class DriverController extends Controller
                 'national_id_no' => $data['national_id_no'],
                 'national_id_avatar_front' => $request->file('national_id_avatar_front')->store('DriversIDAvatars', 'public'),
                 'national_id_avatar_behind' => $request->file('national_id_avatar_behind')->store('DriversIDAvatars', 'public'),
+         
                 'sex' => $data['sex'],
                 'date_of_birth' => $data['date_of_birth'],
                 'driving_license_no' => $data['driving_license_no'],
@@ -165,14 +170,16 @@ class DriverController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Driver $driver)
+    public function show($id)
     {
         try {
+            $driver = Driver::with('vehicle')->findOrFail($id);
+    
             return response()->json([
                 'driver' => $driver
             ], 200);
         } catch (Exception $e) {
-            Log::error('SHOW DRIVER ERROR');
+            Log::error('Error fetching driver');
             Log::error($e);
             return response()->json([
                 'message' => 'An error occurred',
@@ -180,6 +187,7 @@ class DriverController extends Controller
             ], 500);
         }
     }
+    
 
     /**
      * Update the specified resource in storage.

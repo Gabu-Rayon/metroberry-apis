@@ -37,6 +37,7 @@ class Vehicle extends Model
         'updated_at',
     ];
     
+    protected $with = ['driver'];
 
 
     public function creator()
