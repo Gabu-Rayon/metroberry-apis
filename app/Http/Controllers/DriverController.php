@@ -26,7 +26,6 @@ class DriverController extends Controller
             
             // Query based on user role
             if ($user->hasRole('admin')) {
-                // Eager load vehicles for all drivers
                 $drivers = Driver::with('vehicle')->get();
             } else {
                 // Eager load vehicles for drivers associated with the authenticated user
