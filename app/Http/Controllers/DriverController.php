@@ -325,4 +325,29 @@ class DriverController extends Controller
             ], 500);
         }
     }
+
+    public function activateDriver($driver_id) {
+        DB::beginTransaction();
+        try {
+            $driver = Driver::findOrFail($driver_id);
+
+            $driver->status = 'active';
+            $driver->save();
+
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Driver activated successfully',
+                'driver' => $driver
+            ], 200);
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('ACTIVATE DRIVER ERROR');
+            Log::error($e);
+            return response()->json([
+                'message' => 'An error occurred',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

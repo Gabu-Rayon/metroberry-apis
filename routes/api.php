@@ -62,6 +62,7 @@ Route::put('drivers/{driver}', [DriverController::class, 'update'])->middleware(
 Route::delete('drivers/{driver}', [DriverController::class, 'destroy'])->middleware(['auth:sanctum', 'can:delete driver']);
 Route::get('drivers/{driver}', [DriverController::class, 'show'])->middleware(['auth:sanctum', 'can:show driver']);
 Route::post('renew-license/{driver_id}', [DriverController::class, 'renewLicense'])->middleware(['auth:sanctum', 'can:edit driver']);
+Route::post('activate-driver/{driver_id}', [DriverController::class, 'activateDriver'])->middleware(['auth:sanctum', 'can:edit driver']);
 
 Route::get('customers', [EmployeeController::class, 'index'])->middleware(['auth:sanctum', 'can:view customers']);
 Route::post('customers', [EmployeeController::class, 'store'])->middleware(['auth:sanctum', 'can:create customer']);
