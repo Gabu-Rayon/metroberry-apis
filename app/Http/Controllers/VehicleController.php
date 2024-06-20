@@ -3,14 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Driver;
-use App\Models\Organisation;
+use Illuminate\Support\Facades\DB;
 use App\Models\Vehicle;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Validator;
 
 class VehicleController extends Controller
 {
@@ -19,49 +18,18 @@ class VehicleController extends Controller
      */
     public function index()
     {
-        try {
-            // Retrieve all vehicles with related creator and driver details
-            $vehicles = Vehicle::with([
-                'creator:id,name,email',
-                'driver.user:id,name,email'
-            ])->get();
+       try {
+            $role = Auth::user()->getRoleNames()[0];
+            $vehicles = null;
 
-            Log::info('All Vehicles from the API:', $vehicles->toArray());
-
-            $response = $vehicles->map(function ($vehicle) {
-                return [
-                    'id' => $vehicle->id,
-                    'make' => $vehicle->make,
-                    'model' => $vehicle->model,
-                    'year' => $vehicle->year,
-                    'color' => $vehicle->color,
-                    'plate_number' => $vehicle->plate_number,
-                    'seats' => $vehicle->seats,
-                    'fuel_type' => $vehicle->fuel_type,
-                    'engine_size' => $vehicle->engine_size,
-                    'organisation_id' => $vehicle->engine_size,
-                    'vehicle_insurance_issue_date' => $vehicle->vehicle_insurance_issue_date,
-                    'vehicle_insurance_expiry' => $vehicle->vehicle_insurance_expiry,
-                    'vehicle_insurance_issue_organisation' => $vehicle->vehicle_insurance_issue_organisation,
-                    'vehicle_avatar' => $vehicle->vehicle_avatar,
-                    'status' => $vehicle->status,
-                    'creator' => [
-                        'id' => $vehicle->creator->id,
-                        'name' => $vehicle->creator->name,
-                        'email' => $vehicle->creator->email,
-                        'address' => $vehicle->creator->address,
-                    ],
-                    'driver' => $vehicle->driver ? [
-                        'id' => $vehicle->driver->user->id,
-                        'name' => $vehicle->driver->user->name,
-                        'email' => $vehicle->driver->user->email,
-                        'address' => $vehicle->driver->user->address,
-                    ] : null,
-                ];
-            });
+            if ($role === 'organisation') {
+                $vehicles = Vehicle::where('organisation_id', Auth::user()->organisation->id)->get();
+            } else if ($role === 'admin') {
+                $vehicles = Vehicle::all();
+            }
 
             return response()->json([
-                'vehicles' => $response
+                'vehicles' => $vehicles
             ], 200);
         } catch (Exception $e) {
             Log::error('ERROR FETCHING VEHICLES');
@@ -76,76 +44,80 @@ class VehicleController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
+    
+     public function store(Request $request) {
+        DB::beginTransaction();
+
         try {
-            $userId = Auth::id();
-            if (!$userId) {
-                Log::error('User not authenticated');
-                return response()->json(['message' => 'User not authenticated'], 401);
-            }
+            $role = Auth::user()->getRoleNames()[0];
+            $data = $request->all();
 
-            Log::info('Authenticated User ID: ' . $userId);
-
-            $creator = Organisation::find($userId);
-            Log::info('CREATOR', ['creator' => $creator]);
-
-            $data = $request->validate([
+            $validated = Validator::make($data, [
                 'make' => 'required|string',
                 'model' => 'required|string',
                 'year' => 'required|integer',
                 'color' => 'required|string',
-                'plate_number' => 'required|string',
+                'plate_number' => 'required|string|unique:vehicles',
                 'seats' => 'required|integer',
                 'fuel_type' => 'required|string',
                 'engine_size' => 'required|string',
-                'organisation_id' => 'required|integer',
-                'vehicle_insurance_issue_date' => 'nullable|date_format:Y-m-d',
-                'vehicle_insurance_expiry' => 'nullable|date_format:Y-m-d',
-                'vehicle_insurance_issue_organisation' => 'nullable|string',
-                'vehicle_avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
-            Log::info('VEHICLE VALIDATION DATA', ['data' => $data]);
-
-            $avatarPath = null;
-            if ($request->hasFile('vehicle_avatar')) {
-                $avatarPath = $request->file('vehicle_avatar')->store('VehicleAvatars', 'public');
-                Log::info('Avatar Path: ' . $avatarPath);
+            if ($validated->fails()) {
+                return response()->json([
+                    'message' => 'Validation failed',
+                    'errors' => $validated->errors()
+                ], 400);
             }
 
-            $vehicle = Vehicle::create([
-                'make' => $data['make'],
-                'model' => $data['model'],
-                'year' => $data['year'],
-                'color' => $data['color'],
-                'plate_number' => $data['plate_number'],
-                'seats' => $data['seats'],
-                'fuel_type' => $data['fuel_type'],
-                'engine_size' => $data['engine_size'],
-                'organisation_id' => $data['organisation_id'],
-                'vehicle_insurance_issue_date' => $data['vehicle_insurance_issue_date'],
-                'vehicle_insurance_expiry' => $data['vehicle_insurance_expiry'],
-                'vehicle_insurance_issue_organisation' => $data['vehicle_insurance_issue_organisation'],
-                'vehicle_avatar' => $avatarPath,
-                'created_by' => $userId,
-                'status' => 'inactive'
-            ]);
+            $vehicle = new Vehicle();
+            $vehicle->make = $data['make'];
+            $vehicle->model = $data['model'];
+            $vehicle->year = $data['year'];
+            $vehicle->color = $data['color'];
+            $vehicle->plate_number = $data['plate_number'];
+            $vehicle->seats = $data['seats'];
+            $vehicle->fuel_type = $data['fuel_type'];
+            $vehicle->engine_size = $data['engine_size'];
+            $vehicle->status = 'inactive';
 
-            Log::info('VEHICLE CREATED', ['vehicle' => $vehicle]);
+            if ($role === 'organisation') {
+                $vehicle->organisation_id = Auth::user()->organisation->id;
+            }
+
+            $avatarPath = null;
+
+            if ($request->hasFile('vehicle_avatar')) {
+                $file = $request->file('vehicle_avatar');
+                $filename = $file->getClientOriginalName();
+                $avatarPath = $file->storeAs('VehicleAvatars', $filename, 'public');
+                $vehicle->vehicle_avatar = $avatarPath;
+
+                Log::info('Vehicle Avatar Path: ' . $avatarPath);
+            }
+
+            $vehicle->save();
+
+            DB::commit();
 
             return response()->json([
-                'message' => 'Vehicle created successfully',
+                'message' => 'success',
                 'vehicle' => $vehicle
             ], 201);
+
         } catch (Exception $e) {
-            Log::error('ERROR CREATING VEHICLE', ['error' => $e->getMessage()]);
+            DB::rollBack();
+
+            Log::error('ERROR CREATING VEHICLE');
+            Log::error($e);
+
             return response()->json([
-                'message' => 'Error occurred while creating vehicle',
+                'message' => 'Error creating vehicle',
                 'error' => $e->getMessage()
             ], 500);
         }
-    }
+}
+
 
 
     // public function store(Request $request)
@@ -422,30 +394,35 @@ class VehicleController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy($id)
-    {
-        try {
-            $vehicle = Vehicle::find($id);
+{
+    try {
+        $vehicle = Vehicle::find($id);
 
-            if (!$vehicle) {
-                return response()->json([
-                    'error' => 'Vehicle not found'
-                ], 404);
-            }
-
-            $vehicle->delete();
-
+        if (!$vehicle) {
             return response()->json([
-                'message' => 'Vehicle deleted successfully'
-            ], 200);
-        } catch (Exception $e) {
-            Log::error('ERROR DELETING VEHICLE');
-            Log::error($e);
-            return response()->json([
-                'message' => 'Error occurred while deleting vehicle',
-                'error' => $e->getMessage()
-            ], 500);
+                'error' => 'Vehicle not found'
+            ], 404);
         }
+
+        // Unassign vehicle from drivers
+        Driver::where('vehicle_id', $vehicle->id)->update(['vehicle_id' => null]);
+
+        // Delete the vehicle
+        $vehicle->delete();
+
+        return response()->json([
+            'message' => 'Vehicle deleted successfully'
+        ], 200);
+    } catch (Exception $e) {
+        Log::error('ERROR DELETING VEHICLE');
+        Log::error($e);
+        return response()->json([
+            'message' => 'Error occurred while deleting vehicle',
+            'error' => $e->getMessage()
+        ], 500);
     }
+}
+
 
     /**
      * Assign driver to vehicle
