@@ -90,11 +90,12 @@ class VehicleController extends Controller
             if ($request->hasFile('vehicle_avatar')) {
                 $file = $request->file('vehicle_avatar');
                 $filename = $file->getClientOriginalName();
-                $avatarPath = $file->storeAs('VehicleAvatars', $filename, 'public');
-                $vehicle->vehicle_avatar = $avatarPath;
-
-                Log::info('Vehicle Avatar Path: ' . $avatarPath);
+                $storedFileName = $file->storeAs('public/VehicleAvatars', $filename);
+                $vehicle->vehicle_avatar = $filename;
+            
+                Log::info('Vehicle Avatar Filename: ' . $filename);
             }
+            
 
             $vehicle->save();
 

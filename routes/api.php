@@ -11,6 +11,7 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\TripInvoiceController;
 use App\Http\Controllers\OrganisationController;
+use Illuminate\Support\Facades\Log;
 
 Route::get('/user', function (Request $request) {
     $user = $request->user();
@@ -18,6 +19,14 @@ Route::get('/user', function (Request $request) {
     $user->permitted_to = $permissions;
     return $user;
 })->middleware('auth:sanctum');
+
+Route::get('vehicles-avatar/{avatar}', function ($avatar) {
+    $path = storage_path('app/public/VehicleAvatars/' . $avatar);
+    if (!file_exists($path)) {
+        $path = storage_path('app/public/vehicles/default.png');
+    }
+    return response()->file($path);
+});
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
