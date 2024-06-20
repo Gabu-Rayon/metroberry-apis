@@ -9,6 +9,7 @@ use App\Models\Organisation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -48,49 +49,6 @@ class DriverController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    // public function store(Request $request)
-    // {
-    //     try {
-
-    //         $creator = Organisation::find(Auth::id());
-
-    //         Log::info('CREATOR');
-    //         Log::info($creator);
-
-    //         $data = $request->validate([
-    //             'name' => 'required|string',
-    //             'email' => 'required|email|unique:users,email',
-    //             'phone' => 'required|string',
-    //             'password' => 'required|string',
-    //         ]);
-
-    //         $user = User::create([
-    //             'name' => $data['name'],
-    //             'email' => $data['email'],
-    //             'phone' => $data['phone'],
-    //             'password' => bcrypt($data['password']),
-    //             // next we will add avatar when creating Driver 
-    //         ]);
-
-    //         $driver = Driver::create([
-    //             'user_id' => $user->id,
-    //             'organisation_id' => $creator->id ?? null,
-    //             'created_by' => Auth::id(),
-    //             'status' => 'inactive'
-    //         ]);
-    //         return response()->json([
-    //             'message' => 'Driver created successfully !',
-    //             'driver' => $driver
-    //         ], 201);
-    //     } catch (Exception $e) {
-    //         Log::error('CREATE DRIVER ERROR');
-    //         Log::error($e);
-    //         return response()->json([
-    //             'message' => 'An error occurred',
-    //             'error' => $e->getMessage()
-    //         ], 500);
-    //     }
-    // }
 
     public function store(Request $request)
     {
@@ -333,4 +291,38 @@ class DriverController extends Controller
         }
     }
 
+    public function renewLicense (Request $request, $driver_id) {
+        DB::beginTransaction();
+
+        try {
+            $driver = Driver::findOrFail($driver_id);
+
+
+            $request->validate([
+                'startDate' => 'required|date_format:Y-m-d',
+                'endDate' => 'required|date_format:Y-m-d',
+            ]);
+
+            $driver->driving_license_date_issued = $request->startDate;
+            $driver->driving_license_date_expiry = $request->endDate;
+            $driver->save();
+
+            DB::commit();
+
+            return response()->json([
+                'message' => 'License renewed successfully',
+                'driver' => $driver
+            ], 200);
+
+            
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('RENEW LICENSE ERROR');
+            Log::error($e);
+            return response()->json([
+                'message' => 'An error occurred',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }
