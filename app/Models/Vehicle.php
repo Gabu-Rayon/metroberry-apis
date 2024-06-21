@@ -10,22 +10,29 @@ class Vehicle extends Model
     use HasFactory;
 
     protected $fillable = [
-        'created_by',
         'driver_id',
-        'model',
+        'organisation_id',
+        'created_by',
         'make',
+        'model',
         'year',
-        'plate_number',
         'color',
         'seats',
         'fuel_type',
         'engine_size',
-        'vehicle_insurance_issue_date',
-        'vehicle_insurance_expiry',
-        'vehicle_insurance_issue_organisation',
         'vehicle_avatar',
+        'plate_number',
+        'logbook_avatar',
+        'insurance_company',
+        'insurance_policy_no',
+        'insurance_date_of_issue',
+        'insurance_date_of_expiry',
+        'insurance_avatar',
+        'ntsa_inspection_certificate_no',
+        'ntsa_inspection_certificate_date_of_issue',
+        'ntsa_inspection_certificate_date_of_expiry',
+        'ntsa_inspection_certificate_avatar',
         'status',
-        'organisation_id'
     ];
 
     

@@ -5,13 +5,11 @@ namespace App\Http\Controllers;
 use Exception;
 use App\Models\User;
 use App\Models\Driver;
-use App\Models\Organisation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 
@@ -24,15 +22,14 @@ class DriverController extends Controller
     {
         try {
             $user = Auth::user();
-            
-            // Query based on user role
             if ($user->hasRole('admin')) {
                 $drivers = Driver::with('vehicle')->get();
             } else {
-                // Eager load vehicles for drivers associated with the authenticated user
-                $drivers = Driver::where('user_id', $user->id)->with('vehicle')->get();
+                // return unauthorized response
+                return response()->json([
+                    'message' => 'Unauthorized'
+                ], 401);
             }
-    
             return response()->json([
                 'drivers' => $drivers
             ], 200);
