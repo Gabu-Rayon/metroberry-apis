@@ -27,6 +27,7 @@ class User extends Authenticatable
         'phone',
         'address',
         'avatar',
+        'role',
         'created_by'
     ];
 
@@ -40,6 +41,7 @@ class User extends Authenticatable
         'updated_at',
         'password',
         'remember_token',
+        'roles',
         'permissions',
     ];
 
