@@ -38,14 +38,7 @@ Route::put('routes/{route}', [AddRouteController::class, 'update'])->middleware(
 Route::delete('routes/{route}', [AddRouteController::class, 'destroy'])->middleware(['auth:sanctum', 'can:delete route']);
 Route::get('routes/{route}', [AddRouteController::class, 'show'])->middleware(['auth:sanctum', 'can:show route']);
 
-Route::get('vehicles', [VehicleController::class, 'index'])->middleware(['auth:sanctum', 'can:view vehicles']);
-Route::get('vehicles/{vehicle}', [VehicleController::class, 'show'])->middleware(['auth:sanctum', 'can:show vehicle']);
-Route::post('vehicles', [VehicleController::class, 'store'])->middleware(['auth:sanctum', 'can:create vehicles']);
-Route::put('vehicles/{vehicle}', [VehicleController::class, 'update'])->middleware(['auth:sanctum', 'can:edit vehicle']);
-Route::delete('vehicles/{vehicle}', [VehicleController::class, 'destroy'])->middleware(['auth:sanctum', 'can:delete vehicle']);
-Route::post('assign-driver/{vehicle}', [VehicleController::class, 'assign_driver'])->middleware(['auth:sanctum', 'can:assign driver']);
-Route::post('activate-vehicle/{vehicle}', [VehicleController::class, 'activate_vehicle'])->middleware(['auth:sanctum', 'can:activate vehicle']);
-Route::post('deactivate-vehicle/{vehicle}', [VehicleController::class, 'deactivate_vehicle'])->middleware(['auth:sanctum', 'can:activate vehicle']);
+Route::apiResource('vehicles', VehicleController::class)->middleware(['auth:sanctum', 'can:view vehicles']);
 
 
 Route::put('insurances/{vehicleId}', [InsuranceController::class,'update'])->middleware(['auth:sanctum', 'can:edit vehicle']);

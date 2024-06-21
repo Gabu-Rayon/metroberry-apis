@@ -16,21 +16,12 @@ class VehicleController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-       try {
+    public function index(){
+        try {
             $role = Auth::user()->getRoleNames()[0];
-            $vehicles = null;
 
-            if ($role === 'organisation') {
-                $vehicles = Vehicle::where('organisation_id', Auth::user()->organisation->id)->get();
-            } else if ($role === 'admin') {
-                $vehicles = Vehicle::all();
-            }
-
-            return response()->json([
-                'vehicles' => $vehicles
-            ], 200);
+            Log::info('USER ROLE');
+            Log::info($role);
         } catch (Exception $e) {
             Log::error('ERROR FETCHING VEHICLES');
             Log::error($e);
@@ -424,98 +415,9 @@ class VehicleController extends Controller
     }
 }
 
-
     /**
-     * Assign driver to vehicle
-     * 
+     * Assign a driver to a vehicle
      */
-
-    // public function assign_driver($vehicle, Request $request) {
-    //     try {
-
-    //         $car = Vehicle::find($vehicle);
-
-    //         Log::info("Vechile being Assign on:" . $car );
-
-    //         $organisation = Organisation::where('user_id', auth()->user()->id)->first();
-
-    //         Log::info("org  Assigning Vehicle:" . $organisation);
-
-    //         $data = $request->validate([
-
-    //             'driver_id' => 'required|integer'
-    //         ]);
-
-    //         if (!$car) {
-    //             return response()->json([
-    //                 'error' => 'Vehicle not found'
-    //             ], 404);
-    //         }
-
-    //         if ($car->status === 'active') {
-    //             return response()->json([
-    //                 'error' => 'Vehicle already has a driver'
-    //             ], 400);
-    //         }
-
-    //         if (!$organisation) {
-    //             return response()->json([
-    //                 'message' => 'Unauthorised',
-    //             ], 401);
-    //         }
-
-    //         if ($car->organisation_id !== $organisation->id) {
-    //             return response()->json([
-    //                 'message' => 'Unauthorised',
-    //             ], 401);
-    //         }
-
-    //         $driver = Driver::find($data['driver_id']);
-
-    //         if (!$driver) {
-    //             return response()->json([
-    //                 'error' => 'Driver not found'
-    //             ], 404);
-    //         }
-
-    //         if ($driver->vehicle) {
-    //             return response()->json([
-    //                 'error' => 'Driver already has a vehicle'
-    //             ], 400);
-    //         }
-
-    //         if (!$driver->license) {
-    //             return response()->json([
-    //                 'error' => 'Driver has no license'
-    //             ], 400);
-    //         }
-
-    //         if (!$driver->license_expiry || strtotime($driver->license_expiry) < time()) {
-    //             return response()->json([
-    //                 'error' => 'Driver license has expired'
-    //             ], 400);
-    //         }
-
-    //         $car->driver_id = $driver->id;
-    //         $car->status = 'active';
-    //         $car->save();
-
-    //         return response()->json([
-    //             'message' => 'Driver assigned to vehicle successfully',
-    //             'vehicle' => $car
-    //         ], 200);
-
-    //     } catch (Exception $e) {
-    //         Log::error('ERROR ASSIGNING DRIVER TO VEHICLE');
-    //         Log::error($e);
-    //         return response()->json([
-    //             'message' => 'Error occurred while assigning driver to vehicle',
-    //             'error' => $e->getMessage()
-    //         ], 500);
-    //     }
-    // }
-
-
 
     public function assign_driver($vehicle, Request $request)
     {
