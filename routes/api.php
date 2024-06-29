@@ -88,7 +88,7 @@ Route::delete('trip-pricing/{id}', [TripPricingController::class, 'destroy'])->m
 use App\Http\Controllers\RideTypeController;
 
 Route::get('ride-types', [RideTypeController::class, 'index'])->middleware(['auth:sanctum', 'can:view ride types']);
-Route::post('ride-types', [RideTypeController::class, 'store'])->middleware(['auth:sanctum', 'can:create ride type']);
+Route::post('ride-types', [RideTypeController::class, 'store'])->middleware(['auth:sanctum', 'can:create ride types']);
 Route::get('ride-types/{id}', [RideTypeController::class, 'show'])->middleware(['auth:sanctum', 'can:view ride types']);
 Route::put('ride-types/{id}', [RideTypeController::class, 'update']) ->middleware(['auth:sanctum', 'can:edit ride type']);
 Route::delete('ride-types/{id}', [RideTypeController::class, 'destroy'])->middleware(['auth:sanctum', 'can:delete ride type']);

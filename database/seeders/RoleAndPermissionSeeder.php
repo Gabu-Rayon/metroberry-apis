@@ -111,7 +111,13 @@ class RoleAndPermissionSeeder extends Seeder
             'view trip pricing',
             'create trip pricing',
             'edit trip pricing',
-            'delete trip pricing'
+            'delete trip pricing',
+
+            'view ride types',
+            'create ride types',
+            'edit ride type',
+            'delete ride type',
+
         ];
 
         foreach ($permissions as $permission) {
@@ -206,7 +212,12 @@ class RoleAndPermissionSeeder extends Seeder
             'view trip pricing',
             'create trip pricing',
             'edit trip pricing',
-            'delete trip pricing'
+            'delete trip pricing',
+            
+            'view ride types',
+            'create ride types',
+            'edit ride type',
+            'delete ride type',
             
         ]);
 
