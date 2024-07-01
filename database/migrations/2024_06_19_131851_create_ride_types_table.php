@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('ride_type', function (Blueprint $table) {
+        Schema::create('ride_types', function (Blueprint $table) {
             $table->id();
             $table->string('type', 50)->nullable();
             $table->text('description')->nullable();

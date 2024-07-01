@@ -9,7 +9,7 @@ class RideType extends Model
 {
     use HasFactory;
 
-    protected $table = 'ride_type';
+    protected $table = 'ride_types';
 
     protected $fillable = [
         'type',

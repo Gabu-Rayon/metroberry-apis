@@ -27,4 +27,9 @@ class TripPricing extends Model
     {
         return $this->belongsTo(Routes::class, 'route_id');
     }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 }
