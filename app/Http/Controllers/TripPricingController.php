@@ -31,7 +31,7 @@ class TripPricingController extends Controller
                     'id' => $tripPricingValue->id,
                     'ride_type_id' => $tripPricingValue->ride_type_id,
                     'route_id' => $tripPricingValue->route_id,
-                    'base_price' => 'Kes ' .  $tripPricingValue->base_price,
+                    'base_price' => 'Kes ' . $tripPricingValue->base_price,
                     'price_per_km' => 'Kes ' . $tripPricingValue->price_per_km,
                     'price_per_minute' => 'Kes ' . $tripPricingValue->price_per_minute,
                     'creator' => $tripPricingValue->creator ? [
@@ -239,11 +239,21 @@ class TripPricingController extends Controller
      */
     public function destroy($id)
     {
-        $tripPricing = TripPricing::findOrFail($id);
-        $tripPricing->delete();
 
-        return response()->json([
-            'message' => 'Trip pricing deleted successfully'
-        ], 200);
+        try {
+            $tripPricing = TripPricing::findOrFail($id);
+            $tripPricing->delete();
+
+            return response()->json([
+                'message' => 'Trip pricing deleted successfully'
+            ], 200);
+        } catch (Exception $e) {
+            Log::error('Error Editing Trip Pricing');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Error Occurred While Deleting Trip Pricing',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }
