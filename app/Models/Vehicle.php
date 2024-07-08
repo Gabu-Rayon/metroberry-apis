@@ -10,8 +10,8 @@ class Vehicle extends Model
     use HasFactory;
 
     protected $fillable = [
+        'created_by',
         'driver_id',
-        'organisation_id',
         'model',
         'make',
         'year',
@@ -20,26 +20,35 @@ class Vehicle extends Model
         'seats',
         'fuel_type',
         'engine_size',
+        'vehicle_insurance_issue_date',
+        'vehicle_insurance_expiry',
+        'vehicle_insurance_issue_organisation',
+        'vehicle_avatar',
         'status',
-        'created_by',
+        'organisation_id'
     ];
-
+    
 
     protected $hidden = [
-        'driver_id',
         'organisation_id',
-        'id',
         'created_by',
         'created_at',
         'updated_at',
     ];
     
+
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
     public function driver() {
-        return $this->belongsTo(Driver::class);
+        return $this->belongsTo(Driver::class,'driver_id');
     }
 
     public function organisation() {
-        return $this->belongsTo(Organisation::class);
+        return $this->belongsTo(Organisation::class,'organisation_id');
     }
 
     public function trips()
