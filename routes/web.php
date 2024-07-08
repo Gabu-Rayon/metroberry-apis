@@ -1,14 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TripController;
-use App\Http\Controllers\DriverController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\VehicleController;
-use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\UserLoginController;
-use App\Http\Controllers\OrganisationController;
-use App\Http\Controllers\VehicleServiceController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -16,7 +10,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-});
+})->middleware(['auth'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -26,4 +20,38 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
-Route::get('/login', [UserLoginController::class, 'index'])->name('user.login');
+Route::get('/login', [UserLoginController::class, 'index'])
+    ->name('user.login')
+    ->middleware('guest'); 
+
+/**
+ * Employees Routes
+ */
+
+Route::get('/employee', function () {
+    return view('employee.index');
+})->middleware(['auth'])->name('employee.index');
+
+Route::get('/employee/position', function () {
+    return view('employee.position.index');
+})->middleware(['auth'])->name('employee.position.index');
+
+Route::get('/employee/department', function () {
+    return view('employee.department.index');
+})->middleware(['auth'])->name('employee.department.index');
+
+/**
+ * Drivers Routes
+ */
+
+Route::get('/driver', function () {
+    return view('driver.index');
+})->middleware(['auth'])->name('driver.index');
+
+Route::get('/driver/license', function () {
+    return view('driver.license.index');
+})->middleware(['auth'])->name('driver.license.index');
+
+Route::get('/driver/performance', function () {
+    return view('driver.performance.index');
+})->middleware(['auth'])->name('driver.performance.index');

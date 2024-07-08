@@ -10,6 +10,8 @@
     <div id="app">
         <div class="wrapper">
 
+            @include('components.sidebar.sidebar')
+
             @include('components.navbar')
 
             <div class="body-content">

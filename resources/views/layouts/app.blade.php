@@ -50,6 +50,7 @@
   </head>
 <body class="fixed sidebar-mini">
     <div class="main">
+        @include('components.preloader')
         @yield('content')
     </div>
     
