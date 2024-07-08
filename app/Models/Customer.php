@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Customer extends Model
 {
@@ -12,12 +13,11 @@ class Customer extends Model
 
     protected $fillable = [
         'user_id',
-         'organisation_id',
-         'customer_organisation_code',
+        'organisation_id',
+        'customer_organisation_code',
     ];
 
     protected $hidden = [
-        'id',
         'user_id',
         'organisation_id',
         'is_email_verified',
@@ -26,15 +26,31 @@ class Customer extends Model
         'updated_at',
     ];
 
-    public function user()
+    protected $with = ['user','creator'];
+
+    /**
+     * Get the user that owns the customer.
+     */
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function organisation() {
-        return $this->belongsTo(Organisation::class);
+    /**
+     * Get the creator that owns the customer.
+     */
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by', 'id');
     }
 
+    /**
+     * Get the organisation that owns the customer.
+     */
+    public function organisation(): BelongsTo
+    {
+        return $this->belongsTo(Organisation::class, 'organisation_id', 'id');
+    }
     public function trips()
     {
         return $this->hasMany(Trip::class);

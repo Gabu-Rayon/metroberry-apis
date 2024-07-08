@@ -3,12 +3,13 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Traits\HasPermissions;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
-use Spatie\Permission\Traits\HasPermissions;
-use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
@@ -26,6 +27,7 @@ class User extends Authenticatable
         'phone',
         'address',
         'avatar',
+        'created_by'
     ];
 
     /**
@@ -34,7 +36,6 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'id',
         'created_at',
         'updated_at',
         'password',
@@ -43,7 +44,7 @@ class User extends Authenticatable
         'permissions',
     ];
 
-    protected $with = ['organisation', 'driver', 'customer'];
+    protected $with = ['organisation'];
 
     /**
      * Get the attributes that should be cast.
@@ -66,10 +67,10 @@ class User extends Authenticatable
         return $this->hasOne(Driver::class);
     }
 
-    public function customer() {
-        return $this->hasOne(Customer::class);
+    public function customers(): HasMany
+    {
+        return $this->hasMany(Customer::class, 'user_id', 'id');
     }
-
     public function organisation() {
         return $this->hasOne(Organisation::class);
     }
