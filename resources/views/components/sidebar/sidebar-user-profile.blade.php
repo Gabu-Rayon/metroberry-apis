@@ -3,8 +3,10 @@
         <img src="https://ui-avatars.com/api/?name=A&amp;color=7F9CF5&amp;background=EBF4FF" />
     </div>
     <div>
-        <p class="mb-0 fw-bold fs-18">
+        <!-- <p class="mb-0 fw-bold fs-18">
             {{-- {{ Auth::user()->name }} --}}
-        </p>
+        </p> -->
+
+        <p class="mb-0 fw-bold fs-18">Admin</p>
     </div>
 </div>

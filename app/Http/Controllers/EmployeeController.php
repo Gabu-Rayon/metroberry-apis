@@ -18,21 +18,24 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        try {
-            $customers = Customer::all();
+        // try {
+        //     $customers = Customer::all();
 
-            return response()->json([
-                'message' => 'Customers retrieved successfully',
-                'customers' => $customers
-            ], 200);
-        } catch (Exception $e) {
-            Log::info('RETRIEVE CUSTOMERS ERROR');
-            Log::info($e);
-            return response()->json([
-                'message' => 'An error occurred while fetching customers',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        //     return response()->json([
+        //         'message' => 'Customers retrieved successfully',
+        //         'customers' => $customers
+        //     ], 200);
+        // } catch (Exception $e) {
+        //     Log::info('RETRIEVE CUSTOMERS ERROR');
+        //     Log::info($e);
+        //     return response()->json([
+        //         'message' => 'An error occurred while fetching customers',
+        //         'error' => $e->getMessage()
+        //     ], 500);
+        // }
+
+        $customers = Customer::with('user')->get();
+        return view('employee', compact('customers'));
     }
 
     /**
@@ -217,6 +220,18 @@ class EmployeeController extends Controller
     /**
      * Update the specified resource in storage.
      */
+
+
+      public function create(){
+         return view('employee.create');
+      }
+
+    public function edit(Request $request, $id)
+    {
+        $customer = Customer::findOrFail($id);
+        return view('employee.edit', compact('customer'));
+    }
+
     public function update(Request $request, $id)
     {
         try {

@@ -1,12 +1,64 @@
-@extends('layouts.app')
+<!doctype html>
+<html lang="en">
 
-@section('title', 'Create Expense Type')
-@section('content')
+<head>
+    
+    <meta name="csrf-token" content="AQNLvAb467g0eZtkGATqrKcNNVohCNfvLiX4IjQc">
+<meta name="base-url" content="https://vms.bdtask-demoserver.com">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Inventory stock Lists - vms-laravel</title><meta name="description" content="Display a listing of roles in Database."><link rel="canonical" href="inventory/stock"><meta name="robots" content="all"><meta property="og:description" content="Display a listing of roles in Database."><meta property="og:title" content="Inventory stock Lists"><meta property="og:url" content="inventory/stock"><meta property="og:type" content="WebPage"><meta property="og:site_name" content="vms-laravel"><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"vms-laravel","description":"VMS - Vehicle Management System by BDTask","url":"inventory/stock"}</script>
+    
+    <!-- App favicon -->
+<link rel="shortcut icon" href="../../admin-assets/img/favicon.png?v=1">    
+    <link href="../../admin-assets/vendor/bootstrap/css/bootstrap.min.css?v=1" rel="stylesheet">
+<link href="../../admin-assets/vendor/metisMenu/metisMenu.min.css?v=1" rel="stylesheet">
+<link href="../../nanopkg-assets/vendor/datatables/dataTables.bootstrap4.min.css?v=1" rel="stylesheet">
+<link href="../../admin-assets/vendor/typicons/src/typicons.min.css?v=1" rel="stylesheet">
+<link href="../../admin-assets/vendor/themify-icons/themify-icons.min.css?v=1" rel="stylesheet">
+<link href="../../admin-assets/vendor/material_icons/materia_icons.css?v=1" rel="stylesheet">
+<link href="../../admin-assets/vendor/emojionearea/dist/emojionearea.min.css?v=1" rel="stylesheet">
+<link rel="stylesheet" href="../../nanopkg-assets/vendor/yajra-laravel-datatables/assets/datatables.css?v=1">
+        <link href="../../admin-assets/vendor/select2/dist/css/select2.min.css?v=1" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="../../nanopkg-assets/vendor/highlight/highlight.min.css?v=1">
+<link href="../../nanopkg-assets/vendor/sweetalert2/sweetalert2.min.css?v=1" rel="stylesheet">
+<link href="../../nanopkg-assets/vendor/fontawesome-free-6.3.0-web/css/all.min.css?v=1" rel="stylesheet">
+<link href="../../nanopkg-assets/vendor/bootstrap-icons/css/bootstrap-icons.min.css?v=1" rel="stylesheet">
+<link href="../../nanopkg-assets/vendor/toastr/build/toastr.min.css?v=1" rel="stylesheet">
+<link href="../../nanopkg-assets/css/arrow-hidden.min.css?v=1" rel="stylesheet">
+<link href="../../nanopkg-assets/css/custom.min.css?v=1" rel="stylesheet">
+
+<!--Start Your Custom Style Now-->
+<link href="../../admin-assets/css/style-new.min.css?v=1" rel="stylesheet">
+<link href="../../admin-assets/css/custom.min.css?v=1" rel="stylesheet">
+<link href="../../admin-assets/css/extra.min.css?v=1" rel="stylesheet">
+<link href="../../admin-assets/scss/customStyle.min.css?v=1" rel="stylesheet">
+<link href="../../admin-assets/css/grapData.min.css?v=1" rel="stylesheet">
+
+<link rel="stylesheet" href="../../nanopkg-assets/css/data-table.min.css?v=1">
+    <meta name="get-localize" content="get-localize">
+    </head>
 
 <body class="fixed sidebar-mini">
-
-    @include('components.preloader')
-    <!-- react page -->
+    <!-- Preloader -->
+    <!-- Page Loader -->
+<div class="page-loader-wrapper">
+    <div class="loader">
+        <div class="preloader">
+            <div class="spinner-layer pl-green">
+                <div class="circle-clipper left">
+                    <div class="circle"></div>
+                </div>
+                <div class="circle-clipper right">
+                    <div class="circle"></div>
+                </div>
+            </div>
+        </div>
+        <p>Please wait...</p>
+    </div>
+</div>
     <!-- react page -->
     <div id="app">
         <!-- Begin page -->
@@ -386,7 +438,7 @@
     </a>
 </li>
                         
-                                                    <li class="">
+                                                    <li class="mm-active">
     <a class="text-capitalize" href="inventory/stock"
         target="_self">
         Stock management
@@ -745,187 +797,90 @@
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <h6 class="fs-17 fw-semi-bold mb-0">Create expense</h6>
+                    <h6 class="fs-17 fw-semi-bold mb-0">Inventory stock lists</h6>
                 </div>
                 <div class="text-end">
                     <div class="actions">
-                        
+                        <div class="accordion-header d-flex justify-content-end align-items-center" id="flush-headingOne">
+
+                <button type="button" class="btn btn-success btn-sm mx-2" data-bs-toggle="collapse"
+                    data-bs-target="#flush-collapseOne" aria-expanded="true" aria-controls="flush-collapseOne"> <i
+                        class="fas fa-filter"></i> Filter</button>
+            </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="card-body">
-            <form
-            action="inventory/expense"
-            method="POST" class="needs-validation " novalidate="novalidate" enctype="multipart/form-data">
-            <input type="hidden" name="_token" value="AQNLvAb467g0eZtkGATqrKcNNVohCNfvLiX4IjQc" autocomplete="off">                        <div>
-                <div class="row">
-                    <div class="col-md-2">
-                        <label for="type_id" class="fw-bold">
-                            Type
-                            <span class="text-danger">*</span>
-                        </label>
-                        <select name="type_id" id="type_id" class="form-control" required>
-                                                            <option value="fuel" >
-                                    Fuel
-                                </option>
-                                                            <option value="maintenance" >
-                                    Maintenance
-                                </option>
-                                                            <option value="others" >
-                                    Others
-                                </option>
-                                                    </select>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="employee_id" class="fw-bold">
-                            By whom
-                            <span class="text-danger">*</span>
-                        </label>
-                        <select name="employee_id" id="employee_id" class="form-control"
-                            data-ajax-url="inventory/expense/get-employee" required>
-                                                    </select>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="vendor_id" class="fw-bold">
-                            Vendor
-                            <span class="text-danger">*</span>
-                        </label>
-                        <select name="vendor_id" id="vendor_id" class="form-control"
-                            data-ajax-url="inventory/expense/get-vendor" required>
-                                                    </select>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="vehicle_id" class="fw-bold">
-                            Vehicle
-                            <span class="text-danger">*</span>
-                        </label>
-                        <select name="vehicle_id" id="vehicle_id" class="form-control"
-                            data-ajax-url="inventory/expense/get-vehicle" required>
-                                                    </select>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="trip_type_id" class="fw-bold">
-                            Trip type
-                            <span class="text-danger">*</span>
-                        </label>
-                        <select name="trip_type_id" id="trip_type_id" class="form-control"
-                            data-ajax-url="inventory/expense/get-trip-type" required>
-                                                    </select>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="trip_number" class="fw-bold">
-                            Trip no
-                            <span class="text-danger">*</span>
-                        </label>
-                        <input type="number" class="form-control arrow-hidden" id="trip_number" name="trip_number"
-                            min="0" onclick="selectAll(this)" placeholder="Trip number"
-                            value="00" required>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="odometer_millage" class="fw-bold">
-                            Odometer mileage
-                            <span class="text-danger">*</span>
-                        </label>
-                        <input type="number" class="form-control arrow-hidden" id="odometer_millage"
-                            name="odometer_millage" onclick="selectAll(this)" min="0"
-                            placeholder="Odometer mileage"
-                            value="0.00"
-                            required>
-                    </div>
-                    <div class="col-md-2">
-                        <label for="vehicle_rent" class="fw-bold">
-                            Vehicle rent
-                            <span class="text-danger">*</span>
-                        </label>
-                        <input type="number" class="form-control arrow-hidden" id="vehicle_rent" name="vehicle_rent"
-                            min="0" onclick="selectAll(this)" step=".01" placeholder="Vehicle rent"
-                            value="0.00" required>
-                    </div>
+            <div class="row mb-3">
+    <div class="col-12">
+        <div class="accordion accordion-flush" id="accordionFlushExample">
+            <div class="accordion-item">
 
-                    <div class="col-md-2">
-                        <label for="date" class="fw-bold">
-                            Date
-                            <span class="text-danger">*</span>
-                        </label>
-                        <input type="date" class="form-control" id="date" name="date"
-                            placeholder="Date"
-                            value="2024-07-06" required>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="remarks" class="fw-bold">
-                            Remarks
-                        </label>
-                        <textarea name="remarks" id="remarks" class="form-control" rows="1" placeholder="Remarks"></textarea>
-                    </div>
+                <div id="flush-collapseOne" class="accordion-collapse bg-white collapse" aria-labelledby="flush-headingOne"
+                    data-bs-parent="#accordionFlushExample" style="">
 
+                    <div class='row pb-3 my-filter-form'>
 
+                        <div class="row my-2">
+                <div class="col-md-3">
+                    <label for="category_id" class="fw-bold">
+                        Category                    </label>
+                    <select class="form-control select2-ajax"
+                        data-ajax-url="inventory/stock/get-category" name="category_id"
+                        id="category_id">
+                    </select>
                 </div>
-                <div class="row my-5">
-                    <div class="col-md-12">
-                        <table class="table table-borderless table-striped" id="purchase-table"
-                            data-type-url="inventory/expense/get-type">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th width="30%">
-                                        Expense type                                    </th>
-                                    <th width="20%">
-                                        Quantity                                        <span class="text-danger">*</span>
-                                    </th>
-                                    <th width="20%">
-                                        Unit price                                        <span class="text-danger">*</span>
-                                    </th>
-                                    <th width="20%">
-                                        Total price                                    </th>
-                                    <th>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody data-details="[]"></tbody>
-                        </table>
-                    </div>
+                <div class="col-md-3">
+                    <label for="parts_id" class="fw-bold">
+                        Parts                    </label>
+                    <select class="form-control select2-ajax"
+                        data-ajax-url="inventory/stock/get-parts" name="parts_id"
+                        id="parts_id">
+                    </select>
                 </div>
-
-                <div class="card-body footer-info fixed-bottom bg-light py-3 z-index-1">
-                    <ul class="nav
-                align-items-center justify-content-end">
-                        <li class="nav-item text-end pe-2">
-                            <b class="">Net total</b>
-                            <input type="number" step="0.01" class="form-control text-end gross_total"
-                                value="0.00" readonly autocomplete="off">
-                        </li>
-                        <li class="nav-item pe-2">
-                            <b class="text-white">...</b>
-                            <button type="submit"
-                                class="form-control btn btn-sm btn-success align-bottom bg-success">Save                            </button>
-                        </li>
-                    </ul>
+                <div class="col-md-3">
+                    <label for="from_date" class="fw-bold">
+                        Date from                    </label>
+                    <input name="from_date" autocomplete="off" class="form-control  w-100" type="date"
+                        placeholder="Joining date from" id="from_date"">
+                </div>
+                <div class="col-md-3">
+                    <label for="to_date" class="fw-bold">
+                        Date to                    </label>
+                    <input name="to_date" autocomplete="off" class="form-control w-100" type="date"
+                        placeholder="Joining date to" id="to_date">
                 </div>
             </div>
-        </form>
+
+
+                        <div class="col-md-2 d-flex align-items-center">
+                            <button class="btn btn-success me-2 search-btn" type="button">Search</button>
+                            <button class="btn btn-danger me-2 reset-btn" type="button">Reset</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        <div>
+            <div class="table-responsive">
+    <table class="table" id="inventory-stock-table"><thead><tr><th title="Sl" width="30">Sl</th><th title="Category">Category</th><th title="Parts">Parts</th><th title="In quantity">In quantity</th><th title="Out quantity">Out quantity</th><th title="Current quantity">Current quantity</th><th title="Stock value">Stock value</th></tr></thead></table>
+</div>
+
+
+            <div id="page-axios-data" data-table-id="#inventory-stock-table"></div>
+        </div>
         </div>
     </div>
 </div>
                     </div>
                 </div>
                 <div class="overlay"></div>
-                <footer class="footer-content border-top">
-    <div class="footer-text">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="copy">
-                    © 2024 <a class="text-capitalize text-black" href=""
-                        target="_blank">Vms laravel</a>.
-                </div>
-            </div>
-            <div class="col-md-6 text-end">
-                <div class="credit">Designed and developed by: <a class="text-black text-capitalize"
-                        href="https://www.bdtask.com/" target="_blank">Bdtask<a>
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
+             @include('components.footer')
             </div>
         </div>
         <!--end  vue page -->

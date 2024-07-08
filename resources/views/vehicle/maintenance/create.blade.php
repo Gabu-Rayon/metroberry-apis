@@ -1,62 +1,12 @@
-<!doctype html>
-<html lang="en">
+@extends('layouts.app')
 
-<head>
-    
-    <meta name="csrf-token" content="AQNLvAb467g0eZtkGATqrKcNNVohCNfvLiX4IjQc">
-<meta name="base-url" content="https://vms.bdtask-demoserver.com">
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Create Vehicle Maintenance - vms-laravel</title><meta name="description" content="Display a listing of Vehicle Maintenance in Database."><link rel="canonical" href="admin/vehicle/maintenance/create"><meta name="robots" content="all"><meta property="og:description" content="Display a listing of Vehicle Maintenance in Database."><meta property="og:title" content="Create Vehicle Maintenance"><meta property="og:url" content="admin/vehicle/maintenance/create"><meta property="og:type" content="WebPage"><meta property="og:site_name" content="vms-laravel"><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"vms-laravel","description":"VMS - Vehicle Management System by BDTask","url":"admin/vehicle/maintenance/create"}</script>
-    
-    <!-- App favicon -->
-<link rel="shortcut icon" href="../../admin-assets/img/favicon.png?v=1">    
-    <link href="../../admin-assets/vendor/bootstrap/css/bootstrap.min.css?v=1" rel="stylesheet">
-<link href="../../admin-assets/vendor/metisMenu/metisMenu.min.css?v=1" rel="stylesheet">
-<link href="../../nanopkg-assets/vendor/datatables/dataTables.bootstrap4.min.css?v=1" rel="stylesheet">
-<link href="../../admin-assets/vendor/typicons/src/typicons.min.css?v=1" rel="stylesheet">
-<link href="../../admin-assets/vendor/themify-icons/themify-icons.min.css?v=1" rel="stylesheet">
-<link href="../../admin-assets/vendor/material_icons/materia_icons.css?v=1" rel="stylesheet">
-<link href="../../admin-assets/vendor/emojionearea/dist/emojionearea.min.css?v=1" rel="stylesheet">
-        <link href="../../admin-assets/vendor/select2/dist/css/select2.min.css?v=1" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="../../nanopkg-assets/vendor/highlight/highlight.min.css?v=1">
-<link href="../../nanopkg-assets/vendor/sweetalert2/sweetalert2.min.css?v=1" rel="stylesheet">
-<link href="../../nanopkg-assets/vendor/fontawesome-free-6.3.0-web/css/all.min.css?v=1" rel="stylesheet">
-<link href="../../nanopkg-assets/vendor/bootstrap-icons/css/bootstrap-icons.min.css?v=1" rel="stylesheet">
-<link href="../../nanopkg-assets/vendor/toastr/build/toastr.min.css?v=1" rel="stylesheet">
-<link href="../../nanopkg-assets/css/arrow-hidden.min.css?v=1" rel="stylesheet">
-<link href="../../nanopkg-assets/css/custom.min.css?v=1" rel="stylesheet">
-
-<!--Start Your Custom Style Now-->
-<link href="../../admin-assets/css/style-new.min.css?v=1" rel="stylesheet">
-<link href="../../admin-assets/css/custom.min.css?v=1" rel="stylesheet">
-<link href="../../admin-assets/css/extra.min.css?v=1" rel="stylesheet">
-<link href="../../admin-assets/scss/customStyle.min.css?v=1" rel="stylesheet">
-<link href="../../admin-assets/css/grapData.min.css?v=1" rel="stylesheet">
-
-    <meta name="get-localize" content="get-localize">
-    </head>
+@section('title', 'Purchase Make List')
+@section('content')
 
 <body class="fixed sidebar-mini">
-    <!-- Preloader -->
-    <!-- Page Loader -->
-<div class="page-loader-wrapper">
-    <div class="loader">
-        <div class="preloader">
-            <div class="spinner-layer pl-green">
-                <div class="circle-clipper left">
-                    <div class="circle"></div>
-                </div>
-                <div class="circle-clipper right">
-                    <div class="circle"></div>
-                </div>
-            </div>
-        </div>
-        <p>Please wait...</p>
-    </div>
-</div>
+
+    @include('components.preloader')
+    <!-- react page -->
     <!-- react page -->
     <div id="app">
         <!-- Begin page -->
@@ -918,7 +868,7 @@
                 </div>
                 <div class="row my-5">
                     <div class="col-md-12">
-                        <table class="table table-borderless table-striped" id="purchase-table"
+                        <table class="table table-borderless table-striped" id="driver-table"
                             data-inventory-category-url="admin/vehicle/maintenance/get-inventory-category"
                             data-parts-url="admin/vehicle/maintenance/get-parts">
                             <thead class="thead-dark">
@@ -969,23 +919,7 @@
                     </div>
                 </div>
                 <div class="overlay"></div>
-                <footer class="footer-content border-top">
-    <div class="footer-text">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="copy">
-                    © 2024 <a class="text-capitalize text-black" href=""
-                        target="_blank">Vms laravel</a>.
-                </div>
-            </div>
-            <div class="col-md-6 text-end">
-                <div class="credit">Designed and developed by: <a class="text-black text-capitalize"
-                        href="https://www.bdtask.com/" target="_blank">Bdtask<a>
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
+           @include('components.footer')
             </div>
         </div>
         <!--end  vue page -->
@@ -1018,33 +952,4 @@
     </div>
 </div>
     <!-- start scripts -->
-    <!--Global script(used by all pages)-->
-<script src="../../admin-assets/vendor/jQuery/jquery.min.js?v=1"></script>
-<script src="../../admin-assets/vendor/bootstrap/js/bootstrap.bundle.min.js?v=1"></script>
-<script src="../../admin-assets/vendor/emojionearea/dist/emojionearea.min.js?v=1"></script>
-
-        <script src="../../admin-assets/vendor/select2/dist/js/select2.min.js?v=1"></script>
-            <script src="module-assets/Language/js/localizer.min.js?v=1"></script>
-    
-<script src="../../admin-assets/vendor/metisMenu/metisMenu.min.js?v=1"></script>
-<script src="../../admin-assets/vendor/perfect-scrollbar/dist/perfect-scrollbar.min.js?v=1"></script>
-<script src="../../nanopkg-assets/vendor/sweetalert2/sweetalert2.min.js?v=1"></script>
-<script src="../../nanopkg-assets/vendor/fontawesome-free-6.3.0-web/js/all.min.js?v=1"></script>
-<script src="../../nanopkg-assets/vendor/toastr/build/toastr.min.js?v=1"></script>
-<script src="../../nanopkg-assets/vendor/axios/dist/axios.min.js?v=1"></script>
-<script src="../../nanopkg-assets/vendor/typed.js/lib/typed.min.js?v=1"></script>
-<script src="../../nanopkg-assets/vendor/jquery-validation-1.19.5/jquery.validate.min.js?v=1"></script>
-<script src="../../nanopkg-assets/js/axios.init.min.js?v=1"></script>
-<script src="../../nanopkg-assets/js/arrow-hidden.min.js?v=1"></script>
-<script src="../../nanopkg-assets/js/img-src.min.js?v=1"></script>
-<script src="../../nanopkg-assets/js/delete.min.js?v=1"></script>
-<script src="../../nanopkg-assets/js/user-status-update.min.js?v=1"></script>
-<script src="../../nanopkg-assets/js/main.js?v=1"></script>
-
-<!--Page Scripts(used by all page)-->
-<script src="../../admin-assets/js/sidebar.min.js?v=1"></script>
-        <script src="module-assets/VehicleMaintenance/js/create_edit.min.js?v=1"></script>
-        <!-- end scripts -->
-    <script src="../../nanopkg-assets/js/tosterSession.min.js?v=1"></script></body>
-
-</html>
+  @endsection

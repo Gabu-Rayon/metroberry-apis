@@ -11,7 +11,7 @@ class UserLoginController extends Controller
      */
     public function index()
     {
-    return view('auth.login');
+        return view('auth.login');
     }
 
     /**
@@ -35,6 +35,12 @@ class UserLoginController extends Controller
     public function show(string $id)
     {
         //
+    }
+
+
+    public function fileCreate()
+    {
+        return view('driver.create');
     }
 
     /**

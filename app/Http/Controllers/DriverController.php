@@ -21,25 +21,28 @@ class DriverController extends Controller
      */
     public function index()
     {
-        try {
-            $user = User::find(Auth::id());
-            if ($user->hasRole('admin')) {
-                $drivers = Driver::all();
-            } else {
-                $drivers = Driver::where('user_id', $user->user_id)->get();
-            }
+        // try {
+        //     $user = User::find(Auth::id());
+        //     if ($user->hasRole('admin')) {
+        //         $drivers = Driver::all();
+        //     } else {
+        //         $drivers = Driver::where('user_id', $user->user_id)->get();
+        //     }
 
-            return response()->json([
-                'drivers' => $drivers
-            ], 200);
-        } catch (Exception $e) {
-            Log::error('VIEW Organisation ERROR');
-            Log::error($e);
-            return response()->json([
-                'message' => 'An error occurred',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        //     return response()->json([
+        //         'drivers' => $drivers
+        //     ], 200);
+        // } catch (Exception $e) {
+        //     Log::error('VIEW Organisation ERROR');
+        //     Log::error($e);
+        //     return response()->json([
+        //         'message' => 'An error occurred',
+        //         'error' => $e->getMessage()
+        //     ], 500);
+        // }
+
+        $drivers = Driver::with('user')->get();
+        return view('driver', compact('drivers'));
     }
 
     /**
@@ -212,6 +215,15 @@ class DriverController extends Controller
     //         ], 500);
     //     }
     // }
+
+    public function create(){
+        return view('driver.create');
+    }
+
+
+    public function edit(){
+        return view('driver.edit');
+    }
 
     public function update(Request $request, Driver $driver)
     {
