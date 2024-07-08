@@ -34,7 +34,7 @@
             </svg>
             ',
             'subitems' => [
-                ['label' => 'Manage Vehicle', 'route' => route('vehicle.index')],
+                ['label' => 'Manage Vehicle', 'route' => route('vehicle')],
                 ['label' => 'Manage Vehicle Insurances', 'route' => route('vehicle.insurance.index')],
         ]])
         

@@ -3,6 +3,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\AddRouteController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\DashboardController;
@@ -67,7 +68,7 @@ Route::get('organisation/{id}/delete', [OrganisationController::class, 'destroy'
  * 
  */
 
- Route::get('our-routes', [AddRouteController::class, , 'index'])->name('our.routes');
+ Route::get('our-routes', [AddRouteController::class,'index'])->name('our.routes');
 
 Route::get('routes/create', [AddRouteController::class, 'create'])->name('route.create');
 Route::get('edit-route/{id}/edit', [AddRouteController::class, 'edit'])->name('route.edit');
@@ -77,8 +78,23 @@ Route::get('route-delete/{id}/delete', [AddRouteController::class, 'destroy'])->
    * 
    */
 
-Route::get('trips', [TripController::class, , , 'index'])->name('booked.trip');
+Route::get('trips', [TripController::class,'index'])->name('booked.trip');
 
 Route::get('trip/create', [TripController::class, 'create'])->name('trip.create');
 Route::get('trip/{id}/edit', [TripController::class, 'edit'])->name('trip.edit');
 Route::get('trip/{id}/delete', [TripController::class, 'destroy'])->name('trip.destroy');
+
+
+
+/**
+ * vehicle Routes
+ * 
+ */
+
+Route::get('vehicle', [VehicleController::class,'vehicle'])->name('vehicle');
+
+Route::get('vehicle/create', [VehicleController::class, 'create'])->name('vehicle.create');
+Route::get('vehicle/insurance', [VehicleController::class, 'vehicleInsurance'])->name('vehicle.insurance.index');
+
+Route::get('vehicle/{id}/edit', [VehicleController::class, 'edit'])->name('vehicle.edit');
+Route::get('vehicle/{id}/delete', [VehicleController::class, 'destroy'])->name('vehicle.destroy');
