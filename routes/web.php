@@ -8,6 +8,7 @@ use App\Models\Customer;
 use App\Models\Driver;
 use App\Models\DriversLicenses;
 use App\Models\Vehicle;
+use App\Models\VehicleInsurance;
 use Illuminate\Support\Facades\Log;
 
 Route::get('/', function () {
@@ -65,3 +66,8 @@ Route::get('/vehicle', function () {
     $vehicles = Vehicle::with('driver')->get();
     return view('vehicle.index', compact('vehicles'));
 })->name('vehicle.index');
+
+Route::get('/vehicle/insurance', function () {
+    $insurances = VehicleInsurance::with('vehicle')->get();
+    return view('vehicle.insurance.index', compact('insurances'));
+})->name('vehicle.insurance.index');

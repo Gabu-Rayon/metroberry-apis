@@ -35,12 +35,7 @@
             ',
             'subitems' => [
                 ['label' => 'Manage Vehicle', 'route' => route('vehicle.index')],
-                // ['label' => 'Manage Legal Documents', 'route' => route('vehicle.documents.index')],
-                // ['label' => 'Vehicle Type', 'route' => route('vehicle.type.index')],
-                // ['label' => 'RTA Office', 'route' => route('vehicle.rta-office.index')],
-                // ['label' => 'Ownership Type', 'route' => route('vehicle.ownership-type.index')],
-                // ['label' => 'Vehicle Division', 'route' => route('vehicle.division.index')],
-                // ['label' => 'Document Type', 'route' => route('vehicle.document-type.index')],
+                ['label' => 'Manage Vehicle Insurances', 'route' => route('vehicle.insurance.index')],
         ]])
         
         <li >
