@@ -1,13 +1,16 @@
 <?php
-
-use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TripController;
+use App\Http\Controllers\DriverController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AddRouteController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserLoginController;
-use App\Models\Customer;
+use App\Http\Controllers\OrganisationController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth.login');
 });
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -18,46 +21,64 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
-Route::get('/login', [UserLoginController::class, 'index'])
-    ->name('user.login')
-    ->middleware('guest'); 
+Route::get('/login', [UserLoginController::class, 'index'])->name('user.login')->middleware('guest');
 
 /**
  * Employees Routes
+ * 
  */
- 
-Route::get('/file', [UserLoginController::class, 'file'])->name('file.file');
-// driver/create
-Route::get('/driver/create', [UserLoginController::class, 'fileCreate'])->name('file.also');
 
 
-Route::get('/employee', function () {
-    $customers = Customer::with('user')->get();
-    return view('employee.index', compact('customers'));
-})->name('employee.index');
 
-Route::get('/employee/position', function () {
-    return view('employee.position.index');
-})->middleware(['auth'])->name('employee.position.index');
+Route::get('employee/create', [EmployeeController::class, 'create'])->name('employee.create');
+Route::get('employee', [EmployeeController::class, 'index'])->name('employee');
 
-Route::get('/employee/department', function () {
-    return view('employee.department.index');
-})->middleware(['auth'])->name('employee.department.index');
-
+Route::get('employee/{id}/edit', [EmployeeController::class, 'edit'])->name('employee.edit');
+Route::get('employee/{id}/delete', [EmployeeController::class, 'destroy'])->name('employee.destroy');
 /**
  * Drivers Routes
+ * 
  */
 
-Route::get('/driver', function () {
-    return view('driver.index');
-})->middleware(['auth'])->name('driver.index');
 
-Route::get('/driver/license', function () {
-    return view('driver.license.index');
-})->middleware(['auth'])->name('driver.license.index');
+Route::get('driver', [DriverController::class, 'index'])->name('driver');
 
-Route::get('/driver/performance', function () {
-    return view('driver.performance.index');
-})->middleware(['auth'])->name('driver.performance.index');
+Route::get('driver/create', [DriverController::class, 'create'])->name('driver.create');
+Route::get('driver/{id}/edit', [DriverController::class, 'edit'])->name('driver.edit');
+Route::get('driver/{id}/delete', [DriverController::class, 'destroy'])->name('driver.destroy');
+
+Route::get('driver/performance', [DriverController::class, 'create'])->name('driver.performance.index');
+Route::get('driver/license', [DriverController::class, 'driverLicense'])->name('driver.license.index');
+
+/**
+ * Organisation Routes
+ * 
+ */
+Route::get('organisation', [OrganisationController::class, 'index'])->name('organisation');
+
+Route::get('organisation/create', [OrganisationController::class, 'create'])->name('organisation.create');
+Route::get('organisation/{id}/edit', [OrganisationController::class, 'edit'])->name('organisation.edit');
+Route::get('organisation/{id}/delete', [OrganisationController::class, 'destroy'])->name('organisation.destroy');
+
+/**
+ * 'Routes' Routes
+ * 
+ */
+
+ Route::get('our-routes', [AddRouteController::class, , 'index'])->name('our.routes');
+
+Route::get('routes/create', [AddRouteController::class, 'create'])->name('route.create');
+Route::get('edit-route/{id}/edit', [AddRouteController::class, 'edit'])->name('route.edit');
+Route::get('route-delete/{id}/delete', [AddRouteController::class, 'destroy'])->name('route.destroy');
+/**
+   * Tripes Routes
+   * 
+   */
+
+Route::get('trips', [TripController::class, , , 'index'])->name('booked.trip');
+
+Route::get('trip/create', [TripController::class, 'create'])->name('trip.create');
+Route::get('trip/{id}/edit', [TripController::class, 'edit'])->name('trip.edit');
+Route::get('trip/{id}/delete', [TripController::class, 'destroy'])->name('trip.destroy');
