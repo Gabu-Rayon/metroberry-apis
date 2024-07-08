@@ -32,6 +32,8 @@ Route::get('/login', [UserLoginController::class, 'index'])
  * Employees Routes
  */
 
+Route::get('/file', [UserLoginController::class, 'file'])->name('file.file');
+
 Route::get('/employee', function () {
     $customers = Customer::with('user')->get();
     return view('employee.index', compact('customers'));
