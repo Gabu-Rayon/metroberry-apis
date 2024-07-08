@@ -1,11 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard')
+@section('title', 'Create New Purchase')
 @section('content')
 
 <body class="fixed sidebar-mini">
 
     @include('components.preloader')
+    <!-- react page -->
     <!-- react page -->
     <div id="app">
         <!-- Begin page -->
@@ -15,8 +16,8 @@
     <div class="sidebar-header">
         <a href="https://vms.bdtask-demoserver.com" class="sidebar-brand">
             <img class="sidebar-logo-lg"
-                src="https://vms.bdtask-demoserver.com/admin-assets/img/sidebar-logo.png?v=1">
-            <img class="sidebar-logo-sm" src="https://vms.bdtask-demoserver.com/admin-assets/img/favicon.png?v=1">
+                src="../../admin-assets/img/sidebar-logo.png?v=1">
+            <img class="sidebar-logo-sm" src="../../admin-assets/img/favicon.png?v=1">
         </a>
     </div>
 
@@ -34,7 +35,7 @@
         <nav class="sidebar-nav">
             <ul class="metismenu text-capitalize">
                 <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/dashboard"
+    <a class="text-capitalize" href="admin/dashboard"
         target="_self">
         <div class="mr-2">
 
@@ -81,37 +82,37 @@
     </a>
     <ul class="nav-second-level">
         <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/employee"
+    <a class="text-capitalize" href="admin/employee"
         target="_self">
         Manage employee
     </a>
 </li>
                         <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/position"
+    <a class="text-capitalize" href="admin/position"
         target="_self">
         Position
     </a>
 </li>
-                        <li class="mm-active">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/department"
+                        <li class="">
+    <a class="text-capitalize" href="admin/department"
         target="_self">
         Department
     </a>
 </li>
                         <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/driver"
+    <a class="text-capitalize" href="admin/driver"
         target="_self">
         Manage driver
     </a>
 </li>
                         <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/license-type"
+    <a class="text-capitalize" href="admin/license-type"
         target="_self">
         License type
     </a>
 </li>
                         <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/driver/performance"
+    <a class="text-capitalize" href="admin/driver/performance"
         target="_self">
         Driver performance
     </a>
@@ -133,45 +134,45 @@
     </a>
     <ul class="nav-second-level">
         <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/vehicle"
+    <a class="text-capitalize" href="admin/vehicle"
         target="_self">
         Manage vehicle
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/vehicle/legal-document"
+    <a class="text-capitalize" href="admin/vehicle/legal-document"
         target="_self">
         Manage legal documents
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/vehicle/type"
+    <a class="text-capitalize" href="admin/vehicle/type"
         target="_self">
         Vehicle type
     </a>
 </li>
                                                                             <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/vehicle/rta-office"
+    <a class="text-capitalize" href="admin/vehicle/rta-office"
         target="_self">
         Rta office
     </a>
 </li>
                                                                             <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/vehicle/ownership/type"
+    <a class="text-capitalize" href="admin/vehicle/ownership/type"
         target="_self">
         Ownership type
     </a>
 </li>
                                                                             <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/vehicle/division"
+    <a class="text-capitalize" href="admin/vehicle/division"
         target="_self">
         Vehicle division
     </a>
 </li>
                                                                             <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/vehicle/document-type"
+    <a class="text-capitalize" href="admin/vehicle/document-type"
         target="_self">
         Document type
     </a>
@@ -196,35 +197,35 @@
     </a>
     <ul class="nav-second-level">
         <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/vehicle/requisition"
+    <a class="text-capitalize" href="admin/vehicle/requisition"
         target="_self">
         Manage vehicle requisition
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/vehicle/route-detail"
+    <a class="text-capitalize" href="admin/vehicle/route-detail"
         target="_self">
         Vehicle route details
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/vehicle/pick-drop"
+    <a class="text-capitalize" href="admin/vehicle/pick-drop"
         target="_self">
         Pick and drop requisition
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/vehicle/requisition/purpose"
+    <a class="text-capitalize" href="admin/vehicle/requisition/purpose"
         target="_self">
         Requisition purpose
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/vehicle/requisition/type"
+    <a class="text-capitalize" href="admin/vehicle/requisition/type"
         target="_self">
         Requisition type
     </a>
@@ -249,19 +250,19 @@
     </a>
     <ul class="nav-second-level">
         <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/vehicle/insurance"
+    <a class="text-capitalize" href="admin/vehicle/insurance"
         target="_self">
         Insurance details
     </a>
 </li>
                                                                             <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/vehicle/insurance/company"
+    <a class="text-capitalize" href="admin/vehicle/insurance/company"
         target="_self">
         Insurance companies
     </a>
 </li>
                                                                             <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/vehicle/insurance/recurring-period"
+    <a class="text-capitalize" href="admin/vehicle/insurance/recurring-period"
         target="_self">
         Insurance recurring period
     </a>
@@ -285,13 +286,13 @@
     </a>
     <ul class="nav-second-level">
         <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/vehicle/maintenance"
+    <a class="text-capitalize" href="admin/vehicle/maintenance"
         target="_self">
         Maintenance
     </a>
 </li>
                             <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/vehicle/maintenance/create"
+    <a class="text-capitalize" href="admin/vehicle/maintenance/create"
         target="_self">
         Create
     </a>
@@ -316,27 +317,27 @@
     </a>
     <ul class="nav-second-level">
         <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/refueling"
+    <a class="text-capitalize" href="admin/refueling"
         target="_self">
         Refuel
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/refueling/requisition"
+    <a class="text-capitalize" href="admin/refueling/requisition"
         target="_self">
         Requisition
     </a>
 </li>
                                                                             <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/refueling/type"
+    <a class="text-capitalize" href="admin/refueling/type"
         target="_self">
         Fuel type
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/refueling/station"
+    <a class="text-capitalize" href="admin/refueling/station"
         target="_self">
         Fuel station
     </a>
@@ -360,58 +361,58 @@
     </a>
     <ul class="nav-second-level">
         <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/inventory/expense"
+    <a class="text-capitalize" href="inventory/expense"
         target="_self">
         Expense
     </a>
 </li>
                                                                             <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/inventory/expense/type"
+    <a class="text-capitalize" href="inventory/expense/type"
         target="_self">
         Expense type
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/inventory/category"
+    <a class="text-capitalize" href="inventory/category"
         target="_self">
         Category
     </a>
 </li>
                                                                             <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/inventory/location"
+    <a class="text-capitalize" href="inventory/location"
         target="_self">
         Location
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/inventory/stock"
+    <a class="text-capitalize" href="inventory/stock"
         target="_self">
         Stock management
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/inventory/parts"
+    <a class="text-capitalize" href="inventory/parts"
         target="_self">
         Parts
     </a>
 </li>
                                                                             <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/inventory/parts/usage"
+    <a class="text-capitalize" href="inventory/parts/usage"
         target="_self">
         Parts usage
     </a>
 </li>
                                                                             <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/inventory/vendor"
+    <a class="text-capitalize" href="inventory/vendor"
         target="_self">
         Vendors
     </a>
 </li>
                                                                             <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/inventory/trip-type"
+    <a class="text-capitalize" href="inventory/trip-type"
         target="_self">
         Trip type
     </a>
@@ -436,13 +437,13 @@
     </a>
     <ul class="nav-second-level">
         <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/purchase"
+    <a class="text-capitalize" href="admin/purchase"
         target="_self">
         Purchase
     </a>
 </li>
-                            <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/purchase/create"
+                            <li class="mm-active">
+    <a class="text-capitalize" href="admin/purchase/create"
         target="_self">
         Create
     </a>
@@ -475,35 +476,35 @@
     </a>
     <ul class="nav-second-level">
         <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/report/employee"
+    <a class="text-capitalize" href="admin/report/employee"
         target="_self">
         Employee report
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/report/driver"
+    <a class="text-capitalize" href="admin/report/driver"
         target="_self">
         Driver report
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/report/admin/vehicle"
+    <a class="text-capitalize" href="admin/report/admin/vehicle"
         target="_self">
         Vehicle report
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/report/admin/vehicle/requisition"
+    <a class="text-capitalize" href="admin/report/admin/vehicle/requisition"
         target="_self">
         Vehicle requistion report
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/report/admin/pickdrop/requisition"
+    <a class="text-capitalize" href="admin/report/admin/pickdrop/requisition"
         target="_self">
         Pick and drop requistion report
     </a>
@@ -511,28 +512,28 @@
                         
 
                                                     <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/report/admin/refuel/requisition"
+    <a class="text-capitalize" href="admin/report/admin/refuel/requisition"
         target="_self">
         Refuel requistion report
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/report/purchase"
+    <a class="text-capitalize" href="admin/report/purchase"
         target="_self">
         Purchase report
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/report/expense"
+    <a class="text-capitalize" href="admin/report/expense"
         target="_self">
         Expense report
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/report/maintenance"
+    <a class="text-capitalize" href="admin/report/maintenance"
         target="_self">
         Maintenance requistion report
     </a>
@@ -560,13 +561,13 @@
     </a>
     <ul class="nav-second-level">
         <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/user"
+    <a class="text-capitalize" href="admin/user"
         target="_self">
         User
     </a>
 </li>
                         <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/user/create"
+    <a class="text-capitalize" href="admin/user/create"
         target="_self">
         Create user
     </a>
@@ -602,14 +603,14 @@
     </a>
     <ul class="nav-second-level">
         <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/permission"
+    <a class="text-capitalize" href="admin/permission"
         target="_self">
         Permission
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/role"
+    <a class="text-capitalize" href="admin/role"
         target="_self">
         Role
     </a>
@@ -617,7 +618,7 @@
     </ul>
 </li>                                <!-- Setting Management -->
                                     <li class="">
-    <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/setting?g=Site"
+    <a class="text-capitalize" href="admin/setting?g=Site"
         target="_self">
         <div>
                             <svg width="30" height="30" viewBox="0 0 30 30" fill="none"
@@ -633,13 +634,13 @@
                             </ul>
         </nav>
         <div class="mt-auto p-3 sidebar-logout">
-            <form method="POST" action="https://vms.bdtask-demoserver.com/logout" class="d-inline">
-    <input type="hidden" name="_token" value="SbwZj4zeZ8Sk8zxe9efRqpMkzdPVcodIfu7UUkqz" autocomplete="off">    <button type="submit" id="logout-btn">
+            <form method="POST" action="logout" class="d-inline">
+    <input type="hidden" name="_token" value="NQfgwyxFW4oekkaBD8XjlGvmJDoV6ejq5NQ79cyr" autocomplete="off">    <button type="submit" id="logout-btn">
         <span class="btn btn-dark w-100"> <img class="me-2"
-                        src="https://vms.bdtask-demoserver.com/admin-assets/img/logout.png?v=1"><span>Logout</span></span>
+                        src="../../admin-assets/img/logout.png?v=1"><span>Logout</span></span>
     </button>
 </form>
-<link href="https://vms.bdtask-demoserver.com/admin-assets/css/logout.css?v=1" rel="stylesheet">
+<link href="../../admin-assets/css/logout.css?v=1" rel="stylesheet">
         </div>
     </div>
     <!-- sidebar-body -->
@@ -658,26 +659,26 @@
                 <a class="language-menu_item border rounded-circle d-flex justify-content-center align-items-center overflow-hidden"
                     href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 
-                    <img src="{{asset('storage/language/flag/2qUSHXENGj7TKN86U1SChajzSsmqlPupBn9hOULH.svg?v=1')}}">
+                    <img src=" storage/language/flag/2qUSHXENGj7TKN86U1SChajzSsmqlPupBn9hOULH.svg?v=1">
                 </a>
                 <div class="dropdown-menu language_dropdown">
-                                            <a href="https://vms.bdtask-demoserver.com/lang/en"
+                                            <a href="lang/en"
                             class="language_item d-flex align-items-center gap-3">
-                            <img src="{{asset('storage/language/flag/2qUSHXENGj7TKN86U1SChajzSsmqlPupBn9hOULH.svg?v=1')}}">
+                            <img src="storage/language/flag/2qUSHXENGj7TKN86U1SChajzSsmqlPupBn9hOULH.svg?v=1">
                             <span>
                                 English
                             </span>
                         </a>
-                                            <a href="https://vms.bdtask-demoserver.com/lang/bn"
+                                            <a href="lang/bn"
                             class="language_item d-flex align-items-center gap-3">
-                            <img src="{{asset('storage/language/flag/NnhGPAjhaSbw08YybMOMvkZvb2jTRzeJpJDXJ7cA.svg?v=1')}}">
+                            <img src="storage/language/flag/NnhGPAjhaSbw08YybMOMvkZvb2jTRzeJpJDXJ7cA.svg?v=1">
                             <span>
                                 বাংলা
                             </span>
                         </a>
-                                            <a href="https://vms.bdtask-demoserver.com/lang/ar"
+                                            <a href="lang/ar"
                             class="language_item d-flex align-items-center gap-3">
-                            <img src="https://vms.bdtask-demoserver.com/ {{asset('storage/language/flag/jzq7Njrm2LjCU0gtBnrh40xsM42ygZtifAcLMCqK.png?v=1')}}">
+                            <img src="storage/language/flag/jzq7Njrm2LjCU0gtBnrh40xsM42ygZtifAcLMCqK.png?v=1">
                             <span>
                                 Arabic
                             </span>
@@ -709,22 +710,22 @@
                     <ul class="list-unstyled mt-3  dropdown_menu_inner">
                         <li class="">
                             <a class="d-block"
-                                href="https://vms.bdtask-demoserver.com/user/profile">My profile</a>
+                                href="user/profile">My profile</a>
                         </li>
                         <li class="">
                             <a class="d-block"
-                                href="https://vms.bdtask-demoserver.com/user/profile-setting/edit">Edit profile</a>
+                                href="user/profile-setting/edit">Edit profile</a>
                         </li>
                         <li class="">
                             <a class="d-block"
-                                href="https://vms.bdtask-demoserver.com/user/profile-setting">Account settings</a>
+                                href="user/profile-setting">Account settings</a>
                         </li>
-                        <form method="POST" action="https://vms.bdtask-demoserver.com/logout" class="d-inline">
-    <input type="hidden" name="_token" value="SbwZj4zeZ8Sk8zxe9efRqpMkzdPVcodIfu7UUkqz" autocomplete="off">    <button type="submit" id="logout-btn"class="btn_sign_out text-black w-auto">
+                        <form method="POST" action="logout" class="d-inline">
+    <input type="hidden" name="_token" value="NQfgwyxFW4oekkaBD8XjlGvmJDoV6ejq5NQ79cyr" autocomplete="off">    <button type="submit" id="logout-btn"class="btn_sign_out text-black w-auto">
         Sign out
     </button>
 </form>
-<link href="https://vms.bdtask-demoserver.com/admin-assets/css/logout.css?v=1" rel="stylesheet">
+<link href="../../admin-assets/css/logout.css?v=1" rel="stylesheet">
 
                     </ul>
 
@@ -744,38 +745,98 @@
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <h6 class="fs-17 fw-semi-bold mb-0">Department list</h6>
+                    <h6 class="fs-17 fw-semi-bold mb-0">Create purchase</h6>
                 </div>
                 <div class="text-end">
                     <div class="actions">
-                        <a class="btn btn-success" href="javascript:void(0);"
-                onclick="axiosModal('https://vms.bdtask-demoserver.com/admin/department/create')">
-                <i class="fa fa-plus"></i>&nbsp;
-                Add department
-            </a>
+                        
                     </div>
                 </div>
             </div>
         </div>
         <div class="card-body">
-            <div>
-            <div class="table-responsive">
-    <table class="table" id="driver-table">
-        <thead>
-            <tr>
-            <th title="Sl" width="30">Sl</th>
-            <th title="Name">Name</th>
-            <th title="Created">Created</th>
-            <th title="Updated">Updated</th>
-            <th title="Action" width="80">Action</th>
-        </tr>
-    </thead>
-</table>
-</div>
+            <form
+            action="admin/purchase"
+            method="POST" class="needs-validation " novalidate="novalidate" enctype="multipart/form-data">
+            <input type="hidden" name="_token" value="NQfgwyxFW4oekkaBD8XjlGvmJDoV6ejq5NQ79cyr" autocomplete="off">                        <div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <label for="vendor_id" class="fw-bold">
+                            Vendor name
+                            <span class="text-danger">*</span>
+                        </label>
+                        <select name="vendor_id" id="vendor_id" class="form-control"
+                            data-ajax-url="admin/purchase/get-vendor" required>
+                                                    </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="date" class="fw-bold">
+                            Date
+                            <span class="text-danger">*</span>
+                        </label>
+                        <input type="date" class="form-control" id="date" name="date"
+                            placeholder="Date"
+                            value="2024-07-06" required>
+                    </div>
 
+                    <div class="col-md-3">
+                        <label for="req_img_path" class="fw-bold"> Manual requisition image</label>
+                        <input type="file" class="form-control" id="req_img_path" name="req_img_path"
+                            placeholder="Req img path" accept=".jpg,.png,.jpeg">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="order_path" class="fw-bold"> Work order image</label>
+                        <input type="file" class="form-control" id="order_path" name="order_path"
+                            accept=".jpg,.png,.jpeg">
+                    </div>
+                </div>
+                <div class="row my-5">
+                    <div class="col-md-12">
+                        <table class="table table-borderless table-striped" id="driver-table"
+                            data-inventory-category-url="admin/purchase/get-inventory-category"
+                            data-parts-url="admin/purchase/get-parts">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th width="27%">
+                                        Category                                        <span class="text-danger">*</span>
+                                    </th>
+                                    <th width="27%">
+                                        Item                                        <span class="text-danger">*</span>
+                                    </th>
+                                    <th width="15%">
+                                        Quantity                                        <span class="text-danger">*</span>
+                                    </th>
+                                    <th width="15%">
+                                        Unit price                                        <span class="text-danger">*</span>
+                                    </th>
+                                    <th width="15%">
+                                        Total price                                    </th>
+                                    <th>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody data-details="[]"></tbody>
+                        </table>
+                    </div>
+                </div>
 
-            <div id="page-axios-data" data-table-id="#driver-table"></div>
-        </div>
+                <div class="card-body footer-info fixed-bottom bg-light py-3 z-index-1">
+                    <ul class="nav
+                align-items-center justify-content-end">
+                        <li class="nav-item text-end pe-2">
+                            <b class="">Net total</b>
+                            <input type="number" step="0.01" class="form-control text-end gross_total"
+                                value="0.00" readonly autocomplete="off">
+                        </li>
+                        <li class="nav-item pe-2">
+                            <b class="text-white">...</b>
+                            <button type="submit"
+                                class="form-control btn btn-sm btn-success align-bottom bg-success">Save                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </form>
         </div>
     </div>
 </div>
@@ -787,7 +848,7 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="copy">
-                    © 2024 <a class="text-capitalize text-black" href="https://vms.bdtask-demoserver.com/"
+                    © 2024 <a class="text-capitalize text-black" href=""
                         target="_blank">Vms laravel</a>.
                 </div>
             </div>
@@ -830,4 +891,5 @@
         </div>
     </div>
 </div>
-@endsesction
+    <!-- start scripts -->
+@endsection

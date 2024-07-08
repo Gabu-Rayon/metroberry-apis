@@ -92,13 +92,13 @@
         Position
     </a>
 </li>
-                        <li class="mm-active">
+                        <li class="">
     <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/department"
         target="_self">
         Department
     </a>
 </li>
-                        <li class="">
+                        <li class="mm-active">
     <a class="text-capitalize" href="https://vms.bdtask-demoserver.com/admin/driver"
         target="_self">
         Manage driver
@@ -658,26 +658,26 @@
                 <a class="language-menu_item border rounded-circle d-flex justify-content-center align-items-center overflow-hidden"
                     href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 
-                    <img src="{{asset('storage/language/flag/2qUSHXENGj7TKN86U1SChajzSsmqlPupBn9hOULH.svg?v=1')}}">
+                    <img src=" https://vms.bdtask-demoserver.com/storage/language/flag/2qUSHXENGj7TKN86U1SChajzSsmqlPupBn9hOULH.svg?v=1">
                 </a>
                 <div class="dropdown-menu language_dropdown">
                                             <a href="https://vms.bdtask-demoserver.com/lang/en"
                             class="language_item d-flex align-items-center gap-3">
-                            <img src="{{asset('storage/language/flag/2qUSHXENGj7TKN86U1SChajzSsmqlPupBn9hOULH.svg?v=1')}}">
+                            <img src="https://vms.bdtask-demoserver.com/storage/language/flag/2qUSHXENGj7TKN86U1SChajzSsmqlPupBn9hOULH.svg?v=1">
                             <span>
                                 English
                             </span>
                         </a>
                                             <a href="https://vms.bdtask-demoserver.com/lang/bn"
                             class="language_item d-flex align-items-center gap-3">
-                            <img src="{{asset('storage/language/flag/NnhGPAjhaSbw08YybMOMvkZvb2jTRzeJpJDXJ7cA.svg?v=1')}}">
+                            <img src="https://vms.bdtask-demoserver.com/storage/language/flag/NnhGPAjhaSbw08YybMOMvkZvb2jTRzeJpJDXJ7cA.svg?v=1">
                             <span>
                                 বাংলা
                             </span>
                         </a>
                                             <a href="https://vms.bdtask-demoserver.com/lang/ar"
                             class="language_item d-flex align-items-center gap-3">
-                            <img src="https://vms.bdtask-demoserver.com/ {{asset('storage/language/flag/jzq7Njrm2LjCU0gtBnrh40xsM42ygZtifAcLMCqK.png?v=1')}}">
+                            <img src="https://vms.bdtask-demoserver.com/storage/language/flag/jzq7Njrm2LjCU0gtBnrh40xsM42ygZtifAcLMCqK.png?v=1">
                             <span>
                                 Arabic
                             </span>
@@ -719,12 +719,12 @@
                             <a class="d-block"
                                 href="https://vms.bdtask-demoserver.com/user/profile-setting">Account settings</a>
                         </li>
-                        <form method="POST" action="https://vms.bdtask-demoserver.com/logout" class="d-inline">
+                        <form method="POST" action="logout" class="d-inline">
     <input type="hidden" name="_token" value="SbwZj4zeZ8Sk8zxe9efRqpMkzdPVcodIfu7UUkqz" autocomplete="off">    <button type="submit" id="logout-btn"class="btn_sign_out text-black w-auto">
         Sign out
     </button>
 </form>
-<link href="https://vms.bdtask-demoserver.com/admin-assets/css/logout.css?v=1" rel="stylesheet">
+<link href="{{asset('admin-assets/css/logout.css?v=1')}}" rel="stylesheet">
 
                     </ul>
 
@@ -744,14 +744,14 @@
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <h6 class="fs-17 fw-semi-bold mb-0">Department list</h6>
+                    <h6 class="fs-17 fw-semi-bold mb-0">Driver list</h6>
                 </div>
                 <div class="text-end">
                     <div class="actions">
                         <a class="btn btn-success" href="javascript:void(0);"
-                onclick="axiosModal('https://vms.bdtask-demoserver.com/admin/department/create')">
+                onclick="axiosModal('admin/driver/create')">
                 <i class="fa fa-plus"></i>&nbsp;
-                Add department
+                Add driver
             </a>
                     </div>
                 </div>
@@ -760,17 +760,7 @@
         <div class="card-body">
             <div>
             <div class="table-responsive">
-    <table class="table" id="driver-table">
-        <thead>
-            <tr>
-            <th title="Sl" width="30">Sl</th>
-            <th title="Name">Name</th>
-            <th title="Created">Created</th>
-            <th title="Updated">Updated</th>
-            <th title="Action" width="80">Action</th>
-        </tr>
-    </thead>
-</table>
+    <table class="table" id="driver-table"><thead><tr><th title="Sl" width="30">Sl</th><th title="Driver name">Driver name</th><th title="Mobile">Mobile</th><th title="License number">License number</th><th title="Nid">Nid</th><th title="Working time slot">Working time slot</th><th title="Status">Status</th><th title="Action" width="80">Action</th></tr></thead></table>
 </div>
 
 
@@ -830,4 +820,5 @@
         </div>
     </div>
 </div>
-@endsesction
+    <!-- start scripts -->
+
