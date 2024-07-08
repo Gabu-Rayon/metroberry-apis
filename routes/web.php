@@ -27,8 +27,11 @@ Route::get('/login', [UserLoginController::class, 'index'])
 /**
  * Employees Routes
  */
-
+ 
 Route::get('/file', [UserLoginController::class, 'file'])->name('file.file');
+// driver/create
+Route::get('/driver/create', [UserLoginController::class, 'fileCreate'])->name('file.also');
+
 
 Route::get('/employee', function () {
     $customers = Customer::with('user')->get();

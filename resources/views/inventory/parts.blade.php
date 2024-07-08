@@ -1,64 +1,12 @@
-<!doctype html>
-<html lang="en">
+@extends('layouts.app')
 
-<head>
-    
-    <meta name="csrf-token" content="AQNLvAb467g0eZtkGATqrKcNNVohCNfvLiX4IjQc">
-<meta name="base-url" content="https://vms.bdtask-demoserver.com">
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Inventory location Lists - vms-laravel</title><meta name="description" content="Display a listing of roles in Database."><link rel="canonical" href="inventory/location"><meta name="robots" content="all"><meta property="og:description" content="Display a listing of roles in Database."><meta property="og:title" content="Inventory location Lists"><meta property="og:url" content="inventory/location"><meta property="og:type" content="WebPage"><meta property="og:site_name" content="vms-laravel"><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"vms-laravel","description":"VMS - Vehicle Management System by BDTask","url":"inventory/location"}</script>
-    
-    <!-- App favicon -->
-<link rel="shortcut icon" href="../../admin-assets/img/favicon.png?v=1">    
-    <link href="../../admin-assets/vendor/bootstrap/css/bootstrap.min.css?v=1" rel="stylesheet">
-<link href="../../admin-assets/vendor/metisMenu/metisMenu.min.css?v=1" rel="stylesheet">
-<link href="../../nanopkg-assets/vendor/datatables/dataTables.bootstrap4.min.css?v=1" rel="stylesheet">
-<link href="../../admin-assets/vendor/typicons/src/typicons.min.css?v=1" rel="stylesheet">
-<link href="../../admin-assets/vendor/themify-icons/themify-icons.min.css?v=1" rel="stylesheet">
-<link href="../../admin-assets/vendor/material_icons/materia_icons.css?v=1" rel="stylesheet">
-<link href="../../admin-assets/vendor/emojionearea/dist/emojionearea.min.css?v=1" rel="stylesheet">
-<link rel="stylesheet" href="../../nanopkg-assets/vendor/yajra-laravel-datatables/assets/datatables.css?v=1">
-        <link rel="stylesheet" href="../../admin-assets/vendor/daterangepicker/daterangepicker.min.css?v=1">
-    <link rel="stylesheet" href="../../nanopkg-assets/vendor/highlight/highlight.min.css?v=1">
-<link href="../../nanopkg-assets/vendor/sweetalert2/sweetalert2.min.css?v=1" rel="stylesheet">
-<link href="../../nanopkg-assets/vendor/fontawesome-free-6.3.0-web/css/all.min.css?v=1" rel="stylesheet">
-<link href="../../nanopkg-assets/vendor/bootstrap-icons/css/bootstrap-icons.min.css?v=1" rel="stylesheet">
-<link href="../../nanopkg-assets/vendor/toastr/build/toastr.min.css?v=1" rel="stylesheet">
-<link href="../../nanopkg-assets/css/arrow-hidden.min.css?v=1" rel="stylesheet">
-<link href="../../nanopkg-assets/css/custom.min.css?v=1" rel="stylesheet">
-
-<!--Start Your Custom Style Now-->
-<link href="../../admin-assets/css/style-new.min.css?v=1" rel="stylesheet">
-<link href="../../admin-assets/css/custom.min.css?v=1" rel="stylesheet">
-<link href="../../admin-assets/css/extra.min.css?v=1" rel="stylesheet">
-<link href="../../admin-assets/scss/customStyle.min.css?v=1" rel="stylesheet">
-<link href="../../admin-assets/css/grapData.min.css?v=1" rel="stylesheet">
-
-<link rel="stylesheet" href="../../nanopkg-assets/css/data-table.min.css?v=1">
-    <meta name="get-localize" content="get-localize">
-    </head>
+@section('title', 'I List')
+@section('content')
 
 <body class="fixed sidebar-mini">
-    <!-- Preloader -->
-    <!-- Page Loader -->
-<div class="page-loader-wrapper">
-    <div class="loader">
-        <div class="preloader">
-            <div class="spinner-layer pl-green">
-                <div class="circle-clipper left">
-                    <div class="circle"></div>
-                </div>
-                <div class="circle-clipper right">
-                    <div class="circle"></div>
-                </div>
-            </div>
-        </div>
-        <p>Please wait...</p>
-    </div>
-</div>
+
+    @include('components.preloader')
+    <!-- react page -->
     <!-- react page -->
     <div id="app">
         <!-- Begin page -->
@@ -431,7 +379,7 @@
         Category
     </a>
 </li>
-                                                                            <li class="mm-active">
+                                                                            <li class="">
     <a class="text-capitalize" href="inventory/location"
         target="_self">
         Location
@@ -445,7 +393,7 @@
     </a>
 </li>
                         
-                                                    <li class="">
+                                                    <li class="mm-active">
     <a class="text-capitalize" href="inventory/parts"
         target="_self">
         Parts
@@ -797,12 +745,12 @@
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <h6 class="fs-17 fw-semi-bold mb-0">Inventory location lists</h6>
+                    <h6 class="fs-17 fw-semi-bold mb-0">Inventory parts lists</h6>
                 </div>
                 <div class="text-end">
                     <div class="actions">
                         <a class="btn btn-success" href="javascript:void(0);"
-                onclick="axiosModal('inventory/location/create')">
+                onclick="axiosModal('inventory/parts/create')">
                 <i class="fa fa-plus"></i>&nbsp;
                 Create
             </a>
@@ -813,11 +761,11 @@
         <div class="card-body">
             <div>
             <div class="table-responsive">
-    <table class="table" id="inventory-location-table"><thead><tr><th title="Sl" width="30">Sl</th><th title="Name">Name</th><th title="Room">Room</th><th title="Self">Self</th><th title="Drawer">Drawer</th><th title="Capacity">Capacity</th><th title="Dimension">Dimension</th><th title="Status">Status</th><th title="Created">Created</th><th title="Updated">Updated</th><th title="Action" width="80">Action</th></tr></thead></table>
+    <table class="table" id="inventory-parts-table"><thead><tr><th title="Sl" width="30">Sl</th><th title="Name">Name</th><th title="Status">Status</th><th title="Created">Created</th><th title="Updated">Updated</th><th title="Action" width="120">Action</th></tr></thead></table>
 </div>
 
 
-            <div id="page-axios-data" data-table-id="#inventory-location-table"></div>
+            <div id="page-axios-data" data-table-id="#inventory-parts-table"></div>
         </div>
         </div>
     </div>
@@ -825,23 +773,7 @@
                     </div>
                 </div>
                 <div class="overlay"></div>
-                <footer class="footer-content border-top">
-    <div class="footer-text">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="copy">
-                    © 2024 <a class="text-capitalize text-black" href=""
-                        target="_blank">Vms laravel</a>.
-                </div>
-            </div>
-            <div class="col-md-6 text-end">
-                <div class="credit">Designed and developed by: <a class="text-black text-capitalize"
-                        href="https://www.bdtask.com/" target="_blank">Bdtask<a>
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
+                @include('components.footer')
             </div>
         </div>
         <!--end  vue page -->
@@ -875,43 +807,4 @@
 </div>
     <!-- start scripts -->
     <!--Global script(used by all pages)-->
-<script src="../../admin-assets/vendor/jQuery/jquery.min.js?v=1"></script>
-<script src="../../admin-assets/vendor/bootstrap/js/bootstrap.bundle.min.js?v=1"></script>
-<script src="../../admin-assets/vendor/emojionearea/dist/emojionearea.min.js?v=1"></script>
-
-<script src="../../nanopkg-assets/vendor/yajra-laravel-datatables/assets/datatables.js?v=1"></script>
-        <script src="../../admin-assets/vendor/moment/moment.min.js?v=1"></script>
-        <script src="../../admin-assets/vendor/daterangepicker/daterangepicker.min.js?v=1"></script>
-            <script src="module-assets/Language/js/localizer.min.js?v=1"></script>
-    
-<script src="../../admin-assets/vendor/metisMenu/metisMenu.min.js?v=1"></script>
-<script src="../../admin-assets/vendor/perfect-scrollbar/dist/perfect-scrollbar.min.js?v=1"></script>
-<script src="../../nanopkg-assets/vendor/sweetalert2/sweetalert2.min.js?v=1"></script>
-<script src="../../nanopkg-assets/vendor/fontawesome-free-6.3.0-web/js/all.min.js?v=1"></script>
-<script src="../../nanopkg-assets/vendor/toastr/build/toastr.min.js?v=1"></script>
-<script src="../../nanopkg-assets/vendor/axios/dist/axios.min.js?v=1"></script>
-<script src="../../nanopkg-assets/vendor/typed.js/lib/typed.min.js?v=1"></script>
-<script src="../../nanopkg-assets/vendor/jquery-validation-1.19.5/jquery.validate.min.js?v=1"></script>
-<script src="../../nanopkg-assets/js/axios.init.min.js?v=1"></script>
-<script src="../../nanopkg-assets/js/arrow-hidden.min.js?v=1"></script>
-<script src="../../nanopkg-assets/js/img-src.min.js?v=1"></script>
-<script src="../../nanopkg-assets/js/delete.min.js?v=1"></script>
-<script src="../../nanopkg-assets/js/user-status-update.min.js?v=1"></script>
-<script src="../../nanopkg-assets/js/main.js?v=1"></script>
-
-<!--Page Scripts(used by all page)-->
-<script src="../../admin-assets/js/sidebar.min.js?v=1"></script>
-<script type="text/javascript">$(function(){window.LaravelDataTables=window.LaravelDataTables||{};window.LaravelDataTables["inventory-location-table"]=$("#inventory-location-table").DataTable({"serverSide":true,"processing":true,"ajax":{"url":"https:\/\/vms.bdtask-demoserver.com\/inventory\/location","type":"GET","data":function(data) {
-            for (var i = 0, len = data.columns.length; i < len; i++) {
-                if (!data.columns[i].search.value) delete data.columns[i].search;
-                if (data.columns[i].searchable === true) delete data.columns[i].searchable;
-                if (data.columns[i].orderable === true) delete data.columns[i].orderable;
-                if (data.columns[i].data === data.columns[i].name) delete data.columns[i].name;
-            }
-            delete data.search.regex;}},"columns":[{"data":"DT_RowIndex","name":"DT_RowIndex","title":"Sl","orderable":false,"searchable":false,"width":30,"className":"text-center"},{"data":"name","name":"name","title":"Name","orderable":true,"searchable":true,"defaultContent":"N\/A"},{"data":"room","name":"room","title":"Room","orderable":true,"searchable":true,"defaultContent":"N\/A"},{"data":"self","name":"self","title":"Self","orderable":true,"searchable":true,"defaultContent":"N\/A"},{"data":"drawer","name":"drawer","title":"Drawer","orderable":true,"searchable":true,"defaultContent":"N\/A"},{"data":"capacity","name":"capacity","title":"Capacity","orderable":true,"searchable":true,"defaultContent":"N\/A"},{"data":"dimension","name":"dimension","title":"Dimension","orderable":true,"searchable":true,"defaultContent":"N\/A"},{"data":"is_active","name":"is_active","title":"Status","orderable":true,"searchable":true},{"data":"created_at","name":"created_at","title":"Created","orderable":true,"searchable":true,"defaultContent":"N\/A"},{"data":"updated_at","name":"updated_at","title":"Updated","orderable":true,"searchable":true,"defaultContent":"N\/A"},{"data":"action","name":"action","title":"Action","orderable":false,"searchable":false,"width":80,"className":"text-center"}],"dom":"<'row mb-3'<'col-md-4'l><'col-md-4 text-center'B><'col-md-4'f>>rt<'bottom'<'row'<'col-md-6'i><'col-md-6'p>>><'clear'>","order":[],"responsive":true,"autoWidth":false,"headerCallback":function(thead, data, start, end, display) {
-                    $(thead).addClass("table-success");
-                },"lengthMenu":[[10,25,50,100,-1],[10,25,50,100,"All"]],"buttons":[{"extend":"reset","className":"btn btn-success box-shadow--4dp btn-sm-menu"},{"extend":"reload","className":"btn btn-success box-shadow--4dp btn-sm-menu"}]});});</script>
-    <!-- end scripts -->
-    <script src="../../nanopkg-assets/js/tosterSession.min.js?v=1"></script></body>
-
-</html>
+@endsection

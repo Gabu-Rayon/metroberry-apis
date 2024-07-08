@@ -37,6 +37,15 @@ class UserLoginController extends Controller
         //
     }
 
+    public function file()
+    {
+        return view('driver');
+    }
+
+    public function fileCreate(){
+        return view('driver.create'); 
+    }
+
     /**
      * Show the form for editing the specified resource.
      */

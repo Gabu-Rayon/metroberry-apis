@@ -9,7 +9,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Trip Type Lists - vms-laravel</title><meta name="description" content="Display a listing of expense types in Database."><link rel="canonical" href="inventory/trip-type"><meta name="robots" content="all"><meta property="og:description" content="Display a listing of expense types in Database."><meta property="og:title" content="Trip Type Lists"><meta property="og:url" content="inventory/trip-type"><meta property="og:type" content="WebPage"><meta property="og:site_name" content="vms-laravel"><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"vms-laravel","description":"VMS - Vehicle Management System by BDTask","url":"inventory/trip-type"}</script>
+<title>Expense Lists - vms-laravel</title><meta name="description" content="Display a listing of Expense in Database."><link rel="canonical" href="inventory/expense"><meta name="robots" content="all"><meta property="og:description" content="Display a listing of Expense in Database."><meta property="og:title" content="Expense Lists"><meta property="og:url" content="inventory/expense"><meta property="og:type" content="WebPage"><meta property="og:site_name" content="vms-laravel"><script type="application/ld+json">{"@context":"https://schema.org","@type":"WebPage","name":"vms-laravel","description":"VMS - Vehicle Management System by BDTask","url":"inventory/expense"}</script>
     
     <!-- App favicon -->
 <link rel="shortcut icon" href="../../admin-assets/img/favicon.png?v=1">    
@@ -411,7 +411,7 @@
                             Inventory
     </a>
     <ul class="nav-second-level">
-        <li class="">
+        <li class="mm-active">
     <a class="text-capitalize" href="inventory/expense"
         target="_self">
         Expense
@@ -462,7 +462,7 @@
         Vendors
     </a>
 </li>
-                                                                            <li class="mm-active">
+                                                                            <li class="">
     <a class="text-capitalize" href="inventory/trip-type"
         target="_self">
         Trip type
@@ -796,14 +796,13 @@
         <div class="card-header">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <h6 class="fs-17 fw-semi-bold mb-0">Trip type lists</h6>
+                    <h6 class="fs-17 fw-semi-bold mb-0">Expense lists</h6>
                 </div>
                 <div class="text-end">
                     <div class="actions">
-                        <a class="btn btn-success" href="javascript:void(0);"
-                onclick="axiosModal('inventory/trip-type/create')">
+                        <a class="btn btn-success btn-sm" href="inventory/expense/create">
                 <i class="fa fa-plus"></i>&nbsp;
-                Add trip type
+                Create
             </a>
                     </div>
                 </div>
@@ -812,11 +811,11 @@
         <div class="card-body">
             <div>
             <div class="table-responsive">
-    <table class="table" id="trip-type-table"><thead><tr><th title="Sl" width="30">Sl</th><th title="Name">Name</th><th title="Status">Status</th><th title="Created">Created</th><th title="Updated">Updated</th><th title="Action" width="80">Action</th></tr></thead></table>
+    <table class="table" id="expense-table"><thead><tr><th title="Sl" width="30">Sl</th><th title="Code">Code</th><th title="Vehicle">Vehicle</th><th title="Trip">Trip</th><th title="By whom">By whom</th><th title="Date">Date</th><th title="Total">Total</th><th title="Updated">Updated</th><th title="Status">Status</th><th title="Action" width="120">Action</th></tr></thead></table>
 </div>
 
 
-            <div id="page-axios-data" data-table-id="#trip-type-table"></div>
+            <div id="page-axios-data" data-table-id="#expense-table"></div>
         </div>
         </div>
     </div>
@@ -824,23 +823,7 @@
                     </div>
                 </div>
                 <div class="overlay"></div>
-                <footer class="footer-content border-top">
-    <div class="footer-text">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="copy">
-                    © 2024 <a class="text-capitalize text-black" href=""
-                        target="_blank">Vms laravel</a>.
-                </div>
-            </div>
-            <div class="col-md-6 text-end">
-                <div class="credit">Designed and developed by: <a class="text-black text-capitalize"
-                        href="https://www.bdtask.com/" target="_blank">Bdtask<a>
-                </div>
-            </div>
-        </div>
-    </div>
-</footer>
+        @include('components.footer')
             </div>
         </div>
         <!--end  vue page -->
@@ -898,14 +881,14 @@
 
 <!--Page Scripts(used by all page)-->
 <script src="../../admin-assets/js/sidebar.min.js?v=1"></script>
-<script type="text/javascript">$(function(){window.LaravelDataTables=window.LaravelDataTables||{};window.LaravelDataTables["trip-type-table"]=$("#trip-type-table").DataTable({"serverSide":true,"processing":true,"ajax":{"url":"https:\/\/vms.bdtask-demoserver.com\/inventory\/trip-type","type":"GET","data":function(data) {
+<script type="text/javascript">$(function(){window.LaravelDataTables=window.LaravelDataTables||{};window.LaravelDataTables["expense-table"]=$("#expense-table").DataTable({"serverSide":true,"processing":true,"ajax":{"url":"https:\/\/vms.bdtask-demoserver.com\/inventory\/expense","type":"GET","data":function(data) {
             for (var i = 0, len = data.columns.length; i < len; i++) {
                 if (!data.columns[i].search.value) delete data.columns[i].search;
                 if (data.columns[i].searchable === true) delete data.columns[i].searchable;
                 if (data.columns[i].orderable === true) delete data.columns[i].orderable;
                 if (data.columns[i].data === data.columns[i].name) delete data.columns[i].name;
             }
-            delete data.search.regex;}},"columns":[{"data":"DT_RowIndex","name":"DT_RowIndex","title":"Sl","orderable":false,"searchable":false,"width":30,"className":"text-center"},{"data":"name","name":"name","title":"Name","orderable":true,"searchable":true,"defaultContent":"N\/A"},{"data":"is_active","name":"is_active","title":"Status","orderable":true,"searchable":true},{"data":"created_at","name":"created_at","title":"Created","orderable":true,"searchable":true,"defaultContent":"N\/A"},{"data":"updated_at","name":"updated_at","title":"Updated","orderable":true,"searchable":true,"defaultContent":"N\/A"},{"data":"action","name":"action","title":"Action","orderable":false,"searchable":false,"width":80,"className":"text-center"}],"dom":"<'row mb-3'<'col-md-4'l><'col-md-4 text-center'B><'col-md-4'f>>rt<'bottom'<'row'<'col-md-6'i><'col-md-6'p>>><'clear'>","order":[[4,"desc"]],"responsive":true,"autoWidth":false,"headerCallback":function(thead, data, start, end, display) {
+            delete data.search.regex;}},"columns":[{"data":"DT_RowIndex","name":"DT_RowIndex","title":"Sl","orderable":false,"searchable":false,"width":30,"className":"text-center"},{"data":"code","name":"code","title":"Code","orderable":true,"searchable":true,"defaultContent":"N\/A"},{"data":"vendor_name","name":"vendor_name","title":"Vehicle","orderable":true,"searchable":true,"defaultContent":"N\/A"},{"data":"trip_type_name","name":"trip_type_name","title":"Trip","orderable":true,"searchable":true,"defaultContent":"N\/A"},{"data":"employee_name","name":"employee_name","title":"By whom","orderable":true,"searchable":true,"defaultContent":"N\/A"},{"data":"date","name":"date","title":"Date","orderable":true,"searchable":true,"defaultContent":"N\/A"},{"data":"total","name":"total","title":"Total","orderable":true,"searchable":true,"defaultContent":"N\/A"},{"data":"updated_at","name":"updated_at","title":"Updated","orderable":true,"searchable":true,"defaultContent":"N\/A"},{"data":"status","name":"status","title":"Status","orderable":true,"searchable":true,"defaultContent":"N\/A"},{"data":"action","name":"action","title":"Action","orderable":false,"searchable":false,"width":120,"className":"text-center"}],"dom":"<'row mb-3'<'col-md-4'l><'col-md-4 text-center'B><'col-md-4'f>>rt<'bottom'<'row'<'col-md-6'i><'col-md-6'p>>><'clear'>","order":[],"responsive":true,"autoWidth":false,"headerCallback":function(thead, data, start, end, display) {
                     $(thead).addClass("table-success");
                 },"lengthMenu":[[10,25,50,100,-1],[10,25,50,100,"All"]],"buttons":[{"extend":"reset","className":"btn btn-success box-shadow--4dp btn-sm-menu"},{"extend":"reload","className":"btn btn-success box-shadow--4dp btn-sm-menu"}]});});</script>
     <!-- end scripts -->
