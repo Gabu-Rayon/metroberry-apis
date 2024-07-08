@@ -31,7 +31,8 @@
 <link href="{{asset('admin-assets/vendor/themify-icons/themify-icons.min.css?v=1')}}"rel="stylesheet">
 <link href="{{asset('admin-assets/vendor/material_icons/materia_icons.css?v=1')}}"rel="stylesheet">
 <link href="{{asset('admin-assets/vendor/emojionearea/dist/emojionearea.min.css?v=1')}}"rel="stylesheet">
-<link rel="stylesheet"href="../nanopkg-assets/vendor/highlight/highlight.min.css?v=1 {{asset('')}}">
+<link rel="stylesheet" href="{{asset('nanopkg-assets/vendor/yajra-laravel-datatables/assets/datatables.css?v=1')}}">
+<link rel="stylesheet"href="{{asset('nanopkg-assets/vendor/highlight/highlight.min.css?v=1')}}">
 <link href="{{asset('nanopkg-assets/vendor/sweetalert2/sweetalert2.min.css?v=1')}}"rel="stylesheet">
 <link href="{{asset('nanopkg-assets/vendor/fontawesome-free-6.3.0-web/css/all.min.css?v=1')}}"rel="stylesheet">
 <link href="{{asset('nanopkg-assets/vendor/bootstrap-icons/css/bootstrap-icons.min.css?v=1')}}"rel="stylesheet">
@@ -59,7 +60,10 @@
 <script src="{{asset('admin-assets/vendor/bootstrap/js/bootstrap.bundle.min.js?v=1')}}"></script>
 <script src="{{asset('admin-assets/vendor/emojionearea/dist/emojionearea.min.js?v=1')}}"></script>
 
-        <script src="{{asset('module-assets/Language/js/localizer.min.js?v=1')}}"></script>
+<script src="{{asset('module-assets/Language/js/localizer.min.js?v=1')}}"></script>
+
+<script src="../nanopkg-assets/vendor/yajra-laravel-datatables/assets/datatables.js?v=1"></script>
+<script src="module-assets/Language/js/localizer.min.js?v=1"></script>    
     
 <script src="{{asset('admin-assets/vendor/metisMenu/metisMenu.min.js?v=1')}}"></script>
 <script src="{{asset('admin-assets/vendor/perfect-scrollbar/dist/perfect-scrollbar.min.js?v=1')}}"></script>
@@ -89,16 +93,17 @@
         <!-- end scripts -->
     <script src="{{asset('nanopkg-assets/js/tosterSession.min.js?v=1')}}"></script>
 
-<script type="text/javascript">$(function(){window.LaravelDataTables=window.LaravelDataTables||{};window.LaravelDataTables["department-table"]=$("#department-table").DataTable({"serverSide":true,"processing":true,"ajax":{"url":"https:\/\/vms.bdtask-demoserver.com\/admin\/department","type":"GET","data":function(data) {
+<script type="text/javascript">$(function(){window.LaravelDataTables=window.LaravelDataTables||{};window.LaravelDataTables["driver-table"]=$("#driver-table").DataTable({"serverSide":true,"processing":true,"ajax":{"url":"https:\/\/vms.bdtask-demoserver.com\/admin\/driver","type":"GET","data":function(data) {
             for (var i = 0, len = data.columns.length; i < len; i++) {
                 if (!data.columns[i].search.value) delete data.columns[i].search;
                 if (data.columns[i].searchable === true) delete data.columns[i].searchable;
                 if (data.columns[i].orderable === true) delete data.columns[i].orderable;
                 if (data.columns[i].data === data.columns[i].name) delete data.columns[i].name;
             }
-            delete data.search.regex;}},"columns":[{"data":"DT_RowIndex","name":"DT_RowIndex","title":"Sl","orderable":false,"searchable":false,"width":30,"className":"text-center"},{"data":"name","name":"name","title":"Name","orderable":true,"searchable":true,"defaultContent":"N\/A"},{"data":"created_at","name":"created_at","title":"Created","orderable":true,"searchable":true},{"data":"updated_at","name":"updated_at","title":"Updated","orderable":true,"searchable":true},{"data":"action","name":"action","title":"Action","orderable":false,"searchable":false,"width":80,"className":"text-center"}],"dom":"<'row mb-3'<'col-md-4'l><'col-md-4 text-center'B><'col-md-4'f>>rt<'bottom'<'row'<'col-md-6'i><'col-md-6'p>>><'clear'>","order":[],"responsive":true,"autoWidth":false,"headerCallback":function(thead, data, start, end, display) {
+            delete data.search.regex;}},"columns":[{"data":"DT_RowIndex","name":"DT_RowIndex","title":"Sl","orderable":false,"searchable":false,"width":30,"className":"text-center"},{"data":"name","name":"name","title":"Driver name","orderable":true,"searchable":true,"defaultContent":"N\/A"},{"data":"phone","name":"phone","title":"Mobile","orderable":true,"searchable":true,"defaultContent":"N\/A"},{"data":"license_num","name":"license_num","title":"License number","orderable":true,"searchable":true,"defaultContent":"N\/A"},{"data":"nid","name":"nid","title":"Nid","orderable":true,"searchable":true,"defaultContent":"N\/A"},{"data":"working_time_slot","name":"working_time_slot","title":"Working time slot","orderable":true,"searchable":true,"defaultContent":"N\/A"},{"data":"is_active","name":"is_active","title":"Status","orderable":true,"searchable":true,"defaultContent":"N\/A"},{"data":"action","name":"action","title":"Action","orderable":false,"searchable":false,"width":80,"className":"text-center"}],"dom":"<'row mb-3'<'col-md-4'l><'col-md-4 text-center'B><'col-md-4'f>>rt<'bottom'<'row'<'col-md-6'i><'col-md-6'p>>><'clear'>","order":[],"responsive":true,"autoWidth":false,"headerCallback":function(thead, data, start, end, display) {
                     $(thead).addClass("table-success");
                 },"lengthMenu":[[10,25,50,100,-1],[10,25,50,100,"All"]],"buttons":[{"extend":"reset","className":"btn btn-success box-shadow--4dp btn-sm-menu"},{"extend":"reload","className":"btn btn-success box-shadow--4dp btn-sm-menu"}]});});</script>
+    <!-- end scripts -->
 </body>
 
 </html>

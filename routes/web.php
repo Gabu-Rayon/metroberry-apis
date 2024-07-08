@@ -27,3 +27,4 @@ Route::middleware('auth')->group(function () {
 require __DIR__.'/auth.php';
 
 Route::get('/login', [UserLoginController::class, 'index'])->name('user.login');
+Route::get('/file', [UserLoginController::class, 'file']);
