@@ -159,6 +159,7 @@
                                     <th title="Type">Phone</th>
                                     <th title="Nid">Address</th>
                                     <th title="Department">Organisation</th>
+                                    <th title="Action" width="80">Action</th>
                                 </tr>
                                 </thead>
 
