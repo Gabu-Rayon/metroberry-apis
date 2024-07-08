@@ -4,6 +4,7 @@ use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserLoginController;
+use App\Models\Customer;
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,8 +29,9 @@ Route::get('/login', [UserLoginController::class, 'index'])
  */
 
 Route::get('/employee', function () {
-    return view('employee.index');
-})->middleware(['auth'])->name('employee.index');
+    $customers = Customer::with('user')->get();
+    return view('employee.index', compact('customers'));
+})->name('employee.index');
 
 Route::get('/employee/position', function () {
     return view('employee.position.index');

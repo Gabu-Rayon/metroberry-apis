@@ -51,7 +51,13 @@
 <body class="fixed sidebar-mini">
     <div class="main">
         @include('components.preloader')
-        @yield('content')
+        <div id="app">
+            <div class="wrapper">
+                @include('components.sidebar.sidebar')
+                @include('components.navbar')
+                @yield('content')
+            </div>
+        </div>
     </div>
     
 

@@ -20,7 +20,6 @@ class Customer extends Model
         'id',
         'user_id',
         'organisation_id',
-        'customer_organisation_code',
         'is_email_verified',
         'is_contact_verified',
         'created_at',

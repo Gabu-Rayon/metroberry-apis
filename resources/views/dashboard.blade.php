@@ -3,20 +3,9 @@
 @section('title', 'Dashboard')
 @section('content')
 
-<body class="fixed sidebar-mini">
-
-    @include('components.preloader')
+<div class="body-content">
     
-    <div id="app">
-        <div class="wrapper">
-
-            @include('components.sidebar.sidebar')
-
-            @include('components.navbar')
-            
-            <div class="body-content">
-
-                @include('components.dashboard.card-stats')
+    @include('components.dashboard.card-stats')
 
     <div class="row mb-4">
                     <div class="col-xl-8 mb-4 mb-xl-0">
