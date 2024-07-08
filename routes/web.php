@@ -27,6 +27,8 @@ Route::get('/login', [UserLoginController::class, 'index'])
  * Employees Routes
  */
 
+Route::get('/file', [UserLoginController::class, 'file'])->name('file.file');
+
 Route::get('/employee', function () {
     return view('employee.index');
 })->middleware(['auth'])->name('employee.index');
