@@ -74,7 +74,7 @@ class TripInvoiceController extends Controller
         // Create trip invoice
         $tripInvoice = Invoice::create($validatedData);
 
-        return response()->json(['trip_invoice' => $tripInvoice], 201);
+        return response()->json(['Trip Invoice' => $tripInvoice], 201);
     }
 
     /**
@@ -84,7 +84,7 @@ class TripInvoiceController extends Controller
     {
         // Find the trip invoice by ID
         $tripInvoice = Invoice::findOrFail($id);
-        return response()->json(['trip_invoice' => $tripInvoice]);
+        return response()->json(['Trip Invoice' => $tripInvoice]);
     }
 
     /**
@@ -118,7 +118,7 @@ class TripInvoiceController extends Controller
         // Update trip invoice
         $tripInvoice->update($validatedData);
 
-        return response()->json(['trip_invoice' => $tripInvoice]);
+        return response()->json(['Trip Invoice' => $tripInvoice]);
     }
 
     /**

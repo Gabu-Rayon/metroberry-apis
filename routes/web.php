@@ -6,6 +6,7 @@ use App\Http\Controllers\DriverController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\UserLoginController;
 use App\Http\Controllers\OrganisationController;
 use App\Http\Controllers\VehicleServiceController;
 
@@ -25,3 +26,4 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__.'/auth.php';
 
+Route::get('/login', [UserLoginController::class, 'index'])->name('user.login');
