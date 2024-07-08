@@ -11,9 +11,9 @@
         <div class="wrapper">
             <nav class="sidebar sidebar-bunker sidebar-sticky overflow-hidden">
                 <div class="sidebar-header">
-                    <a href="../" class="sidebar-brand">
-                        <img class="sidebar-logo-lg" src="..//admin-assets/img/sidebar-logo.png?v=1" />
-                        <img class="sidebar-logo-sm" src="..//admin-assets/img/favicon.png?v=1" />
+                    <a href="/" class="sidebar-brand">
+                        <img class="sidebar-logo-lg" src="{{asset('admin-assets/img/sidebar-logo.png?v=1')}}" />
+                        <img class="sidebar-logo-sm" src="{{asset('admin-assets/img/favicon.png?v=1')}}" />
                     </a>
                 </div>
                 
@@ -29,7 +29,7 @@
                     <nav class="sidebar-nav">
                         <ul class="metismenu text-capitalize">
                             <li class="mm-active">
-                                <a class="text-capitalize" href="..//admin/dashboard" target="_self">
+                                <a class="text-capitalize" href="admin/dashboard" target="_self">
                                     <div class="mr-2">
                                         <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M1 16H7C7.55 16 8 15.55 8 15V7C8 6.45 7.55 6 7 6H1C0.45 6 0 6.45 0 7V15C0 15.55 0.45 16 1 16ZM1 24H7C7.55 24 8 23.55 8 23V19C8 18.45 7.55 18 7 18H1C0.45 18 0 18.45 0 19V23C0 23.55 0.45 24 1 24ZM11 24H17C17.55 24 18 23.55 18 23V15C18 14.45 17.55 14 17 14H11C10.45 14 10 14.45 10 15V23C10 23.55 10.45 24 11 24ZM10 7V11C10 11.55 10.45 12 11 12H17C17.55 12 18 11.55 18 11V7C18 6.45 17.55 6 17 6H11C10.45 6 10 6.45 10 7Z" fill="#6C6C6C" />
@@ -55,37 +55,37 @@
                                 </a>
                                 <ul class="nav-second-level">
         <li class="">
-    <a class="text-capitalize" href="..//admin/employee"
+    <a class="text-capitalize" href="admin/employee"
         target="_self">
         Manage employee
     </a>
 </li>
                         <li class="">
-    <a class="text-capitalize" href="..//admin/position"
+    <a class="text-capitalize" href="admin/position"
         target="_self">
         Position
     </a>
 </li>
                         <li class="">
-    <a class="text-capitalize" href="..//admin/department"
+    <a class="text-capitalize" href="admin/department"
         target="_self">
         Department
     </a>
 </li>
                         <li class="">
-    <a class="text-capitalize" href="..//admin/driver"
+    <a class="text-capitalize" href="admin/driver"
         target="_self">
         Manage driver
     </a>
 </li>
                         <li class="">
-    <a class="text-capitalize" href="..//admin/license-type"
+    <a class="text-capitalize" href="admin/license-type"
         target="_self">
         License type
     </a>
 </li>
                         <li class="">
-    <a class="text-capitalize" href="..//admin/driver/performance"
+    <a class="text-capitalize" href="admin/driver/performance"
         target="_self">
         Driver performance
     </a>
@@ -107,45 +107,45 @@
     </a>
     <ul class="nav-second-level">
         <li class="">
-    <a class="text-capitalize" href="..//admin/vehicle"
+    <a class="text-capitalize" href="admin/vehicle"
         target="_self">
         Manage vehicle
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="..//admin/vehicle/legal-document"
+    <a class="text-capitalize" href="admin/vehicle/legal-document"
         target="_self">
         Manage legal documents
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="..//admin/vehicle/type"
+    <a class="text-capitalize" href="admin/vehicle/type"
         target="_self">
         Vehicle type
     </a>
 </li>
                                                                             <li class="">
-    <a class="text-capitalize" href="..//admin/vehicle/rta-office"
+    <a class="text-capitalize" href="admin/vehicle/rta-office"
         target="_self">
         Rta office
     </a>
 </li>
                                                                             <li class="">
-    <a class="text-capitalize" href="..//admin/vehicle/ownership/type"
+    <a class="text-capitalize" href="admin/vehicle/ownership/type"
         target="_self">
         Ownership type
     </a>
 </li>
                                                                             <li class="">
-    <a class="text-capitalize" href="..//admin/vehicle/division"
+    <a class="text-capitalize" href="admin/vehicle/division"
         target="_self">
         Vehicle division
     </a>
 </li>
                                                                             <li class="">
-    <a class="text-capitalize" href="..//admin/vehicle/document-type"
+    <a class="text-capitalize" href="admin/vehicle/document-type"
         target="_self">
         Document type
     </a>
@@ -170,35 +170,35 @@
     </a>
     <ul class="nav-second-level">
         <li class="">
-    <a class="text-capitalize" href="..//admin/vehicle/requisition"
+    <a class="text-capitalize" href="admin/vehicle/requisition"
         target="_self">
         Manage vehicle requisition
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="..//admin/vehicle/route-detail"
+    <a class="text-capitalize" href="admin/vehicle/route-detail"
         target="_self">
         Vehicle route details
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="..//admin/vehicle/pick-drop"
+    <a class="text-capitalize" href="admin/vehicle/pick-drop"
         target="_self">
         Pick and drop requisition
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="..//admin/vehicle/requisition/purpose"
+    <a class="text-capitalize" href="admin/vehicle/requisition/purpose"
         target="_self">
         Requisition purpose
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="..//admin/vehicle/requisition/type"
+    <a class="text-capitalize" href="admin/vehicle/requisition/type"
         target="_self">
         Requisition type
     </a>
@@ -223,19 +223,19 @@
     </a>
     <ul class="nav-second-level">
         <li class="">
-    <a class="text-capitalize" href="..//admin/vehicle/insurance"
+    <a class="text-capitalize" href="admin/vehicle/insurance"
         target="_self">
         Insurance details
     </a>
 </li>
                                                                             <li class="">
-    <a class="text-capitalize" href="..//admin/vehicle/insurance/company"
+    <a class="text-capitalize" href="admin/vehicle/insurance/company"
         target="_self">
         Insurance companies
     </a>
 </li>
                                                                             <li class="">
-    <a class="text-capitalize" href="..//admin/vehicle/insurance/recurring-period"
+    <a class="text-capitalize" href="admin/vehicle/insurance/recurring-period"
         target="_self">
         Insurance recurring period
     </a>
@@ -259,13 +259,13 @@
     </a>
     <ul class="nav-second-level">
         <li class="">
-    <a class="text-capitalize" href="..//admin/vehicle/maintenance"
+    <a class="text-capitalize" href="admin/vehicle/maintenance"
         target="_self">
         Maintenance
     </a>
 </li>
                             <li class="">
-    <a class="text-capitalize" href="..//admin/vehicle/maintenance/create"
+    <a class="text-capitalize" href="admin/vehicle/maintenance/create"
         target="_self">
         Create
     </a>
@@ -290,27 +290,27 @@
     </a>
     <ul class="nav-second-level">
         <li class="">
-    <a class="text-capitalize" href="..//admin/refueling"
+    <a class="text-capitalize" href="admin/refueling"
         target="_self">
         Refuel
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="..//admin/refueling/requisition"
+    <a class="text-capitalize" href="admin/refueling/requisition"
         target="_self">
         Requisition
     </a>
 </li>
                                                                             <li class="">
-    <a class="text-capitalize" href="..//admin/refueling/type"
+    <a class="text-capitalize" href="admin/refueling/type"
         target="_self">
         Fuel type
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="..//admin/refueling/station"
+    <a class="text-capitalize" href="admin/refueling/station"
         target="_self">
         Fuel station
     </a>
@@ -334,58 +334,58 @@
     </a>
     <ul class="nav-second-level">
         <li class="">
-    <a class="text-capitalize" href="..//inventory/expense"
+    <a class="text-capitalize" href="inventory/expense"
         target="_self">
         Expense
     </a>
 </li>
                                                                             <li class="">
-    <a class="text-capitalize" href="..//inventory/expense/type"
+    <a class="text-capitalize" href="inventory/expense/type"
         target="_self">
         Expense type
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="..//inventory/category"
+    <a class="text-capitalize" href="inventory/category"
         target="_self">
         Category
     </a>
 </li>
                                                                             <li class="">
-    <a class="text-capitalize" href="..//inventory/location"
+    <a class="text-capitalize" href="inventory/location"
         target="_self">
         Location
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="..//inventory/stock"
+    <a class="text-capitalize" href="inventory/stock"
         target="_self">
         Stock management
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="..//inventory/parts"
+    <a class="text-capitalize" href="inventory/parts"
         target="_self">
         Parts
     </a>
 </li>
                                                                             <li class="">
-    <a class="text-capitalize" href="..//inventory/parts/usage"
+    <a class="text-capitalize" href="inventory/parts/usage"
         target="_self">
         Parts usage
     </a>
 </li>
                                                                             <li class="">
-    <a class="text-capitalize" href="..//inventory/vendor"
+    <a class="text-capitalize" href="inventory/vendor"
         target="_self">
         Vendors
     </a>
 </li>
                                                                             <li class="">
-    <a class="text-capitalize" href="..//inventory/trip-type"
+    <a class="text-capitalize" href="inventory/trip-type"
         target="_self">
         Trip type
     </a>
@@ -410,13 +410,13 @@
     </a>
     <ul class="nav-second-level">
         <li class="">
-    <a class="text-capitalize" href="..//admin/purchase"
+    <a class="text-capitalize" href="admin/purchase"
         target="_self">
         Purchase
     </a>
 </li>
                             <li class="">
-    <a class="text-capitalize" href="..//admin/purchase/create"
+    <a class="text-capitalize" href="admin/purchase/create"
         target="_self">
         Create
     </a>
@@ -449,35 +449,35 @@
     </a>
     <ul class="nav-second-level">
         <li class="">
-    <a class="text-capitalize" href="..//admin/report/employee"
+    <a class="text-capitalize" href="admin/report/employee"
         target="_self">
         Employee report
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="..//admin/report/driver"
+    <a class="text-capitalize" href="admin/report/driver"
         target="_self">
         Driver report
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="..//admin/report/admin/vehicle"
+    <a class="text-capitalize" href="admin/report/admin/vehicle"
         target="_self">
         Vehicle report
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="..//admin/report/admin/vehicle/requisition"
+    <a class="text-capitalize" href="admin/report/admin/vehicle/requisition"
         target="_self">
         Vehicle requistion report
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="..//admin/report/admin/pickdrop/requisition"
+    <a class="text-capitalize" href="admin/report/admin/pickdrop/requisition"
         target="_self">
         Pick and drop requistion report
     </a>
@@ -485,28 +485,28 @@
                         
 
                                                     <li class="">
-    <a class="text-capitalize" href="..//admin/report/admin/refuel/requisition"
+    <a class="text-capitalize" href="admin/report/admin/refuel/requisition"
         target="_self">
         Refuel requistion report
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="..//admin/report/purchase"
+    <a class="text-capitalize" href="admin/report/purchase"
         target="_self">
         Purchase report
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="..//admin/report/expense"
+    <a class="text-capitalize" href="admin/report/expense"
         target="_self">
         Expense report
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="..//admin/report/maintenance"
+    <a class="text-capitalize" href="admin/report/maintenance"
         target="_self">
         Maintenance requistion report
     </a>
@@ -534,13 +534,13 @@
     </a>
     <ul class="nav-second-level">
         <li class="">
-    <a class="text-capitalize" href="..//admin/user"
+    <a class="text-capitalize" href="admin/user"
         target="_self">
         User
     </a>
 </li>
                         <li class="">
-    <a class="text-capitalize" href="..//admin/user/create"
+    <a class="text-capitalize" href="admin/user/create"
         target="_self">
         Create user
     </a>
@@ -576,14 +576,14 @@
     </a>
     <ul class="nav-second-level">
         <li class="">
-    <a class="text-capitalize" href="..//admin/permission"
+    <a class="text-capitalize" href="admin/permission"
         target="_self">
         Permission
     </a>
 </li>
                         
                                                     <li class="">
-    <a class="text-capitalize" href="..//admin/role"
+    <a class="text-capitalize" href="admin/role"
         target="_self">
         Role
     </a>
@@ -591,7 +591,7 @@
     </ul>
 </li>                                <!-- Setting Management -->
                                     <li class="">
-    <a class="text-capitalize" href="..//admin/setting?g=Site"
+    <a class="text-capitalize" href="admin/setting?g=Site"
         target="_self">
         <div>
                             <svg width="30" height="30" viewBox="0 0 30 30" fill="none"
@@ -607,13 +607,13 @@
                             </ul>
         </nav>
         <div class="mt-auto p-3 sidebar-logout">
-            <form method="POST" action="..//logout" class="d-inline">
+            <form method="POST" action="logout" class="d-inline">
     <input type="hidden" name="_token" value="AQNLvAb467g0eZtkGATqrKcNNVohCNfvLiX4IjQc" autocomplete="off">    <button type="submit" id="logout-btn">
         <span class="btn btn-dark w-100"> <img class="me-2"
-                        src="..//admin-assets/img/logout.png?v=1"><span>Logout</span></span>
+                        src="admin-assets/img/logout.png?v=1"><span>Logout</span></span>
     </button>
 </form>
-<link href="..//admin-assets/css/logout.css?v=1" rel="stylesheet">
+<link href="admin-assets/css/logout.css?v=1" rel="stylesheet">
         </div>
     </div>
     <!-- sidebar-body -->
@@ -632,26 +632,26 @@
                 <a class="language-menu_item border rounded-circle d-flex justify-content-center align-items-center overflow-hidden"
                     href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 
-                    <img src=" ..//storage/language/flag/2qUSHXENGj7TKN86U1SChajzSsmqlPupBn9hOULH.svg?v=1">
+                    <img src=" storage/language/flag/2qUSHXENGj7TKN86U1SChajzSsmqlPupBn9hOULH.svg?v=1">
                 </a>
                 <div class="dropdown-menu language_dropdown">
-                                            <a href="..//lang/en"
+                                            <a href="lang/en"
                             class="language_item d-flex align-items-center gap-3">
-                            <img src="..//storage/language/flag/2qUSHXENGj7TKN86U1SChajzSsmqlPupBn9hOULH.svg?v=1">
+                            <img src="storage/language/flag/2qUSHXENGj7TKN86U1SChajzSsmqlPupBn9hOULH.svg?v=1">
                             <span>
                                 English
                             </span>
                         </a>
-                                            <a href="..//lang/bn"
+                                            <a href="lang/bn"
                             class="language_item d-flex align-items-center gap-3">
-                            <img src="..//storage/language/flag/NnhGPAjhaSbw08YybMOMvkZvb2jTRzeJpJDXJ7cA.svg?v=1">
+                            <img src="storage/language/flag/NnhGPAjhaSbw08YybMOMvkZvb2jTRzeJpJDXJ7cA.svg?v=1">
                             <span>
                                 বাংলা
                             </span>
                         </a>
-                                            <a href="..//lang/ar"
+                                            <a href="lang/ar"
                             class="language_item d-flex align-items-center gap-3">
-                            <img src="..//storage/language/flag/jzq7Njrm2LjCU0gtBnrh40xsM42ygZtifAcLMCqK.png?v=1">
+                            <img src="storage/language/flag/jzq7Njrm2LjCU0gtBnrh40xsM42ygZtifAcLMCqK.png?v=1">
                             <span>
                                 Arabic
                             </span>
@@ -683,22 +683,22 @@
                     <ul class="list-unstyled mt-3  dropdown_menu_inner">
                         <li class="">
                             <a class="d-block"
-                                href="..//user/profile">My profile</a>
+                                href="user/profile">My profile</a>
                         </li>
                         <li class="">
                             <a class="d-block"
-                                href="..//user/profile-setting/edit">Edit profile</a>
+                                href="user/profile-setting/edit">Edit profile</a>
                         </li>
                         <li class="">
                             <a class="d-block"
-                                href="..//user/profile-setting">Account settings</a>
+                                href="user/profile-setting">Account settings</a>
                         </li>
-                        <form method="POST" action="..//logout" class="d-inline">
+                        <form method="POST" action="logout" class="d-inline">
     <input type="hidden" name="_token" value="AQNLvAb467g0eZtkGATqrKcNNVohCNfvLiX4IjQc" autocomplete="off">    <button type="submit" id="logout-btn"class="btn_sign_out text-black w-auto">
         Sign out
     </button>
 </form>
-<link href="..//admin-assets/css/logout.css?v=1" rel="stylesheet">
+<link href="admin-assets/css/logout.css?v=1" rel="stylesheet">
 
                     </ul>
 
@@ -742,7 +742,7 @@
                                     </svg>
 
                                     <a class="text-success"
-                                        href="..//admin/vehicle/requisition">On requisition<span
+                                        href="admin/vehicle/requisition">On requisition<span
                                             class="float-end text-success"><strong>0</strong></span></a>
                                 </div>
                                                                                         <div>
@@ -753,7 +753,7 @@
                                             fill="#219653" />
                                     </svg>
 
-                                    <a class="text-success" href="..//admin/vehicle/maintenance">
+                                    <a class="text-success" href="admin/vehicle/maintenance">
                                         On maintenance <span
                                             class="float-end text-success"><strong>325</strong></span></a>
                                 </div>
@@ -766,7 +766,7 @@
                                     </svg>
 
                                     <a class="text-success"
-                                        href="..//inventory/stock">Available                                        <span class="float-end text-success"><strong>0</strong></span></a>
+                                        href="inventory/stock">Available                                        <span class="float-end text-success"><strong>0</strong></span></a>
                                 </div>
                                                         <div>
                                 &nbsp;
@@ -795,7 +795,7 @@
                                     </svg>
 
                                     <a class="text-success"
-                                        href="..//admin/vehicle/requisition">Vehicle requisition <span
+                                        href="admin/vehicle/requisition">Vehicle requisition <span
                                             class="float-end text-success"><strong>0</strong></span></a>
                                 </div>
                                                                                         <div>
@@ -816,7 +816,7 @@
                                     </svg>
 
                                     <a class="text-success"
-                                        href="..//admin/vehicle/pick-drop">Pick &amp; drop requisition <span
+                                        href="admin/vehicle/pick-drop">Pick &amp; drop requisition <span
                                             class="float-end text-success"><strong>0</strong></span></a>
                                 </div>
                                                                                         <div>
@@ -831,7 +831,7 @@
                                     </svg>
 
                                     <a class="text-success"
-                                        href="..//admin/vehicle/maintenance">Maintenance requisition<span
+                                        href="admin/vehicle/maintenance">Maintenance requisition<span
                                             class="float-end text-success"><strong>0</strong></span></a>
                                 </div>
                                                                                         <div>
@@ -843,7 +843,7 @@
                                     </svg>
 
                                     <a class="text-success"
-                                        href="..//admin/refueling/requisition">Fuel requisition<span
+                                        href="admin/refueling/requisition">Fuel requisition<span
                                             class="float-end text-success"><strong>0</strong></span></a>
                                 </div>
                                                     </div>
@@ -871,7 +871,7 @@
                                     </svg>
 
                                     <a class="text-success"
-                                        href="..//admin/vehicle/legal-document">Legal doc soon expire <span
+                                        href="admin/vehicle/legal-document">Legal doc soon expire <span
                                             class="float-end text-success"><strong>0</strong></span></a>
                                 </div>
                                 <div>
@@ -891,7 +891,7 @@
                                     </svg>
 
                                     <a class="text-success"
-                                        href="..//admin/vehicle/legal-document">Legal doc expired <span
+                                        href="admin/vehicle/legal-document">Legal doc expired <span
                                             class="float-end text-success"><strong>1003</strong></span></a>
                                 </div>
                                                         <div>
@@ -923,7 +923,7 @@
                                             fill="#219653" />
                                     </svg>
                                     <a class="text-success"
-                                        href="..//inventory/stock">Stock in                                        <span class="float-end text-success"><strong>212713</strong></span>
+                                        href="inventory/stock">Stock in                                        <span class="float-end text-success"><strong>212713</strong></span>
                                     </a>
                                 </div>
                                 <div>
@@ -934,7 +934,7 @@
                                             fill="#219653" />
                                     </svg>
 
-                                    <a class="text-success" href="..//inventory/stock">
+                                    <a class="text-success" href="inventory/stock">
                                         Stock out                                        <span class="float-end text-success"><strong>1160797</strong></span>
                                     </a>
                                 </div>
@@ -1165,7 +1165,7 @@
                 
                 
                                     <li class="page-item">
-                        <a class="page-link" href="..//admin/dashboard?page=2" rel="next">Next &raquo;</a>
+                        <a class="page-link" href="admin/dashboard?page=2" rel="next">Next &raquo;</a>
                     </li>
                             </ul>
         </div>
@@ -1195,15 +1195,15 @@
                         
                         
                                                                                                                         <li class="page-item active" aria-current="page"><span class="page-link">1</span></li>
-                                                                                                                                <li class="page-item"><a class="page-link" href="..//admin/dashboard?page=2">2</a></li>
-                                                                                                                                <li class="page-item"><a class="page-link" href="..//admin/dashboard?page=3">3</a></li>
-                                                                                                                                <li class="page-item"><a class="page-link" href="..//admin/dashboard?page=4">4</a></li>
-                                                                                                                                <li class="page-item"><a class="page-link" href="..//admin/dashboard?page=5">5</a></li>
-                                                                                                                                <li class="page-item"><a class="page-link" href="..//admin/dashboard?page=6">6</a></li>
-                                                                                                                                <li class="page-item"><a class="page-link" href="..//admin/dashboard?page=7">7</a></li>
-                                                                                                                                <li class="page-item"><a class="page-link" href="..//admin/dashboard?page=8">8</a></li>
-                                                                                                                                <li class="page-item"><a class="page-link" href="..//admin/dashboard?page=9">9</a></li>
-                                                                                                                                <li class="page-item"><a class="page-link" href="..//admin/dashboard?page=10">10</a></li>
+                                                                                                                                <li class="page-item"><a class="page-link" href="admin/dashboard?page=2">2</a></li>
+                                                                                                                                <li class="page-item"><a class="page-link" href="admin/dashboard?page=3">3</a></li>
+                                                                                                                                <li class="page-item"><a class="page-link" href="admin/dashboard?page=4">4</a></li>
+                                                                                                                                <li class="page-item"><a class="page-link" href="admin/dashboard?page=5">5</a></li>
+                                                                                                                                <li class="page-item"><a class="page-link" href="admin/dashboard?page=6">6</a></li>
+                                                                                                                                <li class="page-item"><a class="page-link" href="admin/dashboard?page=7">7</a></li>
+                                                                                                                                <li class="page-item"><a class="page-link" href="admin/dashboard?page=8">8</a></li>
+                                                                                                                                <li class="page-item"><a class="page-link" href="admin/dashboard?page=9">9</a></li>
+                                                                                                                                <li class="page-item"><a class="page-link" href="admin/dashboard?page=10">10</a></li>
                                                                                                                                 
                                                     <li class="page-item disabled" aria-disabled="true"><span class="page-link">...</span></li>
                         
@@ -1211,12 +1211,12 @@
                                                                     
                         
                         
-                                                                                                                        <li class="page-item"><a class="page-link" href="..//admin/dashboard?page=67">67</a></li>
-                                                                                                                                <li class="page-item"><a class="page-link" href="..//admin/dashboard?page=68">68</a></li>
+                                                                                                                        <li class="page-item"><a class="page-link" href="admin/dashboard?page=67">67</a></li>
+                                                                                                                                <li class="page-item"><a class="page-link" href="admin/dashboard?page=68">68</a></li>
                                                                                                         
                     
                                             <li class="page-item">
-                            <a class="page-link" href="..//admin/dashboard?page=2" rel="next" aria-label="Next &raquo;">&rsaquo;</a>
+                            <a class="page-link" href="admin/dashboard?page=2" rel="next" aria-label="Next &raquo;">&rsaquo;</a>
                         </li>
                                     </ul>
             </div>
@@ -1233,7 +1233,7 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="copy">
-                    © 2024 <a class="text-capitalize text-black" href="..//"
+                    © 2024 <a class="text-capitalize text-black" href=""
                         target="_blank">Vms laravel</a>.
                 </div>
             </div>

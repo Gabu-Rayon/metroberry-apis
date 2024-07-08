@@ -11,8 +11,10 @@ class UserLoginController extends Controller
      */
     public function index()
     {
-        return view('login');
+        return view('auth.login');
     }
+
+    
 
     /**
      * Show the form for creating a new resource.
