@@ -4,7 +4,7 @@
     </div>
     <div>
         <p class="mb-0 fw-bold fs-18">
-            {{ Auth::user()->name }}
+            {{-- {{ Auth::user()->name }} --}}
         </p>
     </div>
 </div>

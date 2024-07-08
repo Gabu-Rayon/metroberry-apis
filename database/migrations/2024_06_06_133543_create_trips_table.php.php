@@ -29,6 +29,7 @@ return new class extends Migration {
             $table->float('average_fuel_consumption_litre_per_km')->nullable();
             $table->float('average_fuel_consumption_litre_per_hour')->nullable();
             $table->float('average_fuel_consumption_kg_per_km')->nullable();
+            $table->enum('status', ['scheduled', 'completed', 'cancelled', 'billed'])->default('scheduled');
             $table->timestamps();
 
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
