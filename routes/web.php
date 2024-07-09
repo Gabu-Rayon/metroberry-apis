@@ -37,6 +37,16 @@ Route::get('employee', [EmployeeController::class, 'index'])->name('employee');
 
 Route::get('employee/{id}/edit', [EmployeeController::class, 'edit'])->name('employee.edit');
 Route::get('employee/{id}/delete', [EmployeeController::class, 'destroy'])->name('employee.destroy');
+
+/***
+ * Organisations Routes
+ */
+// organisation organisation/create
+Route::get('organisation/create', [OrganisationController::class, 'create'])->name('organisation.create');
+Route::get('organisation', [OrganisationController::class, 'index'])->name('organisation');
+
+Route::get('organisation/{id}/edit', [OrganisationController::class, 'edit'])->name('organisation.edit');
+Route::get('organisation/{id}/delete', [OrganisationController::class, 'destroy'])->name('organisation.destroy');
 /**
  * Drivers Routes
  * 

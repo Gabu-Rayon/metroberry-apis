@@ -2,7 +2,7 @@
     enctype="multipart/form-data" onsubmit="submitFormAxios(event)">
     <input type="hidden" name="_token" value="AQNLvAb467g0eZtkGATqrKcNNVohCNfvLiX4IjQc" autocomplete="off">
     <div class="card-header my-3 p-2 border-bottom">
-        <h4>Add Car Insurance Detials </h4>
+        <h4>Add Vehicle Insurance Details </h4>
     </div>
     <div class="modal-body">
         <div class="row">

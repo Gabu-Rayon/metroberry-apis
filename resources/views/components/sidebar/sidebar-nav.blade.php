@@ -8,7 +8,7 @@
         ])
         
         @include('components.sidebar.sidebar-dropdown', [
-            'title' => 'Employee Management',
+            'title' => 'User Management',
             'icon' => '
                 <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M18.3143 7C17.7593 7 17.2331 7.12505 16.7617 7.34775C16.9417 7.57959 17.1034 7.82637 17.2442 8.08608C17.3823 8.34077 17.5003 8.60796 17.5965 8.88511C17.7883 9.43789 17.8928 10.0311 17.8928 10.6482C17.8928 11.2654 17.7883 11.8586 17.5965 12.4113C17.5003 12.6886 17.3823 12.9556 17.2442 13.2104C17.1034 13.4701 16.9417 13.7168 16.7617 13.9487C17.2331 14.1713 17.7593 14.2965 18.3143 14.2965C20.3259 14.2966 21.9625 12.66 21.9625 10.6483C21.9625 8.63657 20.3259 7 18.3143 7Z" fill="#6C6C6C" />
@@ -21,6 +21,7 @@
             ',
             'subitems' => [
                 ['label' => 'Manage Employee', 'route' => route('employee')],
+                ['label' => 'Manage Organisation', 'route' => route('organisation')],
                 ['label' => 'Manage Driver', 'route' => route('driver')],
                 ['label' => 'Manage Driver License', 'route' => route('driver.license.index')],
                 ['label' => 'Driver Performance', 'route' => route('driver.performance.index')],

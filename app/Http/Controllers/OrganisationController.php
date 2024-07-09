@@ -17,29 +17,34 @@ class OrganisationController extends Controller
      */
     public function index()
     {
-        try {
-            if (Auth::user()->hasRole('admin')) {
-                $organisation = Organisation::all();
-                foreach ($organisation as $org) {
-                    $org->load('user');
-                }
-                return response()->json([
-                    'count' => count($organisation),
-                    'organisations' => $organisation
-                ], 200);
-            }
-            $organisation = Organisation::where('created_by', Auth::id())->get();
-            return response()->json([
-                'organisations' => $organisation
-            ], 200);
-        } catch (Exception $e) {
-            Log::error('ERROR FETCHING Organisation');
-            Log::error($e);
-            return response()->json([
-                'message' => 'An error occurred while fetching organisations',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        // try {
+        //     if (Auth::user()->hasRole('admin')) {
+        //         $organisation = Organisation::all();
+        //         foreach ($organisation as $org) {
+        //             $org->load('user');
+        //         }
+        //         return response()->json([
+        //             'count' => count($organisation),
+        //             'organisations' => $organisation
+        //         ], 200);
+        //     }
+        //     $organisation = Organisation::where('created_by', Auth::id())->get();
+        //     return response()->json([
+        //         'organisations' => $organisation
+        //     ], 200);
+        // } catch (Exception $e) {
+        //     Log::error('ERROR FETCHING Organisation');
+        //     Log::error($e);
+        //     return response()->json([
+        //         'message' => 'An error occurred while fetching organisations',
+        //         'error' => $e->getMessage()
+        //     ], 500);
+        // }
+
+
+        $organisations = Organisation::all();
+        return view('organisation',compact('organisations'));
+        
     }
 
     /**
@@ -47,12 +52,13 @@ class OrganisationController extends Controller
      */
     public function create()
     {
-        //
+        return view('organisation.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
+    
     public function store(Request $request)
     {
         try {
