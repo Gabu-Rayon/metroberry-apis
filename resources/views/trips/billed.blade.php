@@ -11,7 +11,7 @@
             <!-- Begin page -->
             <div class="wrapper">
                 <!-- start header -->
-                 @include('components.sidebar.sidebar')
+                @include('components.sidebar.sidebar')
                 <!-- end header -->
                 <div class="content-wrapper">
                     <div class="main-content">
@@ -204,20 +204,28 @@
                                                     <thead>
                                                         <tr>
                                                             <th title="Sl" width="30">Sl</th>
-                                                            <th title="Name">Name</th>
-                                                            <th title="Location">Location</th>
-                                                            <th title="NoOfEmployee">No of Employee</th>
-                                                            <th title="Registration date">Registration date</th>
-                                                            <th title="Ownership">Contact</th>
-                                                            <th title="Email">Email</th>
+                                                            <th title="Name">Customer</th>
+                                                            <th title="Location">Driver</th>
+                                                            <th title="NoOfEmployee">Vehicle</th>
+                                                            <th title="Registration date">Route</th>
+                                                            <th title="Ownership">RideType</th>
+                                                            <th title="Email">PickUp Location</th>
+                                                            <th title="Email">DropOff Location</th>
                                                             <th title="Action" width="150">Action</th>
                                                         </tr>
                                                     </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td></td>
+                                                        </tr>
+                                                    </tbody>
                                                 </table>
                                             </div>
 
 
-                                            <div id="page-axios-data" data-table-id="#driver-table"></div>
+                                            <div id="page-axios-data" data-table-id="#driver-table">
+
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

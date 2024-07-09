@@ -228,15 +228,18 @@
                                                     <thead>
                                                         <tr>
                                                             <th title="Sl" width="30">Sl</th>
-                                                            <th title="Name">Name</th>
-                                                            <th title="Location">Location</th>
-                                                            <th title="NoOfEmployee">No of Employee</th>
-                                                            <th title="Registration date">Registration date</th>
-                                                            <th title="Ownership">Contact</th>
-                                                            <th title="Email">Email</th>
+                                                            <th title="Name">Organisation Nm</th>
+                                                            <th title="Location">Org Email</th>
+                                                            <th title="NoOfEmployee">Org FaxNo</th>
+                                                            <th title="Registration date">Org Address</th>
                                                             <th title="Action" width="150">Action</th>
                                                         </tr>
                                                     </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td></td>
+                                                        </tr>
+                                                    </tbody>
                                                 </table>
                                             </div>
 
