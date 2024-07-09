@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class EmployeeController extends Controller
 {
@@ -38,87 +39,81 @@ class EmployeeController extends Controller
         return view('employee', compact('customers'));
     }
 
+
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        Log::info('ACCESSED');
+    public function store(Request $request){
         try {
-            // Log the authenticated user ID
-            $authenticatedUserId = Auth::id();
-            Log::info('Authenticated User ID: ' . $authenticatedUserId);
 
-            // Is request contains an array or a single object
-            $customersData = $request->all();
-            $isSingleCustomer = isset($customersData['name']);
-
-            if ($isSingleCustomer) {
-                $data = $request->validate([
-                    'name' => 'required|string',
-                    'email' => 'required|email|unique:users,email',
-                    'phone' => 'required|string',
-                    'password' => 'required|string',
-                    'organisation_id' => 'required|integer|exists:organisations,id',
-                    'organisation_code' => 'required|string',
-                ]);
-                //single customer in an array
-                $customers = [$customersData];
-            } else {
-                $data = $request->validate([
-                    '*.name' => 'required|string',
-                    '*.email' => 'required|email|unique:users,email',
-                    '*.phone' => 'required|string',
-                    '*.password' => 'required|string',
-                    '*.organisation_id' => 'required|integer|exists:organisations,id',
-                    '*.organisation_code' => 'required|string',
-                ]);
-                // Handle multiple customers
-                $customers = $customersData;
+            
+            $data = $request->all();
+            
+            $validator = Validator::make($data, [
+                'name' => 'required|string',
+                'phone' => 'required|string',
+                'organisation' => 'required|string',
+                'email' => 'required|email|unique:users,email',
+                'address' => 'nullable|string',
+                'national_id' => 'required|string',
+                'front_page_id' => 'required|file',
+                'back_page_id' => 'required|file',
+                'avatar' => 'nullable|file',
+                'password' => 'required|string',
+            ]);
+            
+            if ($validator->fails()) {
+                Log::info('VALIDATION ERROR');
+                Log::info($validator->errors());
+                return redirect()->back()->withErrors($validator->errors())->withInput();
             }
 
-            $createdCustomers = [];
+            Log::info('DATA');
+            Log::info($data);
 
-            foreach ($customers as $customerData) {
-                // Create a new user
-                $user = User::create([
-                    'name' => $customerData['name'],
-                    'email' => $customerData['email'],
-                    'phone' => $customerData['phone'],
-                    'password' => bcrypt($customerData['password']),
-                ]);
+            DB::beginTransaction();
 
-                // Assign the "customer" role to the user
-                $user->assignRole('customer');
+            $user = User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => bcrypt('password'),
+                'phone' => $data['phone'],
+                'address' => $data['address'],
+                'avatar' => $data['avatar'] ?? null,
+            ]);
 
-                // Create a new customer associated with the user and organisation
-                $customer = Customer::create([
-                    'user_id' => $user->id,
-                    'organisation_id' => $customerData['organisation_id'],
-                    'customer_organisation_code' => $customerData['organisation_code'],
-                    'created_by' => $authenticatedUserId,
-                ]);
+            $organisation = Organisation::where('organisation_code', $data['organisation'])->first();
 
-                $createdCustomers[] = $customer;
+            if (!$organisation) {
+                return redirect()->back()->withErrors('Organisation not found')->withInput();
             }
 
-            return response()->json([
-                'message' => 'Customers created successfully',
-                'customers' => $data
-            ], 201);
+            Customer::create([
+                'created_by' => 12,
+                'user_id' => $user->id,
+                'organisation_id' => $organisation->id,
+                'customer_organisation_code' => $data['organisation'],
+                'national_id_no' => $data['national_id'],
+                'national_id_front_avatar' => $data['front_page_id'],
+                'national_id_behind_avatar' => $data['back_page_id'],
+            ]);
+
+            DB::commit();
+
+            Log::info('SUCCESS');
+
+            return redirect()->route('employee')->with('success', 'Customer created successfully');
         } catch (Exception $e) {
+            DB::rollBack();
             Log::error('CREATE CUSTOMER ERROR');
             Log::error($e);
-            return response()->json([
-                'message' => 'An error occurred',
-                'error' => $e->getMessage()
-            ], 500);
+            return redirect()->back()->withErrors($e->getMessage())->withInput();
         }
     }
 
     /**
      * Display the specified resource.
-    //  */
+     */
     // public function show(string $id)
     // {
     //     try {

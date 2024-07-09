@@ -35,9 +35,11 @@ Route::get('/login', [UserLoginController::class, 'index'])->name('user.login')-
 
 Route::get('employee/create', [EmployeeController::class, 'create'])->name('employee.create');
 Route::get('employee', [EmployeeController::class, 'index'])->name('employee');
+Route::post('employee', [EmployeeController::class, 'store'])->name('employee');
 
 Route::get('employee/{id}/edit', [EmployeeController::class, 'edit'])->name('employee.edit');
 Route::get('employee/{id}/delete', [EmployeeController::class, 'destroy'])->name('employee.destroy');
+
 /**
  * Drivers Routes
  * 
