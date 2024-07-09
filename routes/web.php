@@ -94,6 +94,12 @@ Route::get('trip/create', [TripController::class, 'create'])->name('trip.create'
 Route::get('trip/{id}/edit', [TripController::class, 'edit'])->name('trip.edit');
 Route::get('trip/{id}/delete', [TripController::class, 'destroy'])->name('trip.destroy');
 
+Route::get('trips/scheduled', [TripController::class, 'tripScheduled'])->name('trip.scheduled');
+
+Route::get('trips/completed', [TripController::class, 'tripCompleted'])->name('trip.completed');
+Route::get('trips/cancelled', [TripController::class, 'tripCancelled'])->name('trip.cancelled');
+Route::get('trips/billed', [TripController::class, 'tripBilled'])->name('trip.billed');
+
 
 
 /**

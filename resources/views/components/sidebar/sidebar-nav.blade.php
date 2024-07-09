@@ -38,48 +38,20 @@
                 ['label' => 'Manage Vehicle', 'route' => route('vehicle')],
                 ['label' => 'Manage Vehicle Insurances', 'route' => route('vehicle.insurance.index')],
         ]])
-        
-        <li >
-            <a class="has-arrow material-ripple" href="javascript:void(0);">
-                <div>
-                    <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+         @include('components.sidebar.sidebar-dropdown', [
+            'title' => 'Trips Requisition',
+            'icon' => '
+            <svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" clip-rule="evenodd" d="M8.65451 6.00086C4.78057 6.15928 1.43739 8.94035 0.357089 12.9032C-0.723213 16.8661 0.702217 21.1199 3.89487 23.4606C4.37399 23.8119 4.94207 24 5.52386 24C7.84129 24 10.1587 24 12.4761 24C13.0579 24 13.626 23.8119 14.1051 23.4606C17.2978 21.1199 18.7232 16.8661 17.6429 12.9032C16.5626 8.94035 13.2194 6.15928 9.34549 6.00086C9.0893 6.00063 8.90491 5.99905 8.65451 6.00086ZM8.97322 8.27003H8.97351H8.97379C8.9918 8.27166 9.00946 8.27083 9.02621 8.27003H9.02649H9.02677C12.109 8.28284 14.805 10.482 15.6179 13.6464C15.592 13.654 15.592 13.654 15.6179 13.6464C15.6701 13.8496 15.526 14.0506 15.3281 14.0506H8.99999H2.67188C2.47398 14.0506 2.32988 13.8496 2.38208 13.6465C2.40796 13.654 2.40799 13.654 2.38208 13.6465C3.19499 10.482 5.891 8.28284 8.97322 8.27003ZM2.49718 16.2223C2.52203 16.2218 2.54751 16.2246 2.5732 16.2312C5.00897 16.8519 6.96863 18.7717 7.75132 21.304C7.81515 21.5105 7.67011 21.7238 7.46587 21.7238H5.52386C5.37534 21.7238 5.23033 21.6758 5.10802 21.5862C3.52542 20.4259 2.47258 18.6122 2.20567 16.5866C2.17998 16.3916 2.32324 16.2256 2.49718 16.2223ZM15.5028 16.2223C15.6768 16.2256 15.82 16.3916 15.7943 16.5866C15.5274 18.6122 14.4746 20.4259 12.892 21.5862C12.7697 21.6758 12.6247 21.7238 12.4761 21.7238H10.5341C10.3299 21.7238 10.1849 21.5105 10.2487 21.304C11.0314 18.7717 12.991 16.8519 15.4268 16.2312C15.4525 16.2246 15.478 16.2218 15.5028 16.2223Z" fill="#6C6C6C" />
                     </svg>
-                </div>
-                Vehicle requisition
-            </a>
-            <ul class="nav-second-level">
-                <li class="">
-                    <a class="text-capitalize" href="vehicle/requisition" target="_self">
-                        Manage vehicle requisition
-                    </a>
-                </li>
-                
-                <li class="">
-                    <a class="text-capitalize" href="vehicle/route-detail" target="_self">
-                        Vehicle route details
-                    </a>
-                </li>
-                
-                <li class="">
-                    <a class="text-capitalize" href="vehicle/pick-drop" target="_self">
-                        Pick and drop requisition
-                    </a>
-                </li>
-                
-                <li class="">
-                    <a class="text-capitalize" href="vehicle/requisition/purpose" target="_self">
-                        Requisition purpose
-                    </a>
-                </li>
-                
-                <li class="">
-                    <a class="text-capitalize" href="vehicle/requisition/type" target="_self">
-                        Requisition type
-                    </a>
-                </li>
-            </ul>
-        </li>
+            ',
+            'subitems' => [
+                ['label' => 'Manage Scheduled Trip', 'route' => route('trip.scheduled')],
+                ['label' => 'Manage Completed Trip', 'route' => route('trip.completed')],
+                ['label' => 'Manage Cancelled Trip', 'route' => route('trip.cancelled')],
+                ['label' => 'Manage Billed Trip', 'route' => route('trip.billed')],
+        ]])
         
         <li >
             <a class="has-arrow material-ripple" href="javascript:void(0);">

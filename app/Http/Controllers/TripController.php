@@ -345,4 +345,22 @@ class TripController extends Controller
         }
     }
 
+    public function tripScheduled(){
+     return view('trips.scheduled');
+    }
+    public function tripCompleted()
+    {
+        return view('trips.completed');
+
+    }
+    public function tripCancelled()
+    {
+       
+        return view('trips.cancelled');
+    }
+     public function tripBilled(){
+        return view('trips.billed');
+        
+    }
+
 }
