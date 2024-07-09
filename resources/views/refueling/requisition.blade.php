@@ -1,17 +1,17 @@
 @extends('layouts.app')
 
-@section('title', 'Employee List')
+@section('title', 'Refueling  Requisition List')
 @section('content')
 
     <body class="fixed sidebar-mini">
 
-       @include('components.preloader')
+        @include('components.preloader')
         <!-- react page -->
         <div id="app">
             <!-- Begin page -->
             <div class="wrapper">
                 <!-- start header -->
-                @include('components.sidebar.sidebar')
+                 @include('components.sidebar.sidebar')
                 <!-- end header -->
                 <div class="content-wrapper">
                     <div class="main-content">
@@ -23,41 +23,42 @@
                                     <div class="card-header">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div>
-                                                <h6 class="fs-17 fw-semi-bold mb-0">Expense lists</h6>
+                                                <h6 class="fs-17 fw-semi-bold mb-0">Refueling  Requisition lists</h6>
                                             </div>
-                                            <div class="text-end">
+                                            <!-- <div class="text-end">
                                                 <div class="actions">
-                                                    <a class="btn btn-success btn-sm" href="inventory/expense/create">
+                                                    <a class="btn btn-success" href="javascript:void(0);"
+                                                        onclick="axiosModal('/requisition/create')">
                                                         <i class="fa fa-plus"></i>&nbsp;
                                                         Create
                                                     </a>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                         </div>
                                     </div>
                                     <div class="card-body">
                                         <div>
                                             <div class="table-responsive">
-                                                <table class="table" id="expense-table">
+                                                <table class="table" id="driver-table">
                                                     <thead>
                                                         <tr>
                                                             <th title="Sl" width="30">Sl</th>
                                                             <th title="Code">Code</th>
-                                                            <th title="Vehicle">Vehicle</th>
-                                                            <th title="Trip">Trip</th>
-                                                            <th title="By whom">By whom</th>
-                                                            <th title="Date">Date</th>
-                                                            <th title="Total">Total</th>
-                                                            <th title="Updated">Updated</th>
+                                                            <th title="Station name">Station name</th>
+                                                            <th title="Vendor name">Vendor name</th>
+                                                            <th title="Address">Address</th>
+                                                            <th title="Contact person">Contact person</th>
+                                                            <th title="Contact number">Contact number</th>
                                                             <th title="Status">Status</th>
-                                                            <th title="Action" width="120">Action</th>
+                                                            <th title="Updated">Updated</th>
+                                                            <th title="Action" width="80">Action</th>
                                                         </tr>
                                                     </thead>
                                                 </table>
                                             </div>
 
 
-                                            <div id="page-axios-data" data-table-id="#expense-table"></div>
+                                            <div id="page-axios-data" data-table-id="#driver-table"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -65,7 +66,23 @@
                         </div>
                     </div>
                     <div class="overlay"></div>
-                    @include('components.footer')
+                    <footer class="footer-content border-top">
+                        <div class="footer-text">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="copy">
+                                        © 2024 <a class="text-capitalize text-black" href="" target="_blank">Vms
+                                            laravel</a>.
+                                    </div>
+                                </div>
+                                <div class="col-md-6 text-end">
+                                    <div class="credit">Designed and developed by: <a class="text-black text-capitalize"
+                                            href="https://www.bdtask.com/" target="_blank">Bdtask<a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
                 </div>
             </div>
             <!--end  vue page -->
@@ -97,4 +114,4 @@
             </div>
         </div>
         <!-- start scripts -->
-@endsection
+    @endsection

@@ -1,8 +1,8 @@
-<form action="inventory/location" method="POST" class="needs-validation modal-content" novalidate="novalidate"
+<form action="inventory/vendor" method="POST" class="needs-validation modal-content" novalidate="novalidate"
     enctype="multipart/form-data" onsubmit="submitFormAxios(event)">
     <input type="hidden" name="_token" value="AQNLvAb467g0eZtkGATqrKcNNVohCNfvLiX4IjQc" autocomplete="off" />
     <div class="card-header my-3 p-2 border-bottom">
-        <h4>Inventory location Lists</h4>
+        <h4>Vendor Lists</h4>
     </div>
     <div class="modal-body">
         <table class="table table-hover table-striped">
@@ -19,51 +19,28 @@
             </tr>
             <tr>
                 <th>
-                    <label for="room" class="">
-                        Room <span class="text-danger">*</span>
-                    </label>
+                    <label for="email" class=""> Email </label>
                 </th>
                 <td>
-                    <input type="number" class="form-control" name="room" id="room" value="0"
-                        min="0" placeholder="Room" required />
+                    <input type="email" class="form-control" name="email" id="email" value=""
+                        placeholder="Email" />
                 </td>
             </tr>
             <tr>
                 <th>
-                    <label for="self" class=""> Self </label>
+                    <label for="phone" class=""> Phone </label>
                 </th>
                 <td>
-                    <input type="number" class="form-control" name="self" id="self" value="0"
-                        min="0" placeholder="Self" />
+                    <input type="text" class="form-control" name="phone" id="phone" value=""
+                        placeholder="Phone" />
                 </td>
             </tr>
             <tr>
                 <th>
-                    <label for="drawer" class=""> Drawer </label>
+                    <label for="address" class=""> Address </label>
                 </th>
                 <td>
-                    <input type="number" class="form-control" name="drawer" id="drawer" value="0"
-                        min="0" placeholder="Drawer" />
-                </td>
-            </tr>
-
-            <tr>
-                <th>
-                    <label for="capacity" class=""> Capacity </label>
-                </th>
-                <td>
-                    <input type="number" class="form-control" name="capacity" id="capacity" value="0"
-                        min="0" placeholder="Capacity" />
-                </td>
-            </tr>
-
-            <tr>
-                <th>
-                    <label for="dimension" class=""> Dimension </label>
-                </th>
-                <td>
-                    <input type="number" class="form-control" name="dimension" id="dimension" value="0"
-                        min="0" placeholder="Dimension" />
+                    <textarea class="form-control" name="address" id="address" placeholder="Address"></textarea>
                 </td>
             </tr>
             <tr>

@@ -7,11 +7,13 @@ use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\AddRouteController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\UserLoginController;
 use App\Http\Controllers\OrganisationController;
 use App\Http\Controllers\VehicleServiceController;
 use App\Http\Controllers\DriversLicensesController;
 use App\Http\Controllers\VehicleInsuranceController;
+use App\Http\Controllers\VehicleRefuelingController;
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -61,7 +63,7 @@ Route::post('driver', [EmployeeController::class, 'store'])->name('driver');
 Route::get('driver/{id}/edit', [DriverController::class, 'edit'])->name('driver.edit');
 Route::get('driver/{id}/delete', [DriverController::class, 'destroy'])->name('driver.destroy');
 
-Route::get('driver/performance', [DriverController::class,'driverPerformance'])->name('driver.performance.index');
+Route::get('driver/performance', [DriverController::class, 'driverPerformance'])->name('driver.performance.index');
 Route::get('performance/create', [DriverController::class, 'createDriverPerformance'])->name('driver.performance.create');
 Route::get('driver/license', [DriverController::class, 'driverLicense'])->name('driver.license.index');
 
@@ -129,14 +131,46 @@ Route::get('create', [VehicleInsuranceController::class, 'create'])->name('insur
  * Vehicle Maintaince OR servincing
  */
 
- Route::get('vehicle/maintenance', [VehicleServiceController::class, 'index'])->name('vehicle.maintenance');
+Route::get('vehicle/maintenance', [VehicleServiceController::class, 'index'])->name('vehicle.maintenance');
 
 //  create
- Route::get('vehicle/maintenance/create', [VehicleServiceController::class, 'create'])->name('vehicle.maintenance.create');
+Route::get('vehicle/maintenance/create', [VehicleServiceController::class, 'create'])->name('vehicle.maintenance.create');
 
- /****
-  * 
-  *Manage Driver License 
-  *driver.license.index
-  */
-   Route::get('/driver/license', [DriversLicensesController::class, 'index'])->name('driver.license.index');
+/****
+ * 
+ *Manage Driver License 
+ *driver.license.index
+ */
+Route::get('/driver/license', [DriversLicensesController::class, 'index'])->name('driver.license.index');
+
+/***
+ * 
+ * Manage Vehicle Refueling
+ */
+Route::get('refueling', [VehicleRefuelingController::class, 'index'])->name('vehicle.refueling.index');
+
+Route::get('/refueling/create', [VehicleRefuelingController::class, 'create'])->name('vehicle.refueling.create');
+Route::get('/refueling/requisition', [VehicleRefuelingController::class, 'requisition'])->name('vehicle.refueling.requisition');
+Route::get('/refueling/type', [VehicleRefuelingController::class, 'type'])->name('vehicle.refuel.type');
+Route::get('/refueling/station', [VehicleRefuelingController::class, 'station'])->name('vehicle.refueling.station');
+// /type/create
+
+Route::get('/type/create', [VehicleRefuelingController::class, 'typeCreate'])->name('vehicle.refuel.type.create');
+// /station/create
+Route::get('/station/create', [VehicleRefuelingController::class, 'stationCreate'])->name('vehicle.refueling.station.create');
+
+/***
+ * 
+ * Manage Inventory
+ * 
+ * 
+ */
+Route::get('/inventory/expense', [InventoryController::class, 'InventoryExpense'])->name('inventory.expense.index');
+Route::get('inventory/expense/type', [InventoryController::class, 'InventoryExpenseType'])->name('inventory.expense.type');
+Route::get('/inventory/category', [InventoryController::class, 'InventoryCategory'])->name('inventory.category');
+Route::get('/inventory/location', [InventoryController::class, 'InventoryLocation'])->name('inventory.location');
+Route::get('/inventory/stock', [InventoryController::class, 'InventoryTripType'])->name('inventory.stock.management');
+Route::get('/inventory/parts', [InventoryController::class, 'InventoryParts'])->name('inventory.parts');
+Route::get('/inventory/parts/usage', [InventoryController::class, 'InventoryPartsUsage'])->name('inventory.parts.usage');
+Route::get('/iventory/vendor', [InventoryController::class, 'InventoryTrVendor'])->name('inventory.vendors');
+Route::get('/inventory/trip-type', [InventoryController::class, 'InventoryTripType'])->name('inventory.trip.type');
