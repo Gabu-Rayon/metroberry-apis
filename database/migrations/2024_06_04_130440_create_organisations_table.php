@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('organisations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');                        
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('created_by');
+            $table->string('organisation_code')->unique();
+            
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();            
         });
     }

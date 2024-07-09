@@ -12,6 +12,7 @@ class Vehicle extends Model
     protected $fillable = [
         'created_by',
         'driver_id',
+        'organisation_id',
         'model',
         'make',
         'year',
@@ -20,12 +21,8 @@ class Vehicle extends Model
         'seats',
         'fuel_type',
         'engine_size',
-        'vehicle_insurance_issue_date',
-        'vehicle_insurance_expiry',
-        'vehicle_insurance_issue_organisation',
-        'vehicle_avatar',
+        'avatar',
         'status',
-        'organisation_id'
     ];
     
 

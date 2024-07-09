@@ -43,7 +43,7 @@ class OrganisationController extends Controller
 
 
         $organisations = Organisation::all();
-        return view('organisation',compact('organisations'));
+        return view('organisation.index',compact('organisations'));
         
     }
 

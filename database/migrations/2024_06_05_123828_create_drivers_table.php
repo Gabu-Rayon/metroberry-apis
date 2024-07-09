@@ -13,10 +13,18 @@ return new class extends Migration
     {
         Schema::create('drivers', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('organisation_id')->nullable();
-            $table->unsignedBigInteger('vehicle_id')->nullable();            
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('vehicle_id')->nullable();
+            $table->unsignedBigInteger('user_id');
+            $table->string('national_id_no');
+            $table->string('national_id_front_avatar');
+            $table->string('national_id_behind_avatar');
+            $table->enum('status', ['active', 'inactive'])->default('inactive');
+
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('organisation_id')->references('id')->on('organisations')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

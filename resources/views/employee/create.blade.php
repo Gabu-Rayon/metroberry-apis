@@ -1,27 +1,4 @@
-@extends('layouts.app')
-
-@section('title', 'Add Employee')
-
-@section('content')
-
-@if(session('error'))
-    <div class="alert alert-danger">
-        <ul>
-            @foreach(session('error') as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-@endif
-
-<form
-    action="/employee"
-    method="POST"
-    class="needs-validation modal-content"
-    novalidate="novalidate"
-    enctype="multipart/form-data"
-    onsubmit="submitFormAxios(event)"
->
+<form action="employee" method="POST" class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
     @csrf
     <div class="card-header my-3 p-2 border-bottom">
         <h4>Add Employee</h4>
@@ -29,20 +6,14 @@
     <div class="modal-body">
         <div class="row">
             <div class="col-md-12 col-lg-6">
+
                 <div class="form-group row my-2">
                     <label for="name" class="col-sm-5 col-form-label">
                         Name
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input
-                            name="name"
-                            class="form-control"
-                            type="text"
-                            placeholder="Name"
-                            id="name"
-                            value=""
-                            required
+                        <input name="name" class="form-control" type="text" placeholder="Name" id="name" required
                         />
                     </div>
                 </div>
@@ -53,14 +24,7 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input
-                            name="phone"
-                            class="form-control"
-                            type="text"
-                            placeholder="Phone"
-                            id="phone"
-                            value=""
-                            required
+                        <input name="phone" class="form-control" type="text" placeholder="Phone" id="phone" required
                         />
                     </div>
                 </div>
@@ -71,17 +35,20 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input
+                        <select
                             name="organisation"
-                            class="form-control"
-                            type="text"
-                            placeholder="Organisation"
                             id="organisation"
-                            value=""
+                            class="form-control"
                             required
-                        />
+                        >
+                            <option value="">Select Organisation</option>
+                            @foreach ($organisations as $organisation)
+                                <option value="{{ $organisation->id }}">{{ $organisation->user->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
+                
 
                 <div class="form-group row my-2">
                     <label for="front_page_id" class="col-sm-5 col-form-label">
@@ -213,4 +180,3 @@
         <button class="btn btn-success" type="submit">Save</button>
     </div>
 </form>
-@endsection
