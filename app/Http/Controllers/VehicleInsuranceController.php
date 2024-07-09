@@ -19,7 +19,7 @@ class VehicleInsuranceController extends Controller
      */
     public function create()
     {
-        //
+        return view('vehicle.insurance.create');
     }
 
     /**

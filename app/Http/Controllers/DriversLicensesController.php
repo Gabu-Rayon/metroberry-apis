@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DriversLicenses;
+use App\Models\Driver;
 use Illuminate\Http\Request;
+use App\Models\DriversLicenses;
 
 class DriversLicensesController extends Controller
 {
@@ -12,7 +13,9 @@ class DriversLicensesController extends Controller
      */
     public function index()
     {
-        //
+        $licenses = Driver::all();
+        return view('driver.license.index',compact('licenses'));
+
     }
 
     /**
