@@ -122,7 +122,8 @@ Route::get('vehicle/{id}/delete', [VehicleController::class, 'destroy'])->name('
  * 
  */
 // vehicle/insurance/create
-Route::get('create', [VehicleInsuranceController::class, 'create'])->name('vehicle.insurance.create');
+Route::get('vehicle/insurance/company', [VehicleInsuranceController::class, 'create'])->name('insurance.company');
+Route::get('create', [VehicleInsuranceController::class, 'create'])->name('insurance.recurring.period');
 
 /***
  * Vehicle Maintaince OR servincing

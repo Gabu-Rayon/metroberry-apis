@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Organisations List')
+@section('title', 'Cmopleted Trips List')
 @section('content')
 
     <body class="fixed sidebar-mini">
@@ -23,7 +23,7 @@
                                     <div class="card-header">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div>
-                                                <h6 class="fs-17 fw-semi-bold mb-0">Organisation List</h6>
+                                                <h6 class="fs-17 fw-semi-bold mb-0">Completed Trips List</h6>
                                             </div>
                                             <div class="text-end">
                                                 <div class="actions">
