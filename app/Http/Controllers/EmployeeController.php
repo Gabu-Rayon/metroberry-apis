@@ -45,8 +45,6 @@ class EmployeeController extends Controller
      */
     public function store(Request $request){
         try {
-
-            
             $data = $request->all();
             
             $validator = Validator::make($data, [
@@ -56,16 +54,16 @@ class EmployeeController extends Controller
                 'email' => 'required|email|unique:users,email',
                 'address' => 'nullable|string',
                 'national_id' => 'required|string',
-                'front_page_id' => 'required|file',
-                'back_page_id' => 'required|file',
-                'avatar' => 'nullable|file',
+                'front_page_id' => 'required|file|mimes:jpg,jpeg,png,webp',
+                'back_page_id' => 'required|file|mimes:jpg,jpeg,png,webp',
+                'avatar' => 'nullable|file|mimes:jpg,jpeg,png,webp',
                 'password' => 'required|string',
             ]);
-            
+
             if ($validator->fails()) {
                 Log::info('VALIDATION ERROR');
                 Log::info($validator->errors());
-                return redirect()->back()->withErrors($validator->errors())->withInput();
+                return redirect()->back()->with('error', $validator->errors()->first())->withInput();
             }
 
             Log::info('DATA');
@@ -73,29 +71,57 @@ class EmployeeController extends Controller
 
             DB::beginTransaction();
 
-            $user = User::create([
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'password' => bcrypt('password'),
-                'phone' => $data['phone'],
-                'address' => $data['address'],
-                'avatar' => $data['avatar'] ?? null,
-            ]);
-
             $organisation = Organisation::where('organisation_code', $data['organisation'])->first();
 
             if (!$organisation) {
-                return redirect()->back()->withErrors('Organisation not found')->withInput();
+                return redirect()->back()->with('error', 'Organisation not found')->withInput();
             }
 
+            $frontIdPath = null;
+            $backIdPath = null;
+            $avatarPath = null;
+            $email = $data['email'];
+
+            if ($request->hasFile('front_page_id')) {
+                $frontIdFile = $request->file('front_page_id');
+                $frontIdExtension = $frontIdFile->getClientOriginalExtension();
+                $frontIdFileName = "{$email}-front-id.{$frontIdExtension}";
+                $frontIdPath = $frontIdFile->storeAs('uploads/front-page-ids', $frontIdFileName, 'public');
+            }
+            
+            if ($request->hasFile('back_page_id')) {
+                $backIdFile = $request->file('back_page_id');
+                $backIdExtension = $backIdFile->getClientOriginalExtension();
+                $backIdFileName = "{$email}-back-id.{$backIdExtension}";
+                $backIdPath = $backIdFile->storeAs('uploads/back-page-ids', $backIdFileName, 'public');
+            }
+            
+            if ($request->hasFile('avatar')) {
+                $avatarFile = $request->file('avatar');
+                $avatarExtension = $avatarFile->getClientOriginalExtension();
+                $avatarFileName = "{$email}-avatar.{$avatarExtension}";
+                $avatarPath = $avatarFile->storeAs('uploads/user-avatars', $avatarFileName, 'public');
+            }
+            
+
+            $user = User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => bcrypt($data['password']),
+                'phone' => $data['phone'],
+                'address' => $data['address'],
+                'avatar' => $avatarPath,
+                'created_by' => 1,
+            ]);
+
             Customer::create([
-                'created_by' => 12,
+                'created_by' => 1,
                 'user_id' => $user->id,
                 'organisation_id' => $organisation->id,
                 'customer_organisation_code' => $data['organisation'],
                 'national_id_no' => $data['national_id'],
-                'national_id_front_avatar' => $data['front_page_id'],
-                'national_id_behind_avatar' => $data['back_page_id'],
+                'national_id_front_avatar' => $frontIdPath,
+                'national_id_behind_avatar' => $backIdPath,
             ]);
 
             DB::commit();
@@ -107,9 +133,10 @@ class EmployeeController extends Controller
             DB::rollBack();
             Log::error('CREATE CUSTOMER ERROR');
             Log::error($e);
-            return redirect()->back()->withErrors($e->getMessage())->withInput();
+            return redirect()->back()->with('error', 'An error occurred')->withInput();
         }
     }
+
 
     /**
      * Display the specified resource.
@@ -218,7 +245,8 @@ class EmployeeController extends Controller
 
 
       public function create(){
-         return view('employee.create');
+        $organisations = Organisation::with('user')->get();
+        return view('employee.create', compact('organisations'));
       }
 
     public function edit(Request $request, $id)

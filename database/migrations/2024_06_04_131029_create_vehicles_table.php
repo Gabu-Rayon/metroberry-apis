@@ -13,16 +13,22 @@ return new class extends Migration
     {
         Schema::create('vehicles', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('driver_id')->nullable();
+            $table->unsignedBigInteger('organisation_id')->nullable();
             $table->string('model');
             $table->string('make');
-            $table->year('year');
-            $table->string('plate_number');
+            $table->string('year');
+            $table->string('plate_number')->unique();
             $table->string('color');
             $table->integer('seats');
             $table->string('fuel_type');
             $table->string('engine_size');
-            $table->string('status');
+            $table->string('avatar')->nullable();
+            $table->enum('status', ['active', 'inactive'])->default('inactive');
+
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('organisation_id')->references('id')->on('organisations')->onDelete('cascade');
             $table->timestamps();
         });
     }

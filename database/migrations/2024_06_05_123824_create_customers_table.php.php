@@ -12,9 +12,17 @@ return new class extends Migration {
     {
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('organisation_id')->constrained()->onDelete('cascade');
-            $table->string('customer_organisation_code');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('organisation_id');
+            $table->string('customer_organisation_code')->nullable();
+            $table->string('national_id_no')->nullable();
+            $table->string('national_id_front_avatar')->nullable();
+            $table->string('national_id_behind_avatar')->nullable();
+            $table->unsignedBigInteger('created_by');
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('organisation_id')->references('id')->on('organisations')->onDelete('cascade');
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

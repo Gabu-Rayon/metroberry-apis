@@ -18,7 +18,7 @@ class Customer extends Model
         'national_id_no',
         'national_id_front_avatar',
         'national_id_behind_avatar',
-        'terms_and_conditions',
+        'created_by'
     ];
     protected $hidden = [
         'user_id',
