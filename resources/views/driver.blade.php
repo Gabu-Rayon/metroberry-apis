@@ -5,7 +5,7 @@
 
     <body class="fixed sidebar-mini">
 
-        @include('components.preloader')
+         @include('components.preloader')
         <!-- react page -->
         <div id="app">
             <!-- Begin page -->
@@ -16,7 +16,6 @@
                 <div class="content-wrapper">
                     <div class="main-content">
                         @include('components.navbar')
-
                         <div class="body-content">
                             <div class="tile">
                                 <div class="card mb-4">

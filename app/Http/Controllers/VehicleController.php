@@ -19,63 +19,75 @@ class VehicleController extends Controller
      */
     public function index()
     {
-        try {
-            // Retrieve all vehicles with related creator and driver details
+        // try {
+        //     // Retrieve all vehicles with related creator and driver details
+        //     $vehicles = Vehicle::with([
+        //         'creator:id,name,email',
+        //         'driver.user:id,name,email'
+        //     ])->get();
+
+        //     Log::info('All Vehicles from the API:', $vehicles->toArray());
+
+        //     $response = $vehicles->map(function ($vehicle) {
+        //         return [
+        //             'id' => $vehicle->id,
+        //             'make' => $vehicle->make,
+        //             'model' => $vehicle->model,
+        //             'year' => $vehicle->year,
+        //             'color' => $vehicle->color,
+        //             'plate_number' => $vehicle->plate_number,
+        //             'seats' => $vehicle->seats,
+        //             'fuel_type' => $vehicle->fuel_type,
+        //             'engine_size' => $vehicle->engine_size,
+        //             'organisation_id' => $vehicle->engine_size,
+        //             'vehicle_insurance_issue_date' => $vehicle->vehicle_insurance_issue_date,
+        //             'vehicle_insurance_expiry' => $vehicle->vehicle_insurance_expiry,
+        //             'vehicle_insurance_issue_organisation' => $vehicle->vehicle_insurance_issue_organisation,
+        //             'vehicle_avatar' => $vehicle->vehicle_avatar,
+        //             'status' => 'inactive',
+        //             'creator' => [
+        //                 'id' => $vehicle->creator->id,
+        //                 'name' => $vehicle->creator->name,
+        //                 'email' => $vehicle->creator->email,
+        //                 'address' => $vehicle->creator->address,
+        //             ],
+        //             'driver' => $vehicle->driver ? [
+        //                 'id' => $vehicle->driver->user->id,
+        //                 'name' => $vehicle->driver->user->name,
+        //                 'email' => $vehicle->driver->user->email,
+        //                 'address' => $vehicle->driver->user->address,
+        //             ] : null,
+        //         ];
+        //     });
+
+        //     return response()->json([
+        //         'vehicles' => $response
+        //     ], 200);
+        // } catch (Exception $e) {
+        //     Log::error('ERROR FETCHING VEHICLES');
+        //     Log::error($e);
+        //     return response()->json([
+        //         'message' => 'Error occurred while fetching vehicles',
+        //         'error' => $e->getMessage()
+        //     ], 500);
+        // }
+
             $vehicles = Vehicle::with([
                 'creator:id,name,email',
                 'driver.user:id,name,email'
             ])->get();
 
-            Log::info('All Vehicles from the API:', $vehicles->toArray());
-
-            $response = $vehicles->map(function ($vehicle) {
-                return [
-                    'id' => $vehicle->id,
-                    'make' => $vehicle->make,
-                    'model' => $vehicle->model,
-                    'year' => $vehicle->year,
-                    'color' => $vehicle->color,
-                    'plate_number' => $vehicle->plate_number,
-                    'seats' => $vehicle->seats,
-                    'fuel_type' => $vehicle->fuel_type,
-                    'engine_size' => $vehicle->engine_size,
-                    'organisation_id' => $vehicle->engine_size,
-                    'vehicle_insurance_issue_date' => $vehicle->vehicle_insurance_issue_date,
-                    'vehicle_insurance_expiry' => $vehicle->vehicle_insurance_expiry,
-                    'vehicle_insurance_issue_organisation' => $vehicle->vehicle_insurance_issue_organisation,
-                    'vehicle_avatar' => $vehicle->vehicle_avatar,
-                    'status' => 'inactive',
-                    'creator' => [
-                        'id' => $vehicle->creator->id,
-                        'name' => $vehicle->creator->name,
-                        'email' => $vehicle->creator->email,
-                        'address' => $vehicle->creator->address,
-                    ],
-                    'driver' => $vehicle->driver ? [
-                        'id' => $vehicle->driver->user->id,
-                        'name' => $vehicle->driver->user->name,
-                        'email' => $vehicle->driver->user->email,
-                        'address' => $vehicle->driver->user->address,
-                    ] : null,
-                ];
-            });
-
-            return response()->json([
-                'vehicles' => $response
-            ], 200);
-        } catch (Exception $e) {
-            Log::error('ERROR FETCHING VEHICLES');
-            Log::error($e);
-            return response()->json([
-                'message' => 'Error occurred while fetching vehicles',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+            return view('vehicle',compact('vehicles'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
+
+
+     public function create(){
+        return view('vehicle.create');
+     }
     public function store(Request $request)
     {
         try {
@@ -622,4 +634,11 @@ class VehicleController extends Controller
             ], 500);
         }
     }
+
+     public function vehicleInsurance(){
+        return view('vehicle.insurance');
+     }
+
+
+   
 }

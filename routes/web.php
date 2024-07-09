@@ -9,10 +9,9 @@ use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserLoginController;
 use App\Http\Controllers\OrganisationController;
-
-Route::get('/', function () {
-    return view('auth.login');
-});
+use App\Http\Controllers\VehicleServiceController;
+use App\Http\Controllers\DriversLicensesController;
+use App\Http\Controllers\VehicleInsuranceController;
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -24,7 +23,7 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
-Route::get('/login', [UserLoginController::class, 'index'])->name('user.login')->middleware('guest');
+Route::get('/login', [UserLoginController::class, 'index'])->name('user.login');
 
 /**
  * Employees Routes
@@ -50,7 +49,8 @@ Route::get('driver/create', [DriverController::class, 'create'])->name('driver.c
 Route::get('driver/{id}/edit', [DriverController::class, 'edit'])->name('driver.edit');
 Route::get('driver/{id}/delete', [DriverController::class, 'destroy'])->name('driver.destroy');
 
-Route::get('driver/performance', [DriverController::class, 'create'])->name('driver.performance.index');
+Route::get('driver/performance', [DriverController::class,'driverPerformance'])->name('driver.performance.index');
+Route::get('performance/create', [DriverController::class, 'createDriverPerformance'])->name('driver.performance.create');
 Route::get('driver/license', [DriverController::class, 'driverLicense'])->name('driver.license.index');
 
 /**
@@ -68,17 +68,17 @@ Route::get('organisation/{id}/delete', [OrganisationController::class, 'destroy'
  * 
  */
 
- Route::get('our-routes', [AddRouteController::class,'index'])->name('our.routes');
+Route::get('our-routes', [AddRouteController::class, 'index'])->name('our.routes');
 
 Route::get('routes/create', [AddRouteController::class, 'create'])->name('route.create');
 Route::get('edit-route/{id}/edit', [AddRouteController::class, 'edit'])->name('route.edit');
 Route::get('route-delete/{id}/delete', [AddRouteController::class, 'destroy'])->name('route.destroy');
 /**
-   * Tripes Routes
-   * 
-   */
+ * Tripes Routes
+ * 
+ */
 
-Route::get('trips', [TripController::class,'index'])->name('booked.trip');
+Route::get('trips', [TripController::class, 'index'])->name('booked.trip');
 
 Route::get('trip/create', [TripController::class, 'create'])->name('trip.create');
 Route::get('trip/{id}/edit', [TripController::class, 'edit'])->name('trip.edit');
@@ -91,10 +91,33 @@ Route::get('trip/{id}/delete', [TripController::class, 'destroy'])->name('trip.d
  * 
  */
 
-Route::get('vehicle', [VehicleController::class,'vehicle'])->name('vehicle');
+Route::get('vehicle', [VehicleController::class, 'index'])->name('vehicle');
 
 Route::get('vehicle/create', [VehicleController::class, 'create'])->name('vehicle.create');
 Route::get('vehicle/insurance', [VehicleController::class, 'vehicleInsurance'])->name('vehicle.insurance.index');
 
 Route::get('vehicle/{id}/edit', [VehicleController::class, 'edit'])->name('vehicle.edit');
 Route::get('vehicle/{id}/delete', [VehicleController::class, 'destroy'])->name('vehicle.destroy');
+/****
+ * 
+ * Vehicle Insurance
+ * 
+ */
+// vehicle/insurance/create
+Route::get('create', [VehicleInsuranceController::class, 'create'])->name('vehicle.insurance.create');
+
+/***
+ * Vehicle Maintaince OR servincing
+ */
+
+ Route::get('vehicle/maintenance', [VehicleServiceController::class, 'index'])->name('vehicle.maintenance');
+
+//  create
+ Route::get('vehicle/maintenance/create', [VehicleServiceController::class, 'create'])->name('vehicle.maintenance.create');
+
+ /****
+  * 
+  *Manage Driver License 
+  *driver.license.index
+  */
+   Route::get('/driver/license', [DriversLicensesController::class, 'index'])->name('driver.license.index');

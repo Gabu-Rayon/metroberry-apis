@@ -14,8 +14,12 @@ class VehicleServiceController extends Controller
      */
     public function index()
     {
+        // $vehicleServices = VehicleService::all();
+        // return response()->json($vehicleServices);
+
         $vehicleServices = VehicleService::all();
-        return response()->json($vehicleServices);
+        return view('vehicle.maintenance',compact('vehicleServices'));
+        
     }
 
     /**
@@ -23,8 +27,7 @@ class VehicleServiceController extends Controller
      */
     public function create()
     {
-        // If using a form, return a view
-        // return view('vehicle_services.create');
+        return view('vehicle.maintenance.create');
     }
 
     /**

@@ -308,4 +308,12 @@ class DriverController extends Controller
             ], 500);
         }
     }
+
+    public function driverPerformance(){
+        return view('driver.performance');
+    }
+
+     public function createDriverPerformance(){
+        return view('driver.performance.create');
+     }
 }

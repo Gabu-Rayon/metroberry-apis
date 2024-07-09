@@ -30,7 +30,7 @@
                                                     <div class="accordion-header d-flex justify-content-end align-items-center"
                                                         id="flush-headingOne">
                                                         <a class="btn btn-success btn-sm" href="javascript:void(0);"
-                                                            onclick="axiosModal('admin/vehicle/create')">
+                                                            onclick="axiosModal('vehicle/create')">
                                                             <i class="fa fa-plus"></i>&nbsp;
                                                             Add vehicle
                                                         </a>

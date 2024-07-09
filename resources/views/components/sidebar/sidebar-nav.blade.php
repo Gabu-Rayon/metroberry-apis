@@ -22,7 +22,7 @@
             'subitems' => [
                 ['label' => 'Manage Employee', 'route' => route('employee')],
                 ['label' => 'Manage Driver', 'route' => route('driver')],
-                ['label' => 'License Type', 'route' => route('driver.license.index')],
+                ['label' => 'Manage Driver License', 'route' => route('driver.license.index')],
                 ['label' => 'Driver Performance', 'route' => route('driver.performance.index')],
         ]])
 
@@ -123,13 +123,13 @@
             
             <ul class="nav-second-level">
                 <li class="">
-                    <a class="text-capitalize" href="vehicle/maintenance" target="_self">
+                    <a class="text-capitalize" href="maintenance" target="_self">
                         Maintenance
                     </a>
                 </li>
                 
                 <li class="">
-                    <a class="text-capitalize" href="vehicle/maintenance/create" target="_self">
+                    <a class="text-capitalize" href="maintenance/create" target="_self">
                         Create
                     </a>
                 </li>
