@@ -15,8 +15,11 @@ class Customer extends Model
         'user_id',
         'organisation_id',
         'customer_organisation_code',
+        'national_id_no',
+        'national_id_front_avatar',
+        'national_id_behind_avatar',
+        'terms_and_conditions',
     ];
-
     protected $hidden = [
         'user_id',
         'organisation_id',

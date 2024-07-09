@@ -44,6 +44,8 @@
     <link href="{{ asset('admin-assets/css/extra.min.css?v=1') }}"rel="stylesheet">
     <link href="{{ asset('admin-assets/scss/customStyle.min.css?v=1') }}"rel="stylesheet">
     <link href="{{ asset('admin-assets/css/grapData.min.css?v=1') }}"rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
 
     <link rel="stylesheet"href="{{ asset('admin-assets/css/dashboard.min.css?v=1') }}">
 </head>
@@ -103,6 +105,8 @@
         });
     });
 </script>
+
+@yield('scripts')
 <!-- end scripts -->
 </body>
 

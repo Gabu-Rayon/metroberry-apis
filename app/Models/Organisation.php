@@ -13,6 +13,7 @@ class Organisation extends Model
     protected $fillable = [
         'user_id',
         'created_by',
+        'organisation_code'
     ];
 
     protected $with = ['customers', 'vehicles', 'drivers'];
