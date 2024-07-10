@@ -42,7 +42,7 @@ class DriverController extends Controller
         // }
 
         $drivers = Driver::with('user')->get();
-        return view('driver', compact('drivers'));
+        return view('driver.index', compact('drivers'));
     }
 
     /**
