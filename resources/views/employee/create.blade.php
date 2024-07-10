@@ -43,7 +43,7 @@
                         >
                             <option value="">Select Organisation</option>
                             @foreach ($organisations as $organisation)
-                                <option value="{{ $organisation->id }}">{{ $organisation->user->name }}</option>
+                                <option value="{{ $organisation->organisation_code }}">{{ $organisation->user->name }}</option>
                             @endforeach
                         </select>
                     </div>
