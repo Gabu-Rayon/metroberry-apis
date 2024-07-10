@@ -88,7 +88,7 @@ Route::get('organisation', [OrganisationController::class, 'index'])->name('orga
 Route::get('organisation/create', [OrganisationController::class, 'create'])->name('organisation.create');
 Route::get('organisation/{id}/edit', [OrganisationController::class, 'edit'])->name('organisation.edit');
 Route::put('organisation/{id}/update', [OrganisationController::class, 'update'])->name('organisation.update');
-Route::get('organisation/{id}/delete', [OrganisationController::class, 'destroy'])->name('organisation.destroy');
+Route::post('organisation/{id}/delete', [OrganisationController::class, 'destroy'])->name('organisation.destroy');
 
 /**
  * 'Routes' Routes

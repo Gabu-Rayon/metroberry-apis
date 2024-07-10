@@ -239,8 +239,33 @@ class OrganisationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
+    public function destroy(string $id){
+        try {
+            $organisation = Organisation::findOrfail($id);
+
+            if (!$organisation) {
+                return redirect()->back()->with('error', 'Organisation not found');
+            }
+
+            $user = User::find($organisation->user_id);
+
+            if (!$user) {
+                return redirect()->back()->with('error', 'User not found');
+            }
+
+            DB::beginTransaction();
+
+            $organisation->delete();
+            $user->delete();
+
+            DB::commit();
+
+            return redirect()->route('organisation')->with('success', 'Organisation deleted successfully');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('ERROR DELETING Organisation');
+            Log::error($e);
+            return redirect()->back()->with('error', 'An error occurred while deleting organisation');
+        }
     }
 }

@@ -361,17 +361,13 @@ class EmployeeController extends Controller
             $customer = Customer::find($id);
 
             if (!$customer) {
-                return response()->json([
-                    'message' => 'Customer not found',
-                ], 404);
+                return redirect()->back()->with('error', 'Customer not found');
             }
 
             $user = User::find($customer->user_id);
 
             if (!$user) {
-                return response()->json([
-                    'message' => 'User not found',
-                ], 404);
+                return redirect()->back()->with('error', 'User not found');
             }
 
             DB::beginTransaction();
