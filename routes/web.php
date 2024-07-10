@@ -62,6 +62,7 @@ Route::post('organisation', [OrganisationController::class, 'store'])->name('org
 
 Route::get('organisation/{id}/edit', [OrganisationController::class, 'edit'])->name('organisation.edit');
 Route::get('organisation/{id}/delete', [OrganisationController::class, 'destroy'])->name('organisation.destroy');
+
 /**
  * Drivers Routes
  * 
@@ -78,7 +79,14 @@ Route::post('driver/{id}/delete', [DriverController::class, 'destroy'])->name('d
 
 Route::get('driver/performance', [DriverController::class, 'driverPerformance'])->name('driver.performance.index');
 Route::get('performance/create', [DriverController::class, 'createDriverPerformance'])->name('driver.performance.create');
-Route::get('driver/license', [DriverController::class, 'driverLicense'])->name('driver.license.index');
+
+/**
+ * Drivers Licenses Routes
+ * 
+ */
+
+Route::get('driver/license', [DriversLicensesController::class, 'index'])->name('driver.license.index');
+Route::get('driver/license/create', [DriversLicensesController::class, 'create'])->name('driver.license.create');
 
 /**
  * Organisation Routes

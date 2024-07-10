@@ -13,17 +13,16 @@ class DriversLicensesController extends Controller
      */
     public function index()
     {
-        $licenses = Driver::all();
+        $licenses = DriversLicenses::all();
         return view('driver.license.index',compact('licenses'));
-
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
+    public function create(){
+        $drivers = Driver::where('status', 'active')->get();
+        return view('driver.license.create',compact('drivers'));
     }
 
     /**
