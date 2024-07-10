@@ -9,6 +9,7 @@ use App\Models\Organisation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -21,109 +22,97 @@ class DriverController extends Controller
      */
     public function index()
     {
-        // try {
-        //     $user = User::find(Auth::id());
-        //     if ($user->hasRole('admin')) {
-        //         $drivers = Driver::all();
-        //     } else {
-        //         $drivers = Driver::where('user_id', $user->user_id)->get();
-        //     }
-
-        //     return response()->json([
-        //         'drivers' => $drivers
-        //     ], 200);
-        // } catch (Exception $e) {
-        //     Log::error('VIEW Organisation ERROR');
-        //     Log::error($e);
-        //     return response()->json([
-        //         'message' => 'An error occurred',
-        //         'error' => $e->getMessage()
-        //     ], 500);
-        // }
-
         $drivers = Driver::with('user')->get();
         return view('driver.index', compact('drivers'));
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    // public function store(Request $request)
-    // {
-    //     try {
-
-    //         $creator = Organisation::find(Auth::id());
-
-    //         Log::info('CREATOR');
-    //         Log::info($creator);
-
-    //         $data = $request->validate([
-    //             'name' => 'required|string',
-    //             'email' => 'required|email|unique:users,email',
-    //             'phone' => 'required|string',
-    //             'password' => 'required|string',
-    //         ]);
-
-    //         $user = User::create([
-    //             'name' => $data['name'],
-    //             'email' => $data['email'],
-    //             'phone' => $data['phone'],
-    //             'password' => bcrypt($data['password']),
-    //             // next we will add avatar when creating Driver 
-    //         ]);
-
-    //         $driver = Driver::create([
-    //             'user_id' => $user->id,
-    //             'organisation_id' => $creator->id ?? null,
-    //             'created_by' => Auth::id(),
-    //             'status' => 'inactive'
-    //         ]);
-    //         return response()->json([
-    //             'message' => 'Driver created successfully !',
-    //             'driver' => $driver
-    //         ], 201);
-    //     } catch (Exception $e) {
-    //         Log::error('CREATE DRIVER ERROR');
-    //         Log::error($e);
-    //         return response()->json([
-    //             'message' => 'An error occurred',
-    //             'error' => $e->getMessage()
-    //         ], 500);
-    //     }
-    // }
-
     public function store(Request $request)
     {
         try {
+            
             $data = $request->all();
-
-            Log::info('DRIVER DATA');
-            Log::info($data);
 
             $validator = Validator::make($data, [
                 'name' => 'required|string',
-                'email' => 'required|email|unique:users,email',
                 'phone' => 'required|string',
-                'password' => 'required|integer',
                 'organisation' => 'required|string',
-                'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'national_id_no' => 'required|string|unique:drivers',
-                'national_id_avatar_front' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'national_id_avatar_behind' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'email' => 'required|email|unique:users,email',
+                'address' => 'nullable|string',
+                'national_id' => 'required|string',
+                'front_page_id' => 'required|file|mimes:jpg,jpeg,png,webp',
+                'back_page_id' => 'required|file|mimes:jpg,jpeg,png,webp',
+                'avatar' => 'nullable|file|mimes:jpg,jpeg,png,webp',
+                'password' => 'required|string',
             ]);
 
             if ($validator->fails()) {
+                Log::error('VALIDATION ERROR');
+                Log::error($validator->errors());
                 return redirect()->back()->withErrors($validator)->withInput();
             }
 
-           
+            DB::beginTransaction();
+
+            $organisation = Organisation::where('organisation_code', $data['organisation'])->first();
+
+            if (!$organisation) {
+                return redirect()->back()->with('error', 'Organisation not found')->withInput();
+            }
+
+            $frontIdPath = null;
+            $backIdPath = null;
+            $avatarPath = null;
+            $email = $data['email'];
+
+            if ($request->hasFile('front_page_id')) {
+                $frontIdFile = $request->file('front_page_id');
+                $frontIdExtension = $frontIdFile->getClientOriginalExtension();
+                $frontIdFileName = "{$email}-front-id.{$frontIdExtension}";
+                $frontIdPath = $frontIdFile->storeAs('uploads/front-page-ids', $frontIdFileName, 'public');
+            }
+            
+            if ($request->hasFile('back_page_id')) {
+                $backIdFile = $request->file('back_page_id');
+                $backIdExtension = $backIdFile->getClientOriginalExtension();
+                $backIdFileName = "{$email}-back-id.{$backIdExtension}";
+                $backIdPath = $backIdFile->storeAs('uploads/back-page-ids', $backIdFileName, 'public');
+            }
+            
+            if ($request->hasFile('avatar')) {
+                $avatarFile = $request->file('avatar');
+                $avatarExtension = $avatarFile->getClientOriginalExtension();
+                $avatarFileName = "{$email}-avatar.{$avatarExtension}";
+                $avatarPath = $avatarFile->storeAs('uploads/user-avatars', $avatarFileName, 'public');
+            }
+
+            $user = User::create([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => bcrypt($data['password']),
+                'phone' => $data['phone'],
+                'address' => $data['address'],
+                'avatar' => $avatarPath,
+                'created_by' => 1,
+                'role' => 'driver',
+            ]);
+
+            $user->assignRole('driver');
+
+            Driver::create([
+                'created_by' => 1,
+                'user_id' => $user->id,
+                'organisation_id' => $organisation->id,
+                'national_id_no' => $data['national_id'],
+                'national_id_front_avatar' => $frontIdPath,
+                'national_id_behind_avatar' => $backIdPath,
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('drivers')->with('success', 'Driver created successfully');
         } catch (Exception $e) {
             Log::error('CREATE DRIVER ERROR');
             Log::error($e);
-            return response()->json([
-                'message' => 'An error occurred',
-                'error' => $e->getMessage()
-            ], 500);
+            return redirect()->back()->with('error', 'An error occurred')->withInput();
         }
     }
 
@@ -146,40 +135,9 @@ class DriverController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    // public function update(Request $request, Driver $driver)
-    // {
-    //     try {
-    //         $data = $request->validate([
-    //             'name' => 'required|string',
-    //             'email' => 'required|email|unique:users,email,' . $driver->user_id,
-    //             'phone' => 'required|string',
-    //         ]);
-
-    //         $driver->user->update([
-    //             'name' => $data['name'],
-    //             'email' => $data['email'],
-    //             'phone' => $data['phone'],
-    //         ]);
-
-    //         return response()->json([
-    //             'message' => 'Driver updated successfully',
-    //             'driver' => $driver
-    //         ], 200);
-    //     } catch (Exception $e) {
-    //         Log::error('UPDATE DRIVER ERROR');
-    //         Log::error($e);
-    //         return response()->json([
-    //             'message' => 'An error occurred',
-    //             'error' => $e->getMessage()
-    //         ], 500);
-    //     }
-    // }
-
     public function create(){
-        return view('driver.create');
+        $organisations = Organisation::all();
+        return view('driver.create', compact('organisations'));
     }
 
 
