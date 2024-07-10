@@ -170,9 +170,70 @@ class OrganisationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
+    public function update(Request $request, string $id) {
+        try {
+
+            $organisation = Organisation::findOrfail($id);
+            $user = User::findOrfail($organisation->user_id);
+
+            $data = $request->all();
+
+            $validator = Validator::make($data, [
+                'name' => 'required|string',
+                'phone' => 'required|string',
+                'email' => 'required|email|unique:users,email,' . $user->id,
+                'address' => 'required|string',
+                'logo' => 'file|mimes:jpeg,jpg,png,gif,webp|max:2048',
+                'certificate_of_organisation' => 'file|mimes:pdf|max:2048',
+                'organisation_code' => 'required|string|unique:organisations,organisation_code,' . $organisation->id,
+            ]);
+
+            if ($validator->fails()) {
+                Log::info('VALIDATION ERRORS');
+                Log::info($validator->errors()->first());
+                return redirect()->back()->with('error', $validator->errors()->first());
+            }
+
+            DB::beginTransaction();
+
+            $logoPath = $user->avatar;
+
+            if ($request->hasFile('logo')) {
+                $logoFile = $request->file('logo');
+                $logoExtension = $logoFile->getClientOriginalExtension();
+                $logoFileName = "{$user->email}-avatar.{$logoExtension}";
+                $logoPath = $logoFile->storeAs('uploads/company-logos', $logoFileName, 'public');
+            }
+
+            if ($request->hasFile('certificate_of_organisation')) {
+                $certificateFile = $request->file('certificate_of_organisation');
+                $certificateExtension = $certificateFile->getClientOriginalExtension();
+                $certificateFileName = "{$user->email}-certificate.{$certificateExtension}";
+                $certificatePath = $certificateFile->storeAs('uploads/organisation-certificates', $certificateFileName, 'public');
+            }
+
+            $user->update([
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'phone' => $data['phone'],
+                'address' => $data['address'],
+                'avatar' => $logoPath
+            ]);
+
+            $organisation->update([
+                'certificate_of_organisation' => $certificatePath ?? $organisation->certificate_of_organisation,
+                'organisation_code' => $data['organisation_code']
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('organisation')->with('success', 'Organisation updated successfully');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('ERROR UPDATING Organisation');
+            Log::error($e);
+            return redirect()->back()->with('error', 'An error occurred while updating organisation');
+        }
     }
 
     /**
