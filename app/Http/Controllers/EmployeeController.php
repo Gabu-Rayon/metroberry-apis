@@ -260,53 +260,91 @@ class EmployeeController extends Controller
     public function update(Request $request, $id)
     {
         try {
+
             $customer = Customer::find($id);
-            $organisation = Organisation::where('user_id', auth()->user()->id)->first();
+            $user = User::find($customer->user_id);
+            $data = $request->all();
+            $organisation = Organisation::where('organisation_code', $data['organisation'])->first();
 
             if (!$customer) {
-                return response()->json([
-                    'message' => 'Customer not found',
-                ], 404);
+                return redirect()->back()->with('error', 'Customer not found');
             }
+
+            if (!$user) {
+                return redirect()->back()->with('error', 'User not found');
+            }
+
 
             if (!$organisation) {
-                return response()->json([
-                    'message' => 'Unauthorised',
-                ], 401);
+                return redirect()->back()->with('error', 'Organisation not found');
             }
 
-            if ($customer->organisation_id !== $organisation->id) {
-                return response()->json([
-                    'message' => 'Unauthorised',
-                ], 401);
-            }
-
-            $data = $request->validate([
+            $validator = Validator::make($data, [
                 'name' => 'required|string',
-                'email' => 'required|email',
                 'phone' => 'required|string',
-                'address' => 'string',
-                'avatar' => 'string',
+                'organisation' => 'required|string',
+                'email' => 'required|email|unique:users,email,' . $user->id,
+                'address' => 'nullable|string',
+                'national_id_no' => 'required|string|unique:customers,national_id_no,' . $customer->id,
+                'front_page_id' => 'nullable|file|mimes:jpg,jpeg,png,webp',
+                'back_page_id' => 'nullable|file|mimes:jpg,jpeg,png,webp',
+                'avatar' => 'nullable|file|mimes:jpg,jpeg,png,webp',
             ]);
 
-            $customer->user->name = $data['name'];
-            $customer->user->email = $data['email'];
-            $customer->user->phone = $data['phone'];
-            $customer->user->address = $data['address'];
-            $customer->user->avatar = $data['avatar'];
-            $customer->user->save();
+            if ($validator->fails()) {
+                return redirect()->back()->with('error', $validator->errors()->first())->withInput();
+            }
 
-            return response()->json([
-                'message' => 'Customer updated successfully',
-                'customer' => $customer->user
-            ], 200);
-        } catch (Exception $e) {
+            DB::beginTransaction();
+
+            $user->name = $data['name'];
+            $user->email = $data['email'];
+            $user->phone = $data['phone'];
+            $user->address = $data['address'];
+            $customer->national_id_no = $data['national_id_no'];
+
+            $avatarPath = null;
+            $frontIdPath = null;
+            $backIdPath = null;
+            $email = $data['email'];
+
+            if ($request->hasFile('avatar')) {
+                $avatarFile = $request->file('avatar');
+                $avatarExtension = $avatarFile->getClientOriginalExtension();
+                $avatarFileName = "{$email}-avatar.{$avatarExtension}";
+                $avatarPath = $avatarFile->storeAs('uploads/user-avatars', $avatarFileName, 'public');
+                $user->avatar = $avatarPath;
+            }
+
+            if ($request->hasFile('front_page_id')) {
+                $frontIdFile = $request->file('front_page_id');
+                $frontIdExtension = $frontIdFile->getClientOriginalExtension();
+                $frontIdFileName = "{$email}-front-id.{$frontIdExtension}";
+                $frontIdPath = $frontIdFile->storeAs('uploads/front-page-ids', $frontIdFileName, 'public');
+                $customer->national_id_front_avatar = $frontIdPath;
+            }
+
+            if ($request->hasFile('back_page_id')) {
+                $backIdFile = $request->file('back_page_id');
+                $backIdExtension = $backIdFile->getClientOriginalExtension();
+                $backIdFileName = "{$email}-back-id.{$backIdExtension}";
+                $backIdPath = $backIdFile->storeAs('uploads/back-page-ids', $backIdFileName, 'public');
+                $customer->national_id_behind_avatar = $backIdPath;
+            }
+
+            $customer->save();
+            $user->save();
+
+            DB::commit();
+
+            return redirect()->route('employee')->with('success', 'Customer updated successfully');
+
+
+        }catch (Exception $e) {
+            DB::rollBack();
             Log::info('UPDATE CUSTOMER ERROR');
             Log::info($e);
-            return response()->json([
-                'message' => 'An error occurred while updating customer',
-                'error' => $e->getMessage()
-            ], 500);
+            return redirect()->back()->with('error', 'An error occurred while updating customer');
         }
     }
 
@@ -318,7 +356,6 @@ class EmployeeController extends Controller
         try {
 
             $customer = Customer::find($id);
-            $organisation = Organisation::where('user_id', auth()->user()->id)->first();
 
             if (!$customer) {
                 return response()->json([
@@ -326,29 +363,28 @@ class EmployeeController extends Controller
                 ], 404);
             }
 
-            if (!$organisation) {
+            $user = User::find($customer->user_id);
+
+            if (!$user) {
                 return response()->json([
-                    'message' => 'Unauthorised',
-                ], 401);
+                    'message' => 'User not found',
+                ], 404);
             }
 
-            if ($customer->organisation_id !== $organisation->id) {
-                return response()->json([
-                    'message' => 'Unauthorised',
-                ], 401);
-            }
+            DB::beginTransaction();
 
-            return response()->json([
-                'message' => 'Customer deleted successfully',
-                'customer' => $customer->user
-            ], 200);
+            $customer->delete();
+            $user->delete();
+
+            DB::commit();
+
+
+            return redirect()->route('employee')->with('success', 'Customer deleted successfully');
         } catch (Exception $e) {
+            DB::rollBack();
             Log::info('DELETE CUSTOMER ERROR');
             Log::info($e);
-            return response()->json([
-                'message' => 'An error occurred while deleting customer',
-                'error' => $e->getMessage()
-            ], 500);
+            return redirect()->back()->with('error', 'An error occurred while deleting customer');
         }
     }
 }

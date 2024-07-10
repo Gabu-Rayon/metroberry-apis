@@ -1,4 +1,4 @@
-<form action="employee/update" method="POST" class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data" onsubmit="submitFormAxios(event)">
+<form action="employee/{{ $customer->id }}/update" method="POST" class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
   @csrf
   @method('PUT')
   <div class="card-header my-3 p-2 border-bottom">
@@ -56,9 +56,9 @@
                   </label>
                   <div class="col-sm-7">
                       <input name="front_page_id" class="form-control" type="file" placeholder="Front Page ID Picture" id="front_page_id" value="" />
-                      @if ($customer->front_page_id)
+                      @if ($customer->national_id_front_avatar)
                           <div class="mt-2">
-                              <a href="{{ asset($customer->front_page_id) }}" download>Download Front Page ID</a>
+                              <a href="{{ url('storage/' . $customer->national_id_front_avatar) }}" download>Download Front Page ID</a>
                           </div>
                       @endif
                   </div>
@@ -69,10 +69,8 @@
                       Avatar
                   </label>
                   <div class="col-sm-7">
-                      {{ Log::info('AVATAR') }}
-                      {{ Log::info('storage/app/public/' . $customer->user->avatar) }}
                       <input name="avatar" class="form-control" type="file" placeholder="Avatar" id="avatar" value="" />
-                      <img src="{{ url('storage/' . $customer->user->avatar) }}" alt="Avatar" class="img-fluid" style="max-height: 100px; border-radius: 50%;" />
+                      <img src="{{ url('storage/' . $customer->user->avatar) }}" alt="Avatar" class="form-control" />
                   </div>
               </div>
 
@@ -96,7 +94,7 @@
                       <i class="text-danger">*</i>
                   </label>
                   <div class="col-sm-7">
-                      <input name="address" required class="form-control" type="text" placeholder="Address" id="address" value="{{ $customer->address }}" />
+                      <input name="address" required class="form-control" type="text" placeholder="Address" id="address" value="{{ $customer->user->address }}" />
                   </div>
               </div>
 
@@ -106,7 +104,7 @@
                       <i class="text-danger">*</i>
                   </label>
                   <div class="col-sm-7">
-                      <input name="national_id_no" required class="form-control" type="text" placeholder="ID Number" id="national_id_no" value="{{ $customer->user->national_id_no }}" />
+                      <input name="national_id_no" required class="form-control" type="text" placeholder="ID Number" id="national_id_no" value="{{ $customer->national_id_no }}" />
                   </div>
               </div>
 
@@ -116,9 +114,9 @@
                   </label>
                   <div class="col-sm-7">
                       <input name="back_page_id" class="form-control" type="file" placeholder="Back Page ID Picture" id="back_page_id" value="" />
-                      @if ($customer->back_page_id)
+                      @if ($customer->national_id_behind_avatar)
                           <div class="mt-2">
-                              <a href="{{ asset($customer->back_page_id) }}" download>Download Back Page ID</a>
+                              <a href="{{ url('storage/' . $customer->national_id_behind_avatar) }}" download>Download Back Page ID</a>
                           </div>
                       @endif
                   </div>

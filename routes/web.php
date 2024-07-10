@@ -50,8 +50,8 @@ Route::get('employee', [EmployeeController::class, 'index'])->name('employee');
 Route::post('employee', [EmployeeController::class, 'store'])->name('employee');
 
 Route::get('employee/{id}/edit', [EmployeeController::class, 'edit'])->name('employee.edit');
-Route::get('employee/{id}/delete', [EmployeeController::class, 'destroy'])->name('employee.destroy');
-
+Route::put('employee/{id}/update', [EmployeeController::class, 'update'])->name('employee.update');
+Route::post('employee/{id}/delete', [EmployeeController::class, 'destroy'])->name('employee.delete');
 /***
  * Organisations Routes
  */

@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasPermissions;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
@@ -67,9 +68,9 @@ class User extends Authenticatable
         return $this->hasOne(Driver::class);
     }
 
-    public function customers(): HasMany
+    public function customer(): HasOne
     {
-        return $this->hasMany(Customer::class, 'user_id', 'id');
+        return $this->hasOne(Customer::class, 'user_id', 'id');
     }
     public function organisation() {
         return $this->hasOne(Organisation::class);
