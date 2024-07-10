@@ -1,14 +1,19 @@
 <?php
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TripController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\DriverController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\AddRouteController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventoryController;
-use App\Http\Controllers\UserLoginController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\OrganisationController;
 use App\Http\Controllers\VehicleServiceController;
 use App\Http\Controllers\DriversLicensesController;
@@ -25,14 +30,20 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
-Route::get('/login', [UserLoginController::class, 'index'])->name('user.login');
+/***
+ * User Interfaces
+ * 
+ */
+
+Route::get('/login', [UserController::class, 'index'])->name('user.login');
+Route::get('/', [UserController::class, 'index'])->name('user.login');
+Route::get('/admin/user', [UserController::class, 'index'])->name('user.interface.index');
+Route::get('/admin/user/create', [UserController::class, 'create'])->name('user.create');
 
 /**
  * Employees Routes
  * 
  */
-
-
 
 Route::get('employee/create', [EmployeeController::class, 'create'])->name('employee.create');
 Route::get('employee', [EmployeeController::class, 'index'])->name('employee');
@@ -174,3 +185,40 @@ Route::get('/inventory/parts', [InventoryController::class, 'InventoryParts'])->
 Route::get('/inventory/parts/usage', [InventoryController::class, 'InventoryPartsUsage'])->name('inventory.parts.usage');
 Route::get('/iventory/vendor', [InventoryController::class, 'InventoryTrVendor'])->name('inventory.vendors');
 Route::get('/inventory/trip-type', [InventoryController::class, 'InventoryTripType'])->name('inventory.trip.type');
+
+/***
+ * Purchase Routes 
+ * 
+ */
+Route::get('/purchase', [PurchaseController::class,'index'])->name('purchase.index');
+Route::get('/purchase/create', [PurchaseController::class, 'create'])->name('purchase.create');
+/***
+ * Reports routes 
+ * 
+ * 
+ */
+// Reports
+Route::get('report/employee', [ReportController::class, 'employeeReport'])->name('report.employee');
+Route::get('report/driver', [ReportController::class, 'driverReport'])->name('report.driver');
+Route::get('report/vehicle', [ReportController::class, 'vehicleReport'])->name('report.vehicle');
+Route::get('report/admin/vehicle/requisition', [ReportController::class, 'vehicleRequisitionReport'])->name('report.vehicle.requisition');
+Route::get('report/admin/pickdrop/requisition', [ReportController::class, 'pickDropRequisitionReport'])->name('report.pickdrop.requisition');
+Route::get('report/admin/refuel/requisition', [ReportController::class, 'refuelRequisitionReport'])->name('report.refuel.requisition');
+Route::get('report/purchase', [ReportController::class, 'purchaseReport'])->name('report.purchase');
+Route::get('report/expense', [ReportController::class, 'expenseReport'])->name('report.expense');
+Route::get('report/maintenance', [ReportController::class, 'maintenanceReport'])->name('report.maintenance');
+/***
+ * 
+ * Settings Routes
+ * 
+ */
+Route::get('/admin/setting', [SettingsController::class, 'index'])->name('settings.index');
+
+/**
+ * 
+ * Permissions and Role Routes 
+ * 
+ */
+Route::get('/admin/permission', [PermissionController::class, 'index'])->name('permission.index');
+Route::get('/admin/role', [RoleController::class, 'index'])->name('permission.role');
+Route::get('/admin/role/create', [RoleController::class, 'create'])->name('permission.role.create');

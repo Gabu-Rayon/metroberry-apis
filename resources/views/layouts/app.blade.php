@@ -48,6 +48,7 @@
 
 
     <link rel="stylesheet"href="{{ asset('admin-assets/css/dashboard.min.css?v=1') }}">
+    <link href="{{asset('admin-assets/css/logout.css?v=1')}}" rel="stylesheet">
 </head>
 <div class="main">
 
