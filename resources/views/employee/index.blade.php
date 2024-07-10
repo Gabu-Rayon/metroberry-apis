@@ -3,9 +3,9 @@
 @section('title', 'Employees')
 @section('content')
 
-<body class="fixed sidebar-mini">
-    
-    @include('components.preloader')
+    <body class="fixed sidebar-mini">
+
+        @include('components.preloader')
         <div id="app">
             <div class="wrapper">
                 @include('components.sidebar.sidebar')
@@ -22,11 +22,17 @@
                                             </div>
                                             <div class="text-end">
                                                 <div class="actions">
-                                                    <div class="accordion-header d-flex justify-content-end align-items-center" id="flush-headingOne">
-                                                        <a class="btn btn-success btn-sm" href="javascript:void(0);" onclick="axiosModal('employee/create')">
+                                                    <div class="accordion-header d-flex justify-content-end align-items-center"
+                                                        id="flush-headingOne">
+                                                        <a class="btn btn-success btn-sm" href="javascript:void(0);"
+                                                            onclick="axiosModal('employee/create')">
                                                             <i class="fa fa-plus"></i>&nbsp;
                                                             Add employee
                                                         </a>
+
+                                                        <button type="button" class="btn btn-success btn-sm mx-2"
+                                                            data-bs-toggle="collapse" data-bs-target="#flush-collapseOne"
+                                                            aria-expanded="true" aria-controls="flush-collapseOne">
                                                         <button type="button" class="btn btn-success btn-sm mx-2" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="true" aria-controls="flush-collapseOne">
                                                             <i class="fas fa-filter"></i>
                                                             Filter
@@ -36,20 +42,26 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="card-body">
                                         <div class="row mb-3">
                                             <div class="col-12">
                                                 <div class="accordion accordion-flush" id="accordionFlushExample">
                                                     <div class="accordion-item">
-                                                        <div id="flush-collapseOne" class="accordion-collapse bg-white collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
+                                                        <div id="flush-collapseOne"
+                                                            class="accordion-collapse bg-white collapse"
+                                                            aria-labelledby="flush-headingOne"
+                                                            data-bs-parent="#accordionFlushExample" style="">
                                                             <div class='row pb-3 my-filter-form'>
                                                                 <div class="col-sm-12 col-xl-4">
 
                                                                     <div class="form-group row mb-1">
-                                                                        <label for="name" class="col-sm-5 col-form-label justify-content-start text-left">Name</label>
+                                                                        <label for="name"
+                                                                            class="col-sm-5 col-form-label justify-content-start text-left">Name</label>
                                                                         <div class="col-sm-7">
-                                                                            <input type="text" class="form-control" id="name" name="name" placeholder="Name">
+                                                                            <input type="text" class="form-control"
+                                                                                id="name" name="name"
+                                                                                placeholder="Name">
                                                                         </div>
                                                                     </div>
 
@@ -58,14 +70,19 @@
                                                                 <div class="col-sm-12 col-xl-4">
 
                                                                     <div class="form-group row mb-1">
-                                                                        <label for="organisation" class="col-sm-5 col-form-label justify-content-start text-left">
+                                                                        <label for="organisation"
+                                                                            class="col-sm-5 col-form-label justify-content-start text-left">
                                                                             Organisation
                                                                         </label>
                                                                         <div class="col-sm-7">
-                                                                            <select class="form-control basic-single" name="organisation" id="organisation" tabindex="-1" aria-hidden="true">
-                                                                                <option value="">Please select one</option>
+                                                                            <select class="form-control basic-single"
+                                                                                name="organisation" id="organisation"
+                                                                                tabindex="-1" aria-hidden="true">
+                                                                                <option value="">Please select one
+                                                                                </option>
                                                                                 @foreach ($organisations as $org)
-                                                                                    <option value="{{ $org->id }}">{{ $org->user->name }}</option>
+                                                                                    <option value="{{ $org->id }}">
+                                                                                        {{ $org->user->name }}</option>
                                                                                 @endforeach
                                                                             </select>
                                                                         </div>
@@ -76,9 +93,12 @@
                                                                 <div class="col-sm-12 col-xl-4">
 
                                                                     <div class="form-group row mb-1">
-                                                                        <label for="address" class="col-sm-5 col-form-label justify-content-start text-left">Address</label>
+                                                                        <label for="address"
+                                                                            class="col-sm-5 col-form-label justify-content-start text-left">Address</label>
                                                                         <div class="col-sm-7">
-                                                                            <input type="text" class="form-control" id="address" name="address" placeholder="Address">
+                                                                            <input type="text" class="form-control"
+                                                                                id="address" name="address"
+                                                                                placeholder="Address">
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -98,7 +118,7 @@
 
                                         <div>
                                             <div class="table-responsive">
-                                                <table class="table" id="employee-table">
+                                                <table class="table" id="driver-table">
                                                     <thead>
                                                         <tr>
                                                             <th title="Name">Name</th>
@@ -106,7 +126,8 @@
                                                             <th title="Type">Phone</th>
                                                             <th title="Nid">Address</th>
                                                             <th title="Department">Organisation</th>
-                                                             <th title="Action" width="80">Action</th>                                                        </tr>
+                                                            <th title="Action" width="80">Action</th>
+                                                        </tr>
                                                     </thead>
 
                                                     <tbody>
@@ -118,14 +139,18 @@
                                                                 <td>{{ $customer->user->address }}</td>
                                                                 <td>{{ $customer->customer_organisation_code }}</td>
                                                                 <td class="d-flex">
-  <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="axiosModal('employee/{{ $customer->id }}/edit')">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <span class='m-1'></span>
-                        <a href="javascript:void(0);" class="btn btn-sm btn-danger" onclick="deleteCustomer({{ $customer->id }})">
-                            <i class="fas fa-trash"></i>
-                        </a>
-                    </td>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="btn btn-sm btn-primary"
+                                                                        onclick="axiosModal('employee/{{ $customer->id }}/edit')">
+                                                                        <i class="fas fa-edit"></i>
+                                                                    </a>
+                                                                    <span class='m-1'></span>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="btn btn-sm btn-danger"
+                                                                        onclick="deleteCustomer({{ $customer->id }})">
+                                                                        <i class="fas fa-trash"></i>
+                                                                    </a>
+                                                                </td>
                                                             </tr>
                                                         @endforeach
                                                     </tbody>
