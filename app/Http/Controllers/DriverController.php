@@ -108,7 +108,7 @@ class DriverController extends Controller
 
             DB::commit();
 
-            return redirect()->route('drivers')->with('success', 'Driver created successfully');
+            return redirect()->route('driver')->with('success', 'Driver created successfully');
         } catch (Exception $e) {
             Log::error('CREATE DRIVER ERROR');
             Log::error($e);
