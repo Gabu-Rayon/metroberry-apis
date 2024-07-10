@@ -72,6 +72,7 @@ Route::get('driver', [DriverController::class, 'index'])->name('driver');
 
 Route::get('driver/create', [DriverController::class, 'create'])->name('driver.create');
 Route::post('driver', [DriverController::class, 'store'])->name('driver');
+Route::put('driver/{id}/update', [DriverController::class, 'update'])->name('driver.update');
 Route::get('driver/{id}/edit', [DriverController::class, 'edit'])->name('driver.edit');
 Route::get('driver/{id}/delete', [DriverController::class, 'destroy'])->name('driver.destroy');
 

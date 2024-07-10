@@ -141,64 +141,98 @@ class DriverController extends Controller
     }
 
 
-    public function edit(){
-        return view('driver.edit');
+    public function edit($id){
+        $driver = Driver::findOrfail($id);
+        $organisations = Organisation::all();
+        return view('driver.edit', compact('driver', 'organisations'));
     }
 
-    public function update(Request $request, Driver $driver){
+    public function update(Request $request, $id){
         try {
-            $creator = User::find(Auth::id());
 
-            Log::info('Creator Updating the Driver Details :');
-            Log::info($creator);
+            $driver = Driver::find($id);
+            $user = User::find($driver->user_id);
+            $data = $request->all();
+            $organisation = Organisation::where('organisation_code', $data['organisation'])->first();
 
-            // Log request data for debugging
-            Log::info('Request Data:', $request->all());
-
-            // Validate the request data
-            $data = $request->validate([
-                'name' => 'required|string',
-                'email' => 'required|email|unique:users,email,' . $driver->user_id,
-                'phone' => 'required|string',
-                'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            ]);
-
-            $user = $driver->user;
-            $avatarPath = $user->avatar;
-
-            if ($request->hasFile('avatar')) {
-                // Delete the old avatar if it exists
-                if ($avatarPath) {
-                    Storage::disk('public')->delete($avatarPath);
-                }
-
-                // Store the new avatar in the public/DriversAvatars directory
-                $avatarPath = $request->file('avatar')->store('DriversAvatars', 'public');
+            if (!$driver) {
+                return redirect()->back()->with('error', 'Driver not found');
             }
 
-            $user->update([
-                'name' => $data['name'],
-                'email' => $data['email'],
-                'phone' => $data['phone'],
-                'avatar' => $avatarPath,
+            if (!$user) {
+                return redirect()->back()->with('error', 'User not found');
+            }
+
+
+            if (!$organisation) {
+                return redirect()->back()->with('error', 'Organisation not found');
+            }
+
+            $validator = Validator::make($data, [
+                'name' => 'required|string',
+                'phone' => 'required|string',
+                'organisation' => 'required|string',
+                'email' => 'required|email|unique:users,email,' . $user->id,
+                'address' => 'nullable|string',
+                'national_id_no' => 'required|string|unique:drivers,national_id_no,' . $driver->id,
+                'front_page_id' => 'nullable|file|mimes:jpg,jpeg,png,webp',
+                'back_page_id' => 'nullable|file|mimes:jpg,jpeg,png,webp',
+                'avatar' => 'nullable|file|mimes:jpg,jpeg,png,webp',
             ]);
 
-            return response()->json([
-                'message' => 'Driver updated successfully',
-                'driver' => $driver->load('user')
-            ], 200);
-        } catch (ValidationException $e) {
-            Log::error('Validation Error:', $e->errors());
-            return response()->json([
-                'message' => 'Validation Error',
-                'errors' => $e->errors()
-            ], 422);
+            if ($validator->fails()) {
+                return redirect()->back()->with('error', $validator->errors()->first())->withInput();
+            }
+
+            DB::beginTransaction();
+
+            $user->name = $data['name'];
+            $user->email = $data['email'];
+            $user->phone = $data['phone'];
+            $user->address = $data['address'];
+            $driver->national_id_no = $data['national_id_no'];
+
+            $avatarPath = null;
+            $frontIdPath = null;
+            $backIdPath = null;
+            $email = $data['email'];
+
+            if ($request->hasFile('avatar')) {
+                $avatarFile = $request->file('avatar');
+                $avatarExtension = $avatarFile->getClientOriginalExtension();
+                $avatarFileName = "{$email}-avatar.{$avatarExtension}";
+                $avatarPath = $avatarFile->storeAs('uploads/user-avatars', $avatarFileName, 'public');
+                $user->avatar = $avatarPath;
+            }
+
+            if ($request->hasFile('front_page_id')) {
+                $frontIdFile = $request->file('front_page_id');
+                $frontIdExtension = $frontIdFile->getClientOriginalExtension();
+                $frontIdFileName = "{$email}-front-id.{$frontIdExtension}";
+                $frontIdPath = $frontIdFile->storeAs('uploads/front-page-ids', $frontIdFileName, 'public');
+                $driver->national_id_front_avatar = $frontIdPath;
+            }
+
+            if ($request->hasFile('back_page_id')) {
+                $backIdFile = $request->file('back_page_id');
+                $backIdExtension = $backIdFile->getClientOriginalExtension();
+                $backIdFileName = "{$email}-back-id.{$backIdExtension}";
+                $backIdPath = $backIdFile->storeAs('uploads/back-page-ids', $backIdFileName, 'public');
+                $driver->national_id_behind_avatar = $backIdPath;
+            }
+
+            $driver->save();
+            $user->save();
+
+            DB::commit();
+
+            return redirect()->route('driver')->with('success', 'Customer updated successfully');
+
         } catch (Exception $e) {
-            Log::error('UPDATE DRIVER ERROR: ' . $e->getMessage());
-            return response()->json([
-                'message' => 'An error occurred',
-                'error' => $e->getMessage()
-            ], 500);
+            DB::rollBack();
+            Log::error('UPDATE DRIVER ERROR');
+            Log::error($e);
+            return redirect()->back()->with('error', 'An error occurred');
         }
     }
 
