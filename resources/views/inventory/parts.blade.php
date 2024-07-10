@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'I List')
+@section('title', 'Inventory Parts List')
 @section('content')
 
     <body class="fixed sidebar-mini">

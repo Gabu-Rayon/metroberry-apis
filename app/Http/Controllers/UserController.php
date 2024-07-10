@@ -4,14 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class UserLoginController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('auth.login');
+        return view('user');
     }
 
     /**
@@ -19,7 +19,7 @@ class UserLoginController extends Controller
      */
     public function create()
     {
-        //
+        return view('user.create');
     }
     /**
      * Store a newly created resource in storage.
