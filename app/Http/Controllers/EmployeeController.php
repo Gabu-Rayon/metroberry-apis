@@ -36,7 +36,8 @@ class EmployeeController extends Controller
         // }
 
         $customers = Customer::with('user')->get();
-        return view('employee', compact('customers'));
+        $organisations = Organisation::with('user')->get();
+        return view('employee.index', compact('customers', 'organisations'));
     }
 
 
