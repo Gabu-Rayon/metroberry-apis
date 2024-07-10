@@ -30,9 +30,9 @@
                                                     <div class="accordion-header d-flex justify-content-end"
                                                         id="flush-headingOne">
                                                         <a class="btn btn-success btn-sm" href="javascript:void(0);"
-                                                            onclick="axiosModal('admin/refueling/create')">
+                                                            onclick="axiosModal('/refueling/create')">
                                                             <i class="fa fa-plus"></i>&nbsp;
-                                                            Add refuel
+                                                            Add New refuel
                                                         </a>
                                                     </div>
                                                 </div>

@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Expense Report List')
+@section('title', 'Vehicle Report List')
 @section('content')
 
     <body class="fixed sidebar-mini">
 
-       @include('components.preloader')
+        @include('components.preloader')
         <!-- react page -->
         <div id="app">
             <!-- Begin page -->
@@ -23,7 +23,7 @@
                                     <div class="card-header">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div>
-                                                <h6 class="fs-17 fw-semi-bold mb-0">Expense report</h6>
+                                                <h6 class="fs-17 fw-semi-bold mb-0">Vehicle report</h6>
                                             </div>
                                             <div class="text-end">
                                                 <div class="actions">
@@ -53,6 +53,96 @@
 
                                                                 <div class="col-sm-12 col-xl-4">
                                                                     <div class="form-group row mb-1">
+                                                                        <label for="department"
+                                                                            class="col-sm-5 col-form-label justify-content-start text-left">Department
+                                                                        </label>
+                                                                        <div class="col-sm-7">
+                                                                            <select class="form-control basic-single"
+                                                                                name="department_id" id="department"
+                                                                                tabindex="-1" aria-hidden="true">
+                                                                                <option value="">Please select one
+                                                                                </option>
+                                                                                <option value="1">IT</option>
+                                                                                <option value="2">HR</option>
+                                                                                <option value="3">Finance</option>
+                                                                                <option value="4">Marketing</option>
+                                                                                <option value="5">Sales</option>
+                                                                                <option value="6">Production</option>
+                                                                                <option value="7">Quality Control
+                                                                                </option>
+                                                                                <option value="8">Research and
+                                                                                    Development</option>
+                                                                                <option value="9">Customer Service
+                                                                                </option>
+                                                                                <option value="10">Logistics</option>
+                                                                                <option value="11">Warehouse</option>
+                                                                                <option value="12">Maintenance</option>
+                                                                                <option value="13">Security</option>
+                                                                                <option value="14">Administration
+                                                                                </option>
+                                                                                <option value="15">Legal</option>
+                                                                                <option value="16">Purchasing</option>
+                                                                                <option value="17">Accounting</option>
+                                                                                <option value="18">Engineering</option>
+                                                                                <option value="19">Management</option>
+                                                                                <option value="20">Others</option>
+                                                                                <option value="21">TRANSPORT</option>
+                                                                                <option value="22">Abc</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row mb-1">
+                                                                        <label for="vehicle_type"
+                                                                            class="col-sm-5 col-form-label justify-content-start text-left">Vehicle
+                                                                            type </label>
+                                                                        <div class="col-sm-7">
+                                                                            <select class="form-control basic-single"
+                                                                                name="vehicle_type_id" id="vehicle_type"
+                                                                                tabindex="-1" aria-hidden="true">
+                                                                                <option value="">Please select one
+                                                                                </option>
+                                                                                <option value="1">Saloon Car</option>
+                                                                                <option value="2">Pick Up</option>
+                                                                                <option value="3">Van</option>
+                                                                                <option value="4">Bus</option>
+                                                                                <option value="5">Truck</option>
+                                                                                <option value="6">Motorcycle</option>
+                                                                                <option value="7">Bicycle</option>
+                                                                                <option value="8">Others</option>
+                                                                                <option value="9">qwertyu</option>
+                                                                                <option value="10">TATA SCHOOL BUS 0017
+                                                                                </option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-sm-12 col-xl-4">
+                                                                    <div class="form-group row mb-1">
+                                                                        <label for="ownership"
+                                                                            class="col-sm-5 col-form-label justify-content-start text-left">Ownership
+                                                                        </label>
+                                                                        <div class="col-sm-7">
+                                                                            <select class="form-control basic-single"
+                                                                                name="ownership_id" id="ownership"
+                                                                                tabindex="-1" aria-hidden="true">
+                                                                                <option value="">Please select one
+                                                                                </option>
+                                                                                <option value="1">Rented Own</option>
+                                                                                <option value="3">Leased</option>
+                                                                                <option value="4">Bank Financed
+                                                                                </option>
+                                                                                <option value="5">Third Party Financed
+                                                                                </option>
+                                                                                <option value="6">Own</option>
+                                                                                <option value="7">Others</option>
+                                                                                <option value="8">Laii</option>
+                                                                                <option value="9">Quamar Browning
+                                                                                </option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row mb-1">
                                                                         <label for="vendor"
                                                                             class="col-sm-5 col-form-label justify-content-start text-left">Vendor
                                                                         </label>
@@ -78,23 +168,14 @@
                                                                             </select>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="form-group row mb-1">
-                                                                        <label for="code"
-                                                                            class="col-sm-5 col-form-label justify-content-start text-left">Invoice
-                                                                        </label>
-                                                                        <div class="col-sm-7">
-                                                                            <input type="text" class="form-control"
-                                                                                name="code" id="code"
-                                                                                placeholder="Invoice">
-                                                                        </div>
-                                                                    </div>
                                                                 </div>
+
                                                                 <div class="col-sm-12 col-xl-4">
                                                                     <div class="row">
                                                                         <div class="col-sm-12 col-xl-12">
                                                                             <div class="form-group row mb-1">
                                                                                 <label for="date_from"
-                                                                                    class="col-sm-5 col-form-label justify-content-start text-left">Date
+                                                                                    class="col-sm-5 col-form-label justify-content-start text-left">Registration
                                                                                     from </label>
                                                                                 <div class="col-sm-7">
                                                                                     <input name="date_from"
@@ -108,7 +189,7 @@
                                                                         <div class="col-sm-12 col-xl-12">
                                                                             <div class="form-group row mb-1">
                                                                                 <label for="d_to"
-                                                                                    class="col-sm-5 col-form-label justify-content-start text-left">Date
+                                                                                    class="col-sm-5 col-form-label justify-content-start text-left">Registration
                                                                                     to </label>
                                                                                 <div class="col-sm-7">
                                                                                     <input name="date_to"
@@ -138,25 +219,23 @@
 
                                         <div>
                                             <div class="table-responsive">
-                                                <table class="table" id="expense-table">
+                                                <table class="table" id="driver-table">
                                                     <thead>
                                                         <tr>
                                                             <th title="Sl" width="30">Sl</th>
-                                                            <th title="Vehicle">Vehicle</th>
+                                                            <th title="Name">Name</th>
+                                                            <th title="Vehicle type">Vehicle type</th>
+                                                            <th title="Department">Department</th>
+                                                            <th title="Registration date">Registration date</th>
+                                                            <th title="Ownership">Ownership</th>
                                                             <th title="Vendor">Vendor</th>
-                                                            <th title="Date">Date</th>
-                                                            <th title="Trip number">Trip number</th>
-                                                            <th title="Odometer milage">Odometer milage</th>
-                                                            <th title="Invoice">Invoice</th>
-                                                            <th title="Total">Total</th>
-                                                            <th title="Status">Status</th>
                                                         </tr>
                                                     </thead>
                                                 </table>
                                             </div>
 
 
-                                            <div id="page-axios-data" data-table-id="#expense-table"></div>
+                                            <div id="page-axios-data" data-table-id="#driver-table"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -164,7 +243,7 @@
                         </div>
                     </div>
                     <div class="overlay"></div>
-                               @include('components.footer')
+                              @include('components.footer')
                 </div>
             </div>
             <!--end  vue page -->
