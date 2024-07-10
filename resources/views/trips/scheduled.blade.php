@@ -224,7 +224,7 @@
 
                                         <div>
                                             <div class="table-responsive">
-                                                 <table class="table" id="driver-table">
+                                                <table class="table" id="driver-table">
                                                     <thead>
                                                         <tr>
                                                             <th title="Sl" width="30">Sl</th>
@@ -238,11 +238,6 @@
                                                             <th title="Action" width="150">Action</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td></td>
-                                                        </tr>
-                                                    </tbody>
                                                 </table>
                                             </div>
 
