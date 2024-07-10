@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Refueling List')
+@section('title', 'Vehicle List')
 @section('content')
 
     <body class="fixed sidebar-mini">
@@ -11,7 +11,7 @@
             <!-- Begin page -->
             <div class="wrapper">
                 <!-- start header -->
-                 @include('components.sidebar.sidebar')
+                @include('components.sidebar.sidebar')
                 <!-- end header -->
                 <div class="content-wrapper">
                     <div class="main-content">
@@ -227,16 +227,65 @@
                                                 <table class="table" id="driver-table">
                                                     <thead>
                                                         <tr>
-                                                            <th title="Sl" width="30">Sl</th>
-                                                            <th title="Name">Name</th>
-                                                            <th title="Vehicle type">Vehicle type</th>
-                                                            <th title="Department">Department</th>
-                                                            <th title="Registration date">Registration date</th>
-                                                            <th title="Ownership">Ownership</th>
-                                                            <th title="Vendor">Vendor</th>
+                                                            <th title="Sl" width="30">SrNo</th>
+                                                            <th title="Seats">Model</th>
+                                                            <th title="Plate Number">Year</th>
+                                                            <th title="Insurance Issue Date">NumberPlate</th>
+                                                            <th title="Insurance Expriry Date">Seats</th>
+                                                            <th title="Insurance Issue Organisation">FuelType
+                                                            </th>
+                                                            <th title="Insurance Issue Organisation">EngineCC
+                                                            </th>
+                                                            <th title="Avatar">Avatar</th>
+                                                            <th title="Driver">Driver</th>
                                                             <th title="Action" width="150">Action</th>
                                                         </tr>
                                                     </thead>
+                                                    <tbody>
+                                                        @foreach ($vehicles as $vehicle)
+                                                            <tr>
+                                                                <td>{{ $vehicle->id }}</td>
+                                                                <td>{{ $vehicle->model }}</td>
+                                                                <td>{{ $vehicle->year }}</td>
+                                                                <td>{{ $vehicle->plate_number }}</td>
+                                                                <td>{{ $vehicle->seats }}</td>
+                                                                <td>{{ $vehicle->fuel_type }}
+                                                                </td>
+                                                                <td>{{ $vehicle->engine_size }}<i>cc
+                                                                    </i></td>
+                                                                <td>
+                                                                    @if ($vehicle->avatar)
+                                                                        <img src="{{ asset('images/' . $vehicle->avatar) }}"
+                                                                            alt="Avatar" width="50" height="50">
+                                                                    @endif
+                                                                </td>
+                                                                <td>
+                                                                @if ($vehicle->driver && $vehicle->driver->user)
+                                                                    {{ $vehicle->driver->user->name }}
+                                                                @else
+                                                                    <a href="javascript:void(0);"
+                                                                        class="btn btn-sm btn-primary"
+                                                                        onclick="axiosModal('/vehicle/{{ $vehicle->id }}/assign/driver')">
+                                                                        Assign Driver
+                                                                    </a>
+                                                                @endif
+                                                            </td>
+                                                                <td class="d-flex">
+                                                                    <a href="javascript:void(0);"
+                                                                        class="btn btn-sm btn-primary"
+                                                                        onclick="axiosModal('/vehicle/{{ $vehicle->id }}/edit')">
+                                                                        <i class="fas fa-edit"></i>
+                                                                    </a>
+                                                                    <span class='m-1'></span>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="btn btn-sm btn-danger"
+                                                                        onclick="deleteVehicle({{ $vehicle->id }})">
+                                                                        <i class="fas fa-trash"></i>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
                                                 </table>
                                             </div>
 

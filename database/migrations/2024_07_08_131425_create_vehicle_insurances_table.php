@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('vehicle_insurances', function (Blueprint $table) {
+          Schema::create('vehicle_insurances', function (Blueprint $table) {
             $table->id();
             $table->string('insurance_avatar')->nullable();
             $table->unsignedBigInteger('vehicle_id');
@@ -19,6 +19,14 @@ return new class extends Migration
             $table->string('insurance_policy_no');
             $table->date('insurance_date_of_issue');
             $table->date('insurance_date_of_expiry');
+            $table->integer('charges_payable');
+            $table->date('recurring_period');
+            $table->date('recurring_date');
+            $table->boolean('reminder');
+            $table->integer('deductible');
+            $table->boolean('status');
+            $table->string('remark')->nullable();
+            $table->string('policy_document');
 
             $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
             $table->timestamps();

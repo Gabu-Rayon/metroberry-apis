@@ -17,6 +17,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\OrganisationController;
 use App\Http\Controllers\VehicleServiceController;
 use App\Http\Controllers\DriversLicensesController;
+use App\Http\Controllers\InsuranceCompanyController;
 use App\Http\Controllers\VehicleInsuranceController;
 use App\Http\Controllers\VehicleRefuelingController;
 
@@ -122,21 +123,22 @@ Route::get('trips/billed', [TripController::class, 'tripBilled'])->name('trip.bi
  * 
  */
 
-Route::get('vehicle', [VehicleController::class, 'index'])->name('vehicle');
+Route::get('/vehicle', [VehicleController::class, 'index'])->name('vehicle');
 
-Route::get('vehicle/create', [VehicleController::class, 'create'])->name('vehicle.create');
-Route::get('vehicle/insurance', [VehicleController::class, 'vehicleInsurance'])->name('vehicle.insurance.index');
+Route::get('/vehicle/create', [VehicleController::class, 'create'])->name('vehicle.create');
+Route::post('/vehicle/store', [VehicleController::class, 'store'])->name('vehicle.store.new');
+Route::get('/vehicle/insurance', [VehicleController::class, 'vehicleInsurance'])->name('vehicle.insurance.index');
 
-Route::get('vehicle/{id}/edit', [VehicleController::class, 'edit'])->name('vehicle.edit');
-Route::get('vehicle/{id}/delete', [VehicleController::class, 'destroy'])->name('vehicle.destroy');
-/****
- * 
- * Vehicle Insurance
- * 
- */
-// vehicle/insurance/create
-Route::get('vehicle/insurance/company', [VehicleInsuranceController::class, 'create'])->name('insurance.company');
-Route::get('create', [VehicleInsuranceController::class, 'create'])->name('insurance.recurring.period');
+Route::get('/vehicle/{id}/edit', [VehicleController::class, 'edit'])->name('vehicle.edit');
+Route::put('/vehicle/{id}', [VehicleController::class, 'update'])->name('vehicle.update');
+
+// vehicle/{{ $vehicle->id }}/assign/driver
+Route::get('/vehicle/{id}/assign/driver', [VehicleController::class, 'assignDriverForm'])->name('vehicle.assign.driver.form');
+Route::put('/vehicle/{id}/assign/driver', [VehicleController::class,'assignDriver'])->name('vehicle.assign.driver');
+
+
+
+Route::get('/vehicle/{id}/delete', [VehicleController::class, 'destroy'])->name('vehicle.destroy');
 
 /***
  * Vehicle Maintaince OR servincing
@@ -222,3 +224,25 @@ Route::get('/admin/setting', [SettingsController::class, 'index'])->name('settin
 Route::get('/admin/permission', [PermissionController::class, 'index'])->name('permission.index');
 Route::get('/admin/role', [RoleController::class, 'index'])->name('permission.role');
 Route::get('/admin/role/create', [RoleController::class, 'create'])->name('permission.role.create');
+/**
+ * 
+ * Insurance companies
+ * 
+ */
+Route::get('/vehicle/insurance/company', [InsuranceCompanyController::class, 'index'])->name('vehicle.insurance.company');
+Route::get('/vehicle/insurance/company/create', [InsuranceCompanyController::class, 'create'])->name('vehicle.insurance.company.create');
+
+// Route to store a new insurance company in the database
+Route::post('/vehicle/insurance/company/store', [InsuranceCompanyController::class, 'store'])->name('vehicle.insurance.company.store');
+
+// Route to display a specific insurance company (optional)
+Route::get('/vehicle/insurance/company/{id}', [InsuranceCompanyController::class, 'show'])->name('vehicle.insurance.company.show');
+
+// Route to show the form to edit an existing insurance company (optional)
+ Route::get('/vehicle/insurance/company/{id}/edit', [InsuranceCompanyController::class, 'edit'])->name('vehicle.insurance.company.edit');
+
+// Route to update an existing insurance company in the database (optional)
+Route::put('/vehicle/insurance/company/{id}', [InsuranceCompanyController::class, 'update'])->name('vehicle.insurance.company.update');
+
+// Route to delete an existing insurance company from the database (optional)
+Route::delete('/vehicle/insurance/company/{id}', [InsuranceCompanyController::class, 'destroy'])->name('vehicle.insurance.company.destroy');

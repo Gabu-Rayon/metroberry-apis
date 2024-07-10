@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Driver Company Insurance List')
+@section('title', 'Insurance Company List')
 @section('content')
 
     <body class="fixed sidebar-mini">
@@ -9,7 +9,9 @@
         <!-- react page -->
         <div id="app">
             <!-- Begin page -->
-             @include('components.sidebar.sidebar')
+            <div class="wrapper">
+                <!-- start header -->
+                @include('components.sidebar.sidebar')
                 <!-- end header -->
                 <div class="content-wrapper">
                     <div class="main-content">
@@ -21,14 +23,14 @@
                                     <div class="card-header">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div>
-                                                <h6 class="fs-17 fw-semi-bold mb-0">Vehicle insurance company lists</h6>
+                                                <h6 class="fs-17 fw-semi-bold mb-0">Insurance Company List</h6>
                                             </div>
                                             <div class="text-end">
                                                 <div class="actions">
                                                     <a class="btn btn-success" href="javascript:void(0);"
-                                                        onclick="axiosModal('admin/vehicle/insurance/company/create')">
+                                                        onclick="axiosModal('/vehicle/insurance/company/create')">
                                                         <i class="fa fa-plus"></i>&nbsp;
-                                                        Create
+                                                        create
                                                     </a>
                                                 </div>
                                             </div>
@@ -40,15 +42,38 @@
                                                 <table class="table" id="driver-table">
                                                     <thead>
                                                         <tr>
-                                                            <th title="Sl" width="30">Sl</th>
-                                                            <th title="Name">Name</th>
-                                                            <th title="Description">Description</th>
-                                                            <th title="Status">Status</th>
-                                                            <th title="Created">Created</th>
-                                                            <th title="Updated">Updated</th>
-                                                            <th title="Action" width="80">Action</th>
+                                                            <th width="30">Sl</th>
+                                                            <th>Name</th>
+                                                            <th>Address</th>
+                                                            <th>Email</th>
+                                                            <th>Website</th>
+                                                            <th width="80">Action</th>
                                                         </tr>
                                                     </thead>
+                                                    <tbody>
+                                                        @foreach ($insuranceCompanies as $key => $company)
+                                                            <tr>
+                                                                <td>{{ $key + 1 }}</td>
+                                                                <td>{{ $company->name }}</td>
+                                                                <td>{{ $company->address }}</td>
+                                                                <td>{{ $company->email }}</td>
+                                                                <td>{{ $company->website }}</td>
+                                                                <td class="d-flex">
+                                                                    <a href="javascript:void(0);"
+                                                                        class="btn btn-sm btn-primary"
+                                                                        onclick="axiosModal('/vehicle/insurance/company/{{ $company->id }}/edit')">
+                                                                        <i class="fas fa-edit"></i>
+                                                                    </a>
+                                                                    <span class='m-1'></span>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="btn btn-sm btn-danger"
+                                                                        onclick="deleteVehicle({{ $company->id }})">
+                                                                        <i class="fas fa-trash"></i>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
                                                 </table>
                                             </div>
 
@@ -61,7 +86,7 @@
                         </div>
                     </div>
                     <div class="overlay"></div>
-                   @include('components.footer')
+                    @include('components.footer')
                 </div>
             </div>
             <!--end  vue page -->

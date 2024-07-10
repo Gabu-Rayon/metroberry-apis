@@ -67,9 +67,9 @@
                                     </svg>
                             ',
             'subitems' => [
-                ['label' => 'Manage Insurance', 'route' => route('vehicle.insurance.index')],
-                ['label' => 'Manage Insurance Company', 'route' => route('insurance.company')],
-                ['label' => 'Insurance Recurring Period', 'route' => route('insurance.recurring.period')],
+                ['label' => 'Manage Insurance', 'route' => route('vehicle.insurance.company')],
+                ['label' => 'Manage Insurance Company', 'route' => route('vehicle.insurance.company')],
+                
             ],
         ])
         @include('components.sidebar.sidebar-dropdown', [
