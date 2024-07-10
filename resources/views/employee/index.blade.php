@@ -18,7 +18,7 @@
                                     <div class="card-header">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div>
-                                                <h6 class="fs-17 fw-semi-bold mb-0">Employee list</h6>
+                                                <h6 class="fs-17 fw-semi-bold mb-0">Employees</h6>
                                             </div>
                                             <div class="text-end">
                                                 <div class="actions">
@@ -27,7 +27,6 @@
                                                             <i class="fa fa-plus"></i>&nbsp;
                                                             Add employee
                                                         </a>
-                                                        
                                                         <button type="button" class="btn btn-success btn-sm mx-2" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="true" aria-controls="flush-collapseOne">
                                                             <i class="fas fa-filter"></i>
                                                             Filter
