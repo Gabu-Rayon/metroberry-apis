@@ -243,22 +243,35 @@ class DriverController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Driver $driver)
+    public function destroy($id)
     {
         try {
-            $driver->user->delete();
-            $driver->delete();
 
-            return response()->json([
-                'message' => 'Driver deleted successfully'
-            ], 200);
+            $driver = Driver::find($id);
+
+            if (!$driver) {
+                return redirect()->back()->with('error', 'Driver not found');
+            }
+
+            $user = User::find($driver->user_id);
+
+            if (!$user) {
+                return redirect()->back()->with('error', 'User not found');
+            }
+
+            DB::beginTransaction();
+
+            $driver->delete();
+            $user->delete();
+
+            DB::commit();
+
+            return redirect()->route('driver')->with('success', 'Driver deleted successfully');
         } catch (Exception $e) {
+            DB::rollBack();
             Log::error('DELETE DRIVER ERROR');
             Log::error($e);
-            return response()->json([
-                'message' => 'An error occurred',
-                'error' => $e->getMessage()
-            ], 500);
+            return redirect()->back()->with('error', 'An error occurred');
         }
     }
 
