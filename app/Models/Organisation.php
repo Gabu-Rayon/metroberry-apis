@@ -14,6 +14,9 @@ class Organisation extends Model
     
     protected $fillable = [
         'user_id',
+        'certificate_of_organisation',
+        'billing_cycle',
+        'terms_and_conditions',
         'created_by',
         'organisation_code'
     ];

@@ -58,6 +58,7 @@ Route::post('employee/{id}/delete', [EmployeeController::class, 'destroy'])->nam
 // organisation organisation/create
 Route::get('organisation/create', [OrganisationController::class, 'create'])->name('organisation.create');
 Route::get('organisation', [OrganisationController::class, 'index'])->name('organisation');
+Route::post('organisation', [OrganisationController::class, 'store'])->name('organisation');
 
 Route::get('organisation/{id}/edit', [OrganisationController::class, 'edit'])->name('organisation.edit');
 Route::get('organisation/{id}/delete', [OrganisationController::class, 'destroy'])->name('organisation.destroy');

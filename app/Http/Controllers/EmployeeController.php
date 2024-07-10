@@ -113,7 +113,10 @@ class EmployeeController extends Controller
                 'address' => $data['address'],
                 'avatar' => $avatarPath,
                 'created_by' => 1,
+                'role' => 'customer',
             ]);
+
+            $user->assignRole('customer');
 
             Customer::create([
                 'created_by' => 1,

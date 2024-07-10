@@ -8,6 +8,7 @@ use App\Models\Organisation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class OrganisationController extends Controller
@@ -62,49 +63,71 @@ class OrganisationController extends Controller
     public function store(Request $request)
     {
         try {
-            // Validate the incoming request data
-            $data = $request->validate([
+
+            $data = $request->all();
+
+            $validator = Validator::make($data, [
                 'name' => 'required|string',
-                'email' => 'required|email|unique:users,email',
                 'phone' => 'required|string',
-                'password' => 'required|string',
+                'email' => 'required|email|unique:users',
+                'address' => 'required|string',
+                'logo' => 'required|file|mimes:jpeg,jpg,png,gif,webp|max:2048',
+                'organisation_certificate' => 'required|file|mimes:pdf|max:2048',
+                'organisation_code' => 'required|string|unique:organisations',
+                'password' => 'required|string|min:6',
             ]);
 
-            // Log the user creating the organisation
-            $adminUser = User::where('id', auth()->user()->id)->first();
-            Log::info('User with role of Admin Creating the Organisation');
-            Log::info($adminUser);
+            if ($validator->fails()) {
+                return redirect()->back()->with('error', $validator->errors()->first());
+            }
 
-            // Create a new user
+            DB::beginTransaction();
+
+            $logoPath = null;
+            $email = $data['email'];
+
+            if ($request->hasFile('logo')) {
+                $logoFile = $request->file('logo');
+                $logoExtension = $logoFile->getClientOriginalExtension();
+                $logoFileName = "{$email}-avatar.{$logoExtension}";
+                $logoPath = $logoFile->storeAs('uploads/company-logos', $logoFileName, 'public');
+            }
+
+            if ($request->hasFile('organisation_certificate')) {
+                $certificateFile = $request->file('organisation_certificate');
+                $certificateExtension = $certificateFile->getClientOriginalExtension();
+                $certificateFileName = "{$email}-certificate.{$certificateExtension}";
+                $certificatePath = $certificateFile->storeAs('uploads/organisation-certificates', $certificateFileName, 'public');
+            }
+
             $user = User::create([
                 'name' => $data['name'],
                 'email' => $data['email'],
                 'phone' => $data['phone'],
                 'password' => bcrypt($data['password']),
+                'address' => $data['address'],
+                'role' => 'organisation',
+                'avatar' => $logoPath,
+                'created_by' => 1
             ]);
 
-            // Create a new organisation
-            $organisation = Organisation::create([
-                // user_id is the id of organisation in the users table
+            Organisation::create([
                 'user_id' => $user->id,
-                // created_by is the id of user with role of admin in the users table
-                'created_by' => Auth::id(),
+                'certificate_of_organisation' => $certificatePath,
+                'billing_cycle' => null,
+                'terms_and_conditions' => null,
+                'created_by' => 1,
+                'organisation_code' => $data['organisation_code']
             ]);
 
-            // Save the organisation
-            $organisation->save();
+            DB::commit();
 
-            return response()->json([
-                'message' => 'Organisation created successfully',
-                'organisation' => $organisation
-            ], 201);
+            return redirect()->route('organisation')->with('success', 'Organisation created successfully');
         } catch (Exception $e) {
+            DB::rollBack();
             Log::error('Error Creating Organisation');
             Log::error($e);
-            return response()->json([
-                'message' => 'An error occurred while creating organisation',
-                'error' => $e->getMessage()
-            ], 500);
+            return redirect()->back()->with('error', 'An error occurred while creating organisation');
         }
     }
 
