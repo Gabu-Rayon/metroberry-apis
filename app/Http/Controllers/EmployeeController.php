@@ -47,6 +47,9 @@ class EmployeeController extends Controller
     public function store(Request $request){
         try {
             $data = $request->all();
+
+            Log::info('DATA');
+            Log::info($data);
             
             $validator = Validator::make($data, [
                 'name' => 'required|string',
@@ -66,9 +69,6 @@ class EmployeeController extends Controller
                 Log::info($validator->errors());
                 return redirect()->back()->with('error', $validator->errors()->first())->withInput();
             }
-
-            Log::info('DATA');
-            Log::info($data);
 
             DB::beginTransaction();
 
@@ -253,7 +253,8 @@ class EmployeeController extends Controller
     public function edit(Request $request, $id)
     {
         $customer = Customer::findOrFail($id);
-        return view('employee.edit', compact('customer'));
+        $organisations = Organisation::with('user')->get();
+        return view('employee.edit', compact('customer', 'organisations'));
     }
 
     public function update(Request $request, $id)
