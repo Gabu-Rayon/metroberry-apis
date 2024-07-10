@@ -223,7 +223,7 @@
 
                                         <div>
                                             <div class="table-responsive">
-                                                <table class="table" id="employee-table">
+                                                <table class="table" id="driver-table">
                                                     <thead>
                                                         <tr>
                                                             <th title="Name">License No</th>
@@ -231,7 +231,8 @@
                                                             <th title="Type">Expiry Date</th>
                                                             <th title="Nid">Driver</th>
                                                             <th title="Department">Status</th>
-                                                             <th title="Action" width="80">Action</th>                                                        </tr>
+                                                            <th title="Action" width="80">Action</th>
+                                                        </tr>
                                                     </thead>
 
                                                     <tbody>
@@ -240,17 +241,22 @@
                                                                 <td>{{ $license->driving_license_no }}</td>
                                                                 <td>{{ $license->driving_license_date_of_issue }}</td>
                                                                 <td>{{ $license->driving_license_date_of_expiry }}</td>
-                                                                <td>{{ $license->driver ? $license->driver->user->name : '-'  }}</td>
+                                                                <td>{{ $license->driver ? $license->driver->user->name : '-' }}
+                                                                </td>
                                                                 <td>{{ $license->status }}</td>
                                                                 <td class="d-flex">
-  <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="axiosModal('employee/{{ $driver->id }}/edit')">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <span class='m-1'></span>
-                        <a href="javascript:void(0);" class="btn btn-sm btn-danger" onclick="deleteCustomer({{ $driver->id }})">
-                            <i class="fas fa-trash"></i>
-                        </a>
-                    </td>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="btn btn-sm btn-primary"
+                                                                        onclick="axiosModal('employee/{{ $license->id }}/edit')">
+                                                                        <i class="fas fa-edit"></i>
+                                                                    </a>
+                                                                    <span class='m-1'></span>
+                                                                    <a href="javascript:void(0);"
+                                                                        class="btn btn-sm btn-danger"
+                                                                        onclick="deleteCustomer({{ $license->id }})">
+                                                                        <i class="fas fa-trash"></i>
+                                                                    </a>
+                                                                </td>
                                                             </tr>
                                                         @endforeach
                                                     </tbody>
