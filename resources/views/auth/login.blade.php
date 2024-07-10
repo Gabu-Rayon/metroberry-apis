@@ -63,9 +63,10 @@
                 </div>
             </div>
             <div class="col-lg-6 login-bg d-none d-lg-block overflow-hidden text-end py-2"
-                style="background-image: url({{ asset('admin-assets/img/login-bg.png?v=1') }})">
-                <img class="brand_logo" src=" {{ asset('') }}" alt="" />
-            </div>
+     style="background-image: url('{{ asset('admin-assets/img/login-bg.png?v=1') }}')">
+    <img class="#" height="50" width="150" src="{{ asset('admin-assets/img/sidebar-logo.png?v=1') }}" alt="Brand Logo" />
+</div>
+
         </div>
     </div>
 @endsection
