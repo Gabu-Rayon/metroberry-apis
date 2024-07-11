@@ -11,9 +11,9 @@ class RouteLocations extends Model
 
     protected $fillable = [
         'route_id',
+        'name',
         'is_start_location',
         'is_end_location',
         'is_waypoint',
-        'name'
     ];
 }

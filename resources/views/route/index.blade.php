@@ -107,8 +107,15 @@
                                                     <td>{{ $route->name }}</td>
                                                     <td>{{ $route->county }}</td>
                                                     <td class="text-center">{{ $route->start_location->name ?? '-' }}</td>
-                                                    <td class="text-center">{{ '-' }}</td>
-                                                    <td class="text-center">{{ $route->end_location ?? '-' }}</td>
+                                                    <td class="text-center">
+                                                        @foreach ($route->waypoints as $key => $waypoint)
+                                                            {{ $waypoint->name }}
+                                                            @if (!$loop->last)
+                                                                -
+                                                            @endif
+                                                        @endforeach
+                                                    </td>                                                    
+                                                    <td class="text-center">{{ $route->end_location->name ?? '-' }}</td>
                                                     <td class="d-flex">
                                                         <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="axiosModal('route/{{ $route->id }}/edit')">
                                                             <i class="fas fa-edit"></i>

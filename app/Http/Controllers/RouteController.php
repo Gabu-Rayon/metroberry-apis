@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RouteLocations;
 use Exception;
 use App\Models\Routes;
 use Illuminate\Http\Request;
@@ -89,9 +90,69 @@ class RouteController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
+    public function update(Request $request, string $id){
+        try {
+            $route = Routes::findOrfail($id);
+            $data = $request->all();
+
+            $validator = Validator::make($data, [
+                'county' => 'required|string',
+                'name' => 'required|string',
+                'start_location' => 'required|string',
+                'end_location' => 'required|string',
+                'locations' => 'nullable|array',
+            ]);
+
+            if ($validator->fails()) {
+                Log::error('VALIDATION ERROR WHILE UPDATING ROUTE');
+                Log::error($validator->errors()->first());
+                return redirect()->back()->with('error', $validator->errors()->first());
+            }
+
+            DB::beginTransaction();
+
+            $route->update([
+                'county' => $data['county'],
+                'name' => $data['name'],
+            ]);
+
+            RouteLocations::create([
+                'route_id' => $route->id,
+                'name' => $data['start_location'],
+                'is_start_location' => true,
+                'is_end_location' => false,
+                'is_waypoint' => false,
+            ]);
+
+            RouteLocations::create([
+                'route_id' => $route->id,
+                'name' => $data['end_location'],
+                'is_start_location' => false,
+                'is_end_location' => true,
+                'is_waypoint' => false,
+            ]);
+
+            if (isset($data['locations'])) {
+                foreach ($data['locations'] as $location) {
+                    RouteLocations::create([
+                        'route_id' => $route->id,
+                        'name' => $location,
+                        'is_start_location' => false,
+                        'is_end_location' => false,
+                        'is_waypoint' => true,
+                    ]);
+                }
+            }
+
+            DB::commit();
+
+            return redirect()->route('route.index')->with('success', 'Route Updated Successfully');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('ERROR FETCHING ROUTE');
+            Log::error($e);
+            return redirect()->back()->with('error', 'Something Went Wrong');
+        }
     }
 
     /**
