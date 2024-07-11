@@ -76,6 +76,9 @@ Route::post('driver', [DriverController::class, 'store'])->name('driver');
 Route::put('driver/{id}/update', [DriverController::class, 'update'])->name('driver.update');
 Route::get('driver/{id}/edit', [DriverController::class, 'edit'])->name('driver.edit');
 Route::post('driver/{id}/delete', [DriverController::class, 'destroy'])->name('driver.destroy');
+Route::get('driver/{id}/activate', [DriverController::class, 'activateForm'])->name('driver.activate');
+Route::put('driver/{id}/activateStore', [DriverController::class, 'activate'])->name('driver.activateStore');
+Route::put('driver/{id}/deactivate', [DriverController::class, 'deactivate'])->name('driver.deactivate');
 
 Route::get('driver/performance', [DriverController::class, 'driverPerformance'])->name('driver.performance.index');
 Route::get('performance/create', [DriverController::class, 'createDriverPerformance'])->name('driver.performance.create');
@@ -87,6 +90,7 @@ Route::get('performance/create', [DriverController::class, 'createDriverPerforma
 
 Route::get('driver/license', [DriversLicensesController::class, 'index'])->name('driver.license.index');
 Route::get('driver/license/create', [DriversLicensesController::class, 'create'])->name('driver.license.create');
+Route::post('driver/license', [DriversLicensesController::class, 'store'])->name('driver.license');
 
 /**
  * Organisation Routes

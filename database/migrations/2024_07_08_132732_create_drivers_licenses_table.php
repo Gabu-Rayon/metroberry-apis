@@ -19,6 +19,7 @@ return new class extends Migration
             $table->date('driving_license_date_of_expiry');
             $table->string('driving_license_avatar_front')->nullable();
             $table->string('driving_license_avatar_back')->nullable();
+            $table->boolean('verified')->default(false);
 
             $table->foreign('driver_id')->references('id')->on('drivers')->onDelete('cascade');
             $table->timestamps();

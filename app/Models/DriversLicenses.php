@@ -15,6 +15,11 @@ class DriversLicenses extends Model
         'driving_license_date_of_issue',
         'driving_license_date_of_expiry',
         'driving_license_avatar_front',
-        'driving_license_avatar_back'
+        'driving_license_avatar_back',
+        'verified',
     ];
+
+    public function driver(){
+        return $this->hasOne(Driver::class);
+    }
 }

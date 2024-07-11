@@ -26,7 +26,9 @@ class Driver extends Model
         return $this->belongsTo(User::class);
     }
 
-   
+    public function driverLicense() {
+        return $this->hasOne(DriversLicenses::class);
+    }
 
     public function vehicle() {
         return $this->hasOne(Vehicle::class);

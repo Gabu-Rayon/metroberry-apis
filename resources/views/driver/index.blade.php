@@ -78,6 +78,7 @@
                                                     <th title="Email">Email</th>
                                                     <th title="Phone">Phone</th>
                                                     <th title="Address">Address</th>
+                                                    <th title="Address">Status</th>
                                                     <th title="Action" width="80">Action</th>
                                                 </tr>
                                             </thead>
@@ -88,19 +89,33 @@
                                                     <td>{{ $driver->user->email }}</td>
                                                     <td>{{ $driver->user->phone }}</td>
                                                     <td>{{ $driver->user->address }}</td>
+                                                    <td>
+                                                        @if ($driver->status == 'active')
+                                                        <span class="badge bg-success">Active</span>
+                                                        @else
+                                                        <span class="badge bg-danger">Inactive</span>
+                                                        @endif
+                                                    </td>
                                                     <td class="d-flex">
-                                                        <a href="javascript:void(0);"
-                                                            class="btn btn-sm btn-primary"
-                                                            onclick="axiosModal('driver/{{ $driver->id }}/edit')">
+                                                        <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="axiosModal('driver/{{ $driver->id }}/edit')" title="Edit Driver">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
                                                         <span class='m-1'></span>
-                                                        <a href="javascript:void(0);"
-                                                            class="btn btn-sm btn-danger"
-                                                            onclick="deleteDriver({{ $driver->id }})">
+                                                        <a href="javascript:void(0);" class="btn btn-sm btn-danger" onclick="deleteDriver({{ $driver->id }})" title="Delete Driver">
                                                             <i class="fas fa-trash"></i>
                                                         </a>
+                                                        <span class='m-1'></span>
+                                                        @if ($driver->status == 'active')
+                                                            <a href="javascript:void(0);" class="btn btn-sm btn-secondary" onclick="deactivateDriver({{ $driver->id }})" title="Deactivate Driver">
+                                                                <i class="fas fa-toggle-off"></i>
+                                                            </a>
+                                                        @else
+                                                            <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="axiosModal('driver/{{ $driver->id }}/activate')" title="Activate Driver">
+                                                                <i class="fas fa-toggle-on"></i>
+                                                            </a>                                                        
+                                                        @endif
                                                     </td>
+                                                    
                                                 </tr>
                                                 @endforeach
                                             </tbody>
@@ -117,7 +132,7 @@
         </div>
     </div>
 
-    <!-- Delete Modal -->
+    {{-- Delete Modal --}}
     <div class="modal fade" id="delete-modal" data-bs-keyboard="false" tabindex="-1" data-bs-backdrop="true"
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -141,23 +156,6 @@
             </div>
         </div>
     </div>
-
-    <!-- JavaScript -->
-    <script>
-        function deleteDriver(driverId) {
-            var form = document.getElementById('delete-modal-form');
-            form.action = '/driver/' + driverId + '/delete';
-
-            var modal = new bootstrap.Modal(document.getElementById('delete-modal'));
-            modal.show();
-        }
-
-        function confirmDelete() {
-            // Submit the delete form
-            var form = document.getElementById('delete-modal-form');
-            form.submit();
-        }
-    </script>
 
 </body>
 

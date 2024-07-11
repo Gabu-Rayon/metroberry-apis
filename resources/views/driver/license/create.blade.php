@@ -1,14 +1,11 @@
-<form action="driver" method="POST" class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
+<form action="license" method="POST" class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
     @csrf
     <div class="card-header my-3 p-2 border-bottom">
-        <h4>Add Driver</h4>
+        <h4>Add License</h4>
     </div>
     <div class="modal-body">
         <div class="row">
             <div class="col-md-12 col-lg-6">
-
-                {{ \Log::info('DRIVERS') }}
-                {{ \Log::info($drivers) }}
 
                 <div class="form-group row my-2">
                     <label for="driver" class="col-sm-5 col-form-label">
@@ -31,55 +28,27 @@
                 </div>
 
                 <div class="form-group row my-2">
-                    <label for="name" class="col-sm-5 col-form-label">
-                        Name
+                    <label for="issue_date" class="col-sm-5 col-form-label">
+                        Issue Date
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="name" class="form-control" type="text" placeholder="Name" id="name" required
-                        />
-                    </div>
-                </div>
-
-                <div class="form-group row my-2">
-                    <label for="phone" class="col-sm-5 col-form-label">
-                        Phone
-                        <i class="text-danger">*</i>
-                    </label>
-                    <div class="col-sm-7">
-                        <input name="phone" class="form-control" type="text" placeholder="Phone" id="phone" required
-                        />
+                        <input name="issue_date" class="form-control" type="date" placeholder="Issue Date" id="issue_date" required />
                     </div>
                 </div>
                 
 
                 <div class="form-group row my-2">
                     <label for="front_page_id" class="col-sm-5 col-form-label">
-                        Front Page ID Picture
+                        Front Page License Picture
                     </label>
                     <div class="col-sm-7">
                         <input
                             name="front_page_id"
                             class="form-control"
                             type="file"
-                            placeholder="Front Page ID Picture"
+                            placeholder="Front Page License Picture"
                             id="front_page_id"
-                            value=""
-                        />
-                    </div>
-                </div>
-
-                <div class="form-group row my-2">
-                    <label for="avatar" class="col-sm-5 col-form-label">
-                        Avatar
-                    </label>
-                    <div class="col-sm-7">
-                        <input
-                            name="avatar"
-                            class="form-control"
-                            type="file"
-                            placeholder="Avatar"
-                            id="avatar"
                             value=""
                         />
                     </div>
@@ -88,92 +57,42 @@
 
             <div class="col-md-12 col-lg-6">
                 <div class="form-group row my-2">
-                    <label for="email" class="col-sm-5 col-form-label">
-                        Email
+                    <label for="license_no" class="col-sm-5 col-form-label">
+                        License No
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input
-                            name="email"
-                            class="form-control"
-                            type="email"
-                            placeholder="Email"
-                            id="email"
-                            value=""
-                            required
+                        <input name="license_no" class="form-control" type="text" placeholder="License No" id="license_no" required
                         />
                     </div>
                 </div>
 
                 <div class="form-group row my-2">
-                    <label for="address" class="col-sm-5 col-form-label">
-                        Address
+                    <label for="expiry_date" class="col-sm-5 col-form-label">
+                        Expiry Date
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input
-                            name="address"
-                            class="form-control"
-                            type="text"
-                            placeholder="Address"
-                            id="address"
-                            value=""
-                            required
-                        />
-                    </div>
-                </div>
-
-                <div class="form-group row my-2">
-                    <label for="national_id" class="col-sm-5 col-form-label">
-                        ID number
-                        <i class="text-danger">*</i>
-                    </label>
-                    <div class="col-sm-7">
-                        <input
-                            name="national_id"
-                            class="form-control"
-                            type="text"
-                            placeholder="National ID number"
-                            id="national_id"
-                            value=""
-                            required
-                        />
+                        <input name="expiry_date" class="form-control" type="date" placeholder="Expiry Date" id="expiry_date" required />
                     </div>
                 </div>
 
                 <div class="form-group row my-2">
                     <label for="back_page_id" class="col-sm-5 col-form-label">
-                        Back Page ID Picture
+                        Back Page License Picture
                     </label>
                     <div class="col-sm-7">
                         <input
                             name="back_page_id"
                             class="form-control"
                             type="file"
-                            placeholder="Back Page ID Picture"
+                            placeholder="Back Page License Picture"
                             id="back_page_id"
                             value=""
                         />
                     </div>
                 </div>
 
-                <div class="form-group row my-2">
-                    <label for="password" class="col-sm-5 col-form-label">
-                        Password
-                        <i class="text-danger">*</i>
-                    </label>
-                    <div class="col-sm-7">
-                        <input
-                            name="password"
-                            class="form-control"
-                            type="password"
-                            placeholder="Password"
-                            id="password"
-                            value=""
-                            required
-                        />
-                    </div>
-            </div>
         </div>
     </div>
     <div class="modal-footer">

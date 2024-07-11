@@ -100,6 +100,16 @@
                                                             onclick="deleteLicense({{ $license->id }})">
                                                             <i class="fas fa-trash"></i>
                                                         </a>
+                                                        <span class='m-1'></span>
+                                                        @if ($license->verified)
+                                                            <a href="javascript:void(0);" class="btn btn-sm btn-secondary" onclick="verifyLicense({{ $license->id }})" title="Verify License">
+                                                                <i class="fas fa-toggle-off"></i>
+                                                            </a>
+                                                        @else
+                                                            <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="revokeLicense({{ $license->id }})" title="Revoke License">
+                                                                <i class="fas fa-toggle-on"></i>
+                                                            </a>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                                 @endforeach

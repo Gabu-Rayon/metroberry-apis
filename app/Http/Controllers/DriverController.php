@@ -22,7 +22,7 @@ class DriverController extends Controller
      */
     public function index()
     {
-        $drivers = Driver::with('user')->get();
+        $drivers = Driver::with('user', 'driverLicense')->get();
         return view('driver.index', compact('drivers'));
     }
     public function store(Request $request)
@@ -174,7 +174,7 @@ class DriverController extends Controller
                 'organisation' => 'required|string',
                 'email' => 'required|email|unique:users,email,' . $user->id,
                 'address' => 'nullable|string',
-                'national_id_no' => 'required|string|unique:drivers,national_id_no,' . $driver->id,
+                'national_id_no' => 'required|string',
                 'front_page_id' => 'nullable|file|mimes:jpg,jpeg,png,webp',
                 'back_page_id' => 'nullable|file|mimes:jpg,jpeg,png,webp',
                 'avatar' => 'nullable|file|mimes:jpg,jpeg,png,webp',
@@ -183,6 +183,12 @@ class DriverController extends Controller
             if ($validator->fails()) {
                 return redirect()->back()->with('error', $validator->errors()->first())->withInput();
             }
+
+            Log::info('UPDATE DRIVER');
+            Log::info($data);
+
+            Log::info('DRIVER');
+            Log::info($driver);
 
             DB::beginTransaction();
 
@@ -226,7 +232,7 @@ class DriverController extends Controller
 
             DB::commit();
 
-            return redirect()->route('driver')->with('success', 'Customer updated successfully');
+            return redirect()->route('driver')->with('success', 'Driver updated successfully');
 
         } catch (Exception $e) {
             DB::rollBack();
@@ -282,4 +288,92 @@ class DriverController extends Controller
      public function createDriverPerformance(){
         return view('driver.performance.create');
      }
+
+    /**
+     * Activate driver
+     */
+
+    public function activateForm ($id) {
+        $driver = Driver::findOrfail($id);
+        return view('driver.activate', compact('driver'));
+    }
+
+    public function activate ($id) {
+        try {
+
+            $driver = Driver::with('driverLicense')->findOrFail($id);
+
+            Log::info('ACTIVATE DRIVER');
+            Log::info($driver);
+
+            Log::info('DRIVER LICENSE');
+            Log::info($driver->driverLicense);
+
+            if ($driver->status == 'active') {
+                return redirect()->back()->with('error', 'Driver is already active');
+            }
+
+            if (!$driver->driverLicense) {
+                return redirect()->back()->with('error', 'Driver does not have a license');
+            }
+
+            if ($driver->driverLicense->driving_license_date_of_expiry < date('Y-m-d')) {
+                return redirect()->back()->with('error', 'Driver license has expired');
+            }
+
+            if (!$driver->driverLicense->driving_license_avatar_front || !$driver->driverLicense->driving_license_avatar_back) {
+                return redirect()->back()->with('error', 'Driver license documents are missing');
+            }
+
+            if ($driver->driverLicense->verified == false) {
+                return redirect()->back()->with('error', 'Driver license has not been verified');
+            }
+
+            DB::beginTransaction();
+
+            $driver->status = 'active';
+
+            $driver->save();
+
+            DB::commit();
+
+            return redirect()->route('driver')->with('success', 'Driver activated successfully');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('ACTIVATE DRIVER ERROR');
+            Log::error($e);
+            return redirect()->back()->with('error', 'An error occurred');
+        }
+    }
+
+    /**
+     * Deactivate driver
+     */
+
+    public function deactivate ($id) {
+        try {
+
+            $driver = Driver::findOrfail($id);
+
+            if ($driver->status == 'inactive') {
+                return redirect()->back()->with('error', 'Driver is already inactive');
+            }
+
+            DB::beginTransaction();
+
+            $driver->status = 'inactive';
+
+            $driver->save();
+
+            DB::commit();
+
+            return redirect()->route('driver')->with('success', 'Driver deactivated successfully');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('DEACTIVATE DRIVER ERROR');
+            Log::error($e);
+            return redirect()->back()->with('error', 'An error occurred');
+        }
+    }
+
 }
