@@ -8,34 +8,28 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
-class AddRouteController extends Controller
+class RouteController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
+    
+    public function index(){
         try {
-            $routes = Routes::where('created_by', Auth::id())->get();
-            return response()->json([
-                'routes' => $routes
-            ], 200);
+            $routes = Routes::all();
+            return view('route.index', compact('routes'));
         } catch (Exception $e) {
-            Log::error('ERROR FETCHING All the ROUTES');
+            Log::error('ERROR FETCHING ROUTES');
             Log::error($e);
-            return response()->json([
-                'message' => 'Error occurred while fetching routes',
-                'error' => $e->getMessage()
-            ], 500);
+            return redirect()->back()->with('error', 'Something Went Wrong');
         }
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Request $request)
-    {
-        
+    public function create(){
+        return view('route.create');
     }
 
     /**

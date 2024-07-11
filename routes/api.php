@@ -6,7 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\VehicleController;
-use App\Http\Controllers\AddRouteController;
+use App\Http\Controllers\RouteController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\TripInvoiceController;
 use App\Http\Controllers\OrganisationController;
@@ -48,11 +48,11 @@ Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
-Route::get('routes', [AddRouteController::class, 'index'])->middleware(['auth:sanctum', 'can:view routes']);
-Route::post('routes', [AddRouteController::class, 'store'])->middleware(['auth:sanctum', 'can:create route']);
-Route::put('routes/{route}', [AddRouteController::class, 'update'])->middleware(['auth:sanctum', 'can:edit route']);
-Route::delete('routes/{route}', [AddRouteController::class, 'destroy'])->middleware(['auth:sanctum', 'can:delete route']);
-Route::get('routes/{route}', [AddRouteController::class, 'show'])->middleware(['auth:sanctum', 'can:show route']);
+Route::get('routes', [RouteController::class, 'index'])->middleware(['auth:sanctum', 'can:view routes']);
+Route::post('routes', [RouteController::class, 'store'])->middleware(['auth:sanctum', 'can:create route']);
+Route::put('routes/{route}', [RouteController::class, 'update'])->middleware(['auth:sanctum', 'can:edit route']);
+Route::delete('routes/{route}', [RouteController::class, 'destroy'])->middleware(['auth:sanctum', 'can:delete route']);
+Route::get('routes/{route}', [RouteController::class, 'show'])->middleware(['auth:sanctum', 'can:show route']);
 
 Route::get('vehicles', [VehicleController::class, 'index'])->middleware(['auth:sanctum', 'can:view vehicles']);
 Route::get('vehicles/{vehicle}', [VehicleController::class, 'show'])->middleware(['auth:sanctum', 'can:show vehicle']);

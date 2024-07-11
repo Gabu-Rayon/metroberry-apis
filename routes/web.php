@@ -7,7 +7,6 @@ use App\Http\Controllers\DriverController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VehicleController;
-use App\Http\Controllers\AddRouteController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SettingsController;
@@ -18,6 +17,8 @@ use App\Http\Controllers\OrganisationController;
 use App\Http\Controllers\VehicleServiceController;
 use App\Http\Controllers\DriversLicensesController;
 use App\Http\Controllers\PSVBadgeController;
+use App\Http\Controllers\RouteController;
+use App\Http\Controllers\RouteLocationsController;
 use App\Http\Controllers\VehicleInsuranceController;
 use App\Http\Controllers\VehicleRefuelingController;
 
@@ -156,11 +157,11 @@ Route::post('organisation/{id}/delete', [OrganisationController::class, 'destroy
  * 
  */
 
-Route::get('our-routes', [AddRouteController::class, 'index'])->name('our.routes');
+Route::get('our-routes', [RouteController::class, 'index'])->name('our.routes');
 
-Route::get('routes/create', [AddRouteController::class, 'create'])->name('route.create');
-Route::get('edit-route/{id}/edit', [AddRouteController::class, 'edit'])->name('route.edit');
-Route::get('route-delete/{id}/delete', [AddRouteController::class, 'destroy'])->name('route.destroy');
+Route::get('routes/create', [RouteController::class, 'create'])->name('route.create');
+Route::get('edit-route/{id}/edit', [RouteController::class, 'edit'])->name('route.edit');
+Route::get('route-delete/{id}/delete', [RouteController::class, 'destroy'])->name('route.destroy');
 /**
  * Tripes Routes
  * 
@@ -285,3 +286,19 @@ Route::get('/admin/setting', [SettingsController::class, 'index'])->name('settin
 Route::get('/admin/permission', [PermissionController::class, 'index'])->name('permission.index');
 Route::get('/admin/role', [RoleController::class, 'index'])->name('permission.role');
 Route::get('/admin/role/create', [RoleController::class, 'create'])->name('permission.role.create');
+
+
+
+/**
+ * 
+ * Routes routes
+ * 
+ */
+
+Route::get('route', [RouteController::class, 'index'])->name('route.index');
+
+// Create Route
+Route::get('route/create', [RouteController::class, 'create'])->name('route.create');
+Route::post('route', [RouteController::class, 'store'])->name('route');
+
+Route::get('route/location', [RouteLocationsController::class, 'index'])->name('route.location.index');

@@ -9,11 +9,22 @@ class Routes extends Model
 {
     use HasFactory;
     protected $table = 'routes';
+
     protected $fillable = [
        'county',
+       'name',
        'created_by',
-       'location',
-       'start_location',
-       'end_location'
     ];
+
+    public function start_location () {
+        return $this->hasOne(RouteLocations::class, 'route_id', 'id')->where('is_start_location', 1);
+    }
+
+    public function end_location () {
+        return $this->hasOne(RouteLocations::class, 'route_id', 'id')->where('is_end_location', 1);
+    }
+
+    public function waypoints () {
+        return $this->hasMany(RouteLocations::class, 'route_id', 'id')->where('is_waypoint', 1);
+    }
 }
