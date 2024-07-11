@@ -214,11 +214,6 @@
                                                             <th title="Action" width="150">Action</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody>
-                                                        <tr>
-                                                            <td></td>
-                                                        </tr>
-                                                    </tbody>
                                                 </table>
                                             </div>
 

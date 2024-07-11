@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Insurance Company List')
+@section('title', 'Insurances Recurring Periods')
 @section('content')
 
     <body class="fixed sidebar-mini">
@@ -23,14 +23,15 @@
                                     <div class="card-header">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div>
-                                                <h6 class="fs-17 fw-semi-bold mb-0">Insurance Company List</h6>
+                                                <h6 class="fs-17 fw-semi-bold mb-0">Vehicle insurance recurring period lists
+                                                </h6>
                                             </div>
                                             <div class="text-end">
                                                 <div class="actions">
                                                     <a class="btn btn-success" href="javascript:void(0);"
-                                                        onclick="axiosModal('/vehicle/insurance/company/create')">
+                                                        onclick="axiosModal('/vehicle/insurance/recurring-period/create')">
                                                         <i class="fa fa-plus"></i>&nbsp;
-                                                        create
+                                                        Create
                                                     </a>
                                                 </div>
                                             </div>
@@ -42,32 +43,34 @@
                                                 <table class="table" id="driver-table">
                                                     <thead>
                                                         <tr>
-                                                            <th width="30">Sl</th>
-                                                            <th>Name</th>
-                                                            <th>Address</th>
-                                                            <th>Email</th>
-                                                            <th>Website</th>
-                                                            <th width="80">Action</th>
+                                                            <th title="Name">Period</th>
+                                                            <th title="Type">Status</th>
+                                                            <th title="Type">Description</th>
+                                                            <th title="Action" width="80">Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach ($insuranceCompanies as $key => $company)
+                                                        @foreach ($recurringPeriods as $period)
                                                             <tr>
-                                                                <td>{{ $key + 1 }}</td>
-                                                                <td>{{ $company->name }}</td>
-                                                                <td>{{ $company->address }}</td>
-                                                                <td>{{ $company->email }}</td>
-                                                                <td>{{ $company->website }}</td>
+                                                                <td>{{ $period->period }}</td>
+                                                                <td>
+                                                                    @if($period->status)
+                                                                        <i class="fas fa-check-circle text-success" title="Active"></i>
+                                                                    @else
+                                                                        <i class="fas fa-times-circle text-danger" title="Inactive"></i>
+                                                                    @endif
+                                                                </td>
+                                                                <td>{{ $period->description }}</td>
                                                                 <td class="d-flex">
                                                                     <a href="javascript:void(0);"
                                                                         class="btn btn-sm btn-primary"
-                                                                        onclick="axiosModal('/vehicle/insurance/company/{{ $company->id }}/edit')">
+                                                                        onclick="axiosModal('/vehicle/insurance/recurring-period/{{ $period->id }}/edit')">
                                                                         <i class="fas fa-edit"></i>
                                                                     </a>
                                                                     <span class='m-1'></span>
                                                                     <a href="javascript:void(0);"
                                                                         class="btn btn-sm btn-danger"
-                                                                        onclick="deleteVehicle({{ $company->id }})">
+                                                                        onclick="deleteVehicle({{ $period->id }})">
                                                                         <i class="fas fa-trash"></i>
                                                                     </a>
                                                                 </td>
@@ -76,46 +79,10 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-
-
-                                            <div id="page-axios-data" data-table-id="#driver-table"></div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="overlay"></div>
-                    @include('components.footer')
-                </div>
-            </div>
-            <!--end  vue page -->
-        </div>
-        <!-- END layout-wrapper -->
 
-        <!-- Modal -->
-        <div class="modal fade" id="delete-modal" data-bs-keyboard="false" tabindex="-1" data-bs-backdrop="true"
-            aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Delete modal</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="javascript:void(0);" class="needs-validation" id="delete-modal-form">
-                            <div class="modal-body">
-                                <p>Are you sure you want to delete this item? you won t be able to revert this item back!
-                                </p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
-                                <button class="btn btn-danger" type="submit" id="delete_submit">Delete</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- start scripts -->
-    @endsection
+@endsection

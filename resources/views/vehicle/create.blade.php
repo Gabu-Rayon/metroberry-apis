@@ -1,6 +1,6 @@
-<form action="admin/vehicle" method="POST" class="needs-validation modal-content" novalidate="novalidate"
-    enctype="multipart/form-data" onsubmit="submitFormAxios(event)">
-    @crsf
+<form action="/vehicle/store" method="POST" class="needs-validation modal-content" novalidate="novalidate"
+    enctype="multipart/form-data">
+    @csrf
     <div class="card-header my-3 p-2 border-bottom">
         <h4>Add New Vehicle</h4>
     </div>
@@ -63,35 +63,23 @@
                             id="engine_size" value="" required>
                     </div>
                 </div>
-                <div class="form-group row my-2">
-                    <label for="vehicle_insurance_issue_date" class="col-sm-5 col-form-label">Insurance Issue Date<i
-                            class="text-danger">*</i> </label>
-                    <div class="col-sm-7">
-                        <input name="vehicle_insurance_issue_date" class="form-control" type="date"
-                            placeholder="Enter Insurance Issue Date" id="vehicle_insurance_issue_date" value=""
-                            required>
-                    </div>
-                </div>
-                <div class="form-group row my-2">
-                    <label for="vehicle_insurance_expiry" class="col-sm-5 col-form-label">Vehicle Insurance Expiry
-                        Date<i class="text-danger">*</i> </label>
-                    <div class="col-sm-7">
-                        <input name="vehicle_insurance_expiry" class="form-control" type="date"
-                            placeholder="Enter Vehicle Insurance Expiry Date" id="vehicle_insurance_expiry"
-                            value="" required>
-                    </div>
-                </div>
             </div>
 
             <div class="col-md-12 col-lg-6">
-
                 <div class="form-group row my-2">
-                    <label for="vehicle_insurance_issue_organisation" class="col-sm-5 col-form-label">Vehicle
-                        Insurance Issue Org <i class="text-danger">*</i> </label>
+                    <label for="color" class="col-sm-5 col-form-label">Vehicle Color<i class="text-danger">*</i> </label>
                     <div class="col-sm-7">
-                        <input name="vehicle_insurance_issue_organisation" class="form-control" type="text"
-                            placeholder="Vehicle Insurance Issue Org" id="fvehicle_insurance_issue_organisation"
+                        <input name="color" class="form-control" type="text"
+                            placeholder="Enter Vehicle Color" id="color"
                             value="" required>
+                    </div>
+                </div>                
+                 <div class="form-group row my-2">
+                    <label for="seats" class="col-sm-5 col-form-label">No of Seats <i class="text-danger">*</i>
+                    </label>
+                    <div class="col-sm-7">
+                        <input name="seats" class="form-control" type="number"
+                            placeholder="No of Seats" id="seats" value="" required>
                     </div>
                 </div>
                 <div class="form-group row my-2">
