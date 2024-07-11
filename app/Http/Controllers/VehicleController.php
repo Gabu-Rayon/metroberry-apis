@@ -660,7 +660,7 @@ class VehicleController extends Controller
 
             DB::commit();
 
-            return redirect()->route('driver')->with('success', 'Vehicle activated successfully');
+            return redirect()->route('vehicle')->with('success', 'Vehicle activated successfully');
         } catch (Exception $e) {
             DB::rollBack();
             Log::error('ACTIVATE VEHICLE ERROR');
@@ -681,7 +681,7 @@ class VehicleController extends Controller
     {
         try {
 
-            $vehicle = Driver::findOrfail($id);
+            $vehicle = Vehicle::findOrfail($id);
 
             if ($vehicle->status == 'inactive') {
                 return redirect()->back()->with('error', 'Vehicle is already inactive');
@@ -695,7 +695,7 @@ class VehicleController extends Controller
 
             DB::commit();
 
-            return redirect()->route('driver')->with('success', 'Vehicle deactivated successfully');
+            return redirect()->route('vehicle')->with('success', 'Vehicle deactivated successfully');
         } catch (Exception $e) {
             DB::rollBack();
             Log::error('VEHICLE DRIVER ERROR');
