@@ -185,21 +185,19 @@ Route::get('trips/billed', [TripController::class, 'tripBilled'])->name('trip.bi
  * 
  */
 
-Route::get('vehicle', [VehicleController::class, 'index'])->name('vehicle');
+Route::get('/vehicle', [VehicleController::class, 'index'])->name('vehicle');
 
-Route::get('vehicle/create', [VehicleController::class, 'create'])->name('vehicle.create');
-Route::get('vehicle/insurance', [VehicleController::class, 'vehicleInsurance'])->name('vehicle.insurance.index');
+Route::get('/vehicle/create', [VehicleController::class, 'create'])->name('vehicle.create');
+Route::post('/vehicle/store', [VehicleController::class, 'store'])->name('vehicle.store.new');
 
-Route::get('vehicle/{id}/edit', [VehicleController::class, 'edit'])->name('vehicle.edit');
-Route::get('vehicle/{id}/delete', [VehicleController::class, 'destroy'])->name('vehicle.destroy');
-/****
- * 
- * Vehicle Insurance
- * 
- */
-// vehicle/insurance/create
-Route::get('vehicle/insurance/company', [VehicleInsuranceController::class, 'create'])->name('insurance.company');
-Route::get('create', [VehicleInsuranceController::class, 'create'])->name('insurance.recurring.period');
+Route::get('/vehicle/{id}/edit', [VehicleController::class, 'edit'])->name('vehicle.edit');
+Route::put('/vehicle/{id}', [VehicleController::class, 'update'])->name('vehicle.update');
+
+// vehicle/{{ $vehicle->id }}/assign/driver
+Route::get('/vehicle/{id}/assign/driver', [VehicleController::class, 'assignDriverForm'])->name('vehicle.assign.driver.form');
+Route::put('/vehicle/{id}/assign/driver', [VehicleController::class, 'assignDriver'])->name('vehicle.assign.driver');
+
+Route::get('/vehicle/{id}/delete', [VehicleController::class, 'destroy'])->name('vehicle.destroy');
 
 /***
  * Vehicle Maintaince OR servincing
@@ -253,7 +251,7 @@ Route::get('/inventory/trip-type', [InventoryController::class, 'InventoryTripTy
  * Purchase Routes 
  * 
  */
-Route::get('/purchase', [PurchaseController::class,'index'])->name('purchase.index');
+Route::get('/purchase', [PurchaseController::class, 'index'])->name('purchase.index');
 Route::get('/purchase/create', [PurchaseController::class, 'create'])->name('purchase.create');
 /***
  * Reports routes 
@@ -285,3 +283,48 @@ Route::get('/admin/setting', [SettingsController::class, 'index'])->name('settin
 Route::get('/admin/permission', [PermissionController::class, 'index'])->name('permission.index');
 Route::get('/admin/role', [RoleController::class, 'index'])->name('permission.role');
 Route::get('/admin/role/create', [RoleController::class, 'create'])->name('permission.role.create');
+/**
+ * 
+ * Insurance companies
+ * 
+ */
+Route::get('/vehicle/insurance/company', [InsuranceCompanyController::class, 'index'])->name('vehicle.insurance.company');
+Route::get('/vehicle/insurance/company/create', [InsuranceCompanyController::class, 'create'])->name('vehicle.insurance.company.create');
+
+Route::post('/vehicle/insurance/company/store', [InsuranceCompanyController::class, 'store'])->name('vehicle.insurance.company.store');
+
+Route::get('/vehicle/insurance/company/{id}', [InsuranceCompanyController::class, 'show'])->name('vehicle.insurance.company.show');
+
+Route::get('/vehicle/insurance/company/{id}/edit', [InsuranceCompanyController::class, 'edit'])->name('vehicle.insurance.company.edit');
+
+Route::put('/vehicle/insurance/company/{id}', [InsuranceCompanyController::class, 'update'])->name('vehicle.insurance.company.update');
+
+Route::delete('/vehicle/insurance/company/{id}', [InsuranceCompanyController::class, 'destroy'])->name('vehicle.insurance.company.destroy');
+
+
+// vehicle.insurance.recurring.period
+Route::get('/vehicle/insurance/recurring-period', [InsuranceCompanyController::class, 'insuranceRecurringPeriod'])->name('vehicle.insurance.recurring.period');
+Route::get('/vehicle/insurance/recurring-period/create', [InsuranceCompanyController::class, 'insuranceRecurringPeriodCreate'])->name('vehicle.insurance.recurring.period.create');
+
+Route::post('/vehicle/insurance/recurring-period/store', [InsuranceCompanyController::class, 'insuranceRecurringPeriodStore'])->name('vehicle.insurance.recurring.period.create.store');
+//vehicle.insurance.recurring.period.edit
+Route::get('/vehicle/insurance/recurring-period/{id}/edit', [InsuranceCompanyController::class, 'insuranceRecurringPeriodEdit'])->name('vehicle.insurance.recurring.period.edit');
+
+Route::put('/vehicle/insurance/recurring-period/{id}', [InsuranceCompanyController::class, 'insuranceRecurringPeriodUpdate'])->name('vehicle.insurance.recurring.period.update');
+
+/****
+ * VehicleInsurance Route
+ */
+
+Route::get('/vehicle/insurance/', [VehicleInsuranceController::class, 'index'])->name('vehicle.insurance.index');
+Route::get('/vehicle/insurance/create', [VehicleInsuranceController::class, 'create'])->name('vehicle.insurance.create');
+
+Route::post('/vehicle/insurance/store', [VehicleInsuranceController::class, 'store'])->name('vehicle.insurance.store');
+
+Route::get('/vehicle/insurance/{id}', [VehicleInsuranceController::class, 'show'])->name('vehicle.insurance.show');
+
+Route::get('/vehicle/insurance/{id}/edit', [VehicleInsuranceController::class, 'edit'])->name('vehicle.insurance.edit');
+
+Route::put('/vehicle/insurance/{id}', [VehicleInsuranceController::class, 'update'])->name('vehicle.insurance.update');
+
+Route::delete('/vehicle/insurance/{id}', [VehicleInsuranceController::class, 'destroy'])->name('vehicle.insurance.destroy');
