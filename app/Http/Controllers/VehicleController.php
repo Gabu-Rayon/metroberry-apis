@@ -55,7 +55,9 @@ class VehicleController extends Controller
     {
         try {
             // Validate the request data
-            $validator = Validator::make($request->all(), [
+            $data = $request->all();
+
+            $validator = Validator::make($data, [
                 'model' => 'required|string|max:255',
                 'make' => 'required|string|max:255',
                 'year' => 'required|date',
@@ -67,9 +69,10 @@ class VehicleController extends Controller
                 'vehicle_avatar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
 
-            // Check if validation fails
             if ($validator->fails()) {
-                return back()->withErrors($validator)->withInput();
+                Log::info('VALIDATION ERROR Here');
+                Log::info($validator->errors());
+                return redirect()->back()->with('error', $validator->errors()->first())->withInput();
             }
 
             // Log the request data
@@ -265,8 +268,9 @@ class VehicleController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            // Validate the request data
-            $validator = Validator::make($request->all(), [
+            $data = $request->all();
+
+            $validator = Validator::make($data, [
                 'model' => 'required|string|max:255',
                 'make' => 'required|string|max:255',
                 'year' => 'required|date_format:Y',
@@ -276,13 +280,15 @@ class VehicleController extends Controller
                 'fuel_type' => 'required|string|max:255',
                 'engine_size' => 'required|numeric',
                 'vehicle_avatar' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                'driver_id' => 'nullable|exists:drivers,id', 
+                'driver_id' => 'nullable|exists:drivers,id',
             ]);
 
-            // Check if validation fails
             if ($validator->fails()) {
-                return back()->withErrors($validator)->withInput();
+                Log::info('VALIDATION ERROR Here');
+                Log::info($validator->errors());
+                return redirect()->back()->with('error', $validator->errors()->first())->withInput();
             }
+
 
             // Log the request data
             Log::info('Vehicle update request data:', $request->all());

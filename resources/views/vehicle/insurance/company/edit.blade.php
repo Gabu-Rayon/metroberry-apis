@@ -1,4 +1,4 @@
-<form action="{{ route('vehicle.insurance.company.update', $company->id) }}" method="POST" class="needs-validation modal-content" novalidate enctype="multipart/form-data">
+<form action="{{ route('vehicle.insurance.company.update', $company->id) }}" method="POST" class="needs-validation modal-content" enctype="multipart/form-data">
     @csrf
     @method('PUT')
 

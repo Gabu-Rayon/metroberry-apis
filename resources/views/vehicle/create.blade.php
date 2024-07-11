@@ -82,16 +82,6 @@
                             placeholder="No of Seats" id="seats" value="" required>
                     </div>
                 </div>
-
-                <div class="form-group row my-2">
-                    <label for="vehicle_insurance_issue_organisation" class="col-sm-5 col-form-label">Vehicle
-                        Insurance Issue Org <i class="text-danger">*</i> </label>
-                    <div class="col-sm-7">
-                        <input name="vehicle_insurance_issue_organisation" class="form-control" type="text"
-                            placeholder="Vehicle Insurance Issue Org" id="fvehicle_insurance_issue_organisation"
-                            value="" required>
-                    </div>
-                </div>
                 <div class="form-group row my-2">
                     <label for="vehicle_avatar" class="col-sm-5 col-form-label">Vehicle Avatar<i
                             class="text-danger">*</i> </label>
