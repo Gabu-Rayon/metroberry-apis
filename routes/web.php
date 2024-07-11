@@ -20,6 +20,8 @@ use App\Http\Controllers\DriversLicensesController;
 use App\Http\Controllers\InsuranceCompanyController;
 use App\Http\Controllers\VehicleInsuranceController;
 use App\Http\Controllers\VehicleRefuelingController;
+use App\Http\Controllers\RouteController;
+use App\Http\Controllers\RouteLocationsController;
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -156,11 +158,21 @@ Route::post('organisation/{id}/delete', [OrganisationController::class, 'destroy
  * 
  */
 
-Route::get('our-routes', [RouteController::class, 'index'])->name('our.routes');
+// View Routes
+Route::get('route', [RouteController::class, 'index'])->name('route.index');
 
-Route::get('routes/create', [RouteController::class, 'create'])->name('route.create');
-Route::get('edit-route/{id}/edit', [RouteController::class, 'edit'])->name('route.edit');
-Route::get('route-delete/{id}/delete', [RouteController::class, 'destroy'])->name('route.destroy');
+// Create Route
+Route::get('route/create', [RouteController::class, 'create'])->name('route.create');
+Route::post('route', [RouteController::class, 'store'])->name('route');
+
+/**
+ * Route Location Routes
+ * 
+ */
+
+// View Route Locations
+Route::get('route/location', [RouteLocationsController::class, 'index'])->name('route.location.index');
+
 /**
  * Tripes Routes
  * 

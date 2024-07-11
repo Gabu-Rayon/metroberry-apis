@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();           
             $table->string('county');
             $table->string('name');
-            $table->string('location');
-            $table->string('start_location');
-            $table->string('end_location');
+            $table->unsignedBigInteger('created_by');
+
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

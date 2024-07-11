@@ -106,16 +106,16 @@
                                                 <tr>
                                                     <td>{{ $route->name }}</td>
                                                     <td>{{ $route->county }}</td>
-                                                    <td>{{ $route->start_location->name }}</td>
-                                                    <td>{{ $route->waypoints }}</td>
-                                                    <td>{{ $route->end_location }}</td>
+                                                    <td class="text-center">{{ $route->start_location->name ?? '-' }}</td>
+                                                    <td class="text-center">{{ '-' }}</td>
+                                                    <td class="text-center">{{ $route->end_location ?? '-' }}</td>
                                                     <td class="d-flex">
                                                         <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="axiosModal('route/{{ $route->id }}/edit')">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
                                                         <span class='m-1'></span>
                                                         <a href="javascript:void(0);" class="btn btn-sm btn-danger" onclick="axiosModal('route/{{ $route->id }}/delete')">
-                                                            <i class="fas fa-delete"></i>
+                                                            <i class="fas fa-trash"></i>
                                                         </a>
                                                     </td>
                                                 </tr>

@@ -6,7 +6,9 @@ use Exception;
 use App\Models\Routes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class RouteController extends Controller
 {
@@ -78,40 +80,35 @@ class RouteController extends Controller
     public function store(Request $request)
     {
         try {
-            $routesData = $request->validate([
-                'routes.*.county' => 'required|string',
-                'routes.*.location' => 'required|string',
-                'routes.*.start_location' => 'required|string',
-                'routes.*.end_location' => 'required|string',
+            $data = $request->all();
+
+            $validator = Validator::make($data, [
+                'county' => 'required|string',
+                'name' => 'required|string',
             ]);
 
-            Log::info('Routes za kwetu na ya kwetu tu');
-            Log::info($routesData);
-
-            $routes = [];
-
-            foreach ($routesData['routes'] as $routeData) {
-                $route = Routes::create([
-                    'county' => $routeData['county'],
-                    'location' => $routeData['location'],
-                    'start_location' => $routeData['start_location'],
-                    'end_location' => $routeData['end_location'],
-                    'created_by' => Auth::id(),
-                ]);
-
-                $routes[] = $route;
+            if ($validator->fails()) {
+                Log::error('VALIDATION ERROR WHILE ADDING NEW ROUTE');
+                Log::error($validator->errors()->first());
+                return redirect()->back()->with('error', $validator->errors()->first());
             }
 
-            return response()->json([
-                'routes' => $routes,
-            ], 201);
+            DB::beginTransaction();
+
+            Routes::create([
+                'county' => $data['county'],
+                'name' => $data['name'],
+                'created_by' => 1,
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('route.index')->with('success', 'Route Added Successfully');
         } catch (Exception $e) {
+            DB::rollBack();
             Log::error('Error Adding New Routes');
             Log::error($e);
-            return response()->json([
-                'message' => 'An error occurred while Adding New Routes',
-                'error' => $e->getMessage()
-            ], 500);
+            return redirect()->back()->with('error', 'Something Went Wrong');
         }
     }
 
