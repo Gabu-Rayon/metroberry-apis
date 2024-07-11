@@ -150,12 +150,40 @@ class PSVBadgeController extends Controller
         }
     }
 
+    public function delete($id) {
+        $psvbadge = PSVBadge::findOrFail($id);
+        return view('driver.psvbadge.delete',compact('psvbadge'));
+    }
+
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(PSVBadge $pSVBadge)
-    {
-        //
+    public function destroy($id){
+        try {
+
+            $psvbadge = PSVBadge::findOrFail($id);
+            $driver = $psvbadge->driver;
+
+            if (!$psvbadge) {
+                return redirect()->back()->with('error', 'Badge not found');
+            }
+
+            DB::beginTransaction();
+
+            $psvbadge->delete();
+            $driver->status = 'inactive';
+
+            $driver->save();
+
+            DB::commit();
+
+            return redirect()->route('driver.psvbadge')->with('success', 'Badge deleted successfully');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('DELETE BADGE ERROR');
+            Log::error($e);
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     public function verify ($id) {
