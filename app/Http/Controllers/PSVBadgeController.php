@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Driver;
 use App\Models\PSVBadge;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -155,5 +156,47 @@ class PSVBadgeController extends Controller
     public function destroy(PSVBadge $pSVBadge)
     {
         //
+    }
+
+    public function verify ($id) {
+        $psvbadge = PSVBadge::findOrFail($id);
+        return view('driver.psvbadge.verify', compact('psvbadge'));
+    }
+
+    public function verifyStore ($id) {
+        try {
+            
+            $psvbadge = PSVBadge::findOrFail($id);
+    
+            if (!$psvbadge) {
+                return redirect()->back()->with('error', 'Badge not found');
+            }
+
+            if ($psvbadge->verified) {
+                return redirect()->back()->with('error', 'Badge already verified');
+            }
+
+            if ($psvbadge->psv_badge_date_of_expiry < Carbon::today()) {
+                return redirect()->back()->with('error', 'Badge has expired');
+            }
+
+            if (!$psvbadge->psv_badge_avatar) {
+                return redirect()->back()->with('error', 'Badge documents are missing');
+            }
+
+            DB::beginTransaction();
+    
+            $psvbadge->update([
+                'verified' => true
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('driver.psvbadge')->with('success', 'Badge verified successfully');
+        } catch (Exception $e) {
+            Log::error('PSV BADGE VERIFY ERROR');
+            Log::error($e);
+            return redirect()->back()->with('error', 'Something Went Wrong');
+        }
     }
 }

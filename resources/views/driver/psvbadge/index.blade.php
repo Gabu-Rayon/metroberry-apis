@@ -92,27 +92,31 @@
                                                     <td>
                                                         @php
                                                             $avatar = $psvbadge->psv_badge_avatar;
-
+                                                    
                                                             if (!$avatar) {
                                                                 $badgeClass = 'badge bg-danger';
                                                                 $badgeText = 'Missing Documents';
-                                                            }
-                                                            
-                                                            else {
+                                                            } else {
                                                                 $expiryDate = \Carbon\Carbon::parse($psvbadge->psv_badge_date_of_expiry);
                                                                 $today = \Carbon\Carbon::today();
-                                                                $isExpired = $today->lt($expiryDate);
-                                                    
-                                                                $daysUntilExpiry = $isExpired ? 0 : $today->diffInDays($expiryDate, false);
+                                                                $daysUntilExpiry = $today->diffInDays($expiryDate, false);
+                                                                $isExpired = $daysUntilExpiry < 0;
+
+                                                                {{ Log::info('Days until expiry: ' . $daysUntilExpiry); }}
                                                     
                                                                 // Determine badge color and text based on days until expiry and verification status.
-                                                                if ($daysUntilExpiry < 0) {
+                                                                if ($isExpired) {
                                                                     $badgeClass = 'badge bg-danger';
                                                                     $badgeText = 'Expired';
-                                                                } elseif ($daysUntilExpiry <= 30 && !$psvbadge->verified) {
-                                                                    $badgeClass = 'badge bg-warning text-dark'; // Yellow badge for pending verification.
-                                                                    $badgeText = 'Pending Verification';
-                                                                } elseif ($daysUntilExpiry > 30 && !$psvbadge->verified) {
+                                                                } elseif ($daysUntilExpiry > 0 && $daysUntilExpiry <= 30) { // Adjusted condition here
+                                                                    if (!$psvbadge->verified) {
+                                                                        $badgeClass = 'badge bg-warning text-dark'; // Yellow badge for pending verification.
+                                                                        $badgeText = 'Pending Verification';
+                                                                    } else {
+                                                                        $badgeClass = 'badge bg-warning text-dark'; // Yellow badge for expiring soon.
+                                                                        $badgeText = 'Expires Soon';
+                                                                    }
+                                                                } elseif (!$psvbadge->verified) {
                                                                     $badgeClass = 'badge bg-warning text-dark'; // Yellow badge for pending verification.
                                                                     $badgeText = 'Pending Verification';
                                                                 } else {
@@ -123,6 +127,7 @@
                                                         @endphp
                                                         <span class="{{ $badgeClass }}">{{ $badgeText }}</span>
                                                     </td>
+                                                                                                       
                                                     <td class="d-flex">
                                                         <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="axiosModal('psvbadge/{{ $psvbadge->id }}/edit')" title="Edit">
                                                             <i class="fas fa-edit"></i>
