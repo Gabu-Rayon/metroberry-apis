@@ -90,7 +90,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="col-md-12 col-lg-6">
                 <div class="form-group row mb-1">
                     <label for="vehicle_id" class="col-sm-5 col-form-label">Vehicle <i class="text-danger">*</i></label>
@@ -106,7 +105,6 @@
                         </select>
                     </div>
                 </div>
-
                 <div class="form-group row my-2">
                     <label for="charge_payable" class="col-sm-5 col-form-label">Charge Payable <i
                             class="text-danger">*</i></label>
@@ -133,7 +131,6 @@
                             value="{{ $vehicleInsurance->recurring_date }}">
                     </div>
                 </div>
-
                 <div class="form-group row my-2">
                     <label for="deductible" class="col-sm-5 col-form-label">Deductible <i
                             class="text-danger">*</i></label>
