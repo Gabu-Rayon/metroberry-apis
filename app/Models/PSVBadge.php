@@ -16,6 +16,7 @@ class PSVBadge extends Model
         'psv_badge_no',
         'psv_badge_date_of_issue',
         'psv_badge_date_of_expiry',
-        'psv_badge_avatar'
+        'psv_badge_avatar',
+        'verified',
     ];
 }

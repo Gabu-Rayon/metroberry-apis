@@ -24,7 +24,8 @@
                 ['label' => 'Manage Employee', 'route' => route('employee')],
                 ['label' => 'Manage Organisation', 'route' => route('organisation')],
                 ['label' => 'Manage Driver', 'route' => route('driver')],
-                ['label' => 'Manage Driver License', 'route' => route('driver.license.index')],
+                ['label' => 'Manage Licenses', 'route' => route('driver.license.index')],
+                ['label' => 'Manage PSV Badges', 'route' => route('driver.psvbadge.index')],
                 ['label' => 'Driver Performance', 'route' => route('driver.performance.index')],
             ],
         ])

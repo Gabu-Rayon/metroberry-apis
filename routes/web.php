@@ -17,6 +17,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\OrganisationController;
 use App\Http\Controllers\VehicleServiceController;
 use App\Http\Controllers\DriversLicensesController;
+use App\Http\Controllers\PSVBadgeController;
 use App\Http\Controllers\VehicleInsuranceController;
 use App\Http\Controllers\VehicleRefuelingController;
 
@@ -110,6 +111,17 @@ Route::put('driver/license/{id}/revoke', [DriversLicensesController::class, 'rev
 // Delete License
 Route::get('driver/license/{id}/delete', [DriversLicensesController::class, 'delete'])->name('driver.license.delete');
 Route::delete('driver/license/{id}/delete', [DriversLicensesController::class, 'destroy'])->name('driver.license.delete');
+
+/**
+ * Drivers PSV Badge Routes
+ */
+
+// View PSV Badges
+Route::get('driver/psvbadge', [PSVBadgeController::class, 'index'])->name('driver.psvbadge.index');
+
+// Create PSV Badge
+Route::get('driver/psvbadge/create', [PSVBadgeController::class, 'create'])->name('driver.psvbadge.create');
+Route::post('driver/psvbadge', [PSVBadgeController::class, 'store'])->name('driver.psvbadge');
 
 /**
  * Organisation Routes

@@ -10,17 +10,16 @@ class PSVBadgeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
+    public function index(){
+        $psvbadges = PSVBadge::all();
+        return view('driver.psvbadge.index', compact('psvbadges'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
+    public function create() {
+        return view('driver.psvbadge.create');
     }
 
     /**

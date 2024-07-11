@@ -18,7 +18,8 @@ return new class extends Migration
             $table->date('psv_badge_date_of_issue');
             $table->date('psv_badge_date_of_expiry');
             $table->string('psv_badge_avatar')->nullable();
-
+            $table->boolean('verified')->default(false);
+            
             $table->foreign('driver_id')->references('id')->on('drivers')->onDelete('cascade');
             $table->timestamps();
         });
