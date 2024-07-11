@@ -131,19 +131,19 @@
                                                             <i class="fas fa-edit"></i>
                                                         </a>
                                                         <span class='m-1'></span>
-                                                        <a href="javascript:void(0);" class="btn btn-sm btn-danger" onclick="deleteLicense({{ $license->id }})" title="Delete">
-                                                            <i class="fas fa-trash"></i>
-                                                        </a>
-                                                        <span class='m-1'></span>
                                                         @if (!$license->verified)
-                                                            <a href="javascript:void(0);" class="btn btn-sm btn-secondary" onclick="axiosModal('license/{{ $license->id }}/verify')" title="Verify">
-                                                                <i class="fas fa-toggle-off"></i>
-                                                            </a>
-                                                        @else
-                                                            <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="revokeLicense({{ $license->id }})" title="Revoke">
+                                                            <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="axiosModal('license/{{ $license->id }}/verify')" title="Verify">
                                                                 <i class="fas fa-toggle-on"></i>
                                                             </a>
+                                                        @else
+                                                            <a href="javascript:void(0);" class="btn btn-sm btn-secondary" onclick="axiosModal('license/{{ $license->id }}/revoke')" title="Suspend">
+                                                                <i class="fas fa-toggle-off"></i>
+                                                            </a>
                                                         @endif
+                                                        <span class='m-1'></span>
+                                                        <a href="javascript:void(0);" class="btn btn-sm btn-danger" onclick="axiosModal('license/{{ $license->id }}/delete')" title="Delete">
+                                                            <i class="fas fa-trash"></i>
+                                                        </a>
                                                     </td>
                                                 </tr>
                                                 @endforeach
@@ -160,49 +160,5 @@
             </div>
         </div>
     </div>
-
-    <!-- Delete Modal -->
-    <div class="modal fade" id="delete-modal" data-bs-keyboard="false" tabindex="-1" data-bs-backdrop="true"
-        aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Delete Driver</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="javascript:void(0);" class="needs-validation" id="delete-modal-form" method="POST">
-                        @csrf
-                        <div class="modal-body">
-                            <p>Are you sure you want to delete this driver? This action cannot be undone.</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-danger" onclick="confirmDelete()">Delete</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- JavaScript -->
-    <script>
-        function deleteLicense(licenseId) {
-            var form = document.getElementById('delete-modal-form');
-            form.action = '/driver/license/' + licenseId + '/delete';
-
-            var modal = new bootstrap.Modal(document.getElementById('delete-modal'));
-            modal.show();
-        }
-
-        function confirmDelete() {
-            // Submit the delete form
-            var form = document.getElementById('delete-modal-form');
-            form.submit();
-        }
-    </script>
-
 </body>
-
 @endsection

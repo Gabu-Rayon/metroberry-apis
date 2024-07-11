@@ -101,19 +101,19 @@
                                                             <i class="fas fa-edit"></i>
                                                         </a>
                                                         <span class='m-1'></span>
+                                                        @if ($driver->status == 'active')
+                                                            <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="axiosModal('driver/{{ $driver->id }}/deactivate')" title="Dectivate Driver">
+                                                                <i class="fas fa-toggle-on"></i>
+                                                            </a> 
+                                                        @else
+                                                            <a href="javascript:void(0);" class="btn btn-sm btn-secondary" onclick="axiosModal('driver/{{ $driver->id }}/activate')" title="Activate Driver">
+                                                                <i class="fas fa-toggle-off"></i>
+                                                            </a>                                                        
+                                                        @endif
+                                                        <span class='m-1'></span>
                                                         <a href="javascript:void(0);" class="btn btn-sm btn-danger" onclick="deleteDriver({{ $driver->id }})" title="Delete Driver">
                                                             <i class="fas fa-trash"></i>
                                                         </a>
-                                                        <span class='m-1'></span>
-                                                        @if ($driver->status == 'active')
-                                                            <a href="javascript:void(0);" class="btn btn-sm btn-secondary" onclick="axiosModal('driver/{{ $driver->id }}/deactivate')" title="Dectivate Driver">
-                                                                <i class="fas fa-toggle-off"></i>
-                                                            </a> 
-                                                        @else
-                                                            <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="axiosModal('driver/{{ $driver->id }}/activate')" title="Activate Driver">
-                                                                <i class="fas fa-toggle-on"></i>
-                                                            </a>                                                        
-                                                        @endif
                                                     </td>
                                                     
                                                 </tr>

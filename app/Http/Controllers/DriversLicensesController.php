@@ -26,7 +26,7 @@ class DriversLicensesController extends Controller
      * Show the form for creating a new resource.
      */
     public function create(){
-        $drivers = Driver::all();
+        $drivers = Driver::whereDoesntHave('license')->get();
         return view('driver.license.create',compact('drivers'));
     }
 
@@ -174,12 +174,40 @@ class DriversLicensesController extends Controller
         }
     }
 
+    public function delete($id) {
+        $license = DriversLicenses::findOrFail($id);
+        return view('driver.license.delete',compact('license'));
+    }
+
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(DriversLicenses $driversLicenses)
-    {
-        //
+    public function destroy($id){
+        try {
+
+            $license = DriversLicenses::findOrFail($id);
+            $driver = $license->driver;
+
+            if (!$license) {
+                return redirect()->back()->with('error', 'License not found');
+            }
+
+            DB::beginTransaction();
+
+            $license->delete();
+            $driver->status = 'inactive';
+
+            $driver->save();
+
+            DB::commit();
+
+            return redirect()->route('driver.license')->with('success', 'License deleted successfully');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('DELETE LICENSE ERROR');
+            Log::error($e);
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     public function verify ($id) {
@@ -232,6 +260,41 @@ class DriversLicensesController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
             Log::error('VERIFY LICENSE ERROR');
+            Log::error($e);
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function revoke ($id) {
+        $license = DriversLicenses::findOrFail($id);
+        return view('driver.license.revoke',compact('license'));
+    }
+
+    public function revokeStore ($id) {
+        try {
+
+            $license = DriversLicenses::findOrFail($id);
+
+            if (!$license) {
+                return redirect()->back()->with('error', 'License not found');
+            }
+
+            if (!$license->verified) {
+                return redirect()->back()->with('error', 'License already suspended');
+            }
+
+            DB::beginTransaction();
+
+            $license->update([
+                'verified' => false
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('driver.license')->with('success', 'License suspended successfully');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('SUSPEND LICENSE ERROR');
             Log::error($e);
             return redirect()->back()->with('error', $e->getMessage());
         }

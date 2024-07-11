@@ -42,4 +42,8 @@ class Driver extends Model
     {
         return $this->hasMany(Trip::class);
     }
+
+    public function license () {
+        return $this->hasOne(DriversLicenses::class);
+    }
 }

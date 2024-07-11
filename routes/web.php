@@ -86,16 +86,30 @@ Route::get('performance/create', [DriverController::class, 'createDriverPerforma
 
 /**
  * Drivers Licenses Routes
- * 
  */
 
+// View Licenses
 Route::get('driver/license', [DriversLicensesController::class, 'index'])->name('driver.license.index');
+
+// Create License
 Route::get('driver/license/create', [DriversLicensesController::class, 'create'])->name('driver.license.create');
+Route::post('driver/license', [DriversLicensesController::class, 'store'])->name('driver.license');
+
+// Update License Details
 Route::get('driver/license/{id}/edit', [DriversLicensesController::class, 'edit'])->name('driver.license.edit');
 Route::put('driver/license/{id}/update', [DriversLicensesController::class, 'update'])->name('driver.license.update');
-Route::post('driver/license', [DriversLicensesController::class, 'store'])->name('driver.license');
+
+// Verify License
 Route::get('driver/license/{id}/verify', [DriversLicensesController::class, 'verify'])->name('driver.license.verify');
 Route::put('driver/license/{id}/verify', [DriversLicensesController::class, 'verifyStore'])->name('driver.license.verify');
+
+// Revoke License
+Route::get('driver/license/{id}/revoke', [DriversLicensesController::class, 'revoke'])->name('driver.license.revoke');
+Route::put('driver/license/{id}/revoke', [DriversLicensesController::class, 'revokeStore'])->name('driver.license.revoke');
+
+// Delete License
+Route::get('driver/license/{id}/delete', [DriversLicensesController::class, 'delete'])->name('driver.license.delete');
+Route::delete('driver/license/{id}/delete', [DriversLicensesController::class, 'destroy'])->name('driver.license.delete');
 
 /**
  * Organisation Routes
