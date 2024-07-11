@@ -199,4 +199,39 @@ class PSVBadgeController extends Controller
             return redirect()->back()->with('error', 'Something Went Wrong');
         }
     }
+
+    public function revoke ($id) {
+        $psvbadge = PSVBadge::findOrFail($id);
+        return view('driver.psvbadge.revoke', compact('psvbadge'));
+    }
+
+    public function revokeStore($id) {
+        try {
+
+            $psvbadge = PSVBadge::findOrFail($id);
+
+            if (!$psvbadge) {
+                return redirect()->back()->with('error', 'Badge not found');
+            }
+
+            if (!$psvbadge->verified) {
+                return redirect()->back()->with('error', 'Badge already suspended');
+            }
+
+            DB::beginTransaction();
+
+            $psvbadge->update([
+                'verified' => false
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('driver.psvbadge')->with('success', 'Badge suspended successfully');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('SUSPEND BADGE ERROR');
+            Log::error($e);
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
 }

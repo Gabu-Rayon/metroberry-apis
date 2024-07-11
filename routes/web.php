@@ -131,6 +131,10 @@ Route::put('driver/psvbadge/{id}/update', [PSVBadgeController::class, 'update'])
 Route::get('driver/psvbadge/{id}/verify', [PSVBadgeController::class, 'verify'])->name('driver.psvbadge.verify');
 Route::put('driver/psvbadge/{id}/verify', [PSVBadgeController::class, 'verifyStore'])->name('driver.psvbadge.verify');
 
+// Revoke PSV Badge
+Route::get('driver/psvbadge/{id}/revoke', [PSVBadgeController::class, 'revoke'])->name('driver.psvbadge.revoke');
+Route::put('driver/psvbadge/{id}/revoke', [PSVBadgeController::class, 'revokeStore'])->name('driver.psvbadge.revoke');
+
 
 /**
  * Organisation Routes
