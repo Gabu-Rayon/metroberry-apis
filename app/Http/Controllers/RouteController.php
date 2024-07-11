@@ -34,49 +34,6 @@ class RouteController extends Controller
         return view('route.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    // public function store(Request $request)
-    // {
-    //     try {
-
-    //         $routedata = $request->validate([
-    //             'county' => 'required|string',
-    //             'location' => 'required|string',
-    //             'start_location' => 'required|string',
-    //             'end_location' => 'required|string',
-    //         ]);
-
-    //         Log::info('Route za kwetu na ya kwetu tu');
-    //         Log::info($routedata);
-
-    //         $route = Routes::create([
-    //             'county' => $routedata['county'],
-    //             'location' => $routedata['location'],
-    //             'start_location' => $routedata['start_location'],
-    //             'end_location' => $routedata['end_location'],
-    //             'created_by' => Auth::id(),
-    //         ]);
-
-    //         $route->save();
-
-    //         return response()->json([
-    //             'Routes' => $route,
-    //         ], 201);
-
-
-    //     } catch (Exception $e) {
-    //         Log::error('Error Adding A new Route');
-    //         Log::error($e);
-    //         return response()->json([
-    //             'message' => 'An error occurred while Adding A new Route',
-    //             'error' => $e->getMessage()
-    //         ], 500);
-    //     }
-    // }
-
-
     public function store(Request $request)
     {
         try {
@@ -124,9 +81,9 @@ class RouteController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
-        //
+    public function edit(string $id){
+        $route = Routes::findOrfail($id);
+        return view('route.edit', compact('route'));
     }
 
     /**

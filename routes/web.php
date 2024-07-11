@@ -165,6 +165,10 @@ Route::get('route', [RouteController::class, 'index'])->name('route.index');
 Route::get('route/create', [RouteController::class, 'create'])->name('route.create');
 Route::post('route', [RouteController::class, 'store'])->name('route');
 
+// Update Route Details
+Route::get('route/{id}/edit', [RouteController::class, 'edit'])->name('route.edit');
+Route::put('route/{id}/update', [RouteController::class, 'update'])->name('route.update');
+
 /**
  * Route Location Routes
  * 
