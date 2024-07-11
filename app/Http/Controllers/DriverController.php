@@ -346,6 +346,11 @@ class DriverController extends Controller
         }
     }
 
+    public function deactivateForm ($id) {
+        $driver = Driver::findOrfail($id);
+        return view('driver.deactivate', compact('driver'));
+    }
+
     /**
      * Deactivate driver
      */

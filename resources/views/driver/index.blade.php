@@ -106,9 +106,9 @@
                                                         </a>
                                                         <span class='m-1'></span>
                                                         @if ($driver->status == 'active')
-                                                            <a href="javascript:void(0);" class="btn btn-sm btn-secondary" onclick="deactivateDriver({{ $driver->id }})" title="Deactivate Driver">
+                                                            <a href="javascript:void(0);" class="btn btn-sm btn-secondary" onclick="axiosModal('driver/{{ $driver->id }}/deactivate')" title="Dectivate Driver">
                                                                 <i class="fas fa-toggle-off"></i>
-                                                            </a>
+                                                            </a> 
                                                         @else
                                                             <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="axiosModal('driver/{{ $driver->id }}/activate')" title="Activate Driver">
                                                                 <i class="fas fa-toggle-on"></i>
