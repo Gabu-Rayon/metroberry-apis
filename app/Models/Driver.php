@@ -46,4 +46,8 @@ class Driver extends Model
     public function license () {
         return $this->hasOne(DriversLicenses::class);
     }
+
+    public function psvBadge() {
+        return $this->hasOne(PSVBadge::class);
+    }
 }

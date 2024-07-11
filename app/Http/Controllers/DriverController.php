@@ -329,6 +329,22 @@ class DriverController extends Controller
                 return redirect()->back()->with('error', 'Driver license has not been verified');
             }
 
+            if (!$driver->psvBadge) {
+                return redirect()->back()->with('error', 'Driver does not have a PSV Badge');
+            }
+
+            if ($driver->psvBadge->psv_badge_date_of_expiry < date('Y-m-d')) {
+                return redirect()->back()->with('error', 'Driver PSV Badge has expired');
+            }
+
+            if (!$driver->psvBadge->psv_badge_avatar) {
+                return redirect()->back()->with('error', 'Driver PSV Badge documents are missing');
+            }
+
+            if ($driver->psvBadge->verified == false) {
+                return redirect()->back()->with('error', 'Driver PSV Badge has not been verified');
+            }
+
             DB::beginTransaction();
 
             $driver->status = 'active';

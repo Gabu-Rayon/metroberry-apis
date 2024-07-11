@@ -129,12 +129,12 @@
                                                         </a>
                                                         <span class='m-1'></span>
                                                         @if (!$psvbadge->verified)
-                                                            <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="axiosModal('psvbadge/{{ $psvbadge->id }}/verify')" title="Verify">
-                                                                <i class="fas fa-toggle-on"></i>
+                                                            <a href="javascript:void(0);" class="btn btn-sm btn-secondary" onclick="axiosModal('psvbadge/{{ $psvbadge->id }}/verify')" title="Verify">
+                                                                <i class="fas fa-toggle-off"></i>
                                                             </a>
                                                         @else
-                                                            <a href="javascript:void(0);" class="btn btn-sm btn-secondary" onclick="axiosModal('psvbadge/{{ $psvbadge->id }}/revoke')" title="Suspend">
-                                                                <i class="fas fa-toggle-off"></i>
+                                                            <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="axiosModal('psvbadge/{{ $psvbadge->id }}/revoke')" title="Suspend">
+                                                                <i class="fas fa-toggle-on"></i>
                                                             </a>
                                                         @endif
                                                         <span class='m-1'></span>

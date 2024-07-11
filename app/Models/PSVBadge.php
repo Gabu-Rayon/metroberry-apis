@@ -19,4 +19,9 @@ class PSVBadge extends Model
         'psv_badge_avatar',
         'verified',
     ];
+
+    public function driver()
+    {
+        return $this->belongsTo(Driver::class);
+    }
 }
