@@ -91,17 +91,62 @@ class PSVBadgeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(PSVBadge $pSVBadge)
-    {
-        //
+    public function edit($id) {
+        $psvbadge = PSVBadge::findOrFail($id);
+        return view('driver.psvbadge.edit', compact('psvbadge'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, PSVBadge $pSVBadge)
-    {
-        //
+    public function update(Request $request, $id){
+        try {
+            $data = $request->all();
+            $psvbadge = PSVBadge::findOrFail($id);
+
+            $validator = Validator::make($data, [
+                'psv_badge_date_of_issue' => 'required|date',
+                'psv_badge_date_of_expiry' => 'required|date|after:psv_badge_date_of_issue',
+                'psv_badge_avatar' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            ]);
+
+            if ($validator->fails()) {
+                Log::error('PSV BADGE UPDATE VALIDATION ERROR');
+                Log::error($validator->errors()->all());
+                return redirect()->back()->with('error', $validator->errors()->first());
+            }
+
+            if (!$psvbadge) {
+                return redirect()->back()->with('error', 'PSV Badge Not Found');
+            }
+
+            $badgePath = null;
+            $badgeNumber = $psvbadge->psv_badge_no;
+
+            DB::beginTransaction();
+
+            if ($request->hasFile('psv_badge_avatar')) {
+                $badgeFile = $request->file('psv_badge_avatar');
+                $badgeExtension = $badgeFile->getClientOriginalExtension();
+                $badgeFileName = "{$badgeNumber}-back-id.{$badgeExtension}";
+                $badgePath = $badgeFile->storeAs('uploads/psvbadge-avatars', $badgeFileName, 'public');
+            }
+
+            $psvbadge->update([
+                'psv_badge_date_of_issue' => $data['psv_badge_date_of_issue'],
+                'psv_badge_date_of_expiry' => $data['psv_badge_date_of_expiry'],
+                'psv_badge_avatar' => $badgePath,
+            ]);
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'PSV Badge Updated Successfully');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('PSV BADGE UPDATE ERROR');
+            Log::error($e);
+            return redirect()->back()->with('error', 'Something Went Wrong');
+        }
     }
 
     /**

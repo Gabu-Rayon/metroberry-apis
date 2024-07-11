@@ -123,6 +123,10 @@ Route::get('driver/psvbadge', [PSVBadgeController::class, 'index'])->name('drive
 Route::get('driver/psvbadge/create', [PSVBadgeController::class, 'create'])->name('driver.psvbadge.create');
 Route::post('driver/psvbadge', [PSVBadgeController::class, 'store'])->name('driver.psvbadge');
 
+// Update PSV Badge Details
+Route::get('driver/psvbadge/{id}/edit', [PSVBadgeController::class, 'edit'])->name('driver.psvbadge.edit');
+Route::put('driver/psvbadge/{id}/update', [PSVBadgeController::class, 'update'])->name('driver.psvbadge.update');
+
 /**
  * Organisation Routes
  * 
