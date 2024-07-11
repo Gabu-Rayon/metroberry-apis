@@ -135,6 +135,10 @@ Route::put('driver/psvbadge/{id}/verify', [PSVBadgeController::class, 'verifySto
 Route::get('driver/psvbadge/{id}/revoke', [PSVBadgeController::class, 'revoke'])->name('driver.psvbadge.revoke');
 Route::put('driver/psvbadge/{id}/revoke', [PSVBadgeController::class, 'revokeStore'])->name('driver.psvbadge.revoke');
 
+// Delete PSV Badge
+Route::get('driver/psvbadge/{id}/delete', [PSVBadgeController::class, 'delete'])->name('driver.psvbadge.delete');
+Route::delete('driver/psvbadge/{id}/delete', [PSVBadgeController::class, 'destroy'])->name('driver.psvbadge.delete');
+
 
 /**
  * Organisation Routes
