@@ -75,9 +75,10 @@
                                             <thead>
                                                 <tr>
                                                     <th title="Name">License No</th>
+                                                    <th title="Address">Driver</th>
                                                     <th title="Email">Issue Date</th>
                                                     <th title="Phone">Expiry Date</th>
-                                                    <th title="Address">Driver</th>
+                                                    <th title="Status">Status</th>
                                                     <th title="Action" width="80">Action</th>
                                                 </tr>
                                             </thead>
@@ -85,28 +86,61 @@
                                                 @foreach ($licenses as $license)
                                                 <tr>
                                                     <td>{{ $license->driving_license_no }}</td>
+                                                    <td>{{ $license->driver->user->name }}</td>
                                                     <td>{{ $license->driving_license_date_of_issue }}</td>
                                                     <td>{{ $license->driving_license_date_of_expiry }}</td>
-                                                    <td>{{ $license->driver->user->name }}</td>
+                                                    <td>
+                                                        @php
+                                                            $frontPage = $license->driving_license_avatar_front;
+                                                            $backPage = $license->driving_license_avatar_back;
+                                                    
+                                                            // First, check for missing documents.
+                                                            if (!$frontPage || !$backPage) {
+                                                                $badgeClass = 'badge bg-danger'; // Red badge indicates missing documents.
+                                                                $badgeText = 'Missing Documents';
+                                                            }
+                                                            
+                                                            else {
+                                                                // Proceed only if both front and back pages are available.
+                                                                $expiryDate = \Carbon\Carbon::parse($license->driving_license_date_of_expiry);
+                                                                $today = \Carbon\Carbon::today();
+                                                                $isExpired = $today->lt($expiryDate);
+                                                    
+                                                                $daysUntilExpiry = $isExpired ? 0 : $today->diffInDays($expiryDate, false);
+                                                    
+                                                                // Determine badge color and text based on days until expiry and verification status.
+                                                                if ($daysUntilExpiry < 0) {
+                                                                    $badgeClass = 'badge bg-danger';
+                                                                    $badgeText = 'Expired';
+                                                                } elseif ($daysUntilExpiry <= 30 && !$license->verified) {
+                                                                    $badgeClass = 'badge bg-warning text-dark'; // Yellow badge for pending verification.
+                                                                    $badgeText = 'Pending Verification';
+                                                                } elseif ($daysUntilExpiry > 30 && !$license->verified) {
+                                                                    $badgeClass = 'badge bg-warning text-dark'; // Yellow badge for pending verification.
+                                                                    $badgeText = 'Pending Verification';
+                                                                } else {
+                                                                    $badgeClass = 'badge bg-success';
+                                                                    $badgeText = 'Valid';
+                                                                }
+                                                            }
+                                                        @endphp
+                                                        <span class="{{ $badgeClass }}">{{ $badgeText }}</span>
+                                                    </td>
                                                     <td class="d-flex">
-                                                        <a href="javascript:void(0);"
-                                                            class="btn btn-sm btn-primary"
-                                                            onclick="axiosModal('driver/license{{ $license->id }}/edit')">
+                                                        <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="axiosModal('license/{{ $license->id }}/edit')" title="Edit">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
                                                         <span class='m-1'></span>
-                                                        <a href="javascript:void(0);"
-                                                            class="btn btn-sm btn-danger"
-                                                            onclick="deleteLicense({{ $license->id }})">
+                                                        <a href="javascript:void(0);" class="btn btn-sm btn-danger" onclick="deleteLicense({{ $license->id }})" title="Delete">
                                                             <i class="fas fa-trash"></i>
                                                         </a>
                                                         <span class='m-1'></span>
-                                                        @if ($license->verified)
-                                                            <a href="javascript:void(0);" class="btn btn-sm btn-secondary" onclick="verifyLicense({{ $license->id }})" title="Verify License">
+                                                        @if (!$license->verified)
+                                                            <a href="javascript:void(0);" class="btn btn-sm btn-secondary" onclick="axiosModal('license/{{ $license->id }}/verify')" title="Verify">
                                                                 <i class="fas fa-toggle-off"></i>
                                                             </a>
                                                         @else
-                                                            <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="revokeLicense({{ $license->id }})" title="Revoke License">
+                                                            <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="revokeLicense({{ $license->id }})" title="Revoke">
                                                                 <i class="fas fa-toggle-on"></i>
                                                             </a>
                                                         @endif

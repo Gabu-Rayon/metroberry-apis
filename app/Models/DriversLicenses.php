@@ -20,6 +20,6 @@ class DriversLicenses extends Model
     ];
 
     public function driver(){
-        return $this->hasOne(Driver::class);
+        return $this->hasOne(Driver::class, 'id', 'driver_id');
     }
 }

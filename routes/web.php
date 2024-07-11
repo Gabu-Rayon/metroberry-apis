@@ -90,7 +90,11 @@ Route::get('performance/create', [DriverController::class, 'createDriverPerforma
 
 Route::get('driver/license', [DriversLicensesController::class, 'index'])->name('driver.license.index');
 Route::get('driver/license/create', [DriversLicensesController::class, 'create'])->name('driver.license.create');
+Route::get('driver/license/{id}/edit', [DriversLicensesController::class, 'edit'])->name('driver.license.edit');
+Route::put('driver/license/{id}/update', [DriversLicensesController::class, 'update'])->name('driver.license.update');
 Route::post('driver/license', [DriversLicensesController::class, 'store'])->name('driver.license');
+Route::get('driver/license/{id}/verify', [DriversLicensesController::class, 'verify'])->name('driver.license.verify');
+Route::put('driver/license/{id}/verify', [DriversLicensesController::class, 'verifyStore'])->name('driver.license.verify');
 
 /**
  * Organisation Routes

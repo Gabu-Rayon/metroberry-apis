@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Driver;
 use Illuminate\Http\Request;
 use App\Models\DriversLicenses;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -103,17 +104,74 @@ class DriversLicensesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(DriversLicenses $driversLicenses)
-    {
-        //
+    public function edit($id) {
+        $license = DriversLicenses::findOrFail($id);
+        return view('driver.license.edit',compact('license'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, DriversLicenses $driversLicenses)
-    {
-        //
+    public function update(Request $request, $id) {
+        try {
+
+            $license = DriversLicenses::findOrFail($id);
+            $data = $request->all();
+            
+            $validator = Validator::make($data, [
+                'license_no' => 'required|string',
+                'driving_license_date_of_issue' => 'required|date',
+                'driving_license_date_of_expiry' => 'required|date|after:driving_license_date_of_issue',
+                'driving_license_avatar_front' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+                'driving_license_avatar_back' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+            ]);
+
+            if ($validator->fails()) {
+                Log::error('UPDATE LICENSE VALIDATION ERROR');
+                Log::error($validator->errors()->first());
+                return redirect()->back()->with('error', $validator->errors()->first());
+            }
+
+            if (!$license) {
+                return redirect()->back()->with('error', 'License not found');
+            }
+
+            $frontLicensePath = null;
+            $backLicensePath = null;
+
+            if ($request->hasFile('driving_license_avatar_front')) {
+                $frontLicenseFile = $request->file('driving_license_avatar_front');
+                $frontLicenseExtension = $frontLicenseFile->getClientOriginalExtension();
+                $frontLicenseFileName = "{$license->driving_license_no}-front-id.{$frontLicenseExtension}";
+                $frontLicensePath = $frontLicenseFile->storeAs('uploads/front-license-pics', $frontLicenseFileName, 'public');
+            }
+
+            if ($request->hasFile('driving_license_avatar_back')) {
+                $backLicenseFile = $request->file('driving_license_avatar_back');
+                $backLicenseExtension = $backLicenseFile->getClientOriginalExtension();
+                $backLicenseFileName = "{$license->driving_license_no}-back-id.{$backLicenseExtension}";
+                $backLicensePath = $backLicenseFile->storeAs('uploads/back-license-pics', $backLicenseFileName, 'public');
+            }
+
+            DB::beginTransaction();
+
+            $license->update([
+                'driving_license_date_of_issue' => $data['driving_license_date_of_issue'],
+                'driving_license_date_of_expiry' => $data['driving_license_date_of_expiry'],
+                'driving_license_avatar_front' => $frontLicensePath,
+                'driving_license_avatar_back' => $backLicensePath,
+                'verified' => false
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('driver.license')->with('success', 'License updated successfully');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('UPDATE LICENSE ERROR');
+            Log::error($e);
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -122,5 +180,60 @@ class DriversLicensesController extends Controller
     public function destroy(DriversLicenses $driversLicenses)
     {
         //
+    }
+
+    public function verify ($id) {
+        try {
+
+            $license = DriversLicenses::findOrFail($id);
+
+            if (!$license) {
+                return redirect()->back()->with('error', 'License not found');
+            }
+
+            return view('driver.license.verify',compact('license'));
+        } catch (Exception $e) {
+            Log::error('VERIFY LICENSE ERROR');
+            Log::error($e);
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function verifyStore ($id) {
+        try {
+
+            $license = DriversLicenses::findOrFail($id);
+
+            if (!$license) {
+                return redirect()->back()->with('error', 'License not found');
+            }
+
+            if ($license->verified) {
+                return redirect()->back()->with('error', 'License already verified');
+            }
+
+            if ($license->driving_license_date_of_expiry < Carbon::today()) {
+                return redirect()->back()->with('error', 'License has expired');
+            }
+
+            if (!$license->driving_license_avatar_front || !$license->driving_license_avatar_back) {
+                return redirect()->back()->with('error', 'License documents are missing');
+            }
+
+            DB::beginTransaction();
+
+            $license->update([
+                'verified' => true
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('driver.license')->with('success', 'License verified successfully');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('VERIFY LICENSE ERROR');
+            Log::error($e);
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 }

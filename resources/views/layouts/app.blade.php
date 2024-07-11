@@ -106,15 +106,5 @@
             @endif
         });
     </script>
-
-    <!-- DataTables Initialization -->
-    <script type="text/javascript">
-        $(function () {
-            window.LaravelDataTables = window.LaravelDataTables || {};
-            window.LaravelDataTables["driver-table"] = $("#driver-table").DataTable({
-                
-            });
-        });
-    </script>
 </body>
 </html>
