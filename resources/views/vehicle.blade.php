@@ -238,6 +238,7 @@
                                                             </th>
                                                             <th title="Avatar">Avatar</th>
                                                             <th title="Driver">Driver</th>
+                                                             <th title="Address">Status</th>
                                                             <th title="Action" width="150">Action</th>
                                                         </tr>
                                                     </thead>
@@ -270,19 +271,32 @@
                                                                     </a>
                                                                 @endif
                                                             </td>
-                                                                <td class="d-flex">
-                                                                    <a href="javascript:void(0);"
-                                                                        class="btn btn-sm btn-primary"
-                                                                        onclick="axiosModal('/vehicle/{{ $vehicle->id }}/edit')">
-                                                                        <i class="fas fa-edit"></i>
-                                                                    </a>
-                                                                    <span class='m-1'></span>
-                                                                    <a href="javascript:void(0);"
-                                                                        class="btn btn-sm btn-danger"
-                                                                        onclick="deleteVehicle({{ $vehicle->id }})">
-                                                                        <i class="fas fa-trash"></i>
-                                                                    </a>
-                                                                </td>
+                                                             <td>
+                                                        @if ($vehicle->status == 'active')
+                                                        <span class="badge bg-success">Active</span>
+                                                        @else
+                                                        <span class="badge bg-danger">Inactive</span>
+                                                        @endif
+                                                    </td>
+                                                                 <td class="d-flex">
+                                                        <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="axiosModal('/vehicle/{{ $vehicle->id }}/edit')" title="Edit Driver">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                        <span class='m-1'></span>
+                                                        @if ($vehicle->status == 'active')
+                                                            <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="axiosModal('/vehicle/{{ $vehicle->id }}/deactivate')" title="Dectivate Driver">
+                                                                <i class="fas fa-toggle-on"></i>
+                                                            </a> 
+                                                        @else
+                                                            <a href="javascript:void(0);" class="btn btn-sm btn-secondary" onclick="axiosModal('/vehicle/{{ $vehicle->id }}/activate')" title="Activate Driver">
+                                                                <i class="fas fa-toggle-off"></i>
+                                                            </a>                                                        
+                                                        @endif
+                                                        <span class='m-1'></span>
+                                                        <a href="javascript:void(0);" class="btn btn-sm btn-danger" onclick="axiosModal('vehicle/{{ $vehicle->id }}/delete')" title="Delete">
+                                                            <i class="fas fa-trash"></i>
+                                                        </a>
+                                                    </td>
                                                             </tr>
                                                         @endforeach
                                                     </tbody>

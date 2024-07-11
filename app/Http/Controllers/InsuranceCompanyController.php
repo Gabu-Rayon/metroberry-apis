@@ -111,23 +111,6 @@ class InsuranceCompanyController extends Controller
         }
     }
 
-    public function destroy($id)
-    {
-        try {
-            $company = InsuranceCompany::findOrFail($id);
-
-            $company->delete();
-
-            return redirect()->route('vehicle.insurance.company')->with('success', 'Insurance company deleted successfully.');
-        } catch (Exception $e) {
-            // Log the error message
-            Log::error('Error deleting insurance company: ' . $e->getMessage());
-
-            return back()->with('error', 'An error occurred while deleting the insurance company. Please try again.');
-        }
-    }
-
-
      public function insuranceRecurringPeriod(){
         $recurringPeriods = InsuranceRecurringPeriod::all();
          return view('vehicle.insurance.recurring-period',compact('recurringPeriods')); 
@@ -195,6 +178,64 @@ class InsuranceCompanyController extends Controller
         ]);
 
         return redirect()->route('vehicle.insurance.recurring.period')->with('success', 'Insurance Recurring Period updated successfully.');
+    }
+
+
+
+    public function delete($id)
+    {
+        $company = InsuranceCompany::findOrFail($id);
+        return view('vehicle.insurance.company.delete', compact('company'));
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $company = InsuranceCompany::findOrFail($id);
+            $company->delete();
+            return redirect()->route('vehicle.insurance.company')->with('success', 'Insurance company deleted successfully.');
+        } catch (Exception $e) {
+            Log::error('Error deleting insurance company: ' . $e->getMessage());
+            return back()->with('error', 'An error occurred while deleting the insurance company. Please try again.');
+        }
+    }
+
+    public function activateForm($id)
+    {
+        $company = InsuranceCompany::findOrFail($id);
+        return view('vehicle.insurance.company.activate', compact('company'));
+    }
+
+    public function activate(Request $request, $id)
+    {
+        try {
+            $company = InsuranceCompany::findOrFail($id);
+            $company->status = 1;
+            $company->save();
+            return redirect()->route('vehicle.insurance.company')->with('success', 'Insurance company activated successfully.');
+        } catch (Exception $e) {
+            Log::error('Error activating insurance company: ' . $e->getMessage());
+            return back()->with('error', 'An error occurred while activating the insurance company. Please try again.');
+        }
+    }
+
+    public function deactivateForm($id)
+    {
+        $company = InsuranceCompany::findOrFail($id);
+        return view('vehicle.insurance.company.deactivate', compact('company'));
+    }
+
+    public function deactivate(Request $request, $id)
+    {
+        try {
+            $company = InsuranceCompany::findOrFail($id);
+            $company->status = 0; 
+            $company->save();
+            return redirect()->route('vehicle.insurance.company')->with('success', 'Insurance company deactivated successfully.');
+        } catch (Exception $e) {
+            Log::error('Error deactivating insurance company: ' . $e->getMessage());
+            return back()->with('error', 'An error occurred while deactivating the insurance company. Please try again.');
+        }
     }
 
 

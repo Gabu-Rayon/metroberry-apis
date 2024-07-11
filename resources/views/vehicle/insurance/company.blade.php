@@ -47,7 +47,8 @@
                                                             <th>Address</th>
                                                             <th>Email</th>
                                                             <th>Website</th>
-                                                            <th width="80">Action</th>
+                                                             <th title="Address">Status</th>
+                                                            <th title="Action" width="150">Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -58,19 +59,32 @@
                                                                 <td>{{ $company->address }}</td>
                                                                 <td>{{ $company->email }}</td>
                                                                 <td>{{ $company->website }}</td>
-                                                                <td class="d-flex">
-                                                                    <a href="javascript:void(0);"
-                                                                        class="btn btn-sm btn-primary"
-                                                                        onclick="axiosModal('/vehicle/insurance/company/{{ $company->id }}/edit')">
-                                                                        <i class="fas fa-edit"></i>
-                                                                    </a>
-                                                                    <span class='m-1'></span>
-                                                                    <a href="javascript:void(0);"
-                                                                        class="btn btn-sm btn-danger"
-                                                                        onclick="deleteVehicle({{ $company->id }})">
-                                                                        <i class="fas fa-trash"></i>
-                                                                    </a>
-                                                                </td>
+                                                                    <td>
+                                                        @if ($company->status == 1)
+                                                        <span class="badge bg-success">Active</span>
+                                                        @else
+                                                        <span class="badge bg-danger">Inactive</span>
+                                                        @endif
+                                                    </td>
+                                                                 <td class="d-flex">
+                                                        <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="axiosModal('/vehicle/insurance/company/{{ $company->id }}/edit')" title="Edit Driver">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                        <span class='m-1'></span>
+                                                        @if ($company->status == 1)
+                                                            <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="axiosModal('/vehicle/insurance/company/{{ $company->id }}/deactivate')" title="Dectivate Driver">
+                                                                <i class="fas fa-toggle-on"></i>
+                                                            </a> 
+                                                        @else
+                                                            <a href="javascript:void(0);" class="btn btn-sm btn-secondary" onclick="axiosModal('/vehicle/insurance/company/{{ $company->id }}/activate')" title="Activate Driver">
+                                                                <i class="fas fa-toggle-off"></i>
+                                                            </a>                                                        
+                                                        @endif
+                                                        <span class='m-1'></span>
+                                                        <a href="javascript:void(0);" class="btn btn-sm btn-danger" onclick="axiosModal('/vehicle/insurance/company/{{ $company->id }}/delete')" title="Delete">
+                                                            <i class="fas fa-trash"></i>
+                                                        </a>
+                                                    </td>
                                                             </tr>
                                                         @endforeach
                                                     </tbody>

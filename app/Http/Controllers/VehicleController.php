@@ -429,40 +429,24 @@ class VehicleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
+
+     public function delete($id)
+    {
+        $vehicle = Vehicle::findOrFail($id);
+        return view('vehicle.delete', compact('vehicle'));
+    }
+
     public function destroy($id)
     {
         try {
-            $vehicle = Vehicle::find($id);
-            $organisation = Organisation::where('user_id', auth()->user()->id)->first();
-
-
-            if (!$vehicle) {
-                return response()->json([
-                    'error' => 'Vehicle not found'
-                ], 404);
-            }
-
-            if (!$organisation || $vehicle->organisation_id !== $organisation->id) {
-                return response()->json([
-                    'message' => 'Unauthorised',
-                ], 401);
-            }
-
+            $vehicle = Vehicle::findOrFail($id);
             $vehicle->delete();
-
-            return response()->json([
-                'message' => 'Vehicle deleted successfully'
-            ], 200);
+            return redirect()->route('vehicle')->with('success', 'Vehicle deleted successfully.');
         } catch (Exception $e) {
-            Log::error('ERROR DELETING VEHICLE');
-            Log::error($e);
-            return response()->json([
-                'message' => 'Error occurred while deleting vehicle',
-                'error' => $e->getMessage()
-            ], 500);
+            Log::error('Error deleting Vehicle: ' . $e->getMessage());
+            return back()->with('error', 'An error occurred while deleting the Vehicle. Please try again.');
         }
     }
-
     /**
      * Assign driver to vehicle
      * 
@@ -651,6 +635,73 @@ class VehicleController extends Controller
         return view('vehicle.insurance');
      }
 
+    public function activateForm($id)
+    {
+        $vehicle = Vehicle::findOrfail($id);
+        return view('vehicle.activate', compact('vehicle'));
+    }
 
-   
+
+    public function activate($id)
+    {
+        try {
+
+            $vehicle = Vehicle::findOrfail($id);
+
+            if ($vehicle->status == 'active') {
+                return redirect()->back()->with('error', 'Vehicle is already active');
+            }
+
+            DB::beginTransaction();
+
+            $vehicle->status = 'active';
+
+            $vehicle->save();
+
+            DB::commit();
+
+            return redirect()->route('driver')->with('success', 'Vehicle activated successfully');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('ACTIVATE VEHICLE ERROR');
+            Log::error($e);
+            return redirect()->back()->with('error', 'An error occurred');
+        }
+    }
+
+
+    public function deactivateForm($id)
+    {
+        $vehicle = Vehicle::findOrfail($id);
+        return view('vehicle.deactivate', compact('vehicle'));
+    }
+
+
+    public function deactivate($id)
+    {
+        try {
+
+            $vehicle = Driver::findOrfail($id);
+
+            if ($vehicle->status == 'inactive') {
+                return redirect()->back()->with('error', 'Vehicle is already inactive');
+            }
+
+            DB::beginTransaction();
+
+            $vehicle->status = 'inactive';
+
+            $vehicle->save();
+
+            DB::commit();
+
+            return redirect()->route('driver')->with('success', 'Vehicle deactivated successfully');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('VEHICLE DRIVER ERROR');
+            Log::error($e);
+            return redirect()->back()->with('error', 'An error occurred');
+        }
+    }
+
 }

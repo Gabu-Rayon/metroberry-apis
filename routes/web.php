@@ -200,6 +200,18 @@ Route::put('/vehicle/{id}/assign/driver', [VehicleController::class, 'assignDriv
 
 Route::get('/vehicle/{id}/delete', [VehicleController::class, 'destroy'])->name('vehicle.destroy');
 
+// Activate Vehicle 
+Route::get('vehicle/{id}/activate', [VehicleController::class, 'activateForm'])->name('vehicle.activate');
+Route::put('vehicle/{id}/activateStore', [VehicleController::class, 'activate'])->name('vehicle.activateStore');
+Route::get('vehicle/{id}/deactivate', [VehicleController::class, 'deactivateForm'])->name('vehicle.deactivate');
+Route::put('vehicle/{id}/deactivateStore', [VehicleController::class, 'deactivate'])->name('vehicle.deactivateStore');
+
+// Delete Vehicle
+Route::get('vehicle/{id}/delete', [VehicleController::class, 'delete'])->name('driver.delete');
+Route::delete('vehicle/{id}/delete', [VehicleController::class, 'destroy'])->name('driver.delete');
+
+
+
 /***
  * Vehicle Maintaince OR servincing
  */
@@ -312,6 +324,17 @@ Route::post('/vehicle/insurance/recurring-period/store', [InsuranceCompanyContro
 Route::get('/vehicle/insurance/recurring-period/{id}/edit', [InsuranceCompanyController::class, 'insuranceRecurringPeriodEdit'])->name('vehicle.insurance.recurring.period.edit');
 
 Route::put('/vehicle/insurance/recurring-period/{id}', [InsuranceCompanyController::class, 'insuranceRecurringPeriodUpdate'])->name('vehicle.insurance.recurring.period.update');
+
+
+// Activate vehicle.insurance.company 
+Route::get('/vehicle/insurance/company/{id}/activate', [InsuranceCompanyController::class, 'activateForm'])->name('vehicle.insurance.company.activate');
+Route::put('/vehicle/insurance/company/{id}/activateStore', [InsuranceCompanyController::class, 'activate'])->name('vehicle.insurance.company.activateStore');
+Route::get('/vehicle/insurance/company/{id}/deactivate', [InsuranceCompanyController::class, 'deactivateForm'])->name('vehicle.insurance.company.deactivate');
+Route::put('/vehicle/insurance/company/{id}/deactivateStore', [InsuranceCompanyController::class, 'deactivate'])->name('vehicle.insurance.company.deactivateStore');
+
+// Delete vehicle.insurance.company
+Route::get('/vehicle/insurance/company/{id}/delete', [InsuranceCompanyController::class, 'delete'])->name('vehicle.insurance.company.delete');
+Route::delete('/vehicle/insurance/company/{id}/destory', [InsuranceCompanyController::class, 'destroy'])->name('vehicle.insurance.company.destroy');
 
 /****
  * VehicleInsurance Route
