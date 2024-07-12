@@ -29,8 +29,16 @@ class RoleAndPermissionSeeder extends Seeder
             // Dashboard Permissions
             'view dashboard',
 
+            // User Permissions
+            'manage users',
+
             // Employee Permissions
             'view customers',
+            'create customer',
+
+            // Organisation Permissions
+            'view organisations',
+            'create organisation',
         ];
 
         foreach ($permissions as $permission) {
@@ -46,11 +54,24 @@ class RoleAndPermissionSeeder extends Seeder
             // Dashboard Permissions
             'view dashboard',
 
+            // User Permissions
+            'manage users',
+
             // Employee Permissions
             'view customers',
+            'create customer',
+
+            // Organisation Permissions
+            'view organisations',
+            'create organisation'
         ]);
 
         $organisation->syncPermissions([
+            // Dashboard Permissions
+            'view dashboard',
+            
+            // User Permissions
+            'manage users',
 
             // Employee Permissions
             'view customers',

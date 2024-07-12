@@ -18,6 +18,14 @@ class DashboardController extends Controller
      * Display a listing of the resource.
      */
     public function index(){
+
+
+        $user = Auth::user();
+
+        if ($user->role == 'organisation') {
+            return redirect()->route('organisation.dashboard');
+        }
+        
         $activeVehicles = Vehicle::where('status', 'active')->get();
         $inactiveVehicles = Vehicle::where('status', 'inactive')->get();
         $tripsThisMonth = Trip::whereMonth('created_at', date('m'))->get();

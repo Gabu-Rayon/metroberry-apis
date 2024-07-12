@@ -23,7 +23,7 @@ use App\Http\Controllers\VehicleRefuelingController;
 use App\Http\Controllers\RouteController;
 use App\Http\Controllers\RouteLocationsController;
 
-Route::get('/dashboard', [DashboardController::class, 'index'])
+Route::get('dashboard', [DashboardController::class, 'index'])
     ->name('dashboard')
     ->middleware('auth', 'can:view dashboard');
 
@@ -35,12 +35,15 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
-/***
+/***-
  * User Interfaces
  * 
  */
 
 Route::get('/login', [UserController::class, 'index'])->name('login');
+Route::get('/admin/user', [UserController::class, 'index'])->name('user.interface.index');
+Route::get('/admin/user/create', [UserController::class, 'create'])->name('user.create');
+
 
 /**
  * Employees Routes
@@ -50,22 +53,46 @@ Route::get('/login', [UserController::class, 'index'])->name('login');
 // View Employees
 Route::get('employee', [EmployeeController::class, 'index'])
     ->name('employee')
-    ->middleware('auth', 'can:view employees');
+    ->middleware('auth', 'can:view customers');
 
 // Create Employee
-Route::get('employee/create', [EmployeeController::class, 'create'])->name('employee.create');
-Route::post('employee', [EmployeeController::class, 'store'])->name('employee');
+Route::get('employee/create', [EmployeeController::class, 'create'])
+    ->name('employee.create')
+    ->middleware('auth', 'can:create customer');
+
+Route::post('employee', [EmployeeController::class, 'store'])
+    ->name('employee.create')
+    ->middleware('auth', 'can:create customer');
 
 Route::get('employee/{id}/edit', [EmployeeController::class, 'edit'])->name('employee.edit');
 Route::put('employee/{id}/update', [EmployeeController::class, 'update'])->name('employee.update');
 Route::post('employee/{id}/delete', [EmployeeController::class, 'destroy'])->name('employee.delete');
+
+
 /***
  * Organisations Routes
  */
-// organisation organisation/create
-Route::get('organisation/create', [OrganisationController::class, 'create'])->name('organisation.create');
-Route::get('organisation', [OrganisationController::class, 'index'])->name('organisation');
-Route::post('organisation', [OrganisationController::class, 'store'])->name('organisation');
+
+// Organisation Dashboard
+
+Route::get('organisation/dashboard', [OrganisationController::class, 'dashboard'])
+    ->name('organisation.dashboard')
+    ->middleware('auth', 'can:view dashboard');
+
+
+// View Organisations
+Route::get('organisation', [OrganisationController::class, 'index'])
+    ->name('organisation')
+    ->middleware('auth', 'can:view organisations');
+
+// Create Organisation
+Route::get('organisation/create', [OrganisationController::class, 'create'])
+    ->name('organisation.create')
+    ->middleware('auth', 'can:create organisation');
+
+Route::post('organisation', [OrganisationController::class, 'store'])
+    ->name('organisation.create')
+    ->middleware('auth', 'can:create organisation');
 
 Route::get('organisation/{id}/edit', [OrganisationController::class, 'edit'])->name('organisation.edit');
 Route::get('organisation/{id}/delete', [OrganisationController::class, 'destroy'])->name('organisation.destroy');
@@ -144,18 +171,6 @@ Route::put('driver/psvbadge/{id}/revoke', [PSVBadgeController::class, 'revokeSto
 // Delete PSV Badge
 Route::get('driver/psvbadge/{id}/delete', [PSVBadgeController::class, 'delete'])->name('driver.psvbadge.delete');
 Route::delete('driver/psvbadge/{id}/delete', [PSVBadgeController::class, 'destroy'])->name('driver.psvbadge.delete');
-
-
-/**
- * Organisation Routes
- * 
- */
-Route::get('organisation', [OrganisationController::class, 'index'])->name('organisation');
-
-Route::get('organisation/create', [OrganisationController::class, 'create'])->name('organisation.create');
-Route::get('organisation/{id}/edit', [OrganisationController::class, 'edit'])->name('organisation.edit');
-Route::put('organisation/{id}/update', [OrganisationController::class, 'update'])->name('organisation.update');
-Route::post('organisation/{id}/delete', [OrganisationController::class, 'destroy'])->name('organisation.destroy');
 
 /**
  * 'Routes' Routes

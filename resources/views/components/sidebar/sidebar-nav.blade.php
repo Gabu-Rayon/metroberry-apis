@@ -10,6 +10,7 @@
             ])
         @endif
         
+        @if(\Auth::user()->can('manage users'))
         @include('components.sidebar.sidebar-dropdown', [
             'title' => 'Users',
             'icon' => '
@@ -31,6 +32,7 @@
                 ['label' => 'Driver Performance', 'route' => route('driver.performance.index')],
             ]
         ])
+        @endif
         
         @include('components.sidebar.sidebar-dropdown', [
             'title' => 'Vehicles',
