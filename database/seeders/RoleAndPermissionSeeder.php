@@ -86,8 +86,13 @@ class RoleAndPermissionSeeder extends Seeder
             'show vehicle',
             'edit vehicle',
             'delete vehicle',
+            'deactivate vehicle',
+
             'assign driver',
             'view drivers',
+            'activate driver',
+            'deactivate driver',
+
             'show customer',
             'edit customer',
             'delete customer',
@@ -107,6 +112,57 @@ class RoleAndPermissionSeeder extends Seeder
             'update profile',
             'reset password',
             'update avatar',
+            'view dashboard',
+
+            'manage insurance company',
+            'edit insurance company',
+            'delete insurance company',
+            'view insurance company',
+            'activate insurance company',
+            'deactivate insurance company',
+
+            'manage insurance recurring period',
+            'edit insurance recurring period',
+            'delete insurance recurring period',
+            'view insurance recurring period',
+            'activate insurance recurring period',
+            'deactivate insurance recurring period',
+
+            'manage vehicle refueling',
+            'edit vehicle refueling',
+            'delete vehicle refueling',
+            'view vehicle refueling',
+
+            'manage reports',
+            'edit report',
+            'delete report',
+            'view report',
+            'create report',
+
+            'manage purchase',
+            'edit purchase',
+            'delete purchase',
+            'view purchase',
+            'create purchase',
+
+            'manage settings',
+            'edit setting',
+            'delete setting',
+            'view setting',
+            'create setting',
+
+
+            'manage permissions',
+            'edit permission',
+            'delete permission',
+            'view permission',
+            'create permission',
+
+            'manage roles',
+            'edit role',
+            'delete role',
+            'view role',
+            'create role',
         ];
 
         foreach ($permissions as $permission) {
@@ -134,6 +190,7 @@ class RoleAndPermissionSeeder extends Seeder
             'edit vehicle',
             'delete vehicle',
             'show vehicle',
+            'deactivate vehicle',
 
             'view organisations',
             'create organisation',
@@ -147,6 +204,8 @@ class RoleAndPermissionSeeder extends Seeder
             'delete driver',
             'show driver',
             'assign driver',
+            'activate driver',
+            'deactivate driver',
 
             'view customers',
             'create customer',
@@ -162,7 +221,6 @@ class RoleAndPermissionSeeder extends Seeder
 
             'start trip',
             'end trip',
-
 
             'view invoices',
             'create invoice',
@@ -183,9 +241,7 @@ class RoleAndPermissionSeeder extends Seeder
             'view organisation',
             'show organisation',
             'edit organisation',
-            'delete organisation',
-
-            
+            'delete organisation',           
 
             'manage trips',
             'manage drivers',
@@ -197,6 +253,58 @@ class RoleAndPermissionSeeder extends Seeder
             'update profile',
             'reset password',
             'update avatar',
+
+
+
+            'manage insurance company',
+            'edit insurance company',
+            'delete insurance company',
+            'view insurance company',
+            'activate insurance company',
+            'deactivate insurance company',
+
+            'manage insurance recurring period',
+            'edit insurance recurring period',
+            'delete insurance recurring period',
+            'view insurance recurring period',
+            'activate insurance recurring period',
+            'deactivate insurance recurring period',
+
+            'manage vehicle refueling',
+            'edit vehicle refueling',
+            'delete vehicle refueling',
+            'view vehicle refueling',
+
+            'manage reports',
+            'edit report',
+            'delete report',
+            'view report',
+            'create report',
+
+            'manage purchase',
+            'edit purchase',
+            'delete purchase',
+            'view purchase',
+            'create purchase',
+
+            'manage settings',
+            'edit setting',
+            'delete setting',
+            'view setting',
+            'create setting',
+
+
+            'manage permissions',
+            'edit permission',
+            'delete permission',
+            'view permission',
+            'create permission',
+
+            'manage roles',
+            'edit role',
+            'delete role',
+            'view role',
+            'create role',
             
         ]);
 
@@ -253,7 +361,7 @@ class RoleAndPermissionSeeder extends Seeder
             'reset password',
             'update avatar',
 
-             'view invoices',
+            'view invoices',
             'create invoice',
             'edit invoice',
             'delete invoice',
@@ -264,6 +372,9 @@ class RoleAndPermissionSeeder extends Seeder
             'show vehicle',
             'start trip',
             'end trip',
+            'update profile',
+            'reset password',
+            'update avatar',
         ]);
     }
 }

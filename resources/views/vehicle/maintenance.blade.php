@@ -28,7 +28,7 @@
                                             <div class="text-end">
                                                 <div class="actions">
                                                     <a class="btn btn-success btn-sm"
-                                                        href="/create">
+                                                        href="/vehicle/maintenance/create">
                                                         <i class="fa fa-plus"></i>&nbsp;
                                                         Create
                                                     </a>
