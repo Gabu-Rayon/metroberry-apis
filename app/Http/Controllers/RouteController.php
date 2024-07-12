@@ -109,6 +109,9 @@ class RouteController extends Controller
                 return redirect()->back()->with('error', $validator->errors()->first());
             }
 
+            Log::info('DATA');
+            Log::info($data);
+
             DB::beginTransaction();
 
             $route->update([
@@ -136,7 +139,8 @@ class RouteController extends Controller
                 foreach ($data['locations'] as $location) {
                     RouteLocations::create([
                         'route_id' => $route->id,
-                        'name' => $location,
+                        'name' => $location['name'],
+                        'point_order' => $location['point_order'],
                         'is_start_location' => false,
                         'is_end_location' => false,
                         'is_waypoint' => true,

@@ -15,5 +15,10 @@ class RouteLocations extends Model
         'is_start_location',
         'is_end_location',
         'is_waypoint',
+        'point_order',
     ];
+
+    public function route () {
+        return $this->belongsTo(Routes::class, 'route_id', 'id');
+    }
 }

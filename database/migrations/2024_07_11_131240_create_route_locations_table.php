@@ -17,6 +17,7 @@ return new class extends Migration
             $table->boolean('is_start_location')->default(0);
             $table->boolean('is_end_location')->default(0);
             $table->boolean('is_waypoint')->default(0);
+            $table->integer('point_order')->nullable();
             $table->string('name');
 
             $table->foreign('route_id')->references('id')->on('routes');

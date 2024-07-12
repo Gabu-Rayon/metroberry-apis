@@ -1,9 +1,10 @@
-<form action="route/{{ $route->id }}/update" method="POST" class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
+<form action="/route/{{ $route->id }}/update" method="POST" class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
     @csrf
     @method('PUT')
     <div class="card-header my-3 p-2 border-bottom">
         <h4>Edit {{ $route->name }} Details</h4>
     </div>
+    
     <div class="modal-body">
         <div class="row">
             <div class="col-md-6">
@@ -65,17 +66,26 @@
 
 <script>
     $(document).ready(function() {
+        let currentIndex = 1;
+
         $('.repeater-add-btn').click(function(e) {
-            e.preventDefault(); // Prevent the default button click action
+            e.preventDefault();
             var newRow = '<div class="item-content col-md-6">' +
                 '<div class="form-group row my-2">' +
                 '<label for="location_name" class="col-sm-5 col-form-label">Name</label>' +
                 '<div class="col-sm-7">' +
-                '<input name="locations[]" required class="form-control" type="text" placeholder="Name" />' +
+                '<input name="locations[' + currentIndex + '][name]" required class="form-control" type="text" placeholder="Name" />' +
+                '</div>' +
+                '</div>' +
+                '<div class="form-group row my-2">' +
+                '<label for="point_order" class="col-sm-5 col-form-label">Point Order</label>' +
+                '<div class="col-sm-7">' +
+                '<input name="locations[' + currentIndex + '][point_order]" required class="form-control" type="number" placeholder="Order" />' +
                 '</div>' +
                 '</div>' +
                 '</div>';
             $('#repeater .items').append(newRow);
+            currentIndex++;
         });
     });
 </script>

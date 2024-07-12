@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RouteLocations;
+use App\Models\Routes;
 use Illuminate\Http\Request;
 
 class RouteLocationsController extends Controller
@@ -10,15 +12,17 @@ class RouteLocationsController extends Controller
      * Display a listing of the resource.
      */
     public function index(){
-        //
+        $routelocations = RouteLocations::all();
+
+        return view('route.locations.index', compact('routelocations'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
-    {
-        //
+    public function create(){
+        $routes = Routes::all();
+        return view('route.locations.create', compact('routes'));
     }
 
     /**

@@ -177,6 +177,9 @@ Route::put('route/{id}/update', [RouteController::class, 'update'])->name('route
 // View Route Locations
 Route::get('route/location', [RouteLocationsController::class, 'index'])->name('route.location.index');
 
+// Create Route Location
+Route::get('route/location/create', [RouteLocationsController::class, 'create'])->name('route.location.create');
+
 /**
  * Tripes Routes
  * 
