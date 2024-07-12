@@ -23,7 +23,9 @@ use App\Http\Controllers\VehicleRefuelingController;
 use App\Http\Controllers\RouteController;
 use App\Http\Controllers\RouteLocationsController;
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->name('dashboard')
+    ->middleware('auth', 'can:view dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -38,18 +40,20 @@ require __DIR__ . '/auth.php';
  * 
  */
 
-Route::get('/login', [UserController::class, 'index'])->name('user.login');
-Route::get('/', [UserController::class, 'index'])->name('user.login');
-Route::get('/admin/user', [UserController::class, 'index'])->name('user.interface.index');
-Route::get('/admin/user/create', [UserController::class, 'create'])->name('user.create');
+Route::get('/login', [UserController::class, 'index'])->name('login');
 
 /**
  * Employees Routes
  * 
  */
 
+// View Employees
+Route::get('employee', [EmployeeController::class, 'index'])
+    ->name('employee')
+    ->middleware('auth', 'can:view employees');
+
+// Create Employee
 Route::get('employee/create', [EmployeeController::class, 'create'])->name('employee.create');
-Route::get('employee', [EmployeeController::class, 'index'])->name('employee');
 Route::post('employee', [EmployeeController::class, 'store'])->name('employee');
 
 Route::get('employee/{id}/edit', [EmployeeController::class, 'edit'])->name('employee.edit');

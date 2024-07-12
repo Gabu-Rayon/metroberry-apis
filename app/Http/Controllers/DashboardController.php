@@ -9,6 +9,8 @@ use App\Models\Trip;
 use App\Models\Vehicle;
 use App\Models\VehicleInsurance;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
 {

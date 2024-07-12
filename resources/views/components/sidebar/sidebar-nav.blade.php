@@ -1,11 +1,14 @@
 <nav class="sidebar-nav">
     <ul class="metismenu text-capitalize">
-        @include('components.sidebar.sidebar-item', [
-            'isActive' => request()->routeIs('dashboard'),
-            'route' => route('dashboard'),
-            'icon' => '<svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 16H7C7.55 16 8 15.55 8 15V7C8 6.45 7.55 6 7 6H1C0.45 6 0 6.45 0 7V15C0 15.55 0.45 16 1 16ZM1 24H7C7.55 24 8 23.55 8 23V19C8 18.45 7.55 18 7 18H1C0.45 18 0 18.45 0 19V23C0 23.55 0.45 24 1 24ZM11 24H17C17.55 24 18 23.55 18 23V15C18 14.45 17.55 14 17 14H11C10.45 14 10 14.45 10 15V23C10 23.55 10.45 24 11 24ZM10 7V11C10 11.55 10.45 12 11 12H17C17.55 12 18 11.55 18 11V7C18 6.45 17.55 6 17 6H11C10.45 6 10 6.45 10 7Z" fill="#6C6C6C" /></svg>',
-            'label' => 'Dashboard',
-        ])
+        
+        @if(\Auth::user()->can('view dashboard'))
+            @include('components.sidebar.sidebar-item', [
+                'isActive' => request()->routeIs('dashboard'),
+                'route' => route('dashboard'),
+                'icon' => '<svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 16H7C7.55 16 8 15.55 8 15V7C8 6.45 7.55 6 7 6H1C0.45 6 0 6.45 0 7V15C0 15.55 0.45 16 1 16ZM1 24H7C7.55 24 8 23.55 8 23V19C8 18.45 7.55 18 7 18H1C0.45 18 0 18.45 0 19V23C0 23.55 0.45 24 1 24ZM11 24H17C17.55 24 18 23.55 18 23V15C18 14.45 17.55 14 17 14H11C10.45 14 10 14.45 10 15V23C10 23.55 10.45 24 11 24ZM10 7V11C10 11.55 10.45 12 11 12H17C17.55 12 18 11.55 18 11V7C18 6.45 17.55 6 17 6H11C10.45 6 10 6.45 10 7Z" fill="#6C6C6C" /></svg>',
+                'label' => 'Dashboard',
+            ])
+        @endif
         
         @include('components.sidebar.sidebar-dropdown', [
             'title' => 'Users',
