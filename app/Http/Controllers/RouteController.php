@@ -162,8 +162,33 @@ class RouteController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
+
+    public function delete($id) {
+        try {
+            $route = Routes::findOrfail($id);
+            return view('route.delete', compact('route'));
+        } catch (Exception $e) {
+            Log::error('ERROR DELETING ROUTE');
+            Log::error($e);
+            return redirect()->back()->with('error', 'Something Went Wrong');
+        }
+    }
+    public function destroy(string $id){
+        try {
+            $route = Routes::findOrfail($id);
+
+            DB::beginTransaction();
+
+            $route->route_locations()->delete();
+            $route->delete();
+
+            DB::commit();
+            return redirect()->route('route.index')->with('success', 'Route Deleted Successfully');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('ERROR DELETING ROUTE');
+            Log::error($e);
+            return redirect()->back()->with('error', 'Something Went Wrong');
+        }
     }
 }

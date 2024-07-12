@@ -169,6 +169,10 @@ Route::post('route', [RouteController::class, 'store'])->name('route');
 Route::get('route/{id}/edit', [RouteController::class, 'edit'])->name('route.edit');
 Route::put('route/{id}/update', [RouteController::class, 'update'])->name('route.update');
 
+// Delete Route
+Route::get('route/{id}/delete', [RouteController::class, 'delete'])->name('route.delete');
+Route::delete('route/{id}/delete', [RouteController::class, 'destroy'])->name('route.delete');
+
 /**
  * Route Location Routes
  * 

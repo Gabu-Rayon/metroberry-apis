@@ -27,4 +27,8 @@ class Routes extends Model
     public function waypoints () {
         return $this->hasMany(RouteLocations::class, 'route_id', 'id')->where('is_waypoint', 1);
     }
+
+    public function route_locations () {
+        return $this->hasMany(RouteLocations::class, 'route_id', 'id');
+    }
 }
