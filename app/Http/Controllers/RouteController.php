@@ -42,7 +42,8 @@ class RouteController extends Controller
 
             $validator = Validator::make($data, [
                 'county' => 'required|string',
-                'name' => 'required|string',
+                'start_location' => 'required|string',
+                'end_location' => 'required|string',
             ]);
 
             if ($validator->fails()) {
@@ -51,12 +52,30 @@ class RouteController extends Controller
                 return redirect()->back()->with('error', $validator->errors()->first());
             }
 
+            $routeName = $data['start_location'] . ' - ' . $data['end_location'];
+
             DB::beginTransaction();
 
-            Routes::create([
+            $route = Routes::create([
                 'county' => $data['county'],
-                'name' => $data['name'],
+                'name' => $routeName,
                 'created_by' => 1,
+            ]);
+
+            RouteLocations::create([
+                'route_id' => $route->id,
+                'name' => $data['start_location'],
+                'is_start_location' => true,
+                'is_end_location' => false,
+                'is_waypoint' => false,
+            ]);
+
+            RouteLocations::create([
+                'route_id' => $route->id,
+                'name' => $data['end_location'],
+                'is_start_location' => false,
+                'is_end_location' => true,
+                'is_waypoint' => false,
             ]);
 
             DB::commit();

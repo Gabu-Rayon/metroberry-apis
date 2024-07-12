@@ -8,6 +8,16 @@
             <div class="col-md-12 col-lg-6">
 
                 <div class="form-group row my-2">
+                    <label for="start_location" class="col-sm-5 col-form-label">
+                        Start Location
+                        <i class="text-danger">*</i>
+                    </label>
+                    <div class="col-sm-7">
+                        <input name="start_location" class="form-control" type="text" placeholder="Start Location" id="start_location" required />
+                    </div>
+                </div>
+
+                <div class="form-group row my-2">
                     <label for="county" class="col-sm-5 col-form-label">
                         County
                         <i class="text-danger">*</i>
@@ -22,13 +32,12 @@
             <div class="col-md-12 col-lg-6">
 
                 <div class="form-group row my-2">
-                    <label for="name" class="col-sm-5 col-form-label">
-                        Name
+                    <label for="end_location" class="col-sm-5 col-form-label">
+                        End Location
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="name" class="form-control" type="text" placeholder="Name" id="name" required
-                        />
+                        <input name="end_location" class="form-control" type="text" placeholder="End Location" id="end_location" required />
                     </div>
                 </div>
 
