@@ -36,8 +36,8 @@
                                     <form action="https://vms.bdtask-demoserver.com/admin/vehicle/maintenance"
                                         method="POST" class="needs-validation " novalidate="novalidate"
                                         enctype="multipart/form-data">
-                                        <input type="hidden" name="_token"
-                                            value="xju9s96RXCzgkI9EvxF67FobXRPrzSSCuZiSEIPn" autocomplete="off">
+                                        @csrf
+                                        @method('POST')
                                         <div>
                                             <div class="row">
                                                 <div class="col-md-2">

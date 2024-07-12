@@ -32,7 +32,7 @@
                                                         <a class="btn btn-success btn-sm" href="javascript:void(0);"
                                                             onclick="axiosModal('organisation/create')">
                                                             <i class="fa fa-plus"></i>&nbsp;
-                                                            Add Organisation
+                                                            Schedule A Trip
                                                         </a>
 
                                                         <button type="button" class="btn btn-success btn-sm mx-2"

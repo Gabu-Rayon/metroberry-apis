@@ -26,6 +26,7 @@ class RoleAndPermissionSeeder extends Seeder
         }
 
         $permissions = [
+            'manage users',
             'view dashboard',
             'activate vehicle',
 
@@ -175,6 +176,7 @@ class RoleAndPermissionSeeder extends Seeder
         $driver = Role::where('name', 'driver')->first();
 
         $admin->syncPermissions([
+            'manage users',
             'view dashboard',
             'activate vehicle',
             
