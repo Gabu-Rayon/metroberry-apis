@@ -11,7 +11,7 @@
                 <div class="form-group row my-2">
                     <label for="name" class="col-sm-5 col-form-label">Name</label>
                     <div class="col-sm-7">
-                        <input name="name" required class="form-control" type="text" placeholder="Name" id="name" value="{{ $route->name }}" />
+                        <input name="name" disabled class="form-control" type="text" placeholder="Name" id="name" value="{{ $route->name }}" />
                     </div>
                 </div>
 

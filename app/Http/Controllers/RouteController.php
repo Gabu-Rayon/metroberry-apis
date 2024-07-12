@@ -116,7 +116,6 @@ class RouteController extends Controller
 
             $validator = Validator::make($data, [
                 'county' => 'required|string',
-                'name' => 'required|string',
                 'start_location' => 'required|string',
                 'end_location' => 'required|string',
                 'locations' => 'nullable|array',
@@ -133,26 +132,39 @@ class RouteController extends Controller
 
             DB::beginTransaction();
 
-            $route->update([
-                'county' => $data['county'],
-                'name' => $data['name'],
-            ]);
+            $routeStartLocation = $route->route_locations()->where('is_start_location', true)->first();
+            $routeEndLocation = $route->route_locations()->where('is_end_location', true)->first();
 
-            RouteLocations::create([
-                'route_id' => $route->id,
-                'name' => $data['start_location'],
-                'is_start_location' => true,
-                'is_end_location' => false,
-                'is_waypoint' => false,
-            ]);
+            if ($routeStartLocation) {
+                $routeStartLocation->name = $data['start_location'];
+                $routeStartLocation->save();
+            } else {
+                RouteLocations::create([
+                    'route_id' => $route->id,
+                    'name' => $data['start_location'],
+                    'is_start_location' => true,
+                    'is_end_location' => false,
+                    'is_waypoint' => false,
+                ]);
+            }
 
-            RouteLocations::create([
-                'route_id' => $route->id,
-                'name' => $data['end_location'],
-                'is_start_location' => false,
-                'is_end_location' => true,
-                'is_waypoint' => false,
-            ]);
+            if ($routeEndLocation) {
+                $routeEndLocation->name = $data['end_location'];
+                $routeEndLocation->save();
+            } else {
+                RouteLocations::create([
+                    'route_id' => $route->id,
+                    'name' => $data['end_location'],
+                    'is_start_location' => false,
+                    'is_end_location' => true,
+                    'is_waypoint' => false,
+                ]);
+            }
+
+            $route->county = $data['county'];
+            $route->name = $data['start_location'] . ' - ' . $data['end_location'];
+
+            $route->save();
 
             if (isset($data['locations'])) {
                 foreach ($data['locations'] as $location) {
