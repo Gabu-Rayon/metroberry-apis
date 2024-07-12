@@ -7,7 +7,6 @@ use App\Http\Controllers\DriverController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VehicleController;
-use App\Http\Controllers\AddRouteController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PSVBadgeController;
 use App\Http\Controllers\PurchaseController;
@@ -21,8 +20,12 @@ use App\Http\Controllers\DriversLicensesController;
 use App\Http\Controllers\InsuranceCompanyController;
 use App\Http\Controllers\VehicleInsuranceController;
 use App\Http\Controllers\VehicleRefuelingController;
+use App\Http\Controllers\RouteController;
+use App\Http\Controllers\RouteLocationsController;
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('dashboard', [DashboardController::class, 'index'])
+    ->name('dashboard')
+    ->middleware('auth', 'can:view dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -32,35 +35,64 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
-/***
+/***-
  * User Interfaces
  * 
  */
 
-Route::get('/login', [UserController::class, 'index'])->name('user.login');
-Route::get('/', [UserController::class, 'index'])->name('user.login');
+Route::get('/login', [UserController::class, 'index'])->name('login');
 Route::get('/admin/user', [UserController::class, 'index'])->name('user.interface.index');
 Route::get('/admin/user/create', [UserController::class, 'create'])->name('user.create');
+
 
 /**
  * Employees Routes
  * 
  */
 
-Route::get('employee/create', [EmployeeController::class, 'create'])->name('employee.create');
-Route::get('employee', [EmployeeController::class, 'index'])->name('employee');
-Route::post('employee', [EmployeeController::class, 'store'])->name('employee');
+// View Employees
+Route::get('employee', [EmployeeController::class, 'index'])
+    ->name('employee')
+    ->middleware('auth', 'can:view customers');
+
+// Create Employee
+Route::get('employee/create', [EmployeeController::class, 'create'])
+    ->name('employee.create')
+    ->middleware('auth', 'can:create customer');
+
+Route::post('employee', [EmployeeController::class, 'store'])
+    ->name('employee.create')
+    ->middleware('auth', 'can:create customer');
 
 Route::get('employee/{id}/edit', [EmployeeController::class, 'edit'])->name('employee.edit');
 Route::put('employee/{id}/update', [EmployeeController::class, 'update'])->name('employee.update');
 Route::post('employee/{id}/delete', [EmployeeController::class, 'destroy'])->name('employee.delete');
+
+
 /***
  * Organisations Routes
  */
-// organisation organisation/create
-Route::get('organisation/create', [OrganisationController::class, 'create'])->name('organisation.create');
-Route::get('organisation', [OrganisationController::class, 'index'])->name('organisation');
-Route::post('organisation', [OrganisationController::class, 'store'])->name('organisation');
+
+// Organisation Dashboard
+
+Route::get('organisation/dashboard', [OrganisationController::class, 'dashboard'])
+    ->name('organisation.dashboard')
+    ->middleware('auth', 'can:view dashboard');
+
+
+// View Organisations
+Route::get('organisation', [OrganisationController::class, 'index'])
+    ->name('organisation')
+    ->middleware('auth', 'can:view organisations');
+
+// Create Organisation
+Route::get('organisation/create', [OrganisationController::class, 'create'])
+    ->name('organisation.create')
+    ->middleware('auth', 'can:create organisation');
+
+Route::post('organisation', [OrganisationController::class, 'store'])
+    ->name('organisation.create')
+    ->middleware('auth', 'can:create organisation');
 
 Route::get('organisation/{id}/edit', [OrganisationController::class, 'edit'])->name('organisation.edit');
 Route::get('organisation/{id}/delete', [OrganisationController::class, 'destroy'])->name('organisation.destroy');
@@ -140,28 +172,37 @@ Route::put('driver/psvbadge/{id}/revoke', [PSVBadgeController::class, 'revokeSto
 Route::get('driver/psvbadge/{id}/delete', [PSVBadgeController::class, 'delete'])->name('driver.psvbadge.delete');
 Route::delete('driver/psvbadge/{id}/delete', [PSVBadgeController::class, 'destroy'])->name('driver.psvbadge.delete');
 
-
-/**
- * Organisation Routes
- * 
- */
-Route::get('organisation', [OrganisationController::class, 'index'])->name('organisation');
-
-Route::get('organisation/create', [OrganisationController::class, 'create'])->name('organisation.create');
-Route::get('organisation/{id}/edit', [OrganisationController::class, 'edit'])->name('organisation.edit');
-Route::put('organisation/{id}/update', [OrganisationController::class, 'update'])->name('organisation.update');
-Route::post('organisation/{id}/delete', [OrganisationController::class, 'destroy'])->name('organisation.destroy');
-
 /**
  * 'Routes' Routes
  * 
  */
 
-Route::get('our-routes', [AddRouteController::class, 'index'])->name('our.routes');
+// View Routes
+Route::get('route', [RouteController::class, 'index'])->name('route.index');
 
-Route::get('routes/create', [AddRouteController::class, 'create'])->name('route.create');
-Route::get('edit-route/{id}/edit', [AddRouteController::class, 'edit'])->name('route.edit');
-Route::get('route-delete/{id}/delete', [AddRouteController::class, 'destroy'])->name('route.destroy');
+// Create Route
+Route::get('route/create', [RouteController::class, 'create'])->name('route.create');
+Route::post('route', [RouteController::class, 'store'])->name('route');
+
+// Update Route Details
+Route::get('route/{id}/edit', [RouteController::class, 'edit'])->name('route.edit');
+Route::put('route/{id}/update', [RouteController::class, 'update'])->name('route.update');
+
+// Delete Route
+Route::get('route/{id}/delete', [RouteController::class, 'delete'])->name('route.delete');
+Route::delete('route/{id}/delete', [RouteController::class, 'destroy'])->name('route.delete');
+
+/**
+ * Route Location Routes
+ * 
+ */
+
+// View Route Locations
+Route::get('route/location', [RouteLocationsController::class, 'index'])->name('route.location.index');
+
+// Create Route Location
+Route::get('route/location/create', [RouteLocationsController::class, 'create'])->name('route.location.create');
+
 /**
  * Tripes Routes
  * 

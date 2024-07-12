@@ -19,23 +19,16 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        // try {
-        //     $customers = Customer::all();
 
-        //     return response()->json([
-        //         'message' => 'Customers retrieved successfully',
-        //         'customers' => $customers
-        //     ], 200);
-        // } catch (Exception $e) {
-        //     Log::info('RETRIEVE CUSTOMERS ERROR');
-        //     Log::info($e);
-        //     return response()->json([
-        //         'message' => 'An error occurred while fetching customers',
-        //         'error' => $e->getMessage()
-        //     ], 500);
-        // }
+        $customers = null;
 
-        $customers = Customer::with('user')->get();
+        if (Auth::user()->role == 'organisation') {
+            $customers = Customer::where('customer_organisation_code', Auth::user()->organisation->organisation_code)->get();
+        } else {
+            $customers = Customer::where('created_by', Auth::user()->id)->get();
+        }
+        Log::info('CUSTOMERS');
+        Log::info($customers);
         $organisations = Organisation::with('user')->get();
         return view('employee.index', compact('customers', 'organisations'));
     }
@@ -47,9 +40,7 @@ class EmployeeController extends Controller
     public function store(Request $request){
         try {
             $data = $request->all();
-
-            Log::info('DATA');
-            Log::info($data);
+            $creator = Auth::user();
             
             $validator = Validator::make($data, [
                 'name' => 'required|string',
@@ -61,7 +52,7 @@ class EmployeeController extends Controller
                 'front_page_id' => 'required|file|mimes:jpg,jpeg,png,webp',
                 'back_page_id' => 'required|file|mimes:jpg,jpeg,png,webp',
                 'avatar' => 'nullable|file|mimes:jpg,jpeg,png,webp',
-                'password' => 'required|string',
+                'password' => 'required|string', 
             ]);
 
             if ($validator->fails()) {
@@ -112,14 +103,14 @@ class EmployeeController extends Controller
                 'phone' => $data['phone'],
                 'address' => $data['address'],
                 'avatar' => $avatarPath,
-                'created_by' => 1,
+                'created_by' => $creator->id,
                 'role' => 'customer',
             ]);
 
             $user->assignRole('customer');
 
             Customer::create([
-                'created_by' => 1,
+                'created_by' => $creator->id,
                 'user_id' => $user->id,
                 'organisation_id' => $organisation->id,
                 'customer_organisation_code' => $data['organisation'],

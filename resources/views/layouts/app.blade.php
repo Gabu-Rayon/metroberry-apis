@@ -51,6 +51,11 @@
 </head>
 
 <body class="fixed sidebar-mini">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" 
+        integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" 
+        crossorigin="anonymous">
+</script>
+<script src="repeater.js"></script>
     <div class="main">
                 @yield('content')
                 

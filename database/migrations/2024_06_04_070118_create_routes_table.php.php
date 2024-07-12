@@ -14,11 +14,11 @@ return new class extends Migration
         Schema::create('routes', function (Blueprint $table) {
             $table->id();           
             $table->string('county');
-            $table->string('location');
-            $table->string('start_location');
-            $table->string('end_location');
-            $table->timestamps();
+            $table->string('name');
+            $table->unsignedBigInteger('created_by');
 
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

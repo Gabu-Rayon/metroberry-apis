@@ -16,34 +16,14 @@ class OrganisationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        // try {
-        //     if (Auth::user()->hasRole('admin')) {
-        //         $organisation = Organisation::all();
-        //         foreach ($organisation as $org) {
-        //             $org->load('user');
-        //         }
-        //         return response()->json([
-        //             'count' => count($organisation),
-        //             'organisations' => $organisation
-        //         ], 200);
-        //     }
-        //     $organisation = Organisation::where('created_by', Auth::id())->get();
-        //     return response()->json([
-        //         'organisations' => $organisation
-        //     ], 200);
-        // } catch (Exception $e) {
-        //     Log::error('ERROR FETCHING Organisation');
-        //     Log::error($e);
-        //     return response()->json([
-        //         'message' => 'An error occurred while fetching organisations',
-        //         'error' => $e->getMessage()
-        //     ], 500);
-        // }
 
+    public function dashboard () {
+        return view('organisation.dashboard');
+    }
 
-        $organisations = Organisation::all();
+    public function index(){
+
+        $organisations = Organisation::where('created_by', Auth::user()->id)->get();
         return view('organisation.index',compact('organisations'));
         
     }
@@ -108,15 +88,17 @@ class OrganisationController extends Controller
                 'address' => $data['address'],
                 'role' => 'organisation',
                 'avatar' => $logoPath,
-                'created_by' => 1
+                'created_by' => Auth::user()->id
             ]);
+
+            $user->assignRole('organisation');
 
             Organisation::create([
                 'user_id' => $user->id,
                 'certificate_of_organisation' => $certificatePath,
                 'billing_cycle' => null,
                 'terms_and_conditions' => null,
-                'created_by' => 1,
+                'created_by' => Auth::user()->id,
                 'organisation_code' => $data['organisation_code']
             ]);
 
