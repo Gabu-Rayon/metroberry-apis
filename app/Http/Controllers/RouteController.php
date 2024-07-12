@@ -40,6 +40,9 @@ class RouteController extends Controller
         try {
             $data = $request->all();
 
+            Log::info('Data from the Creating a route Form :');
+            Log::info($data);
+
             $validator = Validator::make($data, [
                 'county' => 'required|string',
                 'start_location' => 'required|string',
@@ -53,7 +56,10 @@ class RouteController extends Controller
             }
 
             $routeName = $data['start_location'] . ' - ' . $data['end_location'];
-
+           
+            Log::info('Route Name Generated  :');
+            Log::info($routeName);
+            
             DB::beginTransaction();
 
             $route = Routes::create([
