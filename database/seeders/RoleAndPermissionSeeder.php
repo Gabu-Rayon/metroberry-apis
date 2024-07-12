@@ -26,15 +26,51 @@ class RoleAndPermissionSeeder extends Seeder
         }
 
         $permissions = [
-            // Dashboard Permissions
+            'view dashboard',
+            'activate vehicle',
+
+            'view invoices',
+            'create invoice',
+            'edit invoice',
+            'delete invoice',
+            'show invoice',
+            'view routes',
+            'create route',
+            'edit route',
+            'delete route',
+            'show route',
             'view dashboard',
 
-            // User Permissions
-            'manage users',
+            'view vehicles',
+            'create vehicle',
+            'edit vehicle',
+            'delete vehicle',
+            'show vehicle',
 
-            // Employee Permissions
+           'view invoices',
+            'create invoice',
+            'edit invoice',
+            'delete invoice',
+            'show invoice',
+
+            'view organisations',
+            'create organisation',
+            'edit organisation',
+            'delete organisations',
+            'show organisations',
+
+            'view drivers',
+            'create driver',
+            'edit driver',
+            'delete driver',
+            'show driver',
+            'assign driver',
+
             'view customers',
             'create customer',
+            'edit customer',
+            'delete customer',
+            'show customer',
 
             'view trips',
             'create trip',
@@ -139,7 +175,14 @@ class RoleAndPermissionSeeder extends Seeder
         $driver = Role::where('name', 'driver')->first();
 
         $admin->syncPermissions([
-            // Dashboard Permissions
+            'view dashboard',
+            'activate vehicle',
+            
+            'view routes',
+            'create route',
+            'edit route',
+            'delete route',
+            'show route',
             'view dashboard',
 
             'view vehicles',
@@ -164,9 +207,11 @@ class RoleAndPermissionSeeder extends Seeder
             'activate driver',
             'deactivate driver',
 
-            // Employee Permissions
             'view customers',
             'create customer',
+            'edit customer',
+            'delete customer',
+            'show customer',
 
             'view trips',
             'create trip',
@@ -264,14 +309,46 @@ class RoleAndPermissionSeeder extends Seeder
         ]);
 
         $organisation->syncPermissions([
-            // Dashboard Permissions
             'view dashboard',
+            'activate vehicle',
             
-            // User Permissions
-            'manage users',
+            'view vehicles',
+            'create vehicle',
+            'edit vehicle',
+            'delete vehicle',
+            'show vehicle',
+            'view dashboard',
 
-            // Employee Permissions
+            'view drivers',
+            'create driver',
+            'edit driver',
+            'delete driver',
+            'show driver',
+            'assign driver',
+
             'view customers',
+            'create customer',
+            'edit customer',
+            'delete customer',
+            'show customer',
+
+            'view routes',
+            'create route',
+            'edit route',
+            'delete route',
+            'show route',
+
+             'view invoices',
+            'create invoice',
+            'edit invoice',
+            'delete invoice',
+            'show invoice',
+
+            'view trips',
+            'create trip',
+            'edit trip',
+            'delete trip',
+            'show trip',
         ]);
 
         $customer->syncPermissions([
