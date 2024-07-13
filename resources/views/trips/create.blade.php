@@ -1,87 +1,100 @@
-<form action="{{route('trip.store')}}" method="POST" class="needs-validation modal-content" novalidate="novalidate"
+<form action="{{ route('trip.store') }}" method="POST" class="needs-validation modal-content" novalidate
     enctype="multipart/form-data">
-    @csrf
+    <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
     <div class="card-header my-3 p-2 border-bottom">
         <h4>Schedule A Trip</h4>
     </div>
     <div class="modal-body">
         <div class="row">
             <div class="col-md-12 col-lg-6">
-
                 <div class="form-group row my-2">
                     <label for="customer_id" class="col-sm-5 col-form-label">Employee <i
-                            class="text-danger">*</i></label> </label>
+                            class="text-danger">*</i></label>
                     <div class="col-sm-7">
-
-                        <!-- Should be A select  -->
-                        <input name="customer_id" class="form-control" type="text" placeholder="Employee"
-                            id="customer_id" value="" required>
+                        <select name="customer_id" class="form-control" id="customer_id" required>
+                            <option value="">Select Employee</option>
+                            @foreach ($employees as $employeeData)
+                                <option value="{{ $employeeData->id }}">{{ $employeeData->user->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
 
                 <div class="form-group row my-2">
                     <label for="preferred_route_id" class="col-sm-5 col-form-label">Route <i
-                            class="text-danger">*</i></label> </label>
+                            class="text-danger">*</i></label>
                     <div class="col-sm-7">
-                        <!-- Should be A select -->
-                        <input name="preferred_route_id" autocomplete="off" required class="form-control" type="text"
-                            placeholder="preferred route" id="make" value="">
+                        <select name="preferred_route_id" class="form-control preferred_route_id"
+                            id="preferred_route_id" data-url="{{ route('route.location.waypoints') }}" required>
+                            <option value="">Select Route</option>
+                            @foreach ($routes as $routeData)
+                                <option value="{{ $routeData->id }}">{{ $routeData->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
 
                 <div class="form-group row my-2">
                     <label for="trip_date" class="col-sm-5 col-form-label">Trip Date <i
-                            class="text-danger">*</i></label> </label>
+                            class="text-danger">*</i></label>
                     <div class="col-sm-7">
-                        <input name="trip_date" class="form-control" type="date" placeholder="Trip Date"
-                            id="trip_date" value="" required>
+                        <input name="trip_date" class="form-control" type="date" id="trip_date" required>
                     </div>
                 </div>
 
                 <div class="form-group row my-2">
-                    <label for="shift_start_time" class="col-sm-5 col-form-label">Shift StartTime <i
-                            class="text-danger">*</i></label> </label>
+                    <label for="shift_start_time" class="col-sm-5 col-form-label">Shift Start Time <i
+                            class="text-danger">*</i></label>
                     <div class="col-sm-7">
-                        <!-- if there is type of time let use it here  -->
-                        <input name="shift_start_time" class="form-control" type="time"
-                            placeholder="Enter shift start time" id="shift_start_time" value="" required>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-12 col-lg-6">
-
-                <div class="form-group row my-2">
-                    <label for="shift_start_time" class="col-sm-5 col-form-label">Shift End Time <i class="text-danger">*</i>
-                    </label>
-                    <div class="col-sm-7">
-                        <!-- if there is type of time let use it here  -->
-                        <input name="shift_start_time" class="form-control" type="time"
-                            placeholder="Enter shift end time" id="shift_end_time" value="" required>
-                    </div>
-                </div>
-                <div class="form-group row my-2">
-                    <label for="pick_up_location" class="col-sm-5 col-form-label">PickUp Location<i class="text-danger">*</i>
-                    </label>
-                    <!-- Should be select of Home  or office  -->
-                    <div class="col-sm-7">
-                        <input name="pick_up_location" class="form-control" type="text" placeholder="Enter pick up location"
-                            id="pick_up_location" value="" required>
+                        <input name="shift_start_time" class="form-control" type="time" id="shift_start_time"
+                            required>
                     </div>
                 </div>
             </div>
 
             <div class="col-md-12 col-lg-6">
                 <div class="form-group row my-2">
-                    <label for="drop_off_location" class="col-sm-5 col-form-label">DropOff Location<i class="text-danger">*</i> </label>
+                    <label for="shift_end_time" class="col-sm-5 col-form-label">Shift End Time <i
+                            class="text-danger">*</i></label>
                     <div class="col-sm-7">
-                         <!-- Should be select of Home  or office  the also if  opt to give another drop location  
-                         we give then  an option to select  the waypoint for that route -->
-                        <input name="drop_off_location" class="form-control" type="text"
-                            placeholder="Enter drop off location" id="drop_off_location"
-                            value="" required>
+                        <input name="shift_end_time" class="form-control" type="time" id="shift_end_time" required>
                     </div>
-                </div>    
+                </div>
+
+                <div class="form-group row my-2">
+                    <label for="pick_up_location" class="col-sm-5 col-form-label">PickUp Location <i
+                            class="text-danger">*</i></label>
+                    <div class="col-sm-7">
+                        <select name="pick_up_location" class="form-control" id="pick_up_location" required>
+                            <option value="">Select Location</option>
+                            <option value="Home">Home</option>
+                            <option value="Office">Office</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row my-2">
+                    <label for="drop_off_location" class="col-sm-5 col-form-label">DropOff Location <i
+                            class="text-danger">*</i></label>
+                    <div class="col-sm-7">
+                        <select name="dropOffLocation" class="form-control" id="dropOffLocation" required>
+                            <option value="">Select Drop Off Location</option>
+                            <option value="Home">Home</option>
+                            <option value="Office">Office</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row my-2">
+                    <label for="drop_off_location" class="col-sm-5 col-form-label">Prefer a different Drop Off
+                        Location (<i class="text-primary"><small>Optional</i></small>)? <i class="text-danger">*</i></label>
+                    <div class="col-sm-7">
+                        <select name="drop_off_location" class="form-control select2" id="drop_off_location" required>
+                            <option value="">Select Your preference Drop Off Location</option>
+                            <!-- Options will be populated dynamically via AJAX -->
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -90,3 +103,42 @@
         <button class="btn btn-success" type="submit">Save</button>
     </div>
 </form>
+<script>
+    $(document).on('change', '.preferred_route_id', function() {
+        var preferred_route_id = $(this).val();
+        var url = $(this).data('url');
+        var dropOffLocationSelect = $('#drop_off_location');
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': jQuery('#token').val()
+            },
+            data: {
+                route_id: preferred_route_id
+            },
+            success: function(data) {
+                console.log('Success:', data);
+                dropOffLocationSelect.empty();
+                dropOffLocationSelect.append(
+                    '<option value="">Select Your preference Drop Off Location</option>');
+
+                // Append waypoints dynamically
+                $.each(data, function(key, location) {
+                    dropOffLocationSelect.append('<option value="' + location.id + '">' +
+                        location.name + '</option>');
+                });
+
+
+                // Append static options (Home and Office)
+                dropOffLocationSelect.append('<option value="Home">Home</option>');
+                dropOffLocationSelect.append('<option value="Office">Office</option>');
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+                // Handle errors or show appropriate messages
+            }
+        });
+    });
+</script>
