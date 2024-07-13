@@ -32,7 +32,7 @@
                                                     <a class="btn btn-success btn-sm" href="javascript:void(0);" onclick="axiosModal('location/create')">
                                                         <i class="fa fa-plus"></i>
                                                         &nbsp;
-                                                        Add Route
+                                                        Add Route Location
                                                     </a>
                                                     <button type="button" class="btn btn-success btn-sm mx-2" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="true" aria-controls="flush-collapseOne">
                                                         <i class="fas fa-filter"></i>

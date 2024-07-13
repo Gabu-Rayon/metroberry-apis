@@ -42,6 +42,7 @@ class TripController extends Controller
     public function create()
     {
         // Typically not used in APIs
+        return view('trips.create');
     }
 
     /**
