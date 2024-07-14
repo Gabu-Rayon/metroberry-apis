@@ -202,6 +202,8 @@ Route::get('route/location', [RouteLocationsController::class, 'index'])->name('
 
 // Create Route Location
 Route::get('route/location/create', [RouteLocationsController::class, 'create'])->name('route.location.create');
+Route::post('route/location/store', [RouteLocationsController::class, 'store'])->name('route.location.store');
+Route::post('route/locations/get/all', [RouteLocationsController::class, 'getAllRouteWayPoints'])->name('route.location.waypoints');
 
 /**
  * Tripes Routes
@@ -210,12 +212,16 @@ Route::get('route/location/create', [RouteLocationsController::class, 'create'])
 
 Route::get('trips', [TripController::class, 'index'])->name('booked.trip');
 
-Route::get('trip/create', [TripController::class, 'create'])->name('trip.create');
+Route::get('/trip/create', [TripController::class, 'create'])->name('trip.create');
+Route::post('/trip/store', [TripController::class, 'store'])->name('trip.store');
+
 Route::get('trip/{id}/edit', [TripController::class, 'edit'])->name('trip.edit');
-Route::get('trip/{id}/delete', [TripController::class, 'destroy'])->name('trip.destroy');
+Route::get('trip/{id}/update', [TripController::class, 'update'])->name('trip.update');
+
+Route::get('trip/{id}/delete', [TripController::class, 'destroy'])->name('trip.delete');
+Route::get('trip/{id}/destroy', [TripController::class, 'destroy'])->name('trip.destroy');
 
 Route::get('trips/scheduled', [TripController::class, 'tripScheduled'])->name('trip.scheduled');
-
 Route::get('trips/completed', [TripController::class, 'tripCompleted'])->name('trip.completed');
 Route::get('trips/cancelled', [TripController::class, 'tripCancelled'])->name('trip.cancelled');
 Route::get('trips/billed', [TripController::class, 'tripBilled'])->name('trip.billed');

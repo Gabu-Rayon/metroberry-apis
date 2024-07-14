@@ -15,7 +15,8 @@ class RouteLocationsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(){
+    public function index()
+    {
         $routelocations = RouteLocations::all();
 
         return view('route.locations.index', compact('routelocations'));
@@ -24,10 +25,13 @@ class RouteLocationsController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(){
+    public function create()
+    {
         $routes = Routes::all();
         return view('route.locations.create', compact('routes'));
     }
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -54,7 +58,7 @@ class RouteLocationsController extends Controller
 
             $routeName = $data['start_location'] . ' - ' . $data['end_location'];
 
-            Log::info('Route Name Generated  :');
+            Log::info('Route Name Generated :');
             Log::info($routeName);
 
             DB::beginTransaction();
@@ -94,6 +98,7 @@ class RouteLocationsController extends Controller
 
     /**
      * Display the specified resource.
+     * 
      */
     public function show(string $id)
     {
@@ -123,4 +128,25 @@ class RouteLocationsController extends Controller
     {
         //
     }
+
+    public function getAllRouteWaypoints(Request $request)
+    {
+        try {
+            $routeLocationWaypoints = RouteLocations::where('route_id', $request->route_id)
+                ->where('is_waypoint', 1)
+                ->get(['name', 'id']);
+
+            // Log the request and response data for debugging
+            Log::info('Data request for getting all waypoints for route ID: ' . $request->route_id);
+            Log::info('Retrieved waypoints: ', $routeLocationWaypoints->toArray());
+
+            return response()->json($routeLocationWaypoints);
+        } catch (\Exception $e) {
+            // Log any errors
+            Log::error('Error fetching waypoints: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to fetch waypoints'], 500);
+        }
+
+    }
+
 }
