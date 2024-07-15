@@ -35,31 +35,25 @@
                 </div>
 
                 <div class="form-group row my-2">
-                    <label for="trip_date" class="col-sm-5 col-form-label">Trip Date <i
-                            class="text-danger">*</i></label>
+                    <label for="pickup_time" class="col-sm-5 col-form-label">Pickup Time <i class="text-danger">*</i></label>
                     <div class="col-sm-7">
-                        <input name="trip_date" class="form-control" type="date" id="trip_date" required>
+                        <select name="pickup_time" class="form-control" id="pickup_time" required>
+                            <option value="">Select Pickup Time</option>
+                            <option value="09:00">09:00 AM</option>
+                            <option value="09:30">09:30 AM</option>
+                            <option value="10:00">10:00 AM</option>
+                            <option value="10:30">10:30 AM</option>
+                            <option value="11:00">11:00 AM</option>
+                            <option value="11:30">11:30 AM</option>
+                            <option value="12:00">12:00 PM</option>
+                            <option value="12:30">12:30 PM</option>
+                        </select>
                     </div>
                 </div>
 
-                <div class="form-group row my-2">
-                    <label for="shift_start_time" class="col-sm-5 col-form-label">Shift Start Time <i
-                            class="text-danger">*</i></label>
-                    <div class="col-sm-7">
-                        <input name="shift_start_time" class="form-control" type="time" id="shift_start_time"
-                            required>
-                    </div>
-                </div>
             </div>
 
             <div class="col-md-12 col-lg-6">
-                <div class="form-group row my-2">
-                    <label for="shift_end_time" class="col-sm-5 col-form-label">Shift End Time <i
-                            class="text-danger">*</i></label>
-                    <div class="col-sm-7">
-                        <input name="shift_end_time" class="form-control" type="time" id="shift_end_time" required>
-                    </div>
-                </div>
 
                 <div class="form-group row my-2">
                     <label for="pick_up_location" class="col-sm-5 col-form-label">PickUp Location <i
@@ -74,27 +68,26 @@
                 </div>
 
                 <div class="form-group row my-2">
-                    <label for="drop_off_location" class="col-sm-5 col-form-label">DropOff Location <i
-                            class="text-danger">*</i></label>
+                    <label for="drop_off_location" class="col-sm-5 col-form-label">
+                        Drop Off Location
+                        <i class="text-danger">*</i>
+                    </label>
                     <div class="col-sm-7">
-                        <select name="dropOffLocation" class="form-control" id="dropOffLocation" required>
-                            <option value="">Select Drop Off Location</option>
-                            <option value="Home">Home</option>
-                            <option value="Office">Office</option>
+                        <select name="drop_off_location" class="form-control select2" id="drop_off_location" required>
+                            <option value="">Select Your preference Drop Off Location</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="form-group row my-2">
-                    <label for="drop_off_location" class="col-sm-5 col-form-label">Prefer a different Drop Off
-                        Location (<i class="text-primary"><small>Optional</i></small>)? <i class="text-danger">*</i></label>
+                    <label for="trip_date" class="col-sm-5 col-form-label">
+                        Trip Date
+                        <i class="text-danger">*</i></label>
                     <div class="col-sm-7">
-                        <select name="drop_off_location" class="form-control select2" id="drop_off_location" required>
-                            <option value="">Select Your preference Drop Off Location</option>
-                            <!-- Options will be populated dynamically via AJAX -->
-                        </select>
+                        <input name="trip_date" class="form-control" type="date" id="trip_date" required>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -103,11 +96,13 @@
         <button class="btn btn-success" type="submit">Save</button>
     </div>
 </form>
+
 <script>
     $(document).on('change', '.preferred_route_id', function() {
         var preferred_route_id = $(this).val();
         var url = $(this).data('url');
         var dropOffLocationSelect = $('#drop_off_location');
+        var pickUpLocationSelect = $('#pick_up_location');
 
         $.ajax({
             url: url,
@@ -121,19 +116,23 @@
             success: function(data) {
                 console.log('Success:', data);
                 dropOffLocationSelect.empty();
-                dropOffLocationSelect.append(
-                    '<option value="">Select Your preference Drop Off Location</option>');
+                pickUpLocationSelect.empty();
+                dropOffLocationSelect.append('<option value="">Select Your preference Drop Off Location</option>');
+                pickUpLocationSelect.append('<option value="">Select Location</option>');
 
-                // Append waypoints dynamically
-                $.each(data, function(key, location) {
-                    dropOffLocationSelect.append('<option value="' + location.id + '">' +
-                        location.name + '</option>');
+                data.sort(function(a, b) {
+                    return a.point_order - b.point_order;
                 });
 
+                $.each(data, function(key, location) {
+                    dropOffLocationSelect.append('<option value="' + location.id + '">' + location.name + '</option>');
+                    pickUpLocationSelect.append('<option value="' + location.id + '">' + location.name + '</option>');
+                });
 
-                // Append static options (Home and Office)
                 dropOffLocationSelect.append('<option value="Home">Home</option>');
                 dropOffLocationSelect.append('<option value="Office">Office</option>');
+                pickUpLocationSelect.append('<option value="Home">Home</option>');
+                pickUpLocationSelect.append('<option value="Office">Office</option>');
             },
             error: function(xhr, status, error) {
                 console.error('Error:', error);
@@ -141,4 +140,42 @@
             }
         });
     });
+
+    $(document).ready(function() {
+    var pickUpLocationSelect = $('#pick_up_location');
+    var dropOffLocationSelect = $('#drop_off_location');
+
+    // Disable same option in the other select element
+    function disableSameOption(select1, select2) {
+        $(select1).on('change', function() {
+            var selectedValue = $(this).val();
+            $(select2).find('option').each(function() {
+                if ($(this).val() === selectedValue) {
+                    $(this).prop('disabled', true); // Mark as disabled
+                } else {
+                    $(this).prop('disabled', false); // Re-enable all others
+                }
+            });
+        });
+
+        $(select2).on('change', function() {
+            var selectedValue = $(this).val();
+            $(select1).find('option').each(function() {
+                if ($(this).val() === selectedValue) {
+                    $(this).prop('disabled', true); // Mark as disabled
+                } else {
+                    $(this).prop('disabled', false); // Re-enable all others
+                }
+            });
+        });
+    }
+
+    disableSameOption(pickUpLocationSelect, dropOffLocationSelect);
+    disableSameOption(dropOffLocationSelect, pickUpLocationSelect);
+
+    // Ensure initial selections do not match
+    if ($('#pick_up_location').val() === $('#drop_off_location').val()) {
+        $('#drop_off_location').val('').trigger('change'); // Reset drop off location if it matches pick up location initially
+    }
+});
 </script>
