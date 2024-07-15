@@ -240,42 +240,55 @@
                                                     </thead>
 
                                                     <tbody>
-                                                        @foreach($scheduledTrips as $trip)
+                                                        @foreach($groupedTrips as $organisationCode => $trips)
                                                             <tr>
-                                                                <td class="text-center">{{ $trip->customer->user->name }}</td>
-                                                                <td class="text-center">
-                                                                    @if ($trip->vehicle)
-                                                                        {{ $trip->vehicle->driver->user->name }}
-                                                                    @else
-                                                                        <span class="btn btn-warning btn-sm">TBD</span>
-                                                                    @endif
-                                                                </td>
-                                                                <td class="text-center">
-                                                                    @if ($trip->vehicle)
-                                                                        <span class="btn btn-success btn-sm">{{ $trip->vehicle->plate_number }}</span>
-                                                                    @else
-                                                                        <span class="btn btn-warning btn-sm">TBD</span>
-                                                                    @endif
-                                                                </td>
-                                                                <td class="text-center">{{ $trip->route->name }}</td>
-                                                                <td class="text-center">{{ $trip->pick_up_time }}</td>
-                                                                <td class="text-center">
-                                                                    {{ \Carbon\Carbon::parse($trip->trip_date)->isoFormat('MMMM Do, YYYY') }}
-                                                                </td>                                                                
-                                                                <td class="text-center">{{ $trip->pick_up_location }}</td>
-                                                                <td class="text-center">{{ $trip->drop_off_location }}</td>
-                                                                <td class="text-center">
-                                                                    <a href="javascript:void(0);" onclick="axiosModal('/trip/{{ $trip->id }}/cancel')" class="btn btn-danger btn-sm" title="Cancel">
-                                                                        <i class="fa fa-times"></i>
-                                                                    </a>
-                                                                    <span class='m-1'></span>
-                                                                    <a href="javascript:void(0);" onclick="axiosModal('/trip/{{ $trip->id }}/complete')" class="btn btn-primary btn-sm" title="Complete">
-                                                                        <i class="fa fa-check"></i>
-                                                                    </a>
+                                                                <td colspan="9" class="text-center">
+                                                                    <h5 class="text-primary">
+                                                                        @php
+                                                                            $organisation = $organisations->where('organisation_code', $organisationCode)->first();
+                                                                        @endphp
+                                                                        {{ $organisation->user->name }}
+                                                                    </h5>
                                                                 </td>
                                                             </tr>
+                                                            @foreach($trips as $trip)
+                                                                <tr>
+                                                                    <td class="text-center">{{ $trip->customer->user->name }}</td>
+                                                                    <td class="text-center">
+                                                                        @if ($trip->vehicle)
+                                                                            {{ $trip->vehicle->driver->user->name }}
+                                                                        @else
+                                                                            <span class="btn btn-warning btn-sm">TBD</span>
+                                                                        @endif
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        @if ($trip->vehicle)
+                                                                            <span class="btn btn-success btn-sm">{{ $trip->vehicle->plate_number }}</span>
+                                                                        @else
+                                                                            <span class="btn btn-warning btn-sm">TBD</span>
+                                                                        @endif
+                                                                    </td>
+                                                                    <td class="text-center">{{ $trip->route->name }}</td>
+                                                                    <td class="text-center">{{ $trip->pick_up_time }}</td>
+                                                                    <td class="text-center">
+                                                                        {{ \Carbon\Carbon::parse($trip->trip_date)->isoFormat('MMMM Do, YYYY') }}
+                                                                    </td>
+                                                                    <td class="text-center">{{ $trip->pick_up_location }}</td>
+                                                                    <td class="text-center">{{ $trip->drop_off_location }}</td>
+                                                                    <td class="text-center">
+                                                                        <a href="javascript:void(0);" onclick="axiosModal('/trip/{{ $trip->id }}/cancel')" class="btn btn-danger btn-sm" title="Cancel">
+                                                                            <i class="fa fa-times"></i>
+                                                                        </a>
+                                                                        <span class='m-1'></span>
+                                                                        <a href="javascript:void(0);" onclick="axiosModal('/trip/{{ $trip->id }}/complete')" class="btn btn-primary btn-sm" title="Complete">
+                                                                            <i class="fa fa-check"></i>
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
                                                         @endforeach
                                                     </tbody>
+                                                    
 
                                                 </table>
                                             </div>

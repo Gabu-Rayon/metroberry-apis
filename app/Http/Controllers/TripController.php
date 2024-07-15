@@ -6,6 +6,7 @@ use App\Models\Trip;
 use App\Models\Routes;
 use App\Models\Vehicle;
 use App\Models\Customer;
+use App\Models\Organisation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -19,27 +20,24 @@ class TripController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        try {
-            $trips = Trip::all();
-            Log::info('All Trips Made from the Api :' . $trips);
-            return response()->json([
-                'trips' => $trips
-            ], 200);
-        } catch (Exception $e) {
-            Log::error('ERROR FETCHING TRIPS');
-            Log::error($e);
-            return response()->json([
-                'message' => 'Error occurred while fetching trips',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+    public function index(){
+        $scheduledTrips = Trip::with(['customer.user', 'vehicle.driver.user', 'vehicle', 'route'])
+            ->where('status', 'scheduled')
+            ->orderBy('pick_up_time')
+            ->get()
+            ->groupBy(function ($trip) {
+                return $trip->customer->user->organisation->name;
+            });
 
-        // $trips = Trip::all();
-        // return response()->json($trips);
-    }
+        $scheduledTrips = $scheduledTrips->groupBy(function ($trip) {
+            return $trip->customer->organization;
+        });
 
+        Log::info('SCHEDULED TRIPS');
+        Log::info($scheduledTrips);            
+            
+        return view('trips.scheduled', compact('scheduledTrips'));
+}
     /**
      * Show the form for creating a new resource.
      */
@@ -344,13 +342,21 @@ class TripController extends Controller
         }
     }
 
-    public function tripScheduled(){
-        $scheduledTrips = Trip::where('status', 'scheduled')
-            ->with('customer')
-            ->with('route')
+    public function tripScheduled() {
+        $scheduledTrips = Trip::with(['customer.user', 'vehicle.driver.user', 'route'])
+            ->where('status', 'scheduled')
+            ->orderBy('pick_up_time')
             ->get();
-        return view('trips.scheduled', compact('scheduledTrips'));
+    
+        $groupedTrips = $scheduledTrips->groupBy(function ($trip) {
+            return $trip->customer->customer_organisation_code;
+        });
+
+        $organisations = Organisation::all();
+    
+        return view('trips.scheduled', compact('groupedTrips', 'organisations'));
     }
+    
     public function tripCompleted(){
         $completedTrips = Trip::where('status', 'completed')
             ->with('customer')
