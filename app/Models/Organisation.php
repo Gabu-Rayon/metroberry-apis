@@ -18,7 +18,8 @@ class Organisation extends Model
         'billing_cycle',
         'terms_and_conditions',
         'created_by',
-        'organisation_code'
+        'organisation_code',
+        'status'
     ];
 
     protected $with = ['customers', 'vehicles', 'drivers'];

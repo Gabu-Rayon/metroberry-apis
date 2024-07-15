@@ -114,18 +114,21 @@
                                                     <th title="Phone">Phone</th>
                                                     <th title="Address">Address</th>
                                                     <th title="Organisation">Organisation</th>
+                                                    <th title="Status">Status</th>
                                                     <th title="Action" width="80">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @foreach ($customers as $customer)
+                                                {{ \Log::info($customer) }}
                                                 <tr>
                                                     <td>{{ $customer->user->name }}</td>
                                                     <td>{{ $customer->user->email }}</td>
                                                     <td>{{ $customer->user->phone }}</td>
                                                     <td>{{ $customer->user->address }}</td>
-                                                    <td>{{ $customer->customer_organisation_code }}</td>
-                                                    <td class="d-flex">
+                                                    <td>{{ $customer->organisation->user->name }}</td>
+                                                    <td>{{ $customer->status }}</td>
+                                                    <td>
                                                         <a href="javascript:void(0);"
                                                             class="btn btn-sm btn-primary"
                                                             onclick="axiosModal('employee/{{ $customer->id }}/edit')">

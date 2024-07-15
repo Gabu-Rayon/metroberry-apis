@@ -221,7 +221,10 @@ Route::get('trip/{id}/update', [TripController::class, 'update'])->name('trip.up
 Route::get('trip/{id}/delete', [TripController::class, 'destroy'])->name('trip.delete');
 Route::get('trip/{id}/destroy', [TripController::class, 'destroy'])->name('trip.destroy');
 
-Route::get('trips/scheduled', [TripController::class, 'tripScheduled'])->name('trip.scheduled');
+Route::get('trips/scheduled', [TripController::class, 'tripScheduled'])
+    ->name('trip.scheduled')
+    ->middleware('auth', 'can:view trips');
+
 Route::get('trips/completed', [TripController::class, 'tripCompleted'])->name('trip.completed');
 Route::get('trips/cancelled', [TripController::class, 'tripCancelled'])->name('trip.cancelled');
 Route::get('trips/billed', [TripController::class, 'tripBilled'])->name('trip.billed');

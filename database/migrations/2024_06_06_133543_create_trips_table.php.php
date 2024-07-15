@@ -21,7 +21,7 @@ return new class extends Migration {
             $table->integer('number_of_passengers')->nullable();
             $table->string('pick_up_location');
             $table->string('drop_off_location');
-            $table->enum('status', ['scheduled', 'completed', 'cancelled', 'billed'])->default('pending');
+            $table->enum('status', ['scheduled', 'completed', 'cancelled', 'billed'])->default('scheduled');
         });
     }
 

@@ -19,6 +19,7 @@ return new class extends Migration {
             $table->string('national_id_front_avatar')->nullable();
             $table->string('national_id_behind_avatar')->nullable();
             $table->unsignedBigInteger('created_by');
+            $table->enum('status', ['active', 'inactive'])->default('inactive');
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('organisation_id')->references('id')->on('organisations')->onDelete('cascade');
