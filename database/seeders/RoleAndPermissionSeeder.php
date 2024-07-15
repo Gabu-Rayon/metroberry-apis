@@ -908,6 +908,14 @@ class RoleAndPermissionSeeder extends Seeder
             'manage role',
 
 
+            'view vehicle insurance company',
+            'create vehicle insurance company',
+            'edit vehicle insurance company',
+            'delete vehicle insurance company',
+            'update vehicle insurance company',
+            'manage vehicle insurance company',
+
+
         ]);
 
         $customer->syncPermissions([
