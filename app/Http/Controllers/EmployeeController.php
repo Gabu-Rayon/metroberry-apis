@@ -19,19 +19,43 @@ class EmployeeController extends Controller
      */
     public function index()
     {
+        // Check if the authenticated user has the 'view customers' permission
+        if (\Auth::user()->can('view customers')) {
+            try {
+                $customers = null;
 
-        $customers = null;
+                // Check the user's role
+                if (Auth::user()->role == 'admin') {
+                    // If the user is an admin, fetch all customers
+                    $customers = Customer::all();
+                } elseif (Auth::user()->role == 'organisation') {
+                    // If the user is an organisation, fetch customers for that organisation
+                    $organisation = Organisation::where('user_id', Auth::user()->id)->first();
+                    if ($organisation) {
+                        $customers = Customer::where('customer_organisation_code', $organisation->organisation_code)->get();
+                    }
+                } else {
+                    // If the user has another role, fetch customers created by the user
+                    $customers = Customer::where('created_by', Auth::user()->id)->get();
+                }
 
-        if (Auth::user()->role == 'organisation') {
-            $customers = Customer::where('customer_organisation_code', Auth::user()->organisation->organisation_code)->get();
+                Log::info('Customers fetched: ', ['customers' => $customers]);
+
+                // Fetch organisations with user information
+                $organisations = Organisation::with('user')->get();
+
+                return view('employee.index', compact('customers', 'organisations'));
+            } catch (Exception $e) {
+                // Log the error message
+                Log::error('Error fetching customers: ' . $e->getMessage());
+
+                return back()->with('error', 'An error occurred while fetching the customers. Please try again.');
+            }
         } else {
-            $customers = Customer::where('created_by', Auth::user()->id)->get();
+            return back()->with('error', 'Permission Denied.');
         }
-        Log::info('CUSTOMERS');
-        Log::info($customers);
-        $organisations = Organisation::with('user')->get();
-        return view('employee.index', compact('customers', 'organisations'));
     }
+
 
 
     /**

@@ -23,24 +23,40 @@ class VehicleController extends Controller
      */
     public function index()
     {
-        try {
-            // Fetch vehicles with creator and driver information
-            $vehicles = Vehicle::with([
-                'creator:id,name,email',
-                'driver.user:id,name,email'
-            ])->get();
+        // Check if the authenticated user has the 'view vehicle' permission
+        if (\Auth::user()->can('view vehicle')) {
+            try {
+                $vehicles = null;
 
-            // Log the retrieved vehicles data
-            Log::info('Retrieved vehicles data:', $vehicles->toArray());
+                // Check the user's role
+                if (Auth::user()->role == 'admin') {
+                    // If the user is an admin, fetch all vehicles
+                    $vehicles = Vehicle::all();
+                } elseif (Auth::user()->role == 'organisation') {
+                    // If the user is an organisation, fetch vehicles for that organisation
+                    $organisation = Organisation::where('user_id', Auth::user()->id)->first();
+                    if ($organisation) {
+                        $vehicles = Vehicle::where('organisation_id', $organisation->id)->get();
+                    }
+                } else {
+                    // If the user has another role, fetch vehicles created by the user
+                    $vehicles = Vehicle::where('created_by', Auth::user()->id)->get();
+                }
 
-            return view('vehicle', compact('vehicles'));
-        } catch (Exception $e) {
-            // Log the error message
-            Log::error('Error fetching vehicles: ' . $e->getMessage());
+                Log::info('Vehicles fetched: ', ['vehicles' => $vehicles]);
 
-            return back()->with('error', 'An error occurred while fetching the vehicles. Please try again.');
+                return view('vehicle', compact('vehicles'));
+            } catch (Exception $e) {
+                // Log the error message
+                Log::error('Error fetching vehicles: ' . $e->getMessage());
+
+                return back()->with('error', 'An error occurred while fetching the vehicles. Please try again.');
+            }
+        } else {
+            return back()->with('error', 'Permission Denied.');
         }
     }
+
 
 
     /**
@@ -49,7 +65,9 @@ class VehicleController extends Controller
 
 
      public function create(){
-        return view('vehicle.create');
+
+        $organisations = Organisation::all();
+        return view('vehicle.create',compact('organisations'));
      }
     public function store(Request $request)
     {
@@ -67,6 +85,7 @@ class VehicleController extends Controller
                 'fuel_type' => 'required|string|max:255',
                 'engine_size' => 'required|numeric',
                 'vehicle_avatar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'organisation_id' => 'required|numeric',
             ]);
 
             if ($validator->fails()) {
@@ -89,7 +108,8 @@ class VehicleController extends Controller
 
             // Create a new vehicle record
             $vehicle = new Vehicle();
-            $vehicle->created_by = 1;
+            $vehicle->created_by = Auth::user()->id;
+            $vehicle->organisation_id = $request->organisation_id;
             $vehicle->model = $request->model;
             $vehicle->make = $request->make;
             $vehicle->year = $year;
@@ -240,12 +260,19 @@ class VehicleController extends Controller
             ], 500);
         }
     }
-
     public function edit($id)
     {
         try {
             $vehicle = Vehicle::findOrFail($id);
             $drivers = Driver::all();
+            $organisations = Organisation::all();
+
+            // Fetch the assigned Organisation's name if exists
+            $assignedOrganisationName = null;
+            if ($vehicle->organisation_id) {
+                $organisation = Organisation::with('user')->findOrFail($vehicle->organisation_id);
+                $assignedOrganisationName = $organisation->user->name;
+            }
 
             // Fetch the assigned driver's name if exists
             $assignedDriverName = null;
@@ -254,12 +281,13 @@ class VehicleController extends Controller
                 $assignedDriverName = $driver->user->name;
             }
 
-            return view('vehicle.edit', compact('vehicle', 'assignedDriverName','drivers'));
+            return view('vehicle.edit', compact('vehicle', 'assignedDriverName', 'drivers', 'assignedOrganisationName', 'organisations'));
         } catch (Exception $e) {
             Log::error('Error fetching vehicle for edit: ' . $e->getMessage());
             return back()->with('error', 'An error occurred while fetching the vehicle. Please try again.');
         }
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -269,6 +297,8 @@ class VehicleController extends Controller
     {
         try {
             $data = $request->all();
+            // Log the request data
+            Log::info('Vehicle update request data From the from :', $data);
 
             $validator = Validator::make($data, [
                 'model' => 'required|string|max:255',
@@ -281,6 +311,7 @@ class VehicleController extends Controller
                 'engine_size' => 'required|numeric',
                 'vehicle_avatar' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'driver_id' => 'nullable|exists:drivers,id',
+                'organisation_id'  => 'nullable|exists:organisations,id',
             ]);
 
             if ($validator->fails()) {
@@ -312,6 +343,7 @@ class VehicleController extends Controller
             $vehicle->plate_number = $request->plate_number;
             $vehicle->fuel_type = $request->fuel_type;
             $vehicle->engine_size = $request->engine_size;
+            $vehicle->organisation_id = $request->organisation_id;
 
             // Update driver_id in vehicles table if provided
             if ($request->has('driver_id')) {

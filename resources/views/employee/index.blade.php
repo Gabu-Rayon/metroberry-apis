@@ -126,17 +126,21 @@
                                                     <td>{{ $customer->user->address }}</td>
                                                     <td>{{ $customer->customer_organisation_code }}</td>
                                                     <td class="d-flex">
+                                                        @if (\Auth::user()->can('edit customer'))
                                                         <a href="javascript:void(0);"
                                                             class="btn btn-sm btn-primary"
                                                             onclick="axiosModal('employee/{{ $customer->id }}/edit')">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
+                                                        @endif
                                                         <span class='m-1'></span>
+                                                        @if (\Auth::user()->can('delete customer'))
                                                         <a href="javascript:void(0);"
                                                             class="btn btn-sm btn-danger"
                                                             onclick="deleteCustomer({{ $customer->id }})">
                                                             <i class="fas fa-trash"></i>
                                                         </a>
+                                                        @endif
                                                     </td>
                                                 </tr>
                                                 @endforeach

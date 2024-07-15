@@ -134,7 +134,7 @@ class TripController extends Controller
             //     we get organisation address using the models relationship where the data for organisation is also in the users table 
               
             //then 
-            if user select  'drop_off_location' => '4',  which in this case will came id we will get the  
+            // if user select  'drop_off_location' => '4',  which in this case will came id we will get the  
 
 
             // trip Schedule  
