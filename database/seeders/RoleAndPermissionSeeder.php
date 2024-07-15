@@ -109,6 +109,7 @@ class RoleAndPermissionSeeder extends Seeder
             'manage vehicles',
             'manage trips',
             'book trip',
+            'complete trip',
 
             'update profile',
             'reset password',
@@ -243,7 +244,7 @@ class RoleAndPermissionSeeder extends Seeder
             'view organisation',
             'show organisation',
             'edit organisation',
-            'delete organisation',           
+            'delete organisation',
 
             'manage trips',
             'manage drivers',
@@ -251,6 +252,7 @@ class RoleAndPermissionSeeder extends Seeder
             'manage vehicles',
             'manage trips',
             'book trip',
+            'complete trip',
 
             'update profile',
             'reset password',

@@ -19,6 +19,7 @@ class Vehicle extends Model
         'plate_number',
         'color',
         'seats',
+        'class',
         'fuel_type',
         'engine_size',
         'avatar',
@@ -53,8 +54,17 @@ class Vehicle extends Model
         return $this->hasMany(Trip::class);
     }
 
+    public function isOccupied () {
+        return $this->trips()->where('status', '==', 'scheduled')->exists();
+    }
+
     public function services()
     {
         return $this->hasMany(VehicleService::class);
+    }
+
+    public function insurance()
+    {
+        return $this->hasOne(VehicleInsurance::class);
     }
 }

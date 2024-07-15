@@ -127,19 +127,32 @@
                                                     <td>{{ $customer->user->phone }}</td>
                                                     <td>{{ $customer->user->address }}</td>
                                                     <td>{{ $customer->organisation->user->name }}</td>
-                                                    <td>{{ $customer->status }}</td>
                                                     <td>
-                                                        <a href="javascript:void(0);"
-                                                            class="btn btn-sm btn-primary"
-                                                            onclick="axiosModal('employee/{{ $customer->id }}/edit')">
+                                                        @if ($customer->status == 'active')
+                                                        <span class="badge bg-success">Active</span>
+                                                        @else
+                                                        <span class="badge bg-danger">Inactive</span>
+                                                        @endif
+                                                    </td>
+                                                    <td class="d-flex">
+                                                        <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="axiosModal('employee/{{ $customer->id }}/edit')">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
                                                         <span class='m-1'></span>
-                                                        <a href="javascript:void(0);"
-                                                            class="btn btn-sm btn-danger"
-                                                            onclick="deleteCustomer({{ $customer->id }})">
+                                                        @if ($customer->status == 'active')
+                                                            <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="axiosModal('employee/{{ $customer->id }}/deactivate')" title="Dectivate Driver">
+                                                                <i class="fas fa-toggle-on"></i>
+                                                            </a> 
+                                                        @else
+                                                            <a href="javascript:void(0);" class="btn btn-sm btn-secondary" onclick="axiosModal('employee/{{ $customer->id }}/activate')" title="Activate Driver">
+                                                                <i class="fas fa-toggle-off"></i>
+                                                            </a>                                                        
+                                                        @endif
+                                                        <span class='m-1'></span>
+                                                        <a href="javascript:void(0);" class="btn btn-sm btn-danger" onclick="deleteCustomer({{ $customer->id }})">
                                                             <i class="fas fa-trash"></i>
                                                         </a>
+                                                        <span class='m-1'></span>
                                                     </td>
                                                 </tr>
                                                 @endforeach

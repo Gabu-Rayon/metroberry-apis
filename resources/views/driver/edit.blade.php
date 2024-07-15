@@ -121,6 +121,18 @@
                       @endif
                   </div>
               </div>
+
+              @if ($driver->vehicle)
+              <div class="form-group row my-2">
+                <label for="vehicle" class="col-sm-5 col-form-label">
+                    Vehicle
+                </label>
+                <div class="col-sm-7">
+                    <input name="vehicle" class="form-control" type="text" placeholder="Vehicle" id="vehicle" readonly value="{{ $driver->vehicle->plate_number }}" />
+                    <img src="{{ asset('images/' . $driver->vehicle->avatar) }}" alt="Vehicle" class="form-control" />
+                </div>
+            </div>
+              @endif
           </div>
       </div>
   </div>

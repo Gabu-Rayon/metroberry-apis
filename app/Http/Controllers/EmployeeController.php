@@ -240,7 +240,7 @@ class EmployeeController extends Controller
 
 
       public function create(){
-        $organisations = Organisation::with('user')->get();
+        $organisations = Organisation::with('user')->where('status', 'active')->get();
         return view('employee.create', compact('organisations'));
       }
 
@@ -375,6 +375,50 @@ class EmployeeController extends Controller
             Log::info('DELETE CUSTOMER ERROR');
             Log::info($e);
             return redirect()->back()->with('error', 'An error occurred while deleting customer');
+        }
+    }
+
+    public function activateForm ($id) {
+        $customer = Customer::findOrFail($id);
+        return view('employee.activate', compact('customer'));
+    }
+
+    public function activate ($id) {
+        try {
+
+            $customer = Customer::find($id);
+
+            if (!$customer) {
+                return redirect()->back()->with('error', 'Customer not found');
+            }
+
+            if (!$customer->national_id_front_avatar || !$customer->national_id_behind_avatar) {
+                return redirect()->back()->with('error', 'Missing Documents');
+            }
+
+            if (!$customer->national_id_no) {
+                return redirect()->back()->with('error', 'Missing National ID');
+            }
+
+            $user = User::find($customer->user_id);
+
+            if (!$user) {
+                return redirect()->back()->with('error', 'User not found');
+            }
+
+            DB::beginTransaction();
+
+            $customer->status = 'active';
+
+            $customer->save();
+
+            DB::commit();
+
+            return redirect()->route('employee')->with('success', 'Customer activated successfully');
+        } catch (Exception $e) {
+            Log::info('ACTIVATE CUSTOMER ERROR');
+            Log::info($e);
+            return redirect()->back()->with('error', 'Something Went Wrong');
         }
     }
 }

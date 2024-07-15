@@ -12,7 +12,6 @@ class VehicleInsurance extends Model
 
     protected $table = "vehicle_insurances";
 
-
     protected $fillable = [
         'vehicle_id',
         'insurance_company_id',

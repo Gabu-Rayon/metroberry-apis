@@ -91,14 +91,14 @@ class DriverController extends Controller
                 'phone' => $data['phone'],
                 'address' => $data['address'],
                 'avatar' => $avatarPath,
-                'created_by' => 1,
+                'created_by' => Auth::user()->id,
                 'role' => 'driver',
             ]);
 
             $user->assignRole('driver');
 
             Driver::create([
-                'created_by' => 1,
+                'created_by' => Auth::user()->id,
                 'user_id' => $user->id,
                 'organisation_id' => $organisation->id,
                 'national_id_no' => $data['national_id'],
@@ -136,13 +136,15 @@ class DriverController extends Controller
     }
 
     public function create(){
-        $organisations = Organisation::all();
+        $organisations = Organisation::where('status', 'active')->get();
         return view('driver.create', compact('organisations'));
     }
 
 
     public function edit($id){
-        $driver = Driver::findOrfail($id);
+        $driver = Driver::with('vehicle')->findOrfail($id);
+        Log::info('DRIVER');
+        Log::info($driver);
         $organisations = Organisation::all();
         return view('driver.edit', compact('driver', 'organisations'));
     }

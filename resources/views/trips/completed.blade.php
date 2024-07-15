@@ -224,20 +224,56 @@
 
                                         <div>
                                             <div class="table-responsive">
-                                                 <table class="table" id="driver-table">
+                                                <table class="table" id="driver-table">
                                                     <thead>
                                                         <tr>
-                                                            <th title="Sl" width="30">Sl</th>
                                                             <th title="Name">Customer</th>
                                                             <th title="Location">Driver</th>
                                                             <th title="NoOfEmployee">Vehicle</th>
                                                             <th title="Registration date">Route</th>
-                                                            <th title="Ownership">RideType</th>
-                                                            <th title="Email">PickUp Location</th>
-                                                            <th title="Email">DropOff Location</th>
+                                                            <th title="Email">Time</th>
+                                                            <th title="Email">Date</th>
+                                                            <th title="Email">Pick Up</th>
+                                                            <th title="Email">Drop Off</th>
                                                             <th title="Action" width="150">Action</th>
                                                         </tr>
                                                     </thead>
+
+                                                    <tbody>
+                                                        @foreach($completedTrips as $trip)
+                                                            <tr>
+                                                                <td class="text-center">{{ $trip->customer->user->name }}</td>
+                                                                <td class="text-center">
+                                                                    @if ($trip->vehicle)
+                                                                        {{ $trip->vehicle->driver->user->name }}
+                                                                    @else
+                                                                        <span class="btn btn-warning btn-sm">TBD</span>
+                                                                    @endif
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    @if ($trip->vehicle)
+                                                                        <span class="btn btn-success btn-sm">{{ $trip->vehicle->plate_number }}</span>
+                                                                    @else
+                                                                        <span class="btn btn-warning btn-sm">TBD</span>
+                                                                    @endif
+                                                                </td>
+                                                                <td class="text-center">{{ $trip->route->name }}</td>
+                                                                <td class="text-center">{{ $trip->pick_up_time }}</td>
+                                                                <td class="text-center">
+                                                                    {{ \Carbon\Carbon::parse($trip->trip_date)->isoFormat('MMMM Do, YYYY') }}
+                                                                </td>                                                                
+                                                                <td class="text-center">{{ $trip->pick_up_location }}</td>
+                                                                <td class="text-center">{{ $trip->drop_off_location }}</td>
+                                                                <td class="text-center">
+                                                                    <span class='m-1'></span>
+                                                                    <a href="javascript:void(0);" onclick="axiosModal('/trip/{{ $trip->id }}/bill')" class="btn btn-warning btn-sm" title="Bill">
+                                                                        <i class="fa fa-file text-white"></i>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+
                                                 </table>
                                             </div>
 

@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Routing\RouteSignatureParameters;
+use Illuminate\Support\Facades\DB;
 
 class TripController extends Controller
 {
@@ -44,10 +45,7 @@ class TripController extends Controller
      */
     public function create()
     {
-        // Typically not used in APIs
-        //where name will be from users table and id is from Customers table
-        $employees = Customer::all();
-        //routes
+        $employees = Customer::where('status', 'Active')->get();
         $routes = Routes::all();
         return view('trips.create', compact('employees', 'routes'));
     }
@@ -104,12 +102,15 @@ class TripController extends Controller
             $data = $request->all();
             $creator = Auth::user();
 
-             $validator = Validator::make($data, [
+            Log::info('TRIP DATA');
+            Log::info($data);
+
+            $validator = Validator::make($data, [
                 'customer_id' => 'required|exists:customers,id',
-                'preferred_route_id' => 'required|exists:routes,id',                
+                'pick_up_location' => 'required|string',
+                'preferred_route_id' => 'required|exists:routes,id',
+                'drop_off_location' => 'required|string',
                 'pickup_time' => 'required|date_format:H:i',
-                'pick_up_location' => 'required|in:Home,Office',
-                'drop_off_location' => 'required|exists:route_locations,id',
                 'trip_date' => 'required|date',
             ]);
 
@@ -121,16 +122,26 @@ class TripController extends Controller
                 return redirect()->back()->with('error', $validator->errors()->first())->withInput();
             }
 
-            Log::info('DATA');
-            Log::info($data);
+            DB::beginTransaction();
 
+            Trip::create([
+                'customer_id' => $data['customer_id'],
+                'route_id' => $data['preferred_route_id'],
+                'pick_up_time' => $data['pickup_time'],
+                'pick_up_location' => $data['pick_up_location'],
+                'drop_off_location' => $data['drop_off_location'],
+                'trip_date' => $data['trip_date'],
+                'created_by' => $creator->id,
+            ]);
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Trip Created Successfully');
         } catch (\Exception $e) {
-            // Handle exceptions or errors
-            // Log the error
-            Log::error('Error Schedule trip: ' . $e->getMessage());
-
-            // Optionally, redirect back with error message
-            return back()->withInput()->withErrors(['error' => 'Failed to schedule trip. Please try again.']);
+            DB::rollBack();
+            Log::error('ERROR CREATING TRIP');
+            Log::error($e);
+            return redirect()->back()->with('error', 'Something Went Wrong');
         }
     }
 
@@ -333,13 +344,20 @@ class TripController extends Controller
         }
     }
 
-    public function tripScheduled()
-    {
-        return view('trips.scheduled');
+    public function tripScheduled(){
+        $scheduledTrips = Trip::where('status', 'scheduled')
+            ->with('customer')
+            ->with('route')
+            ->get();
+        return view('trips.scheduled', compact('scheduledTrips'));
     }
-    public function tripCompleted()
-    {
-        return view('trips.completed');
+    public function tripCompleted(){
+        $completedTrips = Trip::where('status', 'completed')
+            ->with('customer')
+            ->with('vehicle')
+            ->with('route')
+            ->get();
+        return view('trips.completed', compact('completedTrips'));
 
     }
     public function tripCancelled()
@@ -351,6 +369,31 @@ class TripController extends Controller
     {
         return view('trips.billed');
 
+    }
+
+    public function completeTripForm($id){
+        $trip = Trip::findOrFail($id);
+        return view('trips.complete', compact('trip'));
+    }
+
+    public function completeTrip($id) {
+        try {
+            $trip = Trip::findOrFail($id);
+
+            DB::beginTransaction();
+
+            $trip->status = 'completed';
+
+            $trip->save();
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Trip Completed Successfully');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'Something Went Wrong');
+            Log::error('ERROR COMPLETING TRIP');
+            Log::error($e);
+        }
     }
 
 }

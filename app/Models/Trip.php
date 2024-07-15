@@ -18,14 +18,18 @@ class Trip extends Model
         'pick_up_time',
         'pick_up_location',
         'drop_off_location',
+        'trip_date',
         'drop_off_time',
         'status',
     ];
 
 
-    public function customer()
-    {
+    public function customer(){
         return $this->belongsTo(Customer::class);
+    }
+
+    public function route (){
+        return $this->belongsTo(Routes::class);
     }
 
     public function vehicle()

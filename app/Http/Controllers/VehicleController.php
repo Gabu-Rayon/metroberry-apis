@@ -543,7 +543,9 @@ class VehicleController extends Controller
     {
         try {
             $vehicle = Vehicle::findOrFail($id);
-            $drivers = Driver::all();
+            $drivers = Driver::where('status', 'active')
+                ->whereNull('vehicle_id')
+                ->get();
             return view('vehicle.assign-driver', compact('vehicle', 'drivers'));
         } catch (Exception $e) {
             Log::error('Error fetching vehicle for Assigning: ' . $e->getMessage());
@@ -646,10 +648,17 @@ class VehicleController extends Controller
     {
         try {
 
-            $vehicle = Vehicle::findOrfail($id);
+            $vehicle = Vehicle::with('insurance')->findOrFail($id);
+
+            Log::info('VEHICLE');
+            Log::info($vehicle);
 
             if ($vehicle->status == 'active') {
                 return redirect()->back()->with('error', 'Vehicle is already active');
+            }
+
+            if (!$vehicle->insurance) {
+                return redirect()->back()->with('error', 'Vehicle has no insurance');
             }
 
             DB::beginTransaction();

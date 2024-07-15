@@ -30,7 +30,7 @@ class VehicleInsuranceController extends Controller
     {
         $insuranceCompanies = InsuranceCompany::where('status', 1)->get();
         $recurringPeriods = InsuranceRecurringPeriod::all();
-        $vehicles = Vehicle::where('status', 'active')->get();
+        $vehicles = Vehicle::all();
 
         return view('vehicle.insurance.create', compact('insuranceCompanies', 'recurringPeriods', 'vehicles'));
     }

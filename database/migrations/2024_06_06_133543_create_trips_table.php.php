@@ -13,15 +13,18 @@ return new class extends Migration {
         Schema::create('trips', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('customer_id');
-            $table->unsignedBigInteger('vehicle_id');
+            $table->unsignedBigInteger('vehicle_id')->nullable();
             $table->unsignedBigInteger('route_id');
-            $table->dateTime('pick_up_time');
-            $table->dateTime('drop_off_time')->nullable();
-            $table->integer('distance')->nullable();
-            $table->integer('number_of_passengers')->nullable();
+            $table->time('pick_up_time');
+            $table->time('drop_off_time')->nullable();
             $table->string('pick_up_location');
             $table->string('drop_off_location');
+            $table->date('trip_date');
             $table->enum('status', ['scheduled', 'completed', 'cancelled', 'billed'])->default('scheduled');
+
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
+            $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
+            $table->foreign('route_id')->references('id')->on('routes')->onDelete('cascade');
         });
     }
 

@@ -64,8 +64,23 @@ Route::post('employee', [EmployeeController::class, 'store'])
     ->name('employee.create')
     ->middleware('auth', 'can:create customer');
 
-Route::get('employee/{id}/edit', [EmployeeController::class, 'edit'])->name('employee.edit');
-Route::put('employee/{id}/update', [EmployeeController::class, 'update'])->name('employee.update');
+// Update Employee Details
+Route::get('employee/{id}/edit', [EmployeeController::class, 'edit'])
+    ->name('employee.edit')
+    ->middleware('auth', 'can:edit customer');
+
+Route::put('employee/{id}/update', [EmployeeController::class, 'update'])
+    ->name('employee.update')
+    ->middleware('auth', 'can:edit customer');
+
+Route::get('employee/{id}/activate', [EmployeeController::class, 'activateForm'])
+    ->name('employee.activate')
+    ->middleware('auth', 'can:edit customer');
+
+Route::put('employee/{id}/activate', [EmployeeController::class, 'activate'])
+    ->name('employee.activate')
+    ->middleware('auth', 'can:edit customer');
+
 Route::post('employee/{id}/delete', [EmployeeController::class, 'destroy'])->name('employee.delete');
 
 
@@ -94,8 +109,27 @@ Route::post('organisation', [OrganisationController::class, 'store'])
     ->name('organisation.create')
     ->middleware('auth', 'can:create organisation');
 
-Route::get('organisation/{id}/edit', [OrganisationController::class, 'edit'])->name('organisation.edit');
-Route::get('organisation/{id}/delete', [OrganisationController::class, 'destroy'])->name('organisation.destroy');
+// Update Organisation Details
+Route::get('organisation/{id}/edit', [OrganisationController::class, 'edit'])
+    ->name('organisation.edit')
+    ->middleware('auth', 'can:edit organisation');
+
+Route::get('organisation/{id}/activate', [OrganisationController::class, 'activateForm'])
+->name('organisation.activate')
+->middleware('auth', 'can:edit organisation');
+
+Route::put('organisation/{id}/activate', [OrganisationController::class, 'activate'])
+->name('organisation.activate')
+->middleware('auth', 'can:edit organisation');
+
+Route::put('organisation/{id}/update', [OrganisationController::class, 'update'])
+    ->name('organisation.update')
+    ->middleware('auth', 'can:edit organisation');
+
+// Delete Organisation
+Route::get('organisation/{id}/delete', [OrganisationController::class, 'destroy'])
+    ->name('organisation.destroy')
+    ->middleware('auth', 'can:delete organisation');
 
 /**
  * Drivers Routes
@@ -228,6 +262,16 @@ Route::get('trips/scheduled', [TripController::class, 'tripScheduled'])
 Route::get('trips/completed', [TripController::class, 'tripCompleted'])->name('trip.completed');
 Route::get('trips/cancelled', [TripController::class, 'tripCancelled'])->name('trip.cancelled');
 Route::get('trips/billed', [TripController::class, 'tripBilled'])->name('trip.billed');
+
+// Complete Trip
+Route::get('trip/{id}/complete', [TripController::class, 'completeTripForm'])
+    ->name('trip.complete')
+    ->middleware('auth', 'can:complete trip');
+
+// Complete Trip
+Route::put('trip/{id}/complete', [TripController::class, 'completeTrip'])
+    ->name('trip.complete')
+    ->middleware('auth', 'can:complete trip');
 
 
 

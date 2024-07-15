@@ -250,4 +250,43 @@ class OrganisationController extends Controller
             return redirect()->back()->with('error', 'An error occurred while deleting organisation');
         }
     }
+
+    public function activateForm(string $id) {
+        $organisation = Organisation::findOrfail($id);
+        return view('organisation.activate',compact('organisation'));
+    }
+
+    public function activate ($id) {
+        try {
+
+            $organisation = Organisation::findOrfail($id);
+
+            if (!$organisation) {
+                return redirect()->back()->with('error', 'Organisation not found');
+            }
+
+            if ($organisation->status == 'active') {
+                return redirect()->back()->with('error', 'Organisation is already active');
+            }
+
+            if (!$organisation->certificate_of_organisation) {
+                return redirect()->back()->with('error', 'Missing Documents');
+            }
+
+            DB::beginTransaction();
+
+            $organisation->update([
+                'status' => 'active'
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('organisation')->with('success', 'Organisation activated successfully');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('ERROR ACTIVATING Organisation');
+            Log::error($e);
+            return redirect()->back()->with('error', 'Something Went Wrong');
+        }
+    }
 }

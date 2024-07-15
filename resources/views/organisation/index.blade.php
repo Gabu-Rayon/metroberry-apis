@@ -93,13 +93,29 @@
                                                     <td>{{ $organisation->user->phone }}</td>
                                                     <td>{{ $organisation->user->address }}</td>
                                                     <td>{{ $organisation->organisation_code }}</td>
-                                                    <td>{{ $organisation->status }}</td>
+                                                    <td>
+                                                        @if ($organisation->status == 'active')
+                                                        <span class="badge bg-success">Active</span>
+                                                        @else
+                                                        <span class="badge bg-danger">Inactive</span>
+                                                        @endif
+                                                    </td>
                                                     <td class="d-flex">
                                                         <a href="javascript:void(0);"
                                                             class="btn btn-sm btn-primary"
                                                             onclick="axiosModal('organisation/{{ $organisation->id }}/edit')">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
+                                                        <span class='m-1'></span>
+                                                        @if ($organisation->status == 'active')
+                                                            <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="axiosModal('organisation/{{ $organisation->id }}/deactivate')" title="Dectivate Organisation">
+                                                                <i class="fas fa-toggle-on"></i>
+                                                            </a> 
+                                                        @else
+                                                            <a href="javascript:void(0);" class="btn btn-sm btn-secondary" onclick="axiosModal('organisation/{{ $organisation->id }}/activate')" title="Activate Organisation">
+                                                                <i class="fas fa-toggle-off"></i>
+                                                            </a>                                                        
+                                                        @endif
                                                         <span class='m-1'></span>
                                                         <a href="javascript:void(0);"
                                                             class="btn btn-sm btn-danger"
