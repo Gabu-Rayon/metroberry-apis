@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Cmopleted Trips List')
+@section('title', 'Completed Trips List')
 @section('content')
 
     <body class="fixed sidebar-mini">
@@ -267,6 +267,9 @@
                                                                 <td class="text-center">{{ $trip->drop_off_location }}</td>
                                                                 <td class="text-center">{{ $trip->drop_off_time }}</td>
                                                                 <td class="text-center">
+                                                                    <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="axiosModal('trip/{{ $trip->id }}/view')" title="View Details">
+                                                                        <i class="fas fa-eye"></i>
+                                                                    </a>
                                                                     <span class='m-1'></span>
                                                                     <a href="javascript:void(0);" onclick="axiosModal('/trip/{{ $trip->id }}/bill')" class="btn btn-warning btn-sm" title="Bill">
                                                                         <i class="fa fa-file text-white"></i>

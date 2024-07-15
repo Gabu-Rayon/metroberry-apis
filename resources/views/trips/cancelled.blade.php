@@ -235,6 +235,7 @@
                                                             <th title="Email">Date</th>
                                                             <th title="Email">Pick Up</th>
                                                             <th title="Email">Drop Off</th>
+                                                            <th title="Action">Action</th>
                                                         </tr>
                                                     </thead>
 
@@ -263,6 +264,11 @@
                                                             </td>
                                                             <td class="text-center">{{ $trip->pick_up_location }}</td>
                                                             <td class="text-center">{{ $trip->drop_off_location }}</td>
+                                                            <td>
+                                                                <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="axiosModal('trip/{{ $trip->id }}/view')" title="View Details">
+                                                                    <i class="fas fa-eye"></i>
+                                                                </a>
+                                                            </td>
                                                         </tr>
                                                         @endforeach
                                                     </tbody>

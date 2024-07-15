@@ -255,6 +255,7 @@ class RoleAndPermissionSeeder extends Seeder
             'book trip',
             'complete trip',
             'cancel trip',
+            'edit trip',
 
             'update profile',
             'reset password',

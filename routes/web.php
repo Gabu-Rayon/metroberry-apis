@@ -268,6 +268,11 @@ Route::get('trip/{id}/complete', [TripController::class, 'completeTripForm'])
     ->name('trip.complete')
     ->middleware('auth', 'can:complete trip');
 
+// Assign Vehicle to Trips
+Route::get('trip/vehicle-assign', [TripController::class, 'assignVehicleToTrips'])
+    ->name('trip.vehicle-assign')
+    ->middleware('auth', 'can:complete trip');
+
 // Complete Trip
 Route::put('trip/{id}/complete', [TripController::class, 'completeTrip'])
     ->name('trip.complete')
