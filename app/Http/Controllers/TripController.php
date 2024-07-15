@@ -402,4 +402,28 @@ class TripController extends Controller
         }
     }
 
+    public function cancelTripForm($id){
+        $trip = Trip::findOrFail($id);
+        return view('trips.cancel', compact('trip'));
+    }
+
+    public function cancelTrip($id) {
+        try {
+            $trip = Trip::findOrFail($id);
+
+            DB::beginTransaction();
+
+            $trip->status = 'cancelled';
+
+            $trip->save();
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Trip Cancelled Successfully');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', 'Something Went Wrong');
+            Log::error('ERROR CANCELLING TRIP');
+            Log::error($e);
+        }
+    }
 }

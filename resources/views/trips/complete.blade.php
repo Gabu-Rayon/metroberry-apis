@@ -2,7 +2,7 @@
     @csrf
     @method('PUT')
     <div class="card-header text-center my-3 p-2 border-bottom">
-        <h4>Confirm trip completion?</h4>
+        <h4>Confirm trip completion</h4>
     </div>
 
     <div class="modal-body">

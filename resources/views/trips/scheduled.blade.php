@@ -243,7 +243,7 @@
                                                         @foreach($groupedTrips as $organisationCode => $trips)
                                                             <tr>
                                                                 <td colspan="9" class="text-center">
-                                                                    <h5 class="text-primary">
+                                                                    <h5 class="text-primary text-sm">
                                                                         @php
                                                                             $organisation = $organisations->where('organisation_code', $organisationCode)->first();
                                                                         @endphp

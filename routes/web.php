@@ -273,6 +273,16 @@ Route::put('trip/{id}/complete', [TripController::class, 'completeTrip'])
     ->name('trip.complete')
     ->middleware('auth', 'can:complete trip');
 
+// Cancel Trip
+Route::get('trip/{id}/cancel', [TripController::class, 'cancelTripForm'])
+    ->name('trip.cancel')
+    ->middleware('auth', 'can:cancel trip');
+
+// Cancel Trip
+Route::put('trip/{id}/cancel', [TripController::class, 'cancelTrip'])
+    ->name('trip.cancel')
+    ->middleware('auth', 'can:cancel trip');
+
 
 
 /**
