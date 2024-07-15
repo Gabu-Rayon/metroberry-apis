@@ -22,6 +22,7 @@ return new class extends Migration {
             $table->string('pick_up_location');
             $table->string('drop_off_location');
             $table->enum('status', ['scheduled', 'completed', 'cancelled', 'billed'])->default('scheduled');
+            $table->timestamps();
         });
     }
 
