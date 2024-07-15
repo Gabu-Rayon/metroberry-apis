@@ -7,6 +7,7 @@ use App\Models\Routes;
 use App\Models\Vehicle;
 use App\Models\Customer;
 use App\Models\Organisation;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -392,6 +393,7 @@ class TripController extends Controller
             DB::beginTransaction();
 
             $trip->status = 'completed';
+            $trip->drop_off_time = Carbon::now('Africa/Nairobi')->format('H:i:s');
 
             $trip->save();
 

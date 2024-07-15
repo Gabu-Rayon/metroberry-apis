@@ -231,10 +231,11 @@
                                                             <th title="Location">Driver</th>
                                                             <th title="NoOfEmployee">Vehicle</th>
                                                             <th title="Registration date">Route</th>
-                                                            <th title="Email">Time</th>
+                                                            <th title="Email">Pickup Time</th>
                                                             <th title="Email">Date</th>
-                                                            <th title="Email">Pick Up</th>
-                                                            <th title="Email">Drop Off</th>
+                                                            <th title="Email">Pickup</th>
+                                                            <th title="Email">Dropoff</th>
+                                                            <th title="Email">Dropoff Time</th>
                                                             <th title="Action" width="150">Action</th>
                                                         </tr>
                                                     </thead>
@@ -264,6 +265,7 @@
                                                                 </td>                                                                
                                                                 <td class="text-center">{{ $trip->pick_up_location }}</td>
                                                                 <td class="text-center">{{ $trip->drop_off_location }}</td>
+                                                                <td class="text-center">{{ $trip->drop_off_time }}</td>
                                                                 <td class="text-center">
                                                                     <span class='m-1'></span>
                                                                     <a href="javascript:void(0);" onclick="axiosModal('/trip/{{ $trip->id }}/bill')" class="btn btn-warning btn-sm" title="Bill">
