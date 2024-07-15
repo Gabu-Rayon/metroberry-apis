@@ -55,7 +55,23 @@ class Vehicle extends Model
     }
 
     public function isOccupied () {
-        return $this->trips()->where('status', '==', 'scheduled')->exists();
+        $seatsRange = null;
+
+        if ($this->class == 'A') {
+            $seatsRange = range(1, 4);
+        } else if ($this->class == 'B') {
+            $seatsRange = range(5, 6);
+        } else if ($this->class == 'C') {
+            $seatsRange = range(7, 14);
+        }
+
+        $trips = $this->trips()->where('status', 'scheduled')->where('trip_date', '>=', now())->get();
+
+        if ($trips->count() >= count($seatsRange)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function services()

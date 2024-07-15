@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Console\Commands\AssignVehicleToTrips;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -18,10 +17,8 @@ class AppServiceProvider extends ServiceProvider
     /**
      * Bootstrap any application services.
      */
-    public function boot(): void {
-        $this->app->booted(function () {
-            $schedule = $this->app->make('Illuminate\Console\Scheduling\Schedule');
-            $schedule->command(AssignVehicleToTrips::class)->everyMinute();
-        });
+    public function boot(): void
+    {
+        //
     }
 }
