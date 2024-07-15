@@ -29,6 +29,8 @@ class VehicleInsurance extends Model
         'create_by',
     ];
 
+    protected $with = ['vehicle'];
+
     public function creator()
     {
         return $this->belongsTo(User::class, 'created_by');

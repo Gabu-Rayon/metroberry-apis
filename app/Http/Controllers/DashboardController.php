@@ -44,7 +44,7 @@ class DashboardController extends Controller
         $expiredInsurances = VehicleInsurance::where('insurance_date_of_expiry', '<', date('Y-m-d'))->get();
         $expiredInspectionCertificates = NTSAInspectionCertificate::where('ntsa_inspection_certificate_date_of_expiry', '<', date('Y-m-d'))->get();
         $expiredLicenses = DriversLicenses::where('driving_license_date_of_expiry', '<', date('Y-m-d'))->get();
-        $expiredPSVBadges = PSVBadge::where('psv_badge_date_of_expiry', '<', date('Y-m-d'))->get();
+        $expiredPSVBadges = PSVBadge::where('psv_badge_date_of_expiry', '<', date('Y-m-d'))->get();      
 
         return view('dashboard', compact(
             'activeVehicles',
@@ -57,7 +57,7 @@ class DashboardController extends Controller
             'expiredInsurances',
             'expiredInspectionCertificates',
             'expiredLicenses',
-            'expiredPSVBadges'
+            'expiredPSVBadges',
         ));
     }
 

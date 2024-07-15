@@ -136,7 +136,7 @@
                     <div>
                         <i class="fas fa-stamp {{ count($expiredInspectionCertificates) == 0 ? 'text-success' : 'text-danger' }}"></i>
 
-                        <a href="vehicle/inspection-certificate" class="{{ count($expiredInsurances) == 0 ? 'text-success' : 'text-danger' }}">
+                        <a href="vehicle/inspection-certificate" class="{{ count($expiredInspectionCertificates) == 0 ? 'text-success' : 'text-danger' }}">
                             Expired Insp Cert
                             <span class="float-end">
                                 <strong>{{ count($expiredInspectionCertificates) }}</strong>

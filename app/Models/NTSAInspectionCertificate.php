@@ -18,4 +18,11 @@ class NTSAInspectionCertificate extends Model
         'ntsa_inspection_certificate_date_of_expiry',
         'ntsa_inspection_certificate_avatar'
     ];
+
+    protected $with = ['vehicle'];
+
+    public function vehicle()
+    {
+        return $this->belongsTo(Vehicle::class);
+    }
 }
