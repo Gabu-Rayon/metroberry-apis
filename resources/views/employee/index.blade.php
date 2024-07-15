@@ -114,11 +114,13 @@
                                                     <th title="Phone">Phone</th>
                                                     <th title="Address">Address</th>
                                                     <th title="Organisation">Organisation</th>
+                                                    <th title="Status">Status</th>
                                                     <th title="Action" width="80">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 @foreach ($customers as $customer)
+                                                {{ \Log::info($customer) }}
                                                 <tr>
                                                     <td>{{ $customer->user->name }}</td>
                                                     <td>{{ $customer->user->email }}</td>
