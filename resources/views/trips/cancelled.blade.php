@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Billed Trips List')
+@section('title', 'Cancelled Trips')
 @section('content')
 
     <body class="fixed sidebar-mini">
@@ -23,7 +23,7 @@
                                     <div class="card-header">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div>
-                                                <h6 class="fs-17 fw-semi-bold mb-0">Billed Trips List</h6>
+                                                <h6 class="fs-17 fw-semi-bold mb-0">Cancelled Trips</h6>
                                             </div>
                                             <div class="text-end">
                                                 <div class="actions">
@@ -227,17 +227,45 @@
                                                   <table class="table" id="driver-table">
                                                     <thead>
                                                         <tr>
-                                                            <th title="Sl" width="30">Sl</th>
                                                             <th title="Name">Customer</th>
                                                             <th title="Location">Driver</th>
                                                             <th title="NoOfEmployee">Vehicle</th>
                                                             <th title="Registration date">Route</th>
-                                                            <th title="Ownership">RideType</th>
-                                                            <th title="Email">PickUp Location</th>
-                                                            <th title="Email">DropOff Location</th>
-                                                            <th title="Action" width="150">Action</th>
+                                                            <th title="Email">Time</th>
+                                                            <th title="Email">Date</th>
+                                                            <th title="Email">Pick Up</th>
+                                                            <th title="Email">Drop Off</th>
                                                         </tr>
                                                     </thead>
+
+                                                    <tbody>
+                                                        @foreach ($cancelledTrips as $trip)
+                                                        <tr>
+                                                            <td class="text-center">{{ $trip->customer->user->name }}</td>
+                                                            <td class="text-center">
+                                                                @if ($trip->vehicle)
+                                                                    {{ $trip->vehicle->driver->user->name }}
+                                                                @else
+                                                                    <span class="btn btn-danger btn-sm">Unassigned</span>
+                                                                @endif
+                                                            </td>
+                                                            <td class="text-center">
+                                                                @if ($trip->vehicle)
+                                                                    <span class="btn btn-success btn-sm">{{ $trip->vehicle->plate_number }}</span>
+                                                                @else
+                                                                    <span class="btn btn-danger btn-sm">Unassigned</span>
+                                                                @endif
+                                                            </td>
+                                                            <td class="text-center">{{ $trip->route->name }}</td>
+                                                            <td class="text-center">{{ $trip->pick_up_time }}</td>
+                                                            <td class="text-center">
+                                                                {{ \Carbon\Carbon::parse($trip->trip_date)->isoFormat('MMMM Do, YYYY') }}
+                                                            </td>
+                                                            <td class="text-center">{{ $trip->pick_up_location }}</td>
+                                                            <td class="text-center">{{ $trip->drop_off_location }}</td>
+                                                        </tr>
+                                                        @endforeach
+                                                    </tbody>
                                                 </table>
                                             </div>
 

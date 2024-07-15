@@ -366,10 +366,13 @@ class TripController extends Controller
         return view('trips.completed', compact('completedTrips'));
 
     }
-    public function tripCancelled()
-    {
-
-        return view('trips.cancelled');
+    public function tripCancelled(){
+        $cancelledTrips = Trip::where('status', 'cancelled')
+            ->with('customer')
+            ->with('vehicle')
+            ->with('route')
+            ->get();
+        return view('trips.cancelled', compact('cancelledTrips'));
     }
     public function tripBilled()
     {
