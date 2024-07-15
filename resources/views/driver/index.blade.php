@@ -97,23 +97,32 @@
                                                         @endif
                                                     </td>
                                                     <td class="d-flex">
+                                                        @if (\Auth::user()->can('edit driver'))
                                                         <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="axiosModal('driver/{{ $driver->id }}/edit')" title="Edit Driver">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
+                                                        @endif
                                                         <span class='m-1'></span>
+
                                                         @if ($driver->status == 'active')
+                                                        @if (\Auth::user()->can('dectivate driver'))
                                                             <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="axiosModal('driver/{{ $driver->id }}/deactivate')" title="Dectivate Driver">
                                                                 <i class="fas fa-toggle-on"></i>
-                                                            </a> 
+                                                            </a>
+                                                            @endif 
                                                         @else
+                                                        @if (\Auth::user()->can('activate driver'))
                                                             <a href="javascript:void(0);" class="btn btn-sm btn-secondary" onclick="axiosModal('driver/{{ $driver->id }}/activate')" title="Activate Driver">
                                                                 <i class="fas fa-toggle-off"></i>
-                                                            </a>                                                        
+                                                            </a> 
+                                                            @endif                                                       
                                                         @endif
+                                                        @if (\Auth::user()->can('activate driver'))
                                                         <span class='m-1'></span>
                                                         <a href="javascript:void(0);" class="btn btn-sm btn-danger" onclick="deleteDriver({{ $driver->id }})" title="Delete Driver">
                                                             <i class="fas fa-trash"></i>
                                                         </a>
+                                                        @endif
                                                     </td>
                                                     
                                                 </tr>

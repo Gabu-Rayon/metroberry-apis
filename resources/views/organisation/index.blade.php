@@ -81,6 +81,7 @@
                                                     <th title="Phone">Phone</th>
                                                     <th title="Address">Address</th>
                                                     <th title="Organisation">Code</th>
+                                                    <th title="Status">Status</th>
                                                     <th title="Action" width="80">Action</th>
                                                 </tr>
                                             </thead>
@@ -92,6 +93,7 @@
                                                     <td>{{ $organisation->user->phone }}</td>
                                                     <td>{{ $organisation->user->address }}</td>
                                                     <td>{{ $organisation->organisation_code }}</td>
+                                                    <td>{{ $organisation->status }}</td>
                                                     <td class="d-flex">
                                                         <a href="javascript:void(0);"
                                                             class="btn btn-sm btn-primary"
@@ -101,7 +103,7 @@
                                                         <span class='m-1'></span>
                                                         <a href="javascript:void(0);"
                                                             class="btn btn-sm btn-danger"
-                                                            onclick="deleteOrganisation({{ $organisation->id }})">
+                                                            onclick="axiosModal('organisation/{{ $organisation->id }}/delete')">
                                                             <i class="fas fa-trash"></i>
                                                         </a>
                                                     </td>

@@ -44,15 +44,15 @@
                 <div class="dropdown-menu">
                     <div class="d-flex align-items-center gap-3 border-bottom pb-3">
                         <div class="user_img">
-                            <img src="https://ui-avatars.com/api/?name=A&amp;color=7F9CF5&amp;background=EBF4FF"
+                            <!-- <img src="https://ui-avatars.com/api/?name=A&amp;color=7F9CF5&amp;background=EBF4FF"
                                 alt="">
-                        </div>
+ -->                        </div>
                         <div>
                             <p class="mb-0 fw-bold fs-16">
                                 Admin
                             </p>
                             <p class="mb-0 text-muted fs-14">
-                                admin@gmail.com
+                               {{ Auth::user()->name }} 
                             </p>
                         </div>
                     </div>
@@ -67,9 +67,10 @@
                         <li class="">
                             <a class="d-block" href="user/profile-setting">Account settings</a>
                         </li>
-                        <form method="POST" action="logout" class="d-inline">
-                            <input type="hidden" name="_token" value="h5yfZkFK7ahUjn6ExY8n7lnGix2WZ6EzPGB3kZwC"
-                                autocomplete="off"> <button type="submit" id="logout-btn"
+                        <form method="POST" action="{{route('users.logout')}}" class="d-inline">
+                             @csrf
+                             @METHOD('POST')
+                                 <button type="submit" id="logout-btn"
                                 class="btn_sign_out text-black w-auto">
                                 Sign out
                             </button>

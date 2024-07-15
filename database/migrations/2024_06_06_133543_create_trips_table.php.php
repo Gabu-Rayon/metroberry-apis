@@ -12,31 +12,16 @@ return new class extends Migration {
     {
         Schema::create('trips', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('customer_id')->nullable();
-            $table->unsignedBigInteger('driver_id')->nullable();
-            $table->unsignedBigInteger('vehicle_id')->nullable();
-            $table->string('preferred_route')->nullable();
-            $table->unsignedBigInteger('preferred_route_id')->nullable();
-            $table->string('pick_up_time')->nullable();
-            $table->date('drop_off_or_pick_up_date')->nullable();
-            $table->enum('pick_up_points', ['Home', 'Office'])->nullable();
-            $table->string('pick_up_location')->nullable();// should reference their home location || office location 
-            $table->string('drop_off_location')->nullable();
-            $table->float('mileage_gps')->nullable();
-            $table->float('mileage_can')->nullable();
-            $table->float('engine_hours_gps')->nullable();
-            $table->float('engine_hours_can')->nullable();
-            $table->float('can_distance_till_service')->nullable();
-            $table->float('average_fuel_consumption_litre_per_km')->nullable();
-            $table->float('average_fuel_consumption_litre_per_hour')->nullable();
-            $table->float('average_fuel_consumption_kg_per_km')->nullable();
+            $table->unsignedBigInteger('customer_id');
+            $table->unsignedBigInteger('vehicle_id');
+            $table->unsignedBigInteger('route_id');
+            $table->dateTime('pick_up_time');
+            $table->dateTime('drop_off_time')->nullable();
+            $table->integer('distance')->nullable();
+            $table->integer('number_of_passengers')->nullable();
+            $table->string('pick_up_location');
+            $table->string('drop_off_location');
             $table->enum('status', ['scheduled', 'completed', 'cancelled', 'billed'])->default('scheduled');
-            $table->timestamps();
-
-            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
-            $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
-            $table->foreign('driver_id')->references('id')->on('drivers')->onDelete('cascade');
-            $table->foreign('preferred_route_id')->references('id')->on('routes')->onDelete('cascade');
         });
     }
 

@@ -102,24 +102,22 @@ class TripController extends Controller
     {
         try {            
             $data = $request->all();
-
-            Log::info('Data from the form of Creating A Trip : ');
-            Log::info($data);
             $creator = Auth::user();
 
-            // Validate incoming request
              $validator = Validator::make($data, [
                 'customer_id' => 'required|exists:customers,id',
                 'preferred_route_id' => 'required|exists:routes,id',                
+                'pickup_time' => 'required|date_format:H:i',
+                'pick_up_location' => 'required|in:Home,Office',
+                'drop_off_location' => 'required|exists:route_locations,id',
                 'trip_date' => 'required|date',
-                'shift_start_time' => 'required|date_format:H:i',
-                'shift_end_time' => 'required|date_format:H:i',
-                'dropOffLocation' => 'nullable|in:Home,Office',
-                'drop_off_location' => 'nullable',
             ]);
+
             if ($validator->fails()) {
+
                 Log::info('VALIDATION ERROR');
                 Log::info($validator->errors());
+
                 return redirect()->back()->with('error', $validator->errors()->first())->withInput();
             } 
             
@@ -134,7 +132,7 @@ class TripController extends Controller
             //     we get organisation address using the models relationship where the data for organisation is also in the users table 
               
             //then 
-            if user select  'drop_off_location' => '4',  which in this case will came id we will get the  
+            // if user select  'drop_off_location' => '4',  which in this case will came id we will get the  
 
 
             // trip Schedule  

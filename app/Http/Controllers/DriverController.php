@@ -22,9 +22,40 @@ class DriverController extends Controller
      */
     public function index()
     {
-        $drivers = Driver::with('user', 'driverLicense')->get();
-        return view('driver.index', compact('drivers'));
+        // Check if the authenticated user has the 'view drivers' permission
+        if (\Auth::user()->can('view drivers')) {
+            try {
+                $drivers = null;
+
+                // Check the user's role
+                if (Auth::user()->role == 'admin') {
+                    // If the user is an admin, fetch all drivers
+                    $drivers = Driver::with('user')->get();
+                } elseif (Auth::user()->role == 'organisation') {
+                    // If the user is an organisation, fetch drivers for that organisation
+                    // Assuming organisation_id in Driver references the organisation table
+                    $drivers = Driver::whereHas('user', function ($query) {
+                        $query->where('organisation_id', Auth::user()->organisation->id);
+                    })->with('user')->get();
+                } else {
+                    // If the user has another role, fetch drivers created by the user
+                    $drivers = Driver::where('created_by', Auth::user()->id)->with('user')->get();
+                }
+
+                Log::info('Drivers fetched: ', ['drivers' => $drivers]);
+
+                return view('driver.index', compact('drivers'));
+            } catch (Exception $e) {
+                // Log the error message
+                Log::error('Error fetching drivers: ' . $e->getMessage());
+
+                return back()->with('error', 'An error occurred while fetching the drivers. Please try again.');
+            }
+        } else {
+            return back()->with('error', 'Permission Denied.');
+        }
     }
+
     public function store(Request $request)
     {
         try {
