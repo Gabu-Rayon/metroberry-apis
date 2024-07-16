@@ -1,4 +1,7 @@
 <form action="{{ $trip->id }}/details" method="POST" class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
+    @php
+        $billable = (bool) $trip->is_billable;
+    @endphp
     @csrf
     @method('PUT')
     <div class="card-header my-3 p-2 border-bottom">
@@ -119,6 +122,8 @@
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
             Close
         </button>
-        <button class="btn btn-success" type="submit" disabled="{{ $trip->is_billable }}" >Save</button>
+        <button class="btn btn-success" type="submit" {{ $trip->is_billable ? 'disabled' : '' }}>
+            Save 
+        </button>
     </div>
 </form>

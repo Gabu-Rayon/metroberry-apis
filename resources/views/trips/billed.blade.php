@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Billed Trip List')
+@section('title', 'Billed Trips')
 @section('content')
 
     <body class="fixed sidebar-mini">
@@ -203,17 +203,23 @@
                                                 <table class="table" id="driver-table">
                                                     <thead>
                                                         <tr>
-                                                            <th title="Sl" width="30">Sl</th>
                                                             <th title="Name">Customer</th>
-                                                            <th title="Location">Driver</th>
-                                                            <th title="NoOfEmployee">Vehicle</th>
-                                                            <th title="Registration date">Route</th>
-                                                            <th title="Ownership">RideType</th>
-                                                            <th title="Email">PickUp Location</th>
-                                                            <th title="Email">DropOff Location</th>
-                                                            <th title="Action" width="150">Action</th>
+                                                            <th title="Billing Rate">Billing Rate</th>
+                                                            <th title="Action" width="150">Total Price</th>
+                                                            <th title="Billed At">Billed At</th>
                                                         </tr>
                                                     </thead>
+
+                                                    <tbody>
+                                                        @foreach ($billedTrips as $trip)
+                                                            <tr>
+                                                                <td>{{ $trip->customer->user->name }}</td>
+                                                                <td>{{ $trip->billingRate->name }}</td>
+                                                                <td>{{ $trip->total_price }}</td>
+                                                                <td>{{ \Carbon\Carbon::parse($trip->billed_at)->format('F jS, Y \a\t h:i a') }}</td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
                                                 </table>
                                             </div>
 

@@ -41,6 +41,10 @@ class DashboardController extends Controller
         $billedTrips = $tripsThisMonth->filter(function($trip) {
             return $trip->status == 'billed';
         });
+
+        $totalIncome = $billedTrips->sum(function ($trip) {
+            return $trip->total_price;
+        });
         $expiredInsurances = VehicleInsurance::where('insurance_date_of_expiry', '<', date('Y-m-d'))->get();
         $expiredInspectionCertificates = NTSAInspectionCertificate::where('ntsa_inspection_certificate_date_of_expiry', '<', date('Y-m-d'))->get();
         $expiredLicenses = DriversLicenses::where('driving_license_date_of_expiry', '<', date('Y-m-d'))->get();
@@ -58,6 +62,7 @@ class DashboardController extends Controller
             'expiredInspectionCertificates',
             'expiredLicenses',
             'expiredPSVBadges',
+            'totalIncome',
         ));
     }
 

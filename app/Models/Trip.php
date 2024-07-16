@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class Trip extends Model
 {
@@ -31,6 +32,10 @@ class Trip extends Model
         'billed_at',
     ];
 
+    protected $casts = [
+        'is_billable' => 'boolean',
+    ];
+
     public function customer(){
         return $this->belongsTo(Customer::class);
     }
@@ -48,13 +53,35 @@ class Trip extends Model
         return $this->belongsTo(Driver::class);
     }
 
+    public function billingRate(){
+        return $this->belongsTo(BillingRates::class);
+    }
+
 
     public function billingsInvoices()
     {
         return $this->hasMany(Invoice::class);
     }
 
-    public function getIsBillableAttribute(){
-        return $this->status == 'completed' && $this->drop_off_time && $this->fuel_consumed && $this->engine_hours && $this->vehicle_mileage && $this->idle_time;
+    public function getIsBillableAttribute()
+{
+    $can_be_billed = 0;
+
+    Log::info('CAN BE BILLED ONE: ' . $can_be_billed);
+
+    if ($this->status == 'completed' && 
+        $this->drop_off_time != null && 
+        $this->fuel_consumed != null &&
+        $this->engine_hours != null &&
+        $this->vehicle_mileage != null &&
+        $this->idle_time != null) {
+        
+        $can_be_billed = 1;
     }
+
+    Log::info('CAN BE BILLED: ' . $can_be_billed);
+
+    return $can_be_billed;
+}
+
 }

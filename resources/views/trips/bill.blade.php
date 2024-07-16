@@ -277,6 +277,7 @@
 
             console.log("Pick Up Time:", pickUpTimeStr);
             console.log("Drop Off Time:", dropOffTimeStr);
+            console.log("Difference (Milliseconds):", diffMilliseconds);
             console.log("Time Difference (Hrs):", timeDifference.toFixed(2));
 
             switch (billBy) {
@@ -305,7 +306,7 @@
         });
 
         // Bind calculateTotal function to input field change events (in case mileage or hours change)
-        $('#vehicle_mileage, #engine_hours').on('input', function() {
+        $('#vehicle_mileage').on('input', function() {
             calculateTotal();
         });
 

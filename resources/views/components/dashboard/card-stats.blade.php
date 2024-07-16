@@ -191,7 +191,7 @@
                         <a class="text-success" href="inventory/stock">
                             Total Income
                             <span class="float-end text-success">
-                                <strong>KES 0</strong>
+                                <strong>KES {{ $totalIncome }}</strong>
                             </span>
                         </a>
                     </div>
