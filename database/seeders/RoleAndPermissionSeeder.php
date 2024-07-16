@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\PermissionGroup;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -31,6 +32,14 @@ class RoleAndPermissionSeeder extends Seeder
         }
 
         $permissions = [
+            // Settings Permissions
+            'view settings',
+            'create settings',
+            'edit settings',
+            'delete settings',
+            'update settings',
+            'manage settings',
+
             'view dashboard',
             'edit profile',
             'update profile',
@@ -373,13 +382,6 @@ class RoleAndPermissionSeeder extends Seeder
             'update report maintenance',
             'manage report maintenance',
 
-            'view settings',
-            'create settings',
-            'edit settings',
-            'delete settings',
-            'update settings',
-            'manage settings',
-
             'view permission',
             'create permission',
             'edit permission',
@@ -438,6 +440,24 @@ class RoleAndPermissionSeeder extends Seeder
             'manage user interface',
 
         ];
+
+        $settingsPermissions = [
+            'view settings',
+            'create settings',
+            'edit settings',
+            'delete settings',
+            'update settings',
+            'manage settings',
+        ];
+
+        foreach($settingsPermissions as $permission) {
+            PermissionGroup::firstOrCreate([
+                'permission_name' => $permission,
+                'group_name' => 'settings'
+            ]);
+        }
+
+
 
         foreach ($permissions as $permission) {
             Permission::firstOrCreate(['name' => $permission]);

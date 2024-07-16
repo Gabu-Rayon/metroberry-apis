@@ -110,6 +110,14 @@ Route::put('employee/{id}/activate', [EmployeeController::class, 'activate'])
     ->name('employee.activate')
     ->middleware('auth', 'can:edit customer');
 
+Route::get('employee/{id}/deactivate', [EmployeeController::class, 'deactivateForm'])
+->name('employee.deactivate')
+->middleware('auth', 'can:edit customer');
+
+Route::put('employee/{id}/deactivate', [EmployeeController::class, 'deactivate'])
+    ->name('employee.deactivate')
+    ->middleware('auth', 'can:edit customer');
+
 Route::post('employee/{id}/delete', [EmployeeController::class, 'destroy'])->name('employee.delete');
 
 
@@ -690,8 +698,12 @@ Route::delete('/permission/{id}/delete', [PermissionController::class, 'destroy'
     ->name('permission.delete')
     ->middleware(['auth', 'can:delete permission']);
 
+// View Roles
 
-Route::get('/admin/role', [RoleController::class, 'index'])->name('permission.role');
+Route::get('/admin/role', [RoleController::class, 'index'])
+    ->name('permission.role')
+    ->middleware(['auth', 'can:view permission']);
+
 Route::get('/admin/role/create', [RoleController::class, 'create'])->name('permission.role.create');
 /**
  * 

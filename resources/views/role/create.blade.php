@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Refueling List')
+@section('title', 'Create Role')
 @section('content')
 
     <body class="fixed sidebar-mini">
@@ -27,9 +27,10 @@
                                         </div>
                                         <div class="text-end">
                                             <div class="actions">
-                                                <a href="https://vms.bdtask-demoserver.com/admin/role"
-                                                    class="btn btn-success btn-sm"><i
-                                                        class="fa fa-list"></i>&nbsp;Role list</a>
+                                                <a href="{{ route('permission.role') }}" class="btn btn-success btn-sm">
+                                                    <i class="fa fa-list"></i>
+                                                    &nbsp;Role list
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -65,58 +66,16 @@
                                                                         Setting
                                                                     </legend>
                                                                     <div class="row py-3">
+
                                                                         <div class="col-md-4 form-group">
                                                                             <div class="form-check form-switch">
-                                                                                <input class="form-check-input"
-                                                                                    type="checkbox" role="switch"
-                                                                                    id="language_setting_management"
-                                                                                    name="permissions[48]"
-                                                                                    value="48">
-                                                                                <label class="form-check-label"
-                                                                                    for="language_setting_management">
+                                                                                <input class="form-check-input" type="checkbox" role="switch" id="language_setting_management" name="permissions[48]" value="48">
+                                                                                <label class="form-check-label" for="language_setting_management">
                                                                                     Language Setting Management
                                                                                 </label>
                                                                             </div>
                                                                         </div>
-                                                                        <div class="col-md-4 form-group">
-                                                                            <div class="form-check form-switch">
-                                                                                <input class="form-check-input"
-                                                                                    type="checkbox" role="switch"
-                                                                                    id="env_setting_management"
-                                                                                    name="permissions[47]"
-                                                                                    value="47">
-                                                                                <label class="form-check-label"
-                                                                                    for="env_setting_management">
-                                                                                    Env Setting Management
-                                                                                </label>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-4 form-group">
-                                                                            <div class="form-check form-switch">
-                                                                                <input class="form-check-input"
-                                                                                    type="checkbox" role="switch"
-                                                                                    id="mail_setting_management"
-                                                                                    name="permissions[46]"
-                                                                                    value="46">
-                                                                                <label class="form-check-label"
-                                                                                    for="mail_setting_management">
-                                                                                    Mail Setting Management
-                                                                                </label>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div class="col-md-4 form-group">
-                                                                            <div class="form-check form-switch">
-                                                                                <input class="form-check-input"
-                                                                                    type="checkbox" role="switch"
-                                                                                    id="setting_management"
-                                                                                    name="permissions[45]"
-                                                                                    value="45">
-                                                                                <label class="form-check-label"
-                                                                                    for="setting_management">
-                                                                                    Setting Management
-                                                                                </label>
-                                                                            </div>
-                                                                        </div>
+                                                                        
                                                                     </div>
 
                                                                 </fieldset>

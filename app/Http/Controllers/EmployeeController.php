@@ -19,8 +19,6 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        // Check if the authenticated user has the 'view customers' permission
-        if (\Auth::user()->can('view customers')) {
             try {
                 $customers = null;
 
@@ -51,9 +49,6 @@ class EmployeeController extends Controller
 
                 return back()->with('error', 'An error occurred while fetching the customers. Please try again.');
             }
-        } else {
-            return back()->with('error', 'Permission Denied.');
-        }
     }
 
 
@@ -441,6 +436,42 @@ class EmployeeController extends Controller
             return redirect()->route('employee')->with('success', 'Customer activated successfully');
         } catch (Exception $e) {
             Log::info('ACTIVATE CUSTOMER ERROR');
+            Log::info($e);
+            return redirect()->back()->with('error', 'Something Went Wrong');
+        }
+    }
+
+    public function deactivateForm ($id) {
+        $customer = Customer::findOrFail($id);
+        return view('employee.deactivate', compact('customer'));
+    }
+
+    public function deactivate($id){
+        try {
+
+            $customer = Customer::find($id);
+
+            if (!$customer) {
+                return redirect()->back()->with('error', 'Customer not found');
+            }
+
+            $user = User::find($customer->user_id);
+
+            if (!$user) {
+                return redirect()->back()->with('error', 'User not found');
+            }
+
+            DB::beginTransaction();
+
+            $customer->status = 'inactive';
+
+            $customer->save();
+
+            DB::commit();
+
+            return redirect()->route('employee')->with('success', 'Customer deactivated successfully');
+        } catch (Exception $e) {
+            Log::info('DEACTIVATE CUSTOMER ERROR');
             Log::info($e);
             return redirect()->back()->with('error', 'Something Went Wrong');
         }
