@@ -426,7 +426,24 @@ Route::get('/admin/setting', [SettingsController::class, 'index'])->name('settin
  * Permissions and Role Routes 
  * 
  */
-Route::get('/admin/permission', [PermissionController::class, 'index'])->name('permission.index');
+
+// View Permissions
+
+Route::get('/admin/permission', [PermissionController::class, 'index'])
+    ->name('permission.index')
+    ->middleware(['auth', 'can:view permission']);
+
+// Create Permissions
+
+Route::get('/admin/permission/create', [PermissionController::class, 'create'])
+    ->name('permission.create')
+    ->middleware(['auth', 'can:create permission']);
+
+Route::post('/admin/permission/create', [PermissionController::class, 'store'])
+    ->name('permission.store')
+    ->middleware(['auth', 'can:create permission']);
+
+
 Route::get('/admin/role', [RoleController::class, 'index'])->name('permission.role');
 Route::get('/admin/role/create', [RoleController::class, 'create'])->name('permission.role.create');
 /**

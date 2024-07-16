@@ -302,10 +302,10 @@ class RoleAndPermissionSeeder extends Seeder
             'create setting',
 
 
+            'view permission',
             'manage permissions',
             'edit permission',
             'delete permission',
-            'view permission',
             'create permission',
 
             'manage roles',

@@ -27,7 +27,15 @@
                                             </div>
                                             <div class="text-end">
                                                 <div class="actions">
-
+                                                    <div class="accordion-header d-flex justify-content-end align-items-center"id="flush-headingOne">
+                                                        @if (\Auth::user()->can('create permission'))
+                                                            <a class="btn btn-success btn-sm" href="javascript:void(0);" onclick="axiosModal('permission/create')">
+                                                                <i class="fa fa-plus"></i>
+                                                                &nbsp;
+                                                                Add Permission
+                                                            </a>
+                                                        @endif
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -38,17 +46,25 @@
                                                 <table class="table" id="driver-table">
                                                     <thead>
                                                         <tr>
-                                                            <th title="Sl" width="30">Sl</th>
                                                             <th title="Name">Name</th>
-                                                            <th title="Group">Group</th>
                                                             <th title="Guard">Guard</th>
                                                             <th title="Updated">Updated</th>
                                                         </tr>
                                                     </thead>
+
+                                                    <tbody>
+                                                        @foreach ($permissions as $permission)
+                                                            {{ \Log::info('PERMISSION') }}
+                                                            {{ \Log::info($permission) }}
+                                                            <tr>
+                                                                <td>{{ $permission->name }}</td>
+                                                                <td>{{ $permission->guard_name }}</td>
+                                                                <td>{{ $permission->updated_at }}</td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
                                                 </table>
                                             </div>
-
-
                                         </div>
                                     </div>
                                 </div>
