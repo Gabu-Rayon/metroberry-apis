@@ -90,7 +90,7 @@ class RoleAndPermissionSeeder extends Seeder
             'delete driver trips',
             'update driver trips details',
             'update driver trips',
-
+            
             'manage drivers performances',
             'view driver performance',
             'create driver performance',
@@ -176,6 +176,8 @@ class RoleAndPermissionSeeder extends Seeder
             'delete trip',
             'update trip',
             'manage trips',
+            'complete trip',
+            'cancel trip',
 
             'view trip details',
             'create trip details',
@@ -495,7 +497,6 @@ class RoleAndPermissionSeeder extends Seeder
             'activate customer',
             'deactivate customer',
 
-
             'manage organisations',
             'view organisations',
             'create organisation',
@@ -605,6 +606,8 @@ class RoleAndPermissionSeeder extends Seeder
             'delete trip',
             'update trip',
             'manage trips',
+            'complete trip',
+            'cancel trip',
 
             'view trip details',
             'create trip details',
