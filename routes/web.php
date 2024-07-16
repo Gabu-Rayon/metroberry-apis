@@ -426,14 +426,12 @@ Route::get('trip/{id}/complete', [TripController::class, 'completeTripForm'])
 // Assign Vehicle to Trips
 Route::get('trip/vehicle-assign', [TripController::class, 'assignVehicleToTrips'])
     ->name('trip.vehicle-assign')
-    // ->middleware('auth', 'can:complete trip');
-    ->middleware('auth', 'can:cancel trip');
+    ->middleware('auth', 'can:complete trip');
 
 // Complete Trip
 Route::put('trip/{id}/complete', [TripController::class, 'completeTrip'])
     ->name('trip.complete')
-    // ->middleware('auth', 'can:complete trip');
-     ->middleware('auth', 'can:cancel trip');
+    ->middleware('auth', 'can:complete trip');
 
 // Cancel Trip
 Route::get('trip/{id}/cancel', [TripController::class, 'cancelTripForm'])
