@@ -664,7 +664,7 @@ Route::delete('/vehicle/insurance/company/{id}/destory', [InsuranceCompanyContro
 
 Route::get('/vehicle/insurance/', [VehicleInsuranceController::class, 'index'])
     ->name('vehicle.insurance.index')
-    ->middleware('auth', 'can:view vehicle insurance');
+    ->middleware('auth', 'can:manage vehicle insurance');
 Route::get('/vehicle/insurance/create', [VehicleInsuranceController::class, 'create'])
     ->name('vehicle.insurance.create')
     ->middleware('can:create vehicle insurance');
@@ -675,7 +675,7 @@ Route::post('/vehicle/insurance/store', [VehicleInsuranceController::class, 'sto
 
 Route::get('/vehicle/insurance/{id}', [VehicleInsuranceController::class, 'show'])
     ->name('vehicle.insurance.show')
-    ->middleware('can:show vehicle insurance');
+    ->middleware('can:view vehicle insurance');
 
 Route::get('/vehicle/insurance/{id}/edit', [VehicleInsuranceController::class, 'edit'])
     ->name('vehicle.insurance.edit')

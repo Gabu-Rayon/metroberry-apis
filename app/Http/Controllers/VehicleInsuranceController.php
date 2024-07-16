@@ -21,7 +21,7 @@ class VehicleInsuranceController extends Controller
     public function index()
     {
         // Check if the authenticated user has the 'view vehicle insurances' permission
-        if (\Auth::user()->can('view vehicle insurances')) {
+        if (\Auth::user()->can('view vehicle insurance')) {
             try {
                 $vehicleInsurances = null;
 
