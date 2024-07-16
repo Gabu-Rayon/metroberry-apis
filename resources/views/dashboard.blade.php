@@ -336,11 +336,6 @@
 
                                                 <li class="page-item disabled" aria-disabled="true"><span
                                                         class="page-link">...</span></li>
-
-
-
-
-
                                                 <li class="page-item"><a class="page-link"
                                                         href="https://vms.bdtask-demoserver.com/admin/dashboard?page=67">67</a>
                                                 </li>

@@ -179,6 +179,7 @@ class RoleAndPermissionSeeder extends Seeder
             'update vehicle',
             'delete vehicle',
             'manage vehicles',
+            'assign vehicle',
 
             'view vehicle details',
             'create vehicle details',
@@ -395,6 +396,8 @@ class RoleAndPermissionSeeder extends Seeder
             'create vehicle insurance company',
             'edit vehicle insurance company',
             'delete vehicle insurance company',
+            'activate vehicle insurance company',
+            'deactivate vehicle insurance company',
             'update vehicle insurance company',
             'manage vehicle insurance company',
 
@@ -423,7 +426,14 @@ class RoleAndPermissionSeeder extends Seeder
             'edit invoice',
             'delete invoice',
             'show invoice',
-            'manage invoice'
+            'manage invoice',
+
+            'view user interface',
+            'create user interface',
+            'edit user interface',
+            'delete user interface',
+            'update user interface',
+            'manage user interface',
 
         ];
 
@@ -585,6 +595,7 @@ class RoleAndPermissionSeeder extends Seeder
             'update vehicle',
             'delete vehicle',
             'manage vehicles',
+            'assign vehicle',
 
             'view vehicle details',
             'create vehicle details',
@@ -802,6 +813,8 @@ class RoleAndPermissionSeeder extends Seeder
             'create vehicle insurance company',
             'edit vehicle insurance company',
             'delete vehicle insurance company',
+            'activate vehicle insurance company',
+            'deactivate vehicle insurance company',            
             'update vehicle insurance company',
             'manage vehicle insurance company',
 
@@ -813,6 +826,12 @@ class RoleAndPermissionSeeder extends Seeder
             'update vehicle insurance',
             'manage vehicle insurance',
 
+            'view user interface',
+            'create user interface',
+            'edit user interface',
+            'delete user interface',
+            'update user interface',
+            'manage user interface',
 
         ]);
 
@@ -864,7 +883,6 @@ class RoleAndPermissionSeeder extends Seeder
             'create vehicle',
             'edit vehicle',
             'update vehicle',
-            'delete vehicle',
             'manage vehicles',
 
             'manage drivers',
@@ -911,6 +929,13 @@ class RoleAndPermissionSeeder extends Seeder
             'edit vehicle insurance company',
             'update vehicle insurance company',
             'manage vehicle insurance company',
+
+
+            'view user interface',
+            'create user interface',
+            'edit user interface',
+            'update user interface',
+            'manage user interface',
         ]);
 
         $customer->syncPermissions([

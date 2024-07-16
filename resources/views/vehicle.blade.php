@@ -264,11 +264,13 @@
                                                                 @if ($vehicle->driver && $vehicle->driver->user)
                                                                     {{ $vehicle->driver->user->name }}
                                                                 @else
+                                                                 @if (\Auth::user()->can('assign vehicle'))
                                                                     <a href="javascript:void(0);"
                                                                         class="btn btn-sm btn-primary"
                                                                         onclick="axiosModal('/vehicle/{{ $vehicle->id }}/assign/driver')">
                                                                         Assign Driver
                                                                     </a>
+                                                                    @endif
                                                                 @endif
                                                             </td>
                                                              <td>
@@ -278,24 +280,32 @@
                                                         <span class="badge bg-danger">Inactive</span>
                                                         @endif
                                                     </td>
-                                                                 <td class="d-flex">
+                                                    <td class="d-flex">
+                                                         @if (\Auth::user()->can('edit vehicle'))
                                                         <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="axiosModal('/vehicle/{{ $vehicle->id }}/edit')" title="Edit Driver">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
+                                                        @endif
                                                         <span class='m-1'></span>
                                                         @if ($vehicle->status == 'active')
+                                                        @if (\Auth::user()->can('deactivate vehicle'))
                                                             <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="axiosModal('/vehicle/{{ $vehicle->id }}/deactivate')" title="Dectivate Driver">
                                                                 <i class="fas fa-toggle-on"></i>
                                                             </a> 
+                                                            @endif
                                                         @else
+                                                            @if (\Auth::user()->can('activate vehicle'))
                                                             <a href="javascript:void(0);" class="btn btn-sm btn-secondary" onclick="axiosModal('/vehicle/{{ $vehicle->id }}/activate')" title="Activate Driver">
                                                                 <i class="fas fa-toggle-off"></i>
-                                                            </a>                                                        
+                                                            </a>  
+                                                            @endif                                                      
                                                         @endif
                                                         <span class='m-1'></span>
+                                                         @if (\Auth::user()->can('delete vehicle'))
                                                         <a href="javascript:void(0);" class="btn btn-sm btn-danger" onclick="axiosModal('vehicle/{{ $vehicle->id }}/delete')" title="Delete">
                                                             <i class="fas fa-trash"></i>
                                                         </a>
+                                                        @endif
                                                     </td>
                                                             </tr>
                                                         @endforeach

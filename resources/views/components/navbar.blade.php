@@ -67,7 +67,7 @@
                         <li class="">
                             <a class="d-block" href="user/profile-setting">Account settings</a>
                         </li>
-                        <form method="POST" action="{{route('users.logout')}}" class="d-inline">
+                        <form method="POST" action="{{route('logout')}}" class="d-inline">
                              @csrf
                              @METHOD('POST')
                                  <button type="submit" id="logout-btn"

@@ -41,20 +41,37 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
-/***-
+/***
  * User Interfaces
  * 
  */
-
-Route::get('/login', [UserController::class, 'index'])->name('login');
 Route::get('/admin/user', [UserController::class, 'index'])
-    ->name('user.interface.index')
+    ->name('user.index')
     ->middleware('auth', 'can:view user');
-Route::get('/admin/user/create', [UserController::class, 'create'])
+
+Route::get('/admin/user/create-user-interface', [UserController::class, 'create'])
     ->name('user.create')
     ->middleware('auth', 'can:create user');
-Route::post('/user/logout', [UserController::class, 'logout'])->name('users.logout');
 
+Route::post('/admin/user/update', [UserController::class, 'store'])
+    ->name('user.store')
+    ->middleware('auth', 'can:create user');
+    
+Route::get('/admin/user/{id}/edit', [UserController::class, 'edit'])
+    ->name('user.edit')
+    ->middleware('auth', 'can:edit user');
+
+Route::post('/admin/user/{id}/update', [UserController::class, 'update'])
+    ->name('user.update')
+    ->middleware('auth', 'can:edit user');
+
+Route::get('/admin/user/{id}/delete', [UserController::class, 'delete'])
+    ->name('user.delete')
+    ->middleware('auth', 'can:delete user');
+    
+Route::post('/admin/user/{id}/destroy', [UserController::class, 'destory'])
+    ->name('user.destroy')
+    ->middleware('auth', 'can:delete user');
 
 
 /**
@@ -362,7 +379,6 @@ Route::get('trips/scheduled', [TripController::class, 'tripScheduled'])
 Route::get('trips/completed', [TripController::class, 'tripCompleted'])
     ->name('trip.completed')
     ->middleware('auth', 'can:view trip');
-    
 Route::get('trips/cancelled', [TripController::class, 'tripCancelled'])
     ->name('trip.cancelled')
     ->middleware('auth', 'can:view trip');
@@ -664,7 +680,7 @@ Route::delete('/vehicle/insurance/company/{id}/destory', [InsuranceCompanyContro
 
 Route::get('/vehicle/insurance/', [VehicleInsuranceController::class, 'index'])
     ->name('vehicle.insurance.index')
-    ->middleware('auth', 'can:manage vehicle insurance');
+    ->middleware('auth', 'can:view vehicle insurance');
 Route::get('/vehicle/insurance/create', [VehicleInsuranceController::class, 'create'])
     ->name('vehicle.insurance.create')
     ->middleware('can:create vehicle insurance');
@@ -675,7 +691,7 @@ Route::post('/vehicle/insurance/store', [VehicleInsuranceController::class, 'sto
 
 Route::get('/vehicle/insurance/{id}', [VehicleInsuranceController::class, 'show'])
     ->name('vehicle.insurance.show')
-    ->middleware('can:view vehicle insurance');
+    ->middleware('can:show vehicle insurance');
 
 Route::get('/vehicle/insurance/{id}/edit', [VehicleInsuranceController::class, 'edit'])
     ->name('vehicle.insurance.edit')

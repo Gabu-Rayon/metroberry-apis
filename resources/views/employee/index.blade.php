@@ -127,6 +127,7 @@
                                                     <td>{{ $customer->user->phone }}</td>
                                                     <td>{{ $customer->user->address }}</td>
                                                     <td>{{ $customer->customer_organisation_code }}</td>
+                                                    <td></td>
                                                     <td class="d-flex">
                                                         @if (\Auth::user()->can('edit customer'))
                                                         <a href="javascript:void(0);"
