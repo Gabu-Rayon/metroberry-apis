@@ -670,6 +670,26 @@ Route::post('/admin/permission/create', [PermissionController::class, 'store'])
     ->name('permission.store')
     ->middleware(['auth', 'can:create permission']);
 
+// Edit Permissions
+
+Route::get('/admin/permission/{id}/edit', [PermissionController::class, 'edit'])
+    ->name('permission.edit')
+    ->middleware(['auth', 'can:edit permission']);
+
+Route::put('/admin/permission/{id}/edit', [PermissionController::class, 'update'])
+    ->name('permission.update')
+    ->middleware(['auth', 'can:edit permission']);
+
+// Delete Permissions
+
+Route::get('/admin/permission/{id}/delete', [PermissionController::class, 'delete'])
+    ->name('permission.delete')
+    ->middleware(['auth', 'can:delete permission']);
+
+Route::delete('/permission/{id}/delete', [PermissionController::class, 'destroy'])
+    ->name('permission.delete')
+    ->middleware(['auth', 'can:delete permission']);
+
 
 Route::get('/admin/role', [RoleController::class, 'index'])->name('permission.role');
 Route::get('/admin/role/create', [RoleController::class, 'create'])->name('permission.role.create');

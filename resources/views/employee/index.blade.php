@@ -134,12 +134,14 @@
                                                         <span class="badge bg-danger">Inactive</span>
                                                         @endif
                                                     </td>
-                                                    <td class="d-flex">
+                                                    <td class="d-flex text-center align-items-center justify-content-center">
+                                                        @if (\Auth::user()->can('edit customer'))
                                                         <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="axiosModal('employee/{{ $customer->id }}/edit')">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
                                                         @endif
                                                         <span class='m-1'></span>
+                                                        @if (\Auth::user()->can('activate customer'))
                                                         @if ($customer->status == 'active')
                                                             <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="axiosModal('employee/{{ $customer->id }}/deactivate')" title="Dectivate Driver">
                                                                 <i class="fas fa-toggle-on"></i>
@@ -149,10 +151,13 @@
                                                                 <i class="fas fa-toggle-off"></i>
                                                             </a>                                                        
                                                         @endif
+                                                        @endif
+                                                        @if (\Auth::user()->can('delete customer'))
                                                         <span class='m-1'></span>
                                                         <a href="javascript:void(0);" class="btn btn-sm btn-danger" onclick="deleteCustomer({{ $customer->id }})">
                                                             <i class="fas fa-trash"></i>
                                                         </a>
+                                                        @endif
                                                         <span class='m-1'></span>
                                                     </td>
                                                 </tr>

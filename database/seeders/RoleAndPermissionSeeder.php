@@ -49,6 +49,8 @@ class RoleAndPermissionSeeder extends Seeder
             'create customer',
             'edit customer',
             'delete customer',
+            'activate customer',
+            'deactivate customer',
             'update customer',
             'reset password',
             'edit password',
@@ -470,6 +472,8 @@ class RoleAndPermissionSeeder extends Seeder
             'edit customer',
             'delete customer',
             'update customer',
+            'activate customer',
+            'deactivate customer',
 
 
             'manage organisations',

@@ -24,7 +24,7 @@ class VehicleController extends Controller
     public function index()
     {
         // Check if the authenticated user has the 'view vehicle' permission
-        if (\Auth::user()->can('view vehicle')) {
+        if (Auth::user()->can('view vehicle')) {
             try {
                 $vehicles = null;
 
@@ -36,7 +36,7 @@ class VehicleController extends Controller
                     // If the user is an organisation, fetch vehicles for that organisation
                     $organisation = Organisation::where('user_id', Auth::user()->id)->first();
                     if ($organisation) {
-                        $vehicles = Vehicle::where('organisation_id', $organisation->id)->get();
+                        $vehicles = Vehicle::with('driver')->where('organisation_id', $organisation->id)->get();
                     }
                 } else {
                     // If the user has another role, fetch vehicles created by the user
