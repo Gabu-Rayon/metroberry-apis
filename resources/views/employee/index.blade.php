@@ -142,18 +142,24 @@
                                                         @endif
                                                         <span class='m-1'></span>
                                                         @if ($customer->status == 'active')
+                                                         @if (\Auth::user()->can('activate customer'))
                                                             <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="axiosModal('employee/{{ $customer->id }}/deactivate')" title="Dectivate Driver">
                                                                 <i class="fas fa-toggle-on"></i>
                                                             </a> 
+                                                            @endif
                                                         @else
+                                                         @if (\Auth::user()->can('deactivate customer'))
                                                             <a href="javascript:void(0);" class="btn btn-sm btn-secondary" onclick="axiosModal('employee/{{ $customer->id }}/activate')" title="Activate Driver">
                                                                 <i class="fas fa-toggle-off"></i>
                                                             </a>                                                        
                                                         @endif
+                                                        @endif
                                                         <span class='m-1'></span>
+                                                        @if (\Auth::user()->can('delete customer'))
                                                         <a href="javascript:void(0);" class="btn btn-sm btn-danger" onclick="deleteCustomer({{ $customer->id }})">
                                                             <i class="fas fa-trash"></i>
                                                         </a>
+                                                        @endif
                                                         <span class='m-1'></span>
                                                     </td>
                                                 </tr>

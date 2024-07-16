@@ -11,16 +11,17 @@ class Trip extends Model
     use HasFactory;
     
     protected $table = "trips";
-    
+
     protected $fillable = [
         'customer_id',
         'vehicle_id',
         'route_id',
         'pick_up_time',
+        'drop_off_time',
+        'distance',
+        'number_of_passengers',
         'pick_up_location',
         'drop_off_location',
-        'trip_date',
-        'drop_off_time',
         'status',
         'vehicle_mileage',
         'engine_hours',
@@ -29,7 +30,7 @@ class Trip extends Model
         'billing_rate_id',
         'billed_by',
         'total_price',
-        'billed_at',
+        'billed_at'
     ];
 
     protected $casts = [

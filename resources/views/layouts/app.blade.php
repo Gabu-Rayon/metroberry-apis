@@ -10,14 +10,14 @@
     <title>
         @yield('title')
     </title>
-    <meta name="description"content="Login" />
-    <link rel="canonical"href="login.html" />
+    <meta name="description"content="Metro-Berry-Admin-Template" />
+    <link rel="canonical"href="/" />
     <meta name="robots"content="all" />
-    <meta property="og:description"content="Login" />
-    <meta property="og:title"content="Login" />
-    <meta property="og:url"content="login.html" />
+    <meta property="og:description"content="Metro-Berry-Admin-Template" />
+    <meta property="og:title"content="Admin" />
+    <meta property="og:url"content="/" />
     <meta property="og:type"content="WebPage" />
-    <meta property="og:site_name"content="Metro-Berry" />
+    <meta property="og:Metro-Berry"content="Metro-Berry" />
 
     <link rel="shortcut icon"href="{{ asset('admin-assets/img/sidebar-logo.png?v=1') }}">
     <link href="{{ asset('admin-assets/vendor/bootstrap/css/bootstrap.min.css?v=1') }}"rel="stylesheet">
