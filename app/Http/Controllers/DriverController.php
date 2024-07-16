@@ -315,7 +315,8 @@ class DriverController extends Controller
     }
 
     public function driverPerformance(){
-        return view('driver.performance');
+        $drivers = Driver::with('user', 'vehicle')->get();
+        return view('driver.performance.index', compact('drivers'));
     }
 
      public function createDriverPerformance(){

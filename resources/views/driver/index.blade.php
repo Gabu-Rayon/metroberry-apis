@@ -105,19 +105,19 @@
                                                         <span class='m-1'></span>
 
                                                         @if ($driver->status == 'active')
-                                                        @if (\Auth::user()->can('dectivate driver'))
+                                                        @if (\Auth::user()->can('edit driver'))
                                                             <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="axiosModal('driver/{{ $driver->id }}/deactivate')" title="Dectivate Driver">
                                                                 <i class="fas fa-toggle-on"></i>
                                                             </a>
                                                             @endif 
                                                         @else
-                                                        @if (\Auth::user()->can('activate driver'))
+                                                        @if (\Auth::user()->can('edit driver'))
                                                             <a href="javascript:void(0);" class="btn btn-sm btn-secondary" onclick="axiosModal('driver/{{ $driver->id }}/activate')" title="Activate Driver">
                                                                 <i class="fas fa-toggle-off"></i>
                                                             </a> 
                                                             @endif                                                       
                                                         @endif
-                                                        @if (\Auth::user()->can('activate driver'))
+                                                        @if (\Auth::user()->can('edit driver'))
                                                         <span class='m-1'></span>
                                                         <a href="javascript:void(0);" class="btn btn-sm btn-danger" onclick="deleteDriver({{ $driver->id }})" title="Delete Driver">
                                                             <i class="fas fa-trash"></i>

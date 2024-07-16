@@ -159,6 +159,14 @@ Route::put('organisation/{id}/activate', [OrganisationController::class, 'activa
 ->name('organisation.activate')
 ->middleware('auth', 'can:edit organisation');
 
+Route::get('organisation/{id}/deactivate', [OrganisationController::class, 'deactivateForm'])
+->name('organisation.deactivate')
+->middleware('auth', 'can:edit organisation');
+
+Route::put('organisation/{id}/deactivate', [OrganisationController::class, 'deactivate'])
+    ->name('organisation.deactivate')
+    ->middleware('auth', 'can:edit organisation');
+
 Route::put('organisation/{id}/update', [OrganisationController::class, 'update'])
     ->name('organisation.update')
     ->middleware('auth', 'can:edit organisation');
@@ -209,6 +217,7 @@ Route::put('driver/{id}/deactivate', [DriverController::class, 'deactivate'])
 Route::get('driver/performance', [DriverController::class, 'driverPerformance'])
     ->name('driver.performance.index')
     ->middleware('auth', 'can:view driver performance');
+
 Route::get('performance/create', [DriverController::class, 'createDriverPerformance'])
     ->name('driver.performance.create')
     ->middleware('auth', 'can:create driver performance');
