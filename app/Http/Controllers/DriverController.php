@@ -22,8 +22,6 @@ class DriverController extends Controller
      */
     public function index()
     {
-        // Check if the authenticated user has the 'view drivers' permission
-        if (\Auth::user()->can('view drivers')) {
             try {
                 $drivers = null;
 
@@ -51,9 +49,7 @@ class DriverController extends Controller
 
                 return back()->with('error', 'An error occurred while fetching the drivers. Please try again.');
             }
-        } else {
-            return back()->with('error', 'Permission Denied.');
-        }
+        
     }
 
     public function store(Request $request)

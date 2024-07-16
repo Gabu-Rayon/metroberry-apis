@@ -319,11 +319,6 @@ class TripController extends Controller
         try {
             // Retrieve the authenticated user
             $user = auth()->user();
-            if (!$user->can('edit vehicle')) {
-                return response()->json([
-                    'message' => 'Forbidden',
-                ], 403);
-            }
 
             // Validate the request data
             $validatedData = $request->validate([
