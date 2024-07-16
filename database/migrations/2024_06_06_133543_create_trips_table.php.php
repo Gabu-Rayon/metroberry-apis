@@ -18,13 +18,26 @@ return new class extends Migration {
             $table->time('pick_up_time');
             $table->time('drop_off_time')->nullable();
             $table->string('pick_up_location');
-            $table->string('drop_off_location');
+            $table->string('drop_off_location')->nullable();
+            $table->decimal('distance', 8, 2)->nullable();
+            $table->integer('number_of_passengers')->nullable();
             $table->date('trip_date');
             $table->enum('status', ['scheduled', 'completed', 'cancelled', 'billed'])->default('scheduled');
+            $table->decimal('vehicle_mileage', 8, 2)->nullable();
+            $table->integer('engine_hours')->nullable();
+            $table->decimal('fuel_consumed', 8, 2)->nullable();
+            $table->integer('idle_time')->nullable();
+            $table->unsignedBigInteger('billing_rate_id')->nullable();
+            $table->unsignedBigInteger('billed_by')->nullable();
+            $table->decimal('total_price', 8, 2)->nullable();
+            $table->timestamp('billed_at')->nullable();
+            $table->timestamps();
 
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
             $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
             $table->foreign('route_id')->references('id')->on('routes')->onDelete('cascade');
+            $table->foreign('billing_rate_id')->references('id')->on('billing_rates')->onDelete('set null');
+            $table->foreign('billed_by')->references('id')->on('users')->onDelete('set null');
         });
     }
 
