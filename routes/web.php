@@ -362,6 +362,7 @@ Route::get('trips/scheduled', [TripController::class, 'tripScheduled'])
 Route::get('trips/completed', [TripController::class, 'tripCompleted'])
     ->name('trip.completed')
     ->middleware('auth', 'can:view trip');
+    
 Route::get('trips/cancelled', [TripController::class, 'tripCancelled'])
     ->name('trip.cancelled')
     ->middleware('auth', 'can:view trip');
