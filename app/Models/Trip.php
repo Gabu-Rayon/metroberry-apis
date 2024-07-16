@@ -24,7 +24,11 @@ class Trip extends Model
         'vehicle_mileage',
         'engine_hours',
         'fuel_consumed',
-        'idle_time'
+        'idle_time',
+        'billing_rate_id',
+        'billed_by',
+        'total_price',
+        'billed_at',
     ];
 
     public function customer(){

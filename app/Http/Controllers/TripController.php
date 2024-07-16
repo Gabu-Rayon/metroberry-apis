@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\BillingRates;
 use Exception;
 use App\Models\Trip;
 use App\Models\Routes;
@@ -540,5 +541,60 @@ class TripController extends Controller
 
             return redirect()->back()->with('error', 'Something Went Wrong');
         }
+    }
+
+    public function bill($id) {
+        $trip = Trip::findOrFail($id);
+        $billingRates = BillingRates::all();
+        return view('trips.bill', compact('trip', 'billingRates'));
+    }
+
+    public function billPut(Request $request, $id) {
+        try {
+
+            $trip = Trip::findOrFail($id);
+            $data = $request->all();
+
+            $validator = Validator::make($data, [
+                'billing_rate_id' => 'required|exists:billing_rates,id',
+                'bill_by' => 'required|in:distance,car_class,time',
+                'total' => 'required|numeric',
+            ]);
+
+            if ($validator->fails()) {
+                Log::error('VALIDATION ERROR');
+                Log::error($validator->errors());
+                return redirect()->back()->with('error', $validator->errors()->first())->withInput();
+            }
+
+            DB::beginTransaction();
+
+            $trip->billing_rate_id = $data['billing_rate_id'];
+            $trip->billed_by = $data['bill_by'];
+            $trip->total_price = $data['total'];
+            $trip->billed_at = Carbon::now('Africa/Nairobi');
+            $trip->status = 'billed';
+
+            $trip->save();
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Trip Billed Successfully');
+
+        } catch (Exception $e) {
+            Log::error('ERROR BILLING TRIP');
+            Log::error($e);
+            return redirect()->back()->with('error', 'Something Went Wrong');
+        }
+    }
+
+    public function getBillingRate ($id) {
+        $billingRate = BillingRates::findOrFail($id);
+
+        return response()->json([
+            'rate_per_km' => $billingRate->rate_per_km,
+            'rate_per_minute' => $billingRate->rate_per_minute,
+            'rate_by_car_class' => $billingRate->rate_by_car_class,
+        ]);
     }
 }

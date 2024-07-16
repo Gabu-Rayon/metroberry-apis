@@ -298,7 +298,21 @@ Route::put('trips/{id}/details', [TripController::class, 'detailsPut'])
 ->name('trips.details')
 ->middleware('auth', 'can:edit trip');
 
+// Bill Trip
 
+Route::get('trip/{id}/bill', [TripController::class, 'bill'])
+    ->name('trips.bill')
+    ->middleware('auth', 'can:bill trip');
+
+Route::put('trips/{id}/bill', [TripController::class, 'billPut'])
+->name('trips.bill')
+->middleware('auth', 'can:bill trip');
+
+// Get Billing Rate
+
+Route::get('get-billing-rate/{id}', [TripController::class, 'getBillingRate'])
+->name('trip.get-billing-rate')
+->middleware('auth', 'can:bill trip');
 
 /**
  * vehicle Routes
