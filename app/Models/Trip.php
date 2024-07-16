@@ -21,8 +21,11 @@ class Trip extends Model
         'trip_date',
         'drop_off_time',
         'status',
+        'vehicle_mileage',
+        'engine_hours',
+        'fuel_consumed',
+        'idle_time'
     ];
-
 
     public function customer(){
         return $this->belongsTo(Customer::class);
@@ -37,8 +40,7 @@ class Trip extends Model
         return $this->belongsTo(Vehicle::class);
     }
 
-    public function driver()
-    {
+    public function driver(){
         return $this->belongsTo(Driver::class);
     }
 
@@ -46,5 +48,9 @@ class Trip extends Model
     public function billingsInvoices()
     {
         return $this->hasMany(Invoice::class);
+    }
+
+    public function getIsBillableAttribute(){
+        return $this->status == 'completed' && $this->drop_off_time && $this->fuel_consumed && $this->engine_hours && $this->vehicle_mileage && $this->idle_time;
     }
 }

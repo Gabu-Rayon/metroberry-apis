@@ -288,6 +288,16 @@ Route::put('trip/{id}/cancel', [TripController::class, 'cancelTrip'])
     ->name('trip.cancel')
     ->middleware('auth', 'can:cancel trip');
 
+// Add Trip Billing Details
+
+Route::get('trips/{id}/details', [TripController::class, 'details'])
+    ->name('trips.details')
+    ->middleware('auth', 'can:edit trip');
+
+Route::put('trips/{id}/details', [TripController::class, 'detailsPut'])
+->name('trips.details')
+->middleware('auth', 'can:edit trip');
+
 
 
 /**

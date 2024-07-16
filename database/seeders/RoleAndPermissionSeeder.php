@@ -111,6 +111,7 @@ class RoleAndPermissionSeeder extends Seeder
             'book trip',
             'complete trip',
             'cancel trip',
+            'bill trip',
 
             'update profile',
             'reset password',
@@ -222,9 +223,9 @@ class RoleAndPermissionSeeder extends Seeder
             'edit trip',
             'delete trip',
             'show trip',
-
             'start trip',
             'end trip',
+            'bill trip',
 
             'view invoices',
             'create invoice',

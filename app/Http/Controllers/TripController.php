@@ -493,4 +493,52 @@ class TripController extends Controller
             return redirect()->back()->with('error', 'Something Went Wrong');
         }
     }
+
+    public function details($id) {
+        $trip = Trip::with(['customer', 'vehicle'])->findOrFail($id);
+        return view('trips.details', compact('trip'));
+    }
+
+    public function detailsPut(Request $request, $id) {
+        try {
+
+            $trip = Trip::findOrFail($id);
+            $data = $request->all();
+
+            $validator = Validator::make($data, [
+                'vehicle_mileage' => 'required|numeric',
+                'engine_hours' => 'required|numeric',
+                'fuel_consumed' => 'required|numeric',
+                'idle_time' => 'required|numeric',
+            ]);
+
+            if ($validator->fails()) {
+                Log::error('VALIDATION ERROR');
+                Log::error($validator->errors());
+                return redirect()->back()->with('error', $validator->errors()->first())->withInput();
+            }
+
+            if (!$trip) {
+                return redirect()->back()->with('error', 'Trip not found');
+            }
+
+            if ($trip->status != 'completed') {
+                return redirect()->back()->with('error', 'Trip is not completed');
+            }
+
+            DB::beginTransaction();
+
+            $trip->update($data);
+
+            DB::commit();
+
+            return redirect()->back()->with('success', 'Trip Details Updated Successfully');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('ERROR UPDATING TRIP DETAILS');
+            Log::error($e);
+
+            return redirect()->back()->with('error', 'Something Went Wrong');
+        }
+    }
 }
