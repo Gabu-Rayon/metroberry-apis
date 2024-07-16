@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Driver Performance List')
+@section('title', 'Driver Performance')
 @section('content')
 
     <body class="fixed sidebar-mini">
@@ -23,15 +23,10 @@
                                     <div class="card-header">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div>
-                                                <h6 class="fs-17 fw-semi-bold mb-0">Driver performance list</h6>
+                                                <h6 class="fs-17 fw-semi-bold mb-0">Driver Performance</h6>
                                             </div>
                                             <div class="text-end">
                                                 <div class="actions">
-                                                    <a class="btn btn-success" href="javascript:void(0);"
-                                                        onclick="axiosModal('/performance/create')">
-                                                        <i class="fa fa-plus"></i>&nbsp;
-                                                        Add driver performance
-                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
@@ -42,20 +37,31 @@
                                                 <table class="table" id="driver-table">
                                                     <thead>
                                                         <tr>
-                                                            <th title="Sl" width="30">Sl</th>
-                                                            <th title="Driver name">Driver name</th>
-                                                            <th title="Over time status">Over time status</th>
-                                                            <th title="Salary status">Salary status</th>
-                                                            <th title="Overtime payment">Overtime payment</th>
-                                                            <th title="Performance bonus">Performance bonus</th>
-                                                            <th title="Penalty amount">Penalty amount</th>
+                                                            <th title="Driver name">Driver</th>
+                                                            <th title="Over time status">Total Number of Trips</th>
+                                                            <th title="Salary status">Cancelled Trips</th>
+                                                            <th title="Overtime payment">Billed Trips</th>
                                                             <th title="Action" width="80">Action</th>
                                                         </tr>
                                                     </thead>
+
+                                                    <tbody>
+                                                        @foreach ($drivers as $driver)
+                                                            <tr>
+                                                                <td class="text-center">{{ $driver->user->name }}</td>
+                                                                <td class="text-center">{{ $driver->vehicle ? count($driver->vehicle->trips) : '-' }}</td>
+                                                                <td class="text-center">{{ $driver->vehicle ? count($driver->vehicle->trips->where('status', 'cancelled')) : '-' }}</td>
+                                                                <td class="text-center">{{ $driver->vehicle ? count($driver->vehicle->trips->where('status', 'billed')) : '-' }}</td>
+                                                                <td class="text-center">
+                                                                    <a href="" class="btn btn-primary btn-sm">
+                                                                        <i class="fa fa-eye"></i>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
                                                 </table>
                                             </div>
-
-
                                             <div id="page-axios-data" data-table-id="#driver-table"></div>
                                         </div>
                                     </div>

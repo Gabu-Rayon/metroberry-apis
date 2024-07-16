@@ -217,6 +217,7 @@ Route::put('driver/{id}/deactivate', [DriverController::class, 'deactivate'])
 Route::get('driver/performance', [DriverController::class, 'driverPerformance'])
     ->name('driver.performance.index')
     ->middleware('auth', 'can:view driver performance');
+
 Route::get('performance/create', [DriverController::class, 'createDriverPerformance'])
     ->name('driver.performance.create')
     ->middleware('auth', 'can:create driver performance');
