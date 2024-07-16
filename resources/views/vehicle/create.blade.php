@@ -43,6 +43,14 @@
                             placeholder="Enter Number Plate " id="plate_number" value="" required>
                     </div>
                 </div>
+                <div class="form-group row my-2">
+                    <label for="vehicle_avatar" class="col-sm-5 col-form-label">Vehicle Avatar<i
+                            class="text-danger">*</i> </label>
+                    <div class="col-sm-7">
+                        <input name="vehicle_avatar" class="form-control" type="file"
+                            placeholder="Enter Vehicle Avatar" id="vehicle_avatar" value="" required>
+                    </div>
+                </div>
             </div>
 
             <div class="col-md-12 col-lg-6">
@@ -63,10 +71,7 @@
                             id="engine_size" value="" required>
                     </div>
                 </div>
-            </div>
-
-            <div class="col-md-12 col-lg-6">
-                <div class="form-group row my-2">
+                 <div class="form-group row my-2">
                     <label for="color" class="col-sm-5 col-form-label">Vehicle Color<i class="text-danger">*</i> </label>
                     <div class="col-sm-7">
                         <input name="color" class="form-control" type="text"
@@ -83,11 +88,14 @@
                     </div>
                 </div>
                 <div class="form-group row my-2">
-                    <label for="vehicle_avatar" class="col-sm-5 col-form-label">Vehicle Avatar<i
-                            class="text-danger">*</i> </label>
+                    <label for="driver_id" class="col-sm-5 col-form-label">Select Vehicle Org</label>
                     <div class="col-sm-7">
-                        <input name="vehicle_avatar" class="form-control" type="file"
-                            placeholder="Enter Vehicle Avatar" id="vehicle_avatar" value="" required>
+                        <select class="form-control basic-single select2" name="organisation_id" id="organisation_id" tabindex="-1" aria-hidden="true">
+                            <option value="">Please Vehicle Organisation</option>
+                            @foreach ($organisations as $organisation)
+                                <option value="{{ $organisation->id }}">{{ $organisation->user->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
             </div>

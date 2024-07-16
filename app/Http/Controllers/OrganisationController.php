@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\File;
 
 class OrganisationController extends Controller
 {
@@ -221,9 +222,18 @@ class OrganisationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id){
+
+    public function delete($id)
+    {
+        $organisation = Organisation::findOrFail($id);
+        return view('organisation.delete', compact('organisation'));
+    }
+
+    // Handle the deletion
+    public function destroy(string $id)
+    {
         try {
-            $organisation = Organisation::findOrfail($id);
+            $organisation = Organisation::findOrFail($id);
 
             if (!$organisation) {
                 return redirect()->back()->with('error', 'Organisation not found');
@@ -237,12 +247,26 @@ class OrganisationController extends Controller
 
             DB::beginTransaction();
 
+            // Delete related files
+            $certificatesPath = public_path('uploads/organisation-certificates/' . $organisation->id);
+            $logosPath = public_path('uploads/company-logos/' . $organisation->id);
+
+            // Check if the directories exist and delete them
+            if (File::exists($certificatesPath)) {
+                File::deleteDirectory($certificatesPath);
+            }
+
+            if (File::exists($logosPath)) {
+                File::deleteDirectory($logosPath);
+            }
+
+            // Delete the organisation and user
             $organisation->delete();
             $user->delete();
 
             DB::commit();
 
-            return redirect()->route('organisation')->with('success', 'Organisation deleted successfully');
+            return redirect()->route('organisation.index')->with('success', 'Organisation deleted successfully');
         } catch (Exception $e) {
             DB::rollBack();
             Log::error('ERROR DELETING Organisation');

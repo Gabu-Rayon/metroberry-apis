@@ -138,6 +138,7 @@
                                                         <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="axiosModal('employee/{{ $customer->id }}/edit')">
                                                             <i class="fas fa-edit"></i>
                                                         </a>
+                                                        @endif
                                                         <span class='m-1'></span>
                                                         @if ($customer->status == 'active')
                                                             <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="axiosModal('employee/{{ $customer->id }}/deactivate')" title="Dectivate Driver">

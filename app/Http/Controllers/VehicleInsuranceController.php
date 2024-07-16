@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\InsuranceCompany;
 use App\Models\VehicleInsurance;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Models\InsuranceRecurringPeriod;
 use Illuminate\Support\Facades\Validator;
@@ -17,10 +18,37 @@ class VehicleInsuranceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(){
-        $vehicleInsurances  = VehicleInsurance::all();
-        return view('vehicle.insurance.index',compact('vehicleInsurances'));
+    public function index()
+    {
+        // Check if the authenticated user has the 'view vehicle insurances' permission
+        if (\Auth::user()->can('view vehicle insurance')) {
+            try {
+                $vehicleInsurances = null;
+
+                // Check the user's role
+                if (Auth::user()->role == 'admin') {
+                    // If the user is an admin, fetch all vehicle insurances
+                    $vehicleInsurances = VehicleInsurance::all();
+                } else {
+                    // Otherwise, fetch vehicle insurances created by the authenticated user
+                    $vehicleInsurances = VehicleInsurance::where('created_by', Auth::user()->id)->get();
+                }
+
+                Log::info('Vehicle Insurances fetched: ', ['vehicleInsurances' => $vehicleInsurances]);
+
+                return view('vehicle.insurance.index', compact('vehicleInsurances'));
+            } catch (Exception $e) {
+                // Log the error message
+                Log::error('Error fetching vehicle insurances: ' . $e->getMessage());
+
+                return back()->with('error', 'An error occurred while fetching the vehicle insurances. Please try again.');
+            }
+        } else {
+            return back()->with('error', 'Permission Denied.');
+        }
     }
+
+
 
     /**
      * Show the form for creating a new resource.

@@ -89,18 +89,30 @@
                          @endif
                      </div>
                  </div>
-                 <div class="form-group row my-2">
+                <div class="form-group row my-2">
+                     <label for="organisation_id" class="col-sm-5 col-form-label">Select Vehicle Organisation</label>
+                     <div class="col-sm-7">
+                         <select class="form-control basic-single select2" name="organisation_id" id="organisation_id">
+                             <option value="">None</option>
+                             @foreach ($organisations as $organisation)
+                                 <option value="{{ $organisation->id }}"
+                                     {{ old('organisation_id', $vehicle->organisation_id) == $organisation->id ? 'selected' : '' }}>
+                                     {{ $organisation->user->name }}
+                                 </option>
+                             @endforeach
+                         </select>
+                     </div>
+                 </div>
+                   <div class="form-group row my-2">
                      <label for="driver_id" class="col-sm-5 col-form-label">Assigned Driver</label>
                      <div class="col-sm-7">
                          <select class="form-control" name="driver_id" id="driver_id">
                              <option value="">None</option>
-                             @if ($assignedDriverName)
-                                 <option value="{{ $vehicle->driver_id }}" selected>{{ $assignedDriverName }}
-                                 </option>
-                             @endif
-                             {{-- Option to select a new driver --}}
                              @foreach ($drivers as $driver)
-                                 <option value="{{ $driver->id }}">{{ $driver->user->name }}</option>
+                                 <option value="{{ $driver->id }}"
+                                     {{ old('driver_id', $vehicle->driver_id) == $driver->id ? 'selected' : '' }}>
+                                     {{ $driver->user->name }}
+                                 </option>
                              @endforeach
                          </select>
                      </div>

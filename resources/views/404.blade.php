@@ -26,15 +26,7 @@
                         </div>
                     </div>
                     <div class="col-md-12 mt-5">
-                        <footer class="text-center text-black">
-                            <div class="">
-                                <div class="copy">© 2024 <a class="text-capitalize" href=""
-                                        target="_blank">vms-laravel</a>.</div>
-                                <div class="credit">Designed &amp;amp; developed by: <a href="https://www.bdtask.com/"
-                                        target="_blank">Bdtask<a></div>
-                            </div>
-                        </footer>
-
+                       @include('components.footer')
                     </div>
                 </div>
             </div>

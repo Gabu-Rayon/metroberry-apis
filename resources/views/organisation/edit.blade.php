@@ -1,4 +1,4 @@
-<form action="organisation/{{ $organisation->id }}/update" method="POST" class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
+<form action="{{ route('organisation.update', $organisation->id) }}" method="POST" class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
     @csrf
     @method('PUT')
     <div class="card-header my-3 p-2 border-bottom">

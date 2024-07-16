@@ -38,7 +38,7 @@
                                 <div class="card-body">
                                     <div>
                                         <div class="table-responsive">
-                                            <table class="table" id="role-table">
+                                            <table class="table" id="driver-table">
                                                 <thead>
                                                     <tr>
                                                         <th title="Sl" width="30">Sl</th>

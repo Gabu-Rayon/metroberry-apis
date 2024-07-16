@@ -68,11 +68,13 @@
                                                                         <i class="fas fa-edit"></i>
                                                                     </a>
                                                                     <span class='m-1'></span>
+                                                                     @if (\Auth::user()->can('delete vehicle insurance company'))
                                                                     <a href="javascript:void(0);"
                                                                         class="btn btn-sm btn-danger"
                                                                         onclick="deleteVehicle({{ $period->id }})">
                                                                         <i class="fas fa-trash"></i>
                                                                     </a>
+                                                                    @endif
                                                                 </td>
                                                             </tr>
                                                         @endforeach

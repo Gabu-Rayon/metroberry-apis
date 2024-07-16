@@ -72,18 +72,24 @@
                                                         </a>
                                                         <span class='m-1'></span>
                                                         @if ($company->status == 1)
+                                                         @if (\Auth::user()->can('activate vehicle insurance company'))
                                                             <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="axiosModal('/vehicle/insurance/company/{{ $company->id }}/deactivate')" title="Dectivate Driver">
                                                                 <i class="fas fa-toggle-on"></i>
                                                             </a> 
+                                                            @endif
                                                         @else
+                                                         @if (\Auth::user()->can('activate vehicle insurance company'))
                                                             <a href="javascript:void(0);" class="btn btn-sm btn-secondary" onclick="axiosModal('/vehicle/insurance/company/{{ $company->id }}/activate')" title="Activate Driver">
                                                                 <i class="fas fa-toggle-off"></i>
-                                                            </a>                                                        
-                                                        @endif
+                                                            </a>  
+                                                            @endif                                                      
+                                                        @endif                                                        
                                                         <span class='m-1'></span>
+                                                        @if (\Auth::user()->can('delete vehicle insurance company'))
                                                         <a href="javascript:void(0);" class="btn btn-sm btn-danger" onclick="axiosModal('/vehicle/insurance/company/{{ $company->id }}/delete')" title="Delete">
                                                             <i class="fas fa-trash"></i>
                                                         </a>
+                                                        @endif
                                                     </td>
                                                             </tr>
                                                         @endforeach

@@ -119,7 +119,7 @@
                                                         <span class='m-1'></span>
                                                         <a href="javascript:void(0);"
                                                             class="btn btn-sm btn-danger"
-                                                            onclick="deleteOrganisation({{ $organisation->id }})">
+                                                            onclick="axiosModal('organisation/{{ $organisation->id }}/delete')">
                                                             <i class="fas fa-trash"></i>
                                                         </a>
                                                     </td>

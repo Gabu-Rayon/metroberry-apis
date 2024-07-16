@@ -27,7 +27,7 @@
                                             </div>
                                             <div class="text-end">
                                                 <div class="actions">
-                                                    <a href="admin/user" class="btn btn-success btn-sm"><i
+                                                    <a href="{{route('user.index')}}" class="btn btn-success btn-sm"><i
                                                             class="fa fa-list"></i>&nbsp;User list</a>
                                                 </div>
                                             </div>
