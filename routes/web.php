@@ -18,6 +18,7 @@ use App\Http\Controllers\OrganisationController;
 use App\Http\Controllers\VehicleServiceController;
 use App\Http\Controllers\DriversLicensesController;
 use App\Http\Controllers\InsuranceCompanyController;
+use App\Http\Controllers\MaintenanceServiceController;
 use App\Http\Controllers\RepairCategoryController;
 use App\Http\Controllers\RepairController;
 use App\Http\Controllers\VehicleInsuranceController;
@@ -535,17 +536,49 @@ Route::delete('vehicle/{id}/delete', [VehicleController::class, 'destroy'])
 
 
 /***
- * Vehicle Maintaince Routes
+ * Vehicle Maintaince Service Routes
  */
 
-Route::get('vehicle/maintenance', [VehicleServiceController::class, 'index'])
-    ->name('vehicle.maintenance')
+// View Vehicle Maintenance Services
+Route::get('maintenance/service', [MaintenanceServiceController::class, 'index'])
+    ->name('maintenance.service')
     ->middleware('auth', 'can:view vehicle maintenance');
 
-//  create
-Route::get('vehicle/maintenance/create', [VehicleServiceController::class, 'create'])
-    ->name('vehicle.maintenance.create')
+// Create Vehicle Maintenance Services
+Route::get('maintenance/service/create', [MaintenanceServiceController::class, 'create'])
+    ->name('maintenance.service.create')
     ->middleware('auth', 'can:create vehicle maintenance');
+
+Route::post('maintenance/service/create', [MaintenanceServiceController::class, 'store'])
+    ->name('maintenance.service.create')
+    ->middleware('auth', 'can:create vehicle maintenance');
+
+// Approve Vehicle Maintenance Service
+Route::get('maintenance/service/{id}/approve', [MaintenanceServiceController::class, 'approveForm'])
+    ->name('maintenance.service.approve')
+    ->middleware('auth', 'can:edit vehicle maintenance');
+
+Route::put('maintenance/service/{id}/approve', [MaintenanceServiceController::class, 'approve'])
+    ->name('maintenance.service.approve')
+    ->middleware('auth', 'can:edit vehicle maintenance');
+
+// Reject Vehicle Maintenance Service
+Route::get('maintenance/service/{id}/reject', [MaintenanceServiceController::class, 'rejectForm'])
+    ->name('maintenance.service.reject')
+    ->middleware('auth', 'can:edit vehicle maintenance');
+
+Route::put('maintenance/service/{id}/reject', [MaintenanceServiceController::class, 'reject'])
+    ->name('maintenance.service.reject')
+    ->middleware('auth', 'can:edit vehicle maintenance');
+
+// Bill Vehicle Maintenance Service
+Route::get('maintenance/service/{id}/bill', [MaintenanceServiceController::class, 'billForm'])
+    ->name('maintenance.service.bill')
+    ->middleware('auth', 'can:edit vehicle maintenance');
+
+Route::put('maintenance/service/{id}/bill', [MaintenanceServiceController::class, 'bill'])
+    ->name('maintenance.service.bill')
+    ->middleware('auth', 'can:edit vehicle maintenance');
 
 /***
  * Vehicle Servicing Routes
@@ -556,6 +589,9 @@ Route::get('vehicle/maintenance/create', [VehicleServiceController::class, 'crea
 Route::get('vehicle/maintenance/service', [ServiceController::class, 'index'])
     ->name('vehicle.maintenance.service')
     ->middleware('auth', 'can:view vehicle maintenance');
+
+Route::get('service-categories/{serviceTypeId}', [ServiceController::class, 'getServiceCategories']);
+
 
 // create vehicle servicing type
 

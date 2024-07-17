@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ServiceType;
+use App\Models\ServiceTypeCategory;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -136,5 +137,10 @@ class ServiceController extends Controller
             Log::error($e);
             return redirect()->back()->with('error', 'Something Went Wrong');
         }
+    }
+
+    public function getServiceCategories($serviceTypeId){
+        $categories = ServiceTypeCategory::where('service_type_id', $serviceTypeId)->get();
+        return response()->json($categories);
     }
 }

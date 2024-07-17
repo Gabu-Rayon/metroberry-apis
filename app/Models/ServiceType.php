@@ -14,8 +14,7 @@ class ServiceType extends Model
         'description',
     ];
 
-    public function serviceTypeCategory()
-    {
-    return $this->hasMany(ServiceTypeCategory::class);
+    public function serviceTypeCategory(){
+        return $this->hasMany(ServiceTypeCategory::class);
     }
 }

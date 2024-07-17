@@ -11,8 +11,10 @@ class VehicleService extends Model
 
     protected $fillable = [
         'vehicle_id',
-        'service_date',
-        'service_type',
+        'type',
+        'date',
+        'cost',
+        'description',
         'created_by',
     ];
 
