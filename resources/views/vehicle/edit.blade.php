@@ -59,10 +59,52 @@
                              id="engine_size" value="{{ old('engine_size', $vehicle->engine_size) }}" required>
                      </div>
                  </div>
+                 <div class="form-group row my-2">
+                     <label for="organisation_id" class="col-sm-5 col-form-label">Select Vehicle Organisation</label>
+                     <div class="col-sm-7">
+                         <select class="form-control basic-single select2" name="organisation_id" id="organisation_id">
+                             <option value="">None</option>
+                             @foreach ($organisations as $organisation)
+                                 <option value="{{ $organisation->id }}"
+                                     {{ old('organisation_id', $vehicle->organisation_id) == $organisation->id ? 'selected' : '' }}>
+                                     {{ $organisation->user->name }}
+                                 </option>
+                             @endforeach
+                         </select>
+                     </div>
+                 </div>
+                 <div class="form-group row my-2">
+                     <label for="driver_id" class="col-sm-5 col-form-label">Assigned Driver</label>
+                     <div class="col-sm-7">
+                         <select class="form-control" name="driver_id" id="driver_id">
+                             <option value="">None</option>
+                             @foreach ($drivers as $driver)
+                                 <option value="{{ $driver->id }}"
+                                     {{ old('driver_id', $vehicle->driver_id) == $driver->id ? 'selected' : '' }}>
+                                     {{ $driver->user->name }}
+                                 </option>
+                             @endforeach
+                         </select>
+                     </div>
+                 </div>
+
+                 <div class="form-group row my-2">
+                     <label for="vehicle_class" class="col-sm-5 col-form-label">Vehicle Class</label>
+                     <div class="col-sm-7">
+                         <select class="form-control" name="vehicle_class" id="vehicle_class">
+                             <option value="">None</option>
+                             @foreach ($vehicleClasses as $class)
+                                 <option value="{{ $class->name }}"
+                                     {{ old('vehicle_class', $vehicle->class) == $class->name ? 'selected' : '' }}>
+                                     Class {{ $class->name }}
+                                 </option>
+                             @endforeach
+                         </select>
+                     </div>
+                 </div>
              </div>
 
              <div class="col-md-12 col-lg-6">
-
                  <div class="form-group row my-2">
                      <label for="color" class="col-sm-5 col-form-label">Vehicle Color <i
                              class="text-danger">*</i></label>
@@ -89,35 +131,6 @@
                          @endif
                      </div>
                  </div>
-                <div class="form-group row my-2">
-                     <label for="organisation_id" class="col-sm-5 col-form-label">Select Vehicle Organisation</label>
-                     <div class="col-sm-7">
-                         <select class="form-control basic-single select2" name="organisation_id" id="organisation_id">
-                             <option value="">None</option>
-                             @foreach ($organisations as $organisation)
-                                 <option value="{{ $organisation->id }}"
-                                     {{ old('organisation_id', $vehicle->organisation_id) == $organisation->id ? 'selected' : '' }}>
-                                     {{ $organisation->user->name }}
-                                 </option>
-                             @endforeach
-                         </select>
-                     </div>
-                 </div>
-                   <div class="form-group row my-2">
-                     <label for="driver_id" class="col-sm-5 col-form-label">Assigned Driver</label>
-                     <div class="col-sm-7">
-                         <select class="form-control" name="driver_id" id="driver_id">
-                             <option value="">None</option>
-                             @foreach ($drivers as $driver)
-                                 <option value="{{ $driver->id }}"
-                                     {{ old('driver_id', $vehicle->driver_id) == $driver->id ? 'selected' : '' }}>
-                                     {{ $driver->user->name }}
-                                 </option>
-                             @endforeach
-                         </select>
-                     </div>
-                 </div>
-
              </div>
          </div>
          <div class="modal-footer">

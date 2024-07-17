@@ -22,6 +22,7 @@ class Trip extends Model
         'number_of_passengers',
         'pick_up_location',
         'drop_off_location',
+        'trip_date',
         'status',
         'vehicle_mileage',
         'engine_hours',

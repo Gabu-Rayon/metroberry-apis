@@ -3,6 +3,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\RouteController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ProfileController;
@@ -14,14 +15,14 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\TripPaymentController;
 use App\Http\Controllers\OrganisationController;
+use App\Http\Controllers\RouteLocationsController;
 use App\Http\Controllers\VehicleServiceController;
 use App\Http\Controllers\DriversLicensesController;
 use App\Http\Controllers\InsuranceCompanyController;
 use App\Http\Controllers\VehicleInsuranceController;
 use App\Http\Controllers\VehicleRefuelingController;
-use App\Http\Controllers\RouteController;
-use App\Http\Controllers\RouteLocationsController;
 
 Route::get('dashboard', [DashboardController::class, 'index'])
     ->name('dashboard')
@@ -56,7 +57,7 @@ Route::get('/admin/user/create-user-interface', [UserController::class, 'create'
 Route::post('/admin/user/update', [UserController::class, 'store'])
     ->name('user.store')
     ->middleware('auth', 'can:create user');
-    
+
 Route::get('/admin/user/{id}/edit', [UserController::class, 'edit'])
     ->name('user.edit')
     ->middleware('auth', 'can:edit user');
@@ -68,7 +69,7 @@ Route::post('/admin/user/{id}/update', [UserController::class, 'update'])
 Route::get('/admin/user/{id}/delete', [UserController::class, 'delete'])
     ->name('user.delete')
     ->middleware('auth', 'can:delete user');
-    
+
 Route::post('/admin/user/{id}/destroy', [UserController::class, 'destory'])
     ->name('user.destroy')
     ->middleware('auth', 'can:delete user');
@@ -111,8 +112,8 @@ Route::put('employee/{id}/activate', [EmployeeController::class, 'activate'])
     ->middleware('auth', 'can:edit customer');
 
 Route::get('employee/{id}/deactivate', [EmployeeController::class, 'deactivateForm'])
-->name('employee.deactivate')
-->middleware('auth', 'can:edit customer');
+    ->name('employee.deactivate')
+    ->middleware('auth', 'can:edit customer');
 
 Route::put('employee/{id}/deactivate', [EmployeeController::class, 'deactivate'])
     ->name('employee.deactivate')
@@ -152,16 +153,16 @@ Route::get('organisation/{id}/edit', [OrganisationController::class, 'edit'])
     ->middleware('auth', 'can:edit organisation');
 
 Route::get('organisation/{id}/activate', [OrganisationController::class, 'activateForm'])
-->name('organisation.activate')
-->middleware('auth', 'can:edit organisation');
+    ->name('organisation.activate')
+    ->middleware('auth', 'can:edit organisation');
 
 Route::put('organisation/{id}/activate', [OrganisationController::class, 'activate'])
-->name('organisation.activate')
-->middleware('auth', 'can:edit organisation');
+    ->name('organisation.activate')
+    ->middleware('auth', 'can:edit organisation');
 
 Route::get('organisation/{id}/deactivate', [OrganisationController::class, 'deactivateForm'])
-->name('organisation.deactivate')
-->middleware('auth', 'can:edit organisation');
+    ->name('organisation.deactivate')
+    ->middleware('auth', 'can:edit organisation');
 
 Route::put('organisation/{id}/deactivate', [OrganisationController::class, 'deactivate'])
     ->name('organisation.deactivate')
@@ -450,8 +451,8 @@ Route::get('trips/{id}/details', [TripController::class, 'details'])
     ->middleware('auth', 'can:edit trip');
 
 Route::put('trips/{id}/details', [TripController::class, 'detailsPut'])
-->name('trips.details')
-->middleware('auth', 'can:edit trip');
+    ->name('trips.details')
+    ->middleware('auth', 'can:edit trip');
 
 // Bill Trip
 
@@ -460,14 +461,45 @@ Route::get('trip/{id}/bill', [TripController::class, 'bill'])
     ->middleware('auth', 'can:bill trip');
 
 Route::put('trips/{id}/bill', [TripController::class, 'billPut'])
-->name('trips.bill')
-->middleware('auth', 'can:bill trip');
+    ->name('trips.bill')
+    ->middleware('auth', 'can:bill trip');
 
 // Get Billing Rate
 
 Route::get('get-billing-rate/{id}', [TripController::class, 'getBillingRate'])
-->name('trip.get-billing-rate')
-->middleware('auth', 'can:bill trip');
+    ->name('trip.get-billing-rate')
+    ->middleware('auth', 'can:bill trip');
+    
+Route::get('trip/billed/{id}/payment/checkout', [TripController::class, 'tripPaymentCheckOut'])
+    ->name('trip.payment.checkout')
+    ->middleware('auth', 'can:bill trip');
+
+/**
+ * Trip Payment Routes
+ * 
+ */
+
+Route::get('trip/billed/{id}/recieve/payment', [TripPaymentController::class, 'billedTripRecievePayment'])
+    ->name('billed.trip.recieve.payment')
+    ->middleware('auth', 'can:bill trip');
+
+Route::post('trip/billed/{id}/recieve/payment/store', [TripPaymentController::class, 'billedTripRecievePaymentStore'])
+    ->name('billed.trip.recieve.payment.store')
+    ->middleware('auth', 'can:bill trip');
+
+
+Route::get('billed/trip/{id}/download/invoice', [TripPaymentController::class, 'billedTripDownloadInvoice'])
+    ->name('billed.trip.download.invoice')
+    ->middleware('auth', 'can:bill trip');
+
+Route::get('billed/trip/{id}/resend/invoice', [TripPaymentController::class, 'billedTripResendInvoice'])
+    ->name('billed.trip.resend.invoice')
+    ->middleware('auth', 'can:bill trip');
+
+Route::get('billed/trip/{id}/send/invoice', [TripPaymentController::class, 'billedTripSendInvoice'])
+    ->name('billed.trip.send.invoice')
+    ->middleware('auth', 'can:bill trip');
+
 
 /**
  * vehicle Routes

@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Driver;
-use App\Models\Organisation;
-use App\Models\Vehicle;
 use Exception;
+use Carbon\Carbon;
+use App\Models\Driver;
+use App\Models\Vehicle;
+use App\Models\Organisation;
+use App\Models\VehicleClass;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
-use Carbon\Carbon;
 
 
 
@@ -67,7 +68,8 @@ class VehicleController extends Controller
      public function create(){
 
         $organisations = Organisation::all();
-        return view('vehicle.create',compact('organisations'));
+        $vehicleClasses = VehicleClass::all();
+        return view('vehicle.create',compact('organisations','vehicleClasses'));
      }
     public function store(Request $request)
     {
@@ -86,6 +88,7 @@ class VehicleController extends Controller
                 'engine_size' => 'required|numeric',
                 'vehicle_avatar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'organisation_id' => 'required|numeric',
+                'vehicle_class' => 'required|string',
             ]);
 
             if ($validator->fails()) {
@@ -115,10 +118,11 @@ class VehicleController extends Controller
             $vehicle->year = $year;
             $vehicle->color = $request->color;
             $vehicle->seats = $request->seats;
+            $vehicle->class = $request->vehicle_class;
             $vehicle->plate_number = $request->plate_number;
             $vehicle->fuel_type = $request->fuel_type;
             $vehicle->engine_size = $request->engine_size;
-            $vehicle->avatar = $avatarName;
+            $vehicle->avatar = $avatarName;            
             $vehicle->save();
 
             return redirect()->route('vehicle')->with('success', 'Vehicle added successfully.');
@@ -266,6 +270,7 @@ class VehicleController extends Controller
             $vehicle = Vehicle::findOrFail($id);
             $drivers = Driver::all();
             $organisations = Organisation::all();
+            $vehicleClasses = VehicleClass::all();
 
             // Fetch the assigned Organisation's name if exists
             $assignedOrganisationName = null;
@@ -281,7 +286,15 @@ class VehicleController extends Controller
                 $assignedDriverName = $driver->user->name;
             }
 
-            return view('vehicle.edit', compact('vehicle', 'assignedDriverName', 'drivers', 'assignedOrganisationName', 'organisations'));
+            // Fetch the assigned vehicle class name if exists
+            $assignedVehicleClass = null;
+            if ($vehicle->class) {
+                $vehicleClass = VehicleClass::where('name', $vehicle->class)->first();
+                $assignedVehicleClass = $vehicleClass ? $vehicleClass->name : null;
+            }
+
+
+            return view('vehicle.edit', compact('vehicle', 'assignedDriverName', 'drivers', 'assignedOrganisationName', 'organisations','assignedVehicleClass','vehicleClasses'));
         } catch (Exception $e) {
             Log::error('Error fetching vehicle for edit: ' . $e->getMessage());
             return back()->with('error', 'An error occurred while fetching the vehicle. Please try again.');
@@ -312,6 +325,7 @@ class VehicleController extends Controller
                 'vehicle_avatar' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'driver_id' => 'nullable|exists:drivers,id',
                 'organisation_id'  => 'nullable|exists:organisations,id',
+                'vehicle_class' =>'required|string'
             ]);
 
             if ($validator->fails()) {
@@ -344,6 +358,7 @@ class VehicleController extends Controller
             $vehicle->fuel_type = $request->fuel_type;
             $vehicle->engine_size = $request->engine_size;
             $vehicle->organisation_id = $request->organisation_id;
+            $vehicle->class = $request->vehicle_class;
 
             // Update driver_id in vehicles table if provided
             if ($request->has('driver_id')) {

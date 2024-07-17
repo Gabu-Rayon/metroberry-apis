@@ -231,6 +231,7 @@
                                             <div class="table-responsive">
                                                 <table class="table" id="driver-table">
                                                     <thead>
+                                                        <tr></tr>
                                                         <tr>
                                                             <th title="Name">Customer</th>
                                                             <th title="Location">Driver</th>

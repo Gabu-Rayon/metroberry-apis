@@ -181,6 +181,7 @@ class RoleAndPermissionSeeder extends Seeder
             'manage trips',
             'complete trip',
             'cancel trip',
+            'bill trip',
 
             'view trip details',
             'create trip details',
@@ -611,6 +612,7 @@ class RoleAndPermissionSeeder extends Seeder
             'manage trips',
             'complete trip',
             'cancel trip',
+            'bill trip',
 
             'view trip details',
             'create trip details',

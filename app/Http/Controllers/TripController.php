@@ -612,4 +612,20 @@ class TripController extends Controller
             'rate_by_car_class' => $billingRate->rate_by_car_class,
         ]);
     }
+
+
+    public function tripPaymentCheckOut($id)
+    {
+        try {
+            // Fetch the trip details where the status is 'billed'
+            $trip = Trip::where('id', $id)->where('status', 'billed')->firstOrFail();
+
+            // Return the view with the trip details
+            return view('trips.tripPaymentCheckout', compact('trip'));
+        } catch (Exception $e) {
+            Log::error('Error fetching trip details for payment checkout: ' . $e->getMessage());
+            return back()->with('error', 'An error occurred while fetching the trip details. Please try again.');
+        }
+    }
+
 }
