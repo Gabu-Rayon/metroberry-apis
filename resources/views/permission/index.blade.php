@@ -49,17 +49,30 @@
                                                             <th title="Name">Name</th>
                                                             <th title="Guard">Guard</th>
                                                             <th title="Updated">Updated</th>
+                                                            <th title="Actions">Actions</th>
                                                         </tr>
                                                     </thead>
 
                                                     <tbody>
                                                         @foreach ($permissions as $permission)
-                                                            {{ \Log::info('PERMISSION') }}
-                                                            {{ \Log::info($permission) }}
                                                             <tr>
                                                                 <td>{{ $permission->name }}</td>
                                                                 <td>{{ $permission->guard_name }}</td>
                                                                 <td>{{ $permission->updated_at }}</td>
+                                                                <td>
+                                                                    <div class="d-flex gap-2">
+                                                                        @if (\Auth::user()->can('edit permission'))
+                                                                            <a href="javascript:void(0);" onclick="axiosModal('permission/{{ $permission->id }}/edit')" class="btn btn-primary btn-sm">
+                                                                                <i class="fa fa-edit fa-sm"></i>
+                                                                            </a>
+                                                                        @endif
+                                                                        @if (\Auth::user()->can('delete permission'))
+                                                                            <a href="javascript:void(0);" onclick="axiosModal('permission/{{ $permission->id }}/delete')" class="btn btn-danger btn-sm">
+                                                                                <i class="fa fa-trash fa-sm"></i>
+                                                                            </a>
+                                                                        @endif
+                                                                    </div>
+                                                                </td>
                                                             </tr>
                                                         @endforeach
                                                     </tbody>

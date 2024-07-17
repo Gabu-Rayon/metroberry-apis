@@ -1,7 +1,8 @@
-<form action="{{ route('permission.store') }}" method="POST" class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
+<form action="{{ route('permission.edit', $permission->id) }}" method="POST" class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
     @csrf
+    @method('PUT')
     <div class="card-header my-3 p-2 border-bottom">
-        <h4>Add Permission</h4>
+        <h4>Edit Permission</h4>
     </div>
     <div class="modal-body">
         <div class="row">
@@ -13,7 +14,7 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="name" class="form-control" type="text" placeholder="Name" id="name" required />
+                        <input name="name" class="form-control" type="text" placeholder="Name" id="name" required value="{{ $permission->name }}">
                     </div>
                 </div>
                 

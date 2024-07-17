@@ -29,7 +29,6 @@
                                                 <div class="actions">
                                                     <div class="accordion-header d-flex justify-content-end align-items-center"
                                                         id="flush-headingOne">
-
                                                         <button type="button" class="btn btn-success btn-sm mx-2"
                                                             data-bs-toggle="collapse" data-bs-target="#flush-collapseOne"
                                                             aria-expanded="true" aria-controls="flush-collapseOne"> <i

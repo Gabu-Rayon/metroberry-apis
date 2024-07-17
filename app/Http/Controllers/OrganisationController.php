@@ -313,4 +313,39 @@ class OrganisationController extends Controller
             return redirect()->back()->with('error', 'Something Went Wrong');
         }
     }
+
+    public function deactivateForm($id) {
+        $organisation = Organisation::findOrfail($id);
+        return view('organisation.deactivate',compact('organisation'));
+    }
+
+    public function deactivate($id) {
+        try {
+
+            $organisation = Organisation::findOrfail($id);
+
+            if (!$organisation) {
+                return redirect()->back()->with('error', 'Organisation not found');
+            }
+
+            if ($organisation->status == 'inactive') {
+                return redirect()->back()->with('error', 'Organisation is already inactive');
+            }
+
+            DB::beginTransaction();
+
+            $organisation->update([
+                'status' => 'inactive'
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('organisation')->with('success', 'Organisation deactivated successfully');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('ERROR DEACTIVATING Organisation');
+            Log::error($e);
+            return redirect()->back()->with('error', 'Something Went Wrong');
+        }
+    }
 }

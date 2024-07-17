@@ -110,6 +110,14 @@ Route::put('employee/{id}/activate', [EmployeeController::class, 'activate'])
     ->name('employee.activate')
     ->middleware('auth', 'can:edit customer');
 
+Route::get('employee/{id}/deactivate', [EmployeeController::class, 'deactivateForm'])
+->name('employee.deactivate')
+->middleware('auth', 'can:edit customer');
+
+Route::put('employee/{id}/deactivate', [EmployeeController::class, 'deactivate'])
+    ->name('employee.deactivate')
+    ->middleware('auth', 'can:edit customer');
+
 Route::post('employee/{id}/delete', [EmployeeController::class, 'destroy'])->name('employee.delete');
 
 
@@ -150,6 +158,14 @@ Route::get('organisation/{id}/activate', [OrganisationController::class, 'activa
 Route::put('organisation/{id}/activate', [OrganisationController::class, 'activate'])
 ->name('organisation.activate')
 ->middleware('auth', 'can:edit organisation');
+
+Route::get('organisation/{id}/deactivate', [OrganisationController::class, 'deactivateForm'])
+->name('organisation.deactivate')
+->middleware('auth', 'can:edit organisation');
+
+Route::put('organisation/{id}/deactivate', [OrganisationController::class, 'deactivate'])
+    ->name('organisation.deactivate')
+    ->middleware('auth', 'can:edit organisation');
 
 Route::put('organisation/{id}/update', [OrganisationController::class, 'update'])
     ->name('organisation.update')
@@ -201,6 +217,7 @@ Route::put('driver/{id}/deactivate', [DriverController::class, 'deactivate'])
 Route::get('driver/performance', [DriverController::class, 'driverPerformance'])
     ->name('driver.performance.index')
     ->middleware('auth', 'can:view driver performance');
+
 Route::get('performance/create', [DriverController::class, 'createDriverPerformance'])
     ->name('driver.performance.create')
     ->middleware('auth', 'can:create driver performance');
@@ -670,8 +687,32 @@ Route::post('/admin/permission/create', [PermissionController::class, 'store'])
     ->name('permission.store')
     ->middleware(['auth', 'can:create permission']);
 
+// Edit Permissions
 
-Route::get('/admin/role', [RoleController::class, 'index'])->name('permission.role');
+Route::get('/admin/permission/{id}/edit', [PermissionController::class, 'edit'])
+    ->name('permission.edit')
+    ->middleware(['auth', 'can:edit permission']);
+
+Route::put('/admin/permission/{id}/edit', [PermissionController::class, 'update'])
+    ->name('permission.update')
+    ->middleware(['auth', 'can:edit permission']);
+
+// Delete Permissions
+
+Route::get('/admin/permission/{id}/delete', [PermissionController::class, 'delete'])
+    ->name('permission.delete')
+    ->middleware(['auth', 'can:delete permission']);
+
+Route::delete('/permission/{id}/delete', [PermissionController::class, 'destroy'])
+    ->name('permission.delete')
+    ->middleware(['auth', 'can:delete permission']);
+
+// View Roles
+
+Route::get('/admin/role', [RoleController::class, 'index'])
+    ->name('permission.role')
+    ->middleware(['auth', 'can:view permission']);
+
 Route::get('/admin/role/create', [RoleController::class, 'create'])->name('permission.role.create');
 /**
  * 

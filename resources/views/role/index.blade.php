@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Refueling List')
+@section('title', 'Roles')
 @section('content')
 
     <body class="fixed sidebar-mini">
@@ -23,7 +23,7 @@
                                 <div class="card-header">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div>
-                                                <h6 class="fs-17 fw-semi-bold mb-0">Role lists</h6>
+                                                <h6 class="fs-17 fw-semi-bold mb-0">Roles</h6>
                                             </div>
                                             <div class="text-end">
                                                 <div class="actions">
@@ -41,13 +41,41 @@
                                             <table class="table" id="driver-table">
                                                 <thead>
                                                     <tr>
-                                                        <th title="Sl" width="30">Sl</th>
                                                         <th title="Name">Name</th>
                                                         <th title="Guard">Guard</th>
                                                         <th title="Updated">Updated</th>
                                                         <th title="Action" width="80">Action</th>
                                                     </tr>
                                                 </thead>
+
+                                                <tbody>
+                                                    @foreach ($roles as $role)
+                                                        <tr>
+                                                            <td>{{ $role->name }}</td>
+                                                            <td>{{ $role->guard_name }}</td>
+                                                            <td>{{ $role->updated_at }}</td>
+                                                            <td>
+                                                                <div class="d-flex gap-2">
+                                                                    @if (\Auth::user()->can('edit role'))
+                                                                        <a href="javascript:void(0);" onclick="axiosModal('role/{{ $role->id }}/edit')" class="btn btn-primary btn-sm">
+                                                                            <i class="fa fa-edit fa-sm"></i>
+                                                                        </a>
+                                                                    @endif
+                                                                    @if (\Auth::user()->can('delete role'))
+                                                                        <a href="javascript:void(0);" onclick="axiosModal('role/{{ $role->id }}/delete')" class="btn btn-danger btn-sm">
+                                                                            <i class="fa fa-trash fa-sm"></i>
+                                                                        </a>
+                                                                    @endif
+                                                                    @if (\Auth::user()->can('assign permission'))
+                                                                        <a href="javascript:void(0);" onclick="axiosModal('role/{{ $role->id }}/permissions')" class="btn btn-info btn-sm">
+                                                                            <i class="fa fa-key fa-sm"></i>
+                                                                        </a>
+                                                                    @endif
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
                                             </table>
                                         </div>
 
