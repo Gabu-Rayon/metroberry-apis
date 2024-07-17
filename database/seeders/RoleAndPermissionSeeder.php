@@ -73,6 +73,7 @@ class RoleAndPermissionSeeder extends Seeder
             'delete organisation',
             'update organisation',
 
+            // Drivers Permissions
             'manage drivers',
             'view drivers',
             'create driver',
@@ -100,6 +101,7 @@ class RoleAndPermissionSeeder extends Seeder
             'view driver performance details',
             'create driver performance details',
 
+            // License Permissions
             'manage driver licenses',
             'view driver licenses',
             'create driver license',
@@ -229,6 +231,7 @@ class RoleAndPermissionSeeder extends Seeder
             'update vehicle maintenance',
             'manage vehicle maintenance',
 
+            // License Permissions
             'view driver license',
             'create driver license',
             'edit driver license',
@@ -452,10 +455,269 @@ class RoleAndPermissionSeeder extends Seeder
             'manage settings',
         ];
 
+        $dashboardPermissions = [
+            'view dashboard',
+            'edit profile',
+            'update profile',
+            'delete profile',
+        ];
+
+        $employeePermissions = [
+            'manage customers',
+            'view customers',
+            'create customer',
+            'edit customer',
+            'delete customer',
+            'update customer',
+            'activate customer',
+            'deactivate customer',
+        ];
+
+        $organisationPermissions = [
+            'manage organisations',
+            'view organisations',
+            'create organisation',
+            'edit organisation',
+            'delete organisation',
+            'update organisation',
+        ];
+
+        $driversPermissions = [
+            'manage drivers',
+            'view drivers',
+            'create driver',
+            'edit driver',
+            'delete driver',
+            'update driver',
+            'activate driver',
+            'deactivate driver',
+            'assign driver',
+            'unassign driver',
+        ];
+
+        $licensePermissions = [
+            'manage driver licenses',
+            'view driver licenses',
+            'create driver license',
+            'edit driver license',
+            'verify driver license',
+            'revoke driver license',
+            'delete driver license',
+            'update driver license',
+
+            'manage driver license details',
+            'view driver license details',
+            'create driver license details',
+            'edit driver license details',
+            'delete driver license details',
+        ];
+
+        $psv_badgePermissions = [
+            'manage psv badges',
+            'view psv badges',
+            'create psv badge',
+            'edit psv badge',
+            'delete psv badge',
+            'update psv badge',
+
+            'manage psv badge details',
+            'view psv badge details',
+            'create psv badge details',
+            'edit psv badge details',
+            'delete psv badge details',
+            'update psv badge details',
+        ];
+
+        $driver_performancePermissions = [
+            'manage drivers performances',
+            'view driver performance',
+            'create driver performance',
+            'edit driver performance',
+            'delete driver performance',
+            'update driver performance',
+            'view driver performance details',
+            'create driver performance details',
+        ];
+
+        $vehiclePermissions = [
+            'view vehicle',
+            'create vehicle',
+            'edit vehicle',
+            'update vehicle',
+            'delete vehicle',
+            'manage vehicles',
+            'assign vehicle',
+        ];
+
+        $vehicle_insurancePermissions = [
+            'view vehicle insurance',
+            'create vehicle insurance',
+            'edit vehicle insurance',
+            'delete vehicle insurance',
+            'update vehicle insurance',
+            'manage vehicle insurance',
+        ];
+
+        $routePermissions = [
+            'manage routes',
+            'view route',
+            'create route',
+            'edit route',
+            'delete route',
+            'update route',
+            'view route details',
+            'create route details',
+            'edit route details',
+            'delete route details',
+            'update route details',
+            'manage route details',
+        ];
+
+        $route_locationPermissions = [
+            'manage route locations',
+            'view route location',
+            'create route location',
+            'edit route location',
+            'delete route location',
+            'update route location',
+        ];
+
+        $tripPermissions = [
+            'view trip',
+            'create trip',
+            'edit trip',
+            'start trip',
+            'end trip',
+            'cancel trip',
+            'delete trip',
+            'update trip',
+            'manage trips',
+            'complete trip',
+            'cancel trip',
+        ];
+
+        $insurance_companyPermissions = [
+            'view vehicle insurance company',
+            'create vehicle insurance company',
+            'edit vehicle insurance company',
+            'delete vehicle insurance company',
+            'activate vehicle insurance company',
+            'deactivate vehicle insurance company',
+            'update vehicle insurance company',
+            'manage vehicle insurance company',
+        ];
+
+        $vehicle_maintenancePermissions = [
+            'view vehicle maintenance',
+            'create vehicle maintenance',
+            'edit vehicle maintenance',
+            'delete vehicle maintenance',
+            'update vehicle maintenance',
+            'manage vehicle maintenance',
+        ];
+
         foreach($settingsPermissions as $permission) {
             PermissionGroup::firstOrCreate([
                 'permission_name' => $permission,
                 'group_name' => 'settings'
+            ]);
+        }
+
+        foreach($dashboardPermissions as $permission) {
+            PermissionGroup::firstOrCreate([
+                'permission_name' => $permission,
+                'group_name' => 'dashboard'
+            ]);
+        }
+
+        foreach($organisationPermissions as $permission) {
+            PermissionGroup::firstOrCreate([
+                'permission_name' => $permission,
+                'group_name' => 'organisation'
+            ]);
+        }
+
+        foreach($employeePermissions as $permission) {
+            PermissionGroup::firstOrCreate([
+                'permission_name' => $permission,
+                'group_name' => 'employee'
+            ]);
+        }
+
+        foreach($driversPermissions as $permission) {
+            PermissionGroup::firstOrCreate([
+                'permission_name' => $permission,
+                'group_name' => 'drivers'
+            ]);
+        }
+
+        foreach($licensePermissions as $permission) {
+            PermissionGroup::firstOrCreate([
+                'permission_name' => $permission,
+                'group_name' => 'license'
+            ]);
+        }
+
+        foreach($psv_badgePermissions as $permission) {
+            PermissionGroup::firstOrCreate([
+                'permission_name' => $permission,
+                'group_name' => 'psv_badge'
+            ]);
+        }
+
+        foreach($driver_performancePermissions as $permission) {
+            PermissionGroup::firstOrCreate([
+                'permission_name' => $permission,
+                'group_name' => 'driver_performance'
+            ]);
+        }
+
+        foreach($vehiclePermissions as $permission) {
+            PermissionGroup::firstOrCreate([
+                'permission_name' => $permission,
+                'group_name' => 'vehicle'
+            ]);
+        }
+
+        foreach($vehicle_insurancePermissions as $permission) {
+            PermissionGroup::firstOrCreate([
+                'permission_name' => $permission,
+                'group_name' => 'vehicle_insurance'
+            ]);
+        }
+
+        foreach($routePermissions as $permission) {
+            PermissionGroup::firstOrCreate([
+                'permission_name' => $permission,
+                'group_name' => 'route'
+            ]);
+        }
+
+        foreach($route_locationPermissions as $permission) {
+            PermissionGroup::firstOrCreate([
+                'permission_name' => $permission,
+                'group_name' => 'route_location'
+            ]);
+        }
+
+        foreach($tripPermissions as $permission) {
+            PermissionGroup::firstOrCreate([
+                'permission_name' => $permission,
+                'group_name' => 'trip'
+            ]);
+        }
+
+        foreach($insurance_companyPermissions as $permission) {
+            PermissionGroup::firstOrCreate([
+                'permission_name' => $permission,
+                'group_name' => 'insurance_company'
+            ]);
+        }
+
+        foreach($vehicle_maintenancePermissions as $permission) {
+            PermissionGroup::firstOrCreate([
+                'permission_name' => $permission,
+                'group_name' => 'vehicle_maintenance'
             ]);
         }
 
@@ -471,6 +733,7 @@ class RoleAndPermissionSeeder extends Seeder
         $driver = Role::where('name', 'driver')->first();
 
         $admin->syncPermissions([
+            // Dashboard Permissions
             'view dashboard',
             'edit profile',
             'update profile',
@@ -481,6 +744,7 @@ class RoleAndPermissionSeeder extends Seeder
             'create user',
             'edit user',
             'delete user',
+
             'assign role',
             'assign permission',
             'reset password',
@@ -488,6 +752,7 @@ class RoleAndPermissionSeeder extends Seeder
             'update password',
             'delete password',
 
+            // Customer Permissions
             'manage customers',
             'view customers',
             'create customer',
@@ -497,6 +762,7 @@ class RoleAndPermissionSeeder extends Seeder
             'activate customer',
             'deactivate customer',
 
+            // Organisation Permissions
             'manage organisations',
             'view organisations',
             'create organisation',
@@ -504,6 +770,7 @@ class RoleAndPermissionSeeder extends Seeder
             'delete organisation',
             'update organisation',
 
+            // Drivers Permissions
             'manage drivers',
             'view drivers',
             'create driver',
@@ -532,6 +799,7 @@ class RoleAndPermissionSeeder extends Seeder
             'view driver performance details',
             'create driver performance details',
 
+            // License Permissions
             'manage driver licenses',
             'view driver licenses',
             'create driver license',
@@ -541,6 +809,7 @@ class RoleAndPermissionSeeder extends Seeder
             'delete driver license',
             'update driver license',
 
+            // License Details Permissions
             'manage driver license details',
             'view driver license details',
             'create driver license details',
@@ -660,6 +929,7 @@ class RoleAndPermissionSeeder extends Seeder
             'update vehicle maintenance',
             'manage vehicle maintenance',
 
+            // License Permissions
             'view driver license',
             'create driver license',
             'edit driver license',
@@ -912,6 +1182,7 @@ class RoleAndPermissionSeeder extends Seeder
             'update vehicle',
             'manage vehicles',
 
+            // Drivers Permissions
             'manage drivers',
             'view drivers',
             'create driver',
