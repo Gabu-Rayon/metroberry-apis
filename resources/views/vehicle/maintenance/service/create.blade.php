@@ -27,7 +27,7 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="description" class="form-control" type="text" placeholder="Description" id="description" required />
+                        <textarea name="description" class="form-control" placeholder="Description" id="description" required rows="5"></textarea>
                     </div>
                 </div>
                 

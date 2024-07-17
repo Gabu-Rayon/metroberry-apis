@@ -603,6 +603,26 @@ Route::post('vehicle/maintenance/service/categories/create', [ServiceCategoryCon
     ->name('vehicle.maintenance.service.categories.create')
     ->middleware('auth', 'can:view vehicle maintenance');
 
+// edit vehicle servicing category
+
+Route::get('vehicle/maintenance/service/categories/{id}/edit', [ServiceCategoryController::class, 'edit'])
+    ->name('vehicle.maintenance.service.categories.edit')
+    ->middleware('auth', 'can:edit vehicle maintenance');
+
+Route::put('vehicle/maintenance/service/categories/{id}/edit', [ServiceCategoryController::class, 'update'])
+    ->name('vehicle.maintenance.service.categories.update')
+    ->middleware('auth', 'can:edit vehicle maintenance');
+
+// delete vehicle servicing category
+
+Route::get('vehicle/maintenance/service/categories/{id}/delete', [ServiceCategoryController::class, 'delete'])
+    ->name('vehicle.maintenance.service.categories.delete')
+    ->middleware('auth', 'can:delete vehicle maintenance');
+
+Route::delete('vehicle/maintenance/service/categories/{id}/delete', [ServiceCategoryController::class, 'destroy'])
+    ->name('vehicle.maintenance.service.categories.delete')
+    ->middleware('auth', 'can:delete vehicle maintenance');
+
 /****
  * 
  *Manage Driver License 

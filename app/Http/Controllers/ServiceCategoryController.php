@@ -76,24 +76,73 @@ class ServiceCategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
-        //
+    public function edit(string $id){
+        $serviceCategory = ServiceTypeCategory::find($id);
+        $serviceTypes = ServiceType::all();
+        return view('vehicle.maintenance.service.categories.edit', compact('serviceCategory', 'serviceTypes'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
+    public function update(Request $request, string $id){
+        try {
+            $data = $request->all();
+
+            $validator = Validator::make($data, [
+                'name' => 'required|string|max:255',
+                'description' => 'required|string|max:255',
+                'serviceType' => 'required|exists:service_types,id',
+            ]);
+
+            if ($validator->fails()) {
+                Log::error('UPDATE SERVICE CATEGORY VALIDATION ERROR');
+                Log::error($validator->errors());
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+
+            DB::beginTransaction();
+
+            $serviceCategory = ServiceTypeCategory::find($id);
+            $serviceCategory->name = $data['name'];
+            $serviceCategory->description = $data['description'];
+            $serviceCategory->service_type_id = $data['serviceType'];
+            $serviceCategory->save();
+
+            DB::commit();
+
+            return redirect()->route('vehicle.maintenance.service.categories')->with('success', 'Service Category updated successfully');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::info('UPDATE SERVICE CATEGORY ERROR');
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', 'Something went wrong');
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
+
+    public function delete(string $id){
+        $serviceCategory = ServiceTypeCategory::find($id);
+        return view('vehicle.maintenance.service.categories.delete', compact('serviceCategory'));
+    }
+    public function destroy(string $id){
+        try {
+            DB::beginTransaction();
+
+            $serviceCategory = ServiceTypeCategory::findOrfail($id);
+            $serviceCategory->delete();
+
+            DB::commit();
+
+            return redirect()->route('vehicle.maintenance.service.categories')->with('success', 'Service Category deleted successfully');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::info('DELETE SERVICE CATEGORY ERROR');
+            Log::error($e->getMessage());
+            return redirect()->back()->with('error', 'Something went wrong');
+        }
     }
 }
