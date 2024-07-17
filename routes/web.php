@@ -573,6 +573,16 @@ Route::get('vehicle/maintenance/service/categories', [ServiceCategoryController:
     ->name('vehicle.maintenance.service.categories')
     ->middleware('auth', 'can:view vehicle maintenance');
 
+// create vehicle servicing category
+
+Route::get('vehicle/maintenance/service/categories/create', [ServiceCategoryController::class, 'create'])
+    ->name('vehicle.maintenance.service.categories.create')
+    ->middleware('auth', 'can:view vehicle maintenance');
+
+Route::post('vehicle/maintenance/service/categories/create', [ServiceCategoryController::class, 'store'])
+    ->name('vehicle.maintenance.service.categories.create')
+    ->middleware('auth', 'can:view vehicle maintenance');
+
 /****
  * 
  *Manage Driver License 
