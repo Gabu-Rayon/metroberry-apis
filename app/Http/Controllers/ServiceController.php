@@ -65,32 +65,76 @@ class ServiceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
+    public function show(string $id){
         //
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
-    {
-        //
+    public function edit(string $id){
+        $serviceType = ServiceType::findOrfail($id);
+        return view('vehicle.maintenance.service.edit', compact('serviceType'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
-    {
-        //
+    public function update(Request $request, string $id){
+        try {
+            $data = $request->all();
+
+            $validator = Validator::make($data, [
+                'name' => 'required|string|max:255',
+                'description' => 'required|string|max:255',
+            ]);
+
+            if ($validator->fails()) {
+                Log::error('UPDATE SERVICE TYPE VALIDATION ERROR');
+                Log::error($validator->errors());
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
+
+            DB::beginTransaction();
+
+            $serviceType = ServiceType::findOrfail($id);
+            $serviceType->update([
+                'name' => $data['name'],
+                'description' => $data['description'],
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('vehicle.maintenance.service')->with('success', 'Service Type Updated Successfully');
+        } catch (Exception $e) {
+            Log::error('ERROR UPDATING SERVICE TYPE');
+            Log::error($e);
+            return redirect()->back()->with('error', 'Something Went Wrong');
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
+
+    public function delete($id) {
+        $serviceType = ServiceType::findOrfail($id);
+        return view('vehicle.maintenance.service.delete', compact('serviceType'));
+    }
+    public function destroy(string $id) {
+        try {
+            DB::beginTransaction();
+
+            $serviceType = ServiceType::findOrfail($id);
+            $serviceType->delete();
+
+            DB::commit();
+
+            return redirect()->route('vehicle.maintenance.service')->with('success', 'Service Type Deleted Successfully');
+        } catch (Exception $e) {
+            Log::error('ERROR DELETING SERVICE TYPE');
+            Log::error($e);
+            return redirect()->back()->with('error', 'Something Went Wrong');
+        }
     }
 }

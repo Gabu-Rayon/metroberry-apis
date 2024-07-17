@@ -93,7 +93,7 @@
                             </svg>',
                 'subitems' => array_filter([
                     \Auth::user()->can('view vehicle maintenance') ? ['label' => 'Maintenance', 'route' => route('vehicle.maintenance')] : null,
-                    \Auth::user()->can('view vehicle maintenance') ? ['label' => 'Service', 'route' => route('vehicle.maintenance.service')] : null,
+                    \Auth::user()->can('view vehicle maintenance') ? ['label' => 'Service Types', 'route' => route('vehicle.maintenance.service')] : null,
                     \Auth::user()->can('view vehicle maintenance') ? ['label' => 'Service Categories', 'route' => route('vehicle.maintenance.service.categories')] : null,
                     \Auth::user()->can('create vehicle maintenance') ? ['label' => 'Create', 'route' => route('vehicle.maintenance.create')] : null,
                 ]),

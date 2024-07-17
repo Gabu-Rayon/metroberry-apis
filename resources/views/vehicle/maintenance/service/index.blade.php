@@ -40,6 +40,7 @@
                                                 <tr>
                                                     <th title="Name">Name</th>
                                                     <th title="Email">Description</th>
+                                                    <th title="Action">Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -47,6 +48,14 @@
                                                 <tr>
                                                     <td>{{ $serviceType->name }}</td>
                                                     <td>{{ $serviceType->description }}</td>
+                                                    <td>
+                                                        <a href="javascript:void(0);" onclick="axiosModal('service/{{ $serviceType->id }}/edit')" class="btn btn-primary btn-sm">
+                                                            <i class="fa fa-edit"></i>
+                                                        </a>
+                                                        <a href="javascript:void(0);" onclick="axiosModal('service/{{ $serviceType->id }}/delete')" class="btn btn-danger btn-sm">
+                                                            <i class="fa fa-trash"></i>
+                                                        </a>
+                                                    </td>
                                                 </tr>
                                                 @endforeach
                                             </tbody>

@@ -563,6 +563,26 @@ Route::post('vehicle/maintenance/service/create', [ServiceController::class, 'st
 ->name('vehicle.maintenance.service.create')
 ->middleware('auth', 'can:create vehicle maintenance');
 
+// edit vehicle servicing type
+
+Route::get('vehicle/maintenance/service/{id}/edit', [ServiceController::class, 'edit'])
+    ->name('vehicle.maintenance.service.edit')
+    ->middleware('auth', 'can:edit vehicle maintenance');
+
+Route::put('vehicle/maintenance/service/{id}/edit', [ServiceController::class, 'update'])
+->name('vehicle.maintenance.service.edit')
+->middleware('auth', 'can:edit vehicle maintenance');
+
+// delete vehicle servicing type
+
+Route::get('vehicle/maintenance/service/{id}/delete', [ServiceController::class, 'delete'])
+    ->name('vehicle.maintenance.service.delete')
+    ->middleware('auth', 'can:edit vehicle maintenance');
+
+Route::delete('vehicle/maintenance/service/{id}/delete', [ServiceController::class, 'destroy'])
+->name('vehicle.maintenance.service.delete')
+->middleware('auth', 'can:edit vehicle maintenance');
+
 /***
  * Vehicle Servicing Category Routes
  */
