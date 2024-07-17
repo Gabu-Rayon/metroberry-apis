@@ -22,6 +22,8 @@ use App\Http\Controllers\VehicleInsuranceController;
 use App\Http\Controllers\VehicleRefuelingController;
 use App\Http\Controllers\RouteController;
 use App\Http\Controllers\RouteLocationsController;
+use App\Http\Controllers\ServiceCategoryController;
+use App\Http\Controllers\ServiceController;
 
 Route::get('dashboard', [DashboardController::class, 'index'])
     ->name('dashboard')
@@ -529,7 +531,7 @@ Route::delete('vehicle/{id}/delete', [VehicleController::class, 'destroy'])
 
 
 /***
- * Vehicle Maintaince OR servincing
+ * Vehicle Maintaince Routes
  */
 
 Route::get('vehicle/maintenance', [VehicleServiceController::class, 'index'])
@@ -540,6 +542,36 @@ Route::get('vehicle/maintenance', [VehicleServiceController::class, 'index'])
 Route::get('vehicle/maintenance/create', [VehicleServiceController::class, 'create'])
     ->name('vehicle.maintenance.create')
     ->middleware('auth', 'can:create vehicle maintenance');
+
+/***
+ * Vehicle Servicing Routes
+ */
+
+// view vehicle servicing type
+
+Route::get('vehicle/maintenance/service', [ServiceController::class, 'index'])
+    ->name('vehicle.maintenance.service')
+    ->middleware('auth', 'can:view vehicle maintenance');
+
+// create vehicle servicing type
+
+Route::get('vehicle/maintenance/service/create', [ServiceController::class, 'create'])
+    ->name('vehicle.maintenance.service.create')
+    ->middleware('auth', 'can:create vehicle maintenance');
+
+Route::post('vehicle/maintenance/service/create', [ServiceController::class, 'store'])
+->name('vehicle.maintenance.service.create')
+->middleware('auth', 'can:create vehicle maintenance');
+
+/***
+ * Vehicle Servicing Category Routes
+ */
+
+// view vehicle servicing category
+
+Route::get('vehicle/maintenance/service/categories', [ServiceCategoryController::class, 'index'])
+    ->name('vehicle.maintenance.service.categories')
+    ->middleware('auth', 'can:view vehicle maintenance');
 
 /****
  * 

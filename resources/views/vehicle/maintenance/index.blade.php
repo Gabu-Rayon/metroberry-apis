@@ -23,7 +23,7 @@
                                     <div class="card-header">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div>
-                                                <h6 class="fs-17 fw-semi-bold mb-0">Vehicle maintenance lists</h6>
+                                                <h6 class="fs-17 fw-semi-bold mb-0">Vehicle Maintenance</h6>
                                             </div>
                                             <div class="text-end">
                                                 <div class="actions">

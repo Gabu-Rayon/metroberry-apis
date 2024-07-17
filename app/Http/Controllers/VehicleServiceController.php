@@ -18,7 +18,7 @@ class VehicleServiceController extends Controller
         // return response()->json($vehicleServices);
 
         $vehicleServices = VehicleService::all();
-        return view('vehicle.maintenance',compact('vehicleServices'));
+        return view('vehicle.maintenance.index',compact('vehicleServices'));
         
     }
 
