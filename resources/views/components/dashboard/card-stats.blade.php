@@ -178,39 +178,53 @@
             <div class="card-header px-3 bg-white">
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
-                        <h6 class="fs-17 fw-bold mb-0"> Other activities</h6>
+                        <h6 class="fs-17 fw-bold mb-0">Other activities</h6>
                     </div>
                 </div>
             </div>
             <div class="card-body px-3">
                 <div class="d-flex flex-column gap-2">
-
+                    @php
+                        $isLoss = $totalExpense > $totalIncome;
+                        $textClass = $isLoss ? 'text-danger' : 'text-success';
+                    @endphp
+    
                     <div>
-                        <i class="fas fa-money-bill text-success"></i>
-
-                        <a class="text-success" href="inventory/stock">
+                        <i class="fas fa-money-bill {{ $textClass }}"></i>
+                        <a class="{{ $textClass }}" href="inventory/stock">
                             Total Income
-                            <span class="float-end text-success">
+                            <span class="float-end {{ $textClass }}">
                                 <strong>KES {{ $totalIncome }}</strong>
                             </span>
                         </a>
                     </div>
-
+    
                     <div>
-                        <i class="fas fa-money-check text-success"></i>
-                        
-                        <a class="text-success" href="inventory/stock">
+                        <i class="fas fa-money-check {{ $textClass }}"></i>
+                        <a class="{{ $textClass }}" href="inventory/stock">
                             Total Expenses
-                            <span class="float-end text-success">
-                                <strong>KES 0</strong>
+                            <span class="float-end {{ $textClass }}">
+                                <strong>KES {{ $totalExpense }}</strong>
                             </span>
                         </a>
                     </div>
-
-                    <div>&nbsp;</div>
-                    <div>&nbsp;</div>
+    
+                    @if($isLoss)
+                        <div class="alert alert-danger mt-2">
+                            Kindly Check Your Accounts
+                            <i class="far fa-frown"></i>
+                        </div>
+                    @else
+                        <div class="alert alert-success mt-2">
+                            Accounts Are Ok
+                            <i class="far fa-smile"></i>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
     </div>
+    
+    
+
 </div>

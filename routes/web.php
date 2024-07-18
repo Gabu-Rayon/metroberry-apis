@@ -18,7 +18,9 @@ use App\Http\Controllers\OrganisationController;
 use App\Http\Controllers\VehicleServiceController;
 use App\Http\Controllers\DriversLicensesController;
 use App\Http\Controllers\InsuranceCompanyController;
+use App\Http\Controllers\MaintenanceRepairController;
 use App\Http\Controllers\MaintenanceServiceController;
+use App\Http\Controllers\RefuellingStationController;
 use App\Http\Controllers\RepairCategoryController;
 use App\Http\Controllers\RepairController;
 use App\Http\Controllers\VehicleInsuranceController;
@@ -464,17 +466,17 @@ Route::put('trips/{id}/details', [TripController::class, 'detailsPut'])
 
 Route::get('trip/{id}/bill', [TripController::class, 'bill'])
     ->name('trips.bill')
-    ->middleware('auth', 'can:bill trip');
+    ->middleware('auth', 'can:edit trip');
 
 Route::put('trips/{id}/bill', [TripController::class, 'billPut'])
 ->name('trips.bill')
-->middleware('auth', 'can:bill trip');
+->middleware('auth', 'can:edit trip');
 
 // Get Billing Rate
 
 Route::get('get-billing-rate/{id}', [TripController::class, 'getBillingRate'])
 ->name('trip.get-billing-rate')
-->middleware('auth', 'can:bill trip');
+->middleware('auth', 'can:edit trip');
 
 /**
  * vehicle Routes
@@ -533,7 +535,73 @@ Route::delete('vehicle/{id}/delete', [VehicleController::class, 'destroy'])
     ->name('driver.delete')
     ->middleware('auth', 'can:delete vehicle');
 
+/***
+ * Vehicle Maintaince Repair Routes
+ */
 
+// View Vehicle Maintenance Repairs
+Route::get('maintenance/repair', [MaintenanceRepairController::class, 'index'])
+    ->name('maintenance.repair')
+    ->middleware('auth', 'can:view vehicle maintenance');
+
+// Create Vehicle Maintenance Repairs
+Route::get('maintenance/repair/create', [MaintenanceRepairController::class, 'create'])
+    ->name('maintenance.repair.create')
+    ->middleware('auth', 'can:create vehicle maintenance');
+
+Route::post('maintenance/repair/create', [MaintenanceRepairController::class, 'store'])
+->name('maintenance.repair.create')
+->middleware('auth', 'can:create vehicle maintenance');
+
+// Edit Vehicle Maintenance Repairs
+Route::get('maintenance/repair/{id}/edit', [MaintenanceRepairController::class, 'edit'])
+    ->name('maintenance.repair.edit')
+    ->middleware('auth', 'can:edit vehicle maintenance');
+
+Route::put('maintenance/repair/{id}/edit', [MaintenanceRepairController::class, 'update'])
+->name('maintenance.repair.edit')
+->middleware('auth', 'can:edit vehicle maintenance');
+
+Route::get('maintenance/repair/{id}/approve', [MaintenanceRepairController::class, 'approveForm'])
+    ->name('maintenance.repair.approve')
+    ->middleware('auth', 'can:edit vehicle maintenance');
+
+Route::put('maintenance/repair/{id}/approve', [MaintenanceRepairController::class, 'approve'])
+->name('maintenance.repair.approve')
+->middleware('auth', 'can:edit vehicle maintenance');
+
+Route::get('maintenance/repair/{id}/reject', [MaintenanceRepairController::class, 'rejectForm'])
+    ->name('maintenance.repair.reject')
+    ->middleware('auth', 'can:edit vehicle maintenance');
+
+Route::put('maintenance/repair/{id}/reject', [MaintenanceRepairController::class, 'reject'])
+    ->name('maintenance.repair.reject')
+    ->middleware('auth', 'can:edit vehicle maintenance');
+
+Route::get('maintenance/repair/{id}/bill', [MaintenanceRepairController::class, 'billForm'])
+    ->name('maintenance.repair.bill')
+    ->middleware('auth', 'can:edit vehicle maintenance');
+
+Route::put('maintenance/repair/{id}/bill', [MaintenanceRepairController::class, 'bill'])
+    ->name('maintenance.repair.bill')
+    ->middleware('auth', 'can:edit vehicle maintenance');
+
+Route::get('maintenance/repair/{id}/redo', [MaintenanceRepairController::class, 'redoForm'])
+    ->name('maintenance.repair.redo-repair')
+    ->middleware('auth', 'can:edit vehicle maintenance');
+
+Route::put('maintenance/repair/{id}/redo', [MaintenanceRepairController::class, 'redo'])
+->name('maintenance.repair.redo-repair')
+->middleware('auth', 'can:edit vehicle maintenance');
+
+// Delete Vehicle Maintenance Repairs
+Route::get('maintenance/repair/{id}/delete', [MaintenanceRepairController::class, 'delete'])
+    ->name('maintenance.repair.delete')
+    ->middleware('auth', 'can:delete vehicle maintenance');
+
+Route::delete('maintenance/repair/{id}/delete', [MaintenanceRepairController::class, 'destroy'])
+->name('maintenance.repair.delete')
+->middleware('auth', 'can:delete vehicle maintenance');
 
 /***
  * Vehicle Maintaince Service Routes
@@ -818,17 +886,67 @@ Route::get('/refueling/requisition', [VehicleRefuelingController::class, 'requis
 Route::get('/refueling/type', [VehicleRefuelingController::class, 'type'])
     ->name('vehicle.refuel.type')
     ->middleware('auth', 'can:create vehicle refueling');
-Route::get('/refueling/station', [VehicleRefuelingController::class, 'station'])
-    ->name('vehicle.refueling.station')
+
+/***
+ * 
+ * Manage Vehicle Refueling Stations
+ */
+
+// View Refueling Stations
+Route::get('refueling/station', [RefuellingStationController::class, 'index'])
+    ->name('refueling.station')
     ->middleware('auth', 'can:create vehicle refueling');
+
+// Create Refueling Station
+Route::get('refueling/station/create', [RefuellingStationController::class, 'create'])
+    ->name('refueling.station.create')
+    ->middleware('auth', 'can:create vehicle refueling');
+
+Route::post('refueling/station/create', [RefuellingStationController::class, 'store'])
+    ->name('refueling.station.create')
+    ->middleware('auth', 'can:create vehicle refueling');
+
+// Edit Refueling Station
+Route::get('refueling/station/{id}/edit', [RefuellingStationController::class, 'edit'])
+    ->name('refueling.station.edit')
+    ->middleware('auth', 'can:edit vehicle refueling');
+
+Route::put('refueling/station/{id}/edit', [RefuellingStationController::class, 'update'])
+    ->name('refueling.station.edit')
+    ->middleware('auth', 'can:edit vehicle refueling');
+
+// Activate Refueling Station
+Route::get('refueling/station/{id}/activate', [RefuellingStationController::class, 'activateForm'])
+    ->name('refueling.station.activate')
+    ->middleware('auth', 'can:edit vehicle refueling');
+
+Route::put('refueling/station/{id}/activate', [RefuellingStationController::class, 'activate'])
+    ->name('refueling.station.activate')
+    ->middleware('auth', 'can:edit vehicle refueling');
+
+// Deactivate Refueling Station
+Route::get('refueling/station/{id}/deactivate', [RefuellingStationController::class, 'deactivateForm'])
+    ->name('refueling.station.deactivate')
+    ->middleware('auth', 'can:edit vehicle refueling');
+
+Route::put('refueling/station/{id}/deactivate', [RefuellingStationController::class, 'deactivate'])
+    ->name('refueling.station.deactivate')
+    ->middleware('auth', 'can:edit vehicle refueling');
+
+// Delete Refueling Station
+Route::get('refueling/station/{id}/delete', [RefuellingStationController::class, 'delete'])
+    ->name('refueling.station.delete')
+    ->middleware('auth', 'can:delete vehicle refueling');
+
+Route::delete('refueling/station/{id}/delete', [RefuellingStationController::class, 'destroy'])
+    ->name('refueling.station.delete')
+    ->middleware('auth', 'can:delete vehicle refueling');
+
+
 // /type/create
 
 Route::get('/type/create', [VehicleRefuelingController::class, 'typeCreate'])
     ->name('vehicle.refuel.type.create')
-    ->middleware('auth', 'can:create vehicle refueling');
-// /station/create
-Route::get('/station/create', [VehicleRefuelingController::class, 'stationCreate'])
-    ->name('vehicle.refueling.station.create')
     ->middleware('auth', 'can:create vehicle refueling');
 
 /***

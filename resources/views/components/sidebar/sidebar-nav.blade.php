@@ -93,6 +93,7 @@
                             </svg>',
                 'subitems' => array_filter([
                     \Auth::user()->can('view vehicle maintenance') ? ['label' => 'Maintenance Service', 'route' => route('maintenance.service')] : null,
+                    \Auth::user()->can('view vehicle maintenance') ? ['label' => 'Maintenance Repair', 'route' => route('maintenance.repair')] : null,
                     \Auth::user()->can('view vehicle maintenance') ? ['label' => 'Service Types', 'route' => route('vehicle.maintenance.service')] : null,
                     \Auth::user()->can('view vehicle maintenance') ? ['label' => 'Service Categories', 'route' => route('vehicle.maintenance.service.categories')] : null,
                     \Auth::user()->can('view vehicle maintenance') ? ['label' => 'Vehicle Parts', 'route' => route('vehicle.maintenance.parts')] : null,
@@ -113,7 +114,7 @@
                     \Auth::user()->can('view vehicle refueling') ? ['label' => 'Refuel', 'route' => route('vehicle.refueling.index')] : null,
                     \Auth::user()->can('view vehicle refueling') ? ['label' => 'Requisition', 'route' => route('vehicle.refueling.requisition')] : null,
                     \Auth::user()->can('view vehicle refueling') ? ['label' => 'Fuel Type', 'route' => route('vehicle.refuel.type')] : null,
-                    \Auth::user()->can('view vehicle refueling') ? ['label' => 'Fuel Station', 'route' => route('vehicle.refueling.station')] : null,
+                    \Auth::user()->can('view vehicle refueling') ? ['label' => 'Fuel Stations', 'route' => route('refueling.station')] : null,
                 ]),
             ])
         @endif

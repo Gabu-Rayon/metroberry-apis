@@ -65,10 +65,6 @@ class VehicleRefuelingController extends Controller
      public function type(){
         return view('refueling.type');
      }
-    public function station()
-    {
-        return view('refueling.station');
-    }
     public function requisition()
     {
      return view('refueling.requisition');
@@ -76,9 +72,4 @@ class VehicleRefuelingController extends Controller
     public function typeCreate(){
         return view('refueling.type.create');
      }
-
-     public function stationCreate(){
-        return view('refueling.station.create');
-     }
-
 }

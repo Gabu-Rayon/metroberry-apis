@@ -142,15 +142,15 @@
                                                         @endif
                                                         <span class='m-1'></span>
                                                         @if (\Auth::user()->can('activate customer'))
-                                                        @if ($customer->status == 'active')
-                                                            <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="axiosModal('employee/{{ $customer->id }}/deactivate')" title="Dectivate Driver">
-                                                                <i class="fas fa-toggle-on"></i>
-                                                            </a> 
-                                                        @else
-                                                            <a href="javascript:void(0);" class="btn btn-sm btn-secondary" onclick="axiosModal('employee/{{ $customer->id }}/activate')" title="Activate Driver">
-                                                                <i class="fas fa-toggle-off"></i>
-                                                            </a>                                                        
-                                                        @endif
+                                                            @if ($customer->status == 'active')
+                                                                <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="axiosModal('employee/{{ $customer->id }}/deactivate')" title="Dectivate Driver">
+                                                                    <i class="fas fa-toggle-on"></i>
+                                                                </a> 
+                                                            @else
+                                                                <a href="javascript:void(0);" class="btn btn-sm btn-secondary" onclick="axiosModal('employee/{{ $customer->id }}/activate')" title="Activate Driver">
+                                                                    <i class="fas fa-toggle-off"></i>
+                                                                </a>                                                        
+                                                            @endif
                                                         @endif
                                                         @if (\Auth::user()->can('delete customer'))
                                                         <span class='m-1'></span>

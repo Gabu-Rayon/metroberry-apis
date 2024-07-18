@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\DriversLicenses;
+use App\Models\MaintenanceRepair;
+use App\Models\MaintenanceService;
 use App\Models\NTSAInspectionCertificate;
 use App\Models\PSVBadge;
 use App\Models\Trip;
@@ -29,6 +31,8 @@ class DashboardController extends Controller
         $activeVehicles = Vehicle::where('status', 'active')->get();
         $inactiveVehicles = Vehicle::where('status', 'inactive')->get();
         $tripsThisMonth = Trip::whereMonth('created_at', date('m'))->get();
+        $services = MaintenanceService::where('service_status', 'billed')->get();
+        $repairs = MaintenanceRepair::where('repair_status', 'billed')->get();
         $scheduledTrips = $tripsThisMonth->filter(function($trip) {
             return $trip->status == 'scheduled';
         });
@@ -41,9 +45,14 @@ class DashboardController extends Controller
         $billedTrips = $tripsThisMonth->filter(function($trip) {
             return $trip->status == 'billed';
         });
-
         $totalIncome = $billedTrips->sum(function ($trip) {
             return $trip->total_price;
+        });
+        $totalExpense = $services->sum(function ($service) {
+            return $service->service_cost;
+        });
+        $totalExpense += $repairs->sum(function ($repair) {
+            return $repair->repair_cost;
         });
         $expiredInsurances = VehicleInsurance::where('insurance_date_of_expiry', '<', date('Y-m-d'))->get();
         $expiredInspectionCertificates = NTSAInspectionCertificate::where('ntsa_inspection_certificate_date_of_expiry', '<', date('Y-m-d'))->get();
@@ -63,6 +72,7 @@ class DashboardController extends Controller
             'expiredLicenses',
             'expiredPSVBadges',
             'totalIncome',
+            'totalExpense'
         ));
     }
 

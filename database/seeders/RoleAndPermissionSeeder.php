@@ -7,7 +7,6 @@ use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\PermissionRegistrar;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class RoleAndPermissionSeeder extends Seeder
 {
@@ -24,7 +23,8 @@ class RoleAndPermissionSeeder extends Seeder
             'admin',
             'organisation',
             'customer',
-            'driver'
+            'driver',
+            'fuelling_station',
         ];
 
         foreach ($roles as $roleName) {
