@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
+use App\Models\Driver;
+use App\Models\Vehicle;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
@@ -12,6 +15,26 @@ class ReportController extends Controller
     public function index()
     {
         //
+    }
+
+    /**
+     * Display the employee report.
+     */
+
+    
+    public function employeeReport(){
+        $employees = Customer::with('trips')->get();
+        return view('report.employee', compact('employees'));
+    }
+
+    public function driverReport(){
+        $drivers = Driver::with('vehicle')->get();
+        return view('report.driver', compact('drivers'));
+    }
+
+    public function vehicleReport(){
+        $vehicles = Vehicle::with('driver', 'repairs')->get();
+        return view('report.vehicle', compact('vehicles'));
     }
 
     /**
@@ -62,35 +85,13 @@ class ReportController extends Controller
         //
     }
 
-
-    /**
-     * Display the employee report.
-     */
-    public function employeeReport()
-    {
-
-        // Return the view with the data
-        return view('report.employee');
-    }
-
     /**
      * Display the driver report.
      */
-    public function driverReport()
-    {
-        // Return the view with the data
-        return view('report.driver');
-    }
 
     /**
      * Display the vehicle report.
      */
-    public function vehicleReport()
-    {
-
-        // Return the view with the data
-        return view('report.vehicle');
-    }
 
     /**
      * Display the vehicle requisition report.

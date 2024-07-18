@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('title', 'Vehicle Report List')
+@section('title', 'Vehicles Report')
 @section('content')
 
     <body class="fixed sidebar-mini">
 
-        @include('components.preloader')
+       @include('components.preloader')
         <!-- react page -->
         <div id="app">
             <!-- Begin page -->
@@ -23,12 +23,13 @@
                                     <div class="card-header">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div>
-                                                <h6 class="fs-17 fw-semi-bold mb-0">Vehicle report</h6>
+                                                <h6 class="fs-17 fw-semi-bold mb-0">Vehicles Report</h6>
                                             </div>
                                             <div class="text-end">
                                                 <div class="actions">
                                                     <div class="accordion-header d-flex justify-content-end align-items-center"
                                                         id="flush-headingOne">
+
                                                         <button type="button" class="btn btn-success btn-sm mx-2"
                                                             data-bs-toggle="collapse" data-bs-target="#flush-collapseOne"
                                                             aria-expanded="true" aria-controls="flush-collapseOne"> <i
@@ -53,12 +54,52 @@
 
                                                                 <div class="col-sm-12 col-xl-4">
                                                                     <div class="form-group row mb-1">
-                                                                        <label for="department"
-                                                                            class="col-sm-5 col-form-label justify-content-start text-left">Department
-                                                                        </label>
+                                                                        <label for="emp_type"
+                                                                            class="col-sm-5 col-form-label justify-content-start text-left">Employee
+                                                                            type </label>
                                                                         <div class="col-sm-7">
                                                                             <select class="form-control basic-single"
-                                                                                name="department_id" id="department"
+                                                                                name="employee_type" id="emp_types"
+                                                                                tabindex="-1" aria-hidden="true">
+                                                                                <option value="">Please select one
+                                                                                </option>
+                                                                                <option value="Internal">Internal</option>
+                                                                                <option value="External">External</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row mb-1">
+                                                                        <label for="blood"
+                                                                            class="col-sm-5 col-form-label justify-content-start text-left">Blood
+                                                                            group </label>
+                                                                        <div class="col-sm-7">
+                                                                            <select class="form-control basic-single"
+                                                                                name="blood_group" id="shbloodg"
+                                                                                tabindex="-1" aria-hidden="true">
+                                                                                <option value="">Please select one
+                                                                                </option>
+                                                                                <option value="A+">A+</option>
+                                                                                <option value="A-">A-</option>
+                                                                                <option value="B+">B+</option>
+                                                                                <option value="B-">B-</option>
+                                                                                <option value="O+">O+</option>
+                                                                                <option value="O-">O-</option>
+                                                                                <option value="AB+">AB+</option>
+                                                                                <option value="AB-">AB-</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                                <div class="col-sm-12 col-xl-4">
+                                                                    <div class="form-group row mb-1">
+                                                                        <label for="department"
+                                                                            class="col-sm-5 col-form-label justify-content-start text-left">Department
+                                                                            <i class="text-danger">*</i></label>
+                                                                        <div class="col-sm-7">
+                                                                            <select
+                                                                                class="form-control basic-single required"
+                                                                                name="department" id="departmentsh"
                                                                                 tabindex="-1" aria-hidden="true">
                                                                                 <option value="">Please select one
                                                                                 </option>
@@ -92,111 +133,69 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row mb-1">
-                                                                        <label for="vehicle_type"
-                                                                            class="col-sm-5 col-form-label justify-content-start text-left">Vehicle
-                                                                            type </label>
+                                                                        <label for="designation"
+                                                                            class="col-sm-5 col-form-label justify-content-start text-left">Designation
+                                                                            <i class="text-danger">*</i></label>
                                                                         <div class="col-sm-7">
-                                                                            <select class="form-control basic-single"
-                                                                                name="vehicle_type_id" id="vehicle_type"
+                                                                            <select
+                                                                                class="form-control basic-single required"
+                                                                                name="designation" id="designationsh"
                                                                                 tabindex="-1" aria-hidden="true">
                                                                                 <option value="">Please select one
                                                                                 </option>
-                                                                                <option value="1">Saloon Car</option>
-                                                                                <option value="2">Pick Up</option>
-                                                                                <option value="3">Van</option>
-                                                                                <option value="4">Bus</option>
-                                                                                <option value="5">Truck</option>
-                                                                                <option value="6">Motorcycle</option>
-                                                                                <option value="7">Bicycle</option>
-                                                                                <option value="8">Others</option>
-                                                                                <option value="9">qwertyu</option>
-                                                                                <option value="10">TATA SCHOOL BUS 0017
+                                                                                <option value="2">CFO</option>
+                                                                                <option value="3">COO</option>
+                                                                                <option value="4">CTO</option>
+                                                                                <option value="5">CMO</option>
+                                                                                <option value="6">CIO</option>
+                                                                                <option value="7">CISO</option>
+                                                                                <option value="8">CRO</option>
+                                                                                <option value="9">CDO</option>
+                                                                                <option value="10">CLO</option>
+                                                                                <option value="11">CHRO</option>
+                                                                                <option value="12">CSO</option>
+                                                                                <option value="13">CPO</option>
+                                                                                <option value="14">CQO</option>
+                                                                                <option value="15">CVO</option>
+                                                                                <option value="16">CBO</option>
+                                                                                <option value="17">CNO</option>
+                                                                                <option value="18">CWO</option>
+                                                                                <option value="19">DRIVER</option>
+                                                                                <option value="20">COMPUTER OPRRATOR
                                                                                 </option>
                                                                             </select>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-
-                                                                <div class="col-sm-12 col-xl-4">
-                                                                    <div class="form-group row mb-1">
-                                                                        <label for="ownership"
-                                                                            class="col-sm-5 col-form-label justify-content-start text-left">Ownership
-                                                                        </label>
-                                                                        <div class="col-sm-7">
-                                                                            <select class="form-control basic-single"
-                                                                                name="ownership_id" id="ownership"
-                                                                                tabindex="-1" aria-hidden="true">
-                                                                                <option value="">Please select one
-                                                                                </option>
-                                                                                <option value="1">Rented Own</option>
-                                                                                <option value="3">Leased</option>
-                                                                                <option value="4">Bank Financed
-                                                                                </option>
-                                                                                <option value="5">Third Party Financed
-                                                                                </option>
-                                                                                <option value="6">Own</option>
-                                                                                <option value="7">Others</option>
-                                                                                <option value="8">Laii</option>
-                                                                                <option value="9">Quamar Browning
-                                                                                </option>
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="form-group row mb-1">
-                                                                        <label for="vendor"
-                                                                            class="col-sm-5 col-form-label justify-content-start text-left">Vendor
-                                                                        </label>
-                                                                        <div class="col-sm-7">
-                                                                            <select class="form-control basic-single"
-                                                                                name="vendor_id" id="vendor"
-                                                                                tabindex="-1" aria-hidden="true">
-                                                                                <option value="">Please select one
-                                                                                </option>
-                                                                                <option value="1">Rahim Motors
-                                                                                </option>
-                                                                                <option value="2">Karim Cars</option>
-                                                                                <option value="3">Tariq Traders
-                                                                                </option>
-                                                                                <option value="4">Ali Traders</option>
-                                                                                <option value="5">Bilal Gears &amp; Co
-                                                                                </option>
-                                                                                <option value="6">Saeed Brothers
-                                                                                </option>
-                                                                                <option value="7">JAYESH FILING
-                                                                                    STATION</option>
-                                                                                <option value="8">C.K. MOTORS</option>
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
                                                                 <div class="col-sm-12 col-xl-4">
                                                                     <div class="row">
                                                                         <div class="col-sm-12 col-xl-12">
                                                                             <div class="form-group row mb-1">
-                                                                                <label for="date_from"
-                                                                                    class="col-sm-5 col-form-label justify-content-start text-left">Registration
-                                                                                    from </label>
+                                                                                <label for="join_datefrsh"
+                                                                                    class="col-sm-5 col-form-label justify-content-start text-left">Joining
+                                                                                    date from </label>
                                                                                 <div class="col-sm-7">
-                                                                                    <input name="date_from"
+                                                                                    <input name="join_date_from"
                                                                                         autocomplete="off"
                                                                                         class="form-control  w-100"
-                                                                                        type="date" placeholder="From"
-                                                                                        id="date_from">
+                                                                                        type="date"
+                                                                                        placeholder="Joining date from"
+                                                                                        id="join_datefrsh">
                                                                                 </div>
                                                                             </div>
                                                                         </div>
                                                                         <div class="col-sm-12 col-xl-12">
                                                                             <div class="form-group row mb-1">
-                                                                                <label for="d_to"
-                                                                                    class="col-sm-5 col-form-label justify-content-start text-left">Registration
-                                                                                    to </label>
+                                                                                <label for="joining_d_to"
+                                                                                    class="col-sm-5 col-form-label justify-content-start text-left">Joining
+                                                                                    date to </label>
                                                                                 <div class="col-sm-7">
-                                                                                    <input name="date_to"
+                                                                                    <input name="join_date_to"
                                                                                         autocomplete="off"
                                                                                         class="form-control w-100"
-                                                                                        type="date" placeholder="To"
-                                                                                        id="d_to">
+                                                                                        type="date"
+                                                                                        placeholder="Joining date to"
+                                                                                        id="joining_d_to">
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -222,15 +221,35 @@
                                                 <table class="table" id="driver-table">
                                                     <thead>
                                                         <tr>
-                                                            <th title="Sl" width="30">Sl</th>
-                                                            <th title="Name">Name</th>
-                                                            <th title="Vehicle type">Vehicle type</th>
-                                                            <th title="Department">Department</th>
-                                                            <th title="Registration date">Registration date</th>
-                                                            <th title="Ownership">Ownership</th>
-                                                            <th title="Vendor">Vendor</th>
+                                                            <th title="Vehicle">Vehicle</th>
+                                                            <th title="Driver">Driver</th>
+                                                            <th title="Total Trips">Total Trips</th>
+                                                            <th title="Total Repairs">Total Repairs</th>
+                                                            <th title="Total Services">Total Services</th>
+                                                            <th title="Total Refuellings">Total Refuellings</th>
+                                                            <th title="Total Income">Total Income</th>
+                                                            <th title="Total Expenses">Total Expenses</th>
                                                         </tr>
                                                     </thead>
+
+                                                    <tbody>
+                                                        @foreach ($vehicles as $vehicle)
+                                                            <tr>
+                                                                <td>{{ $vehicle->plate_number }}</td>
+                                                                <td class="{{ $vehicle->driver ? '' : 'text-center' }}">{{ $vehicle->driver ? $vehicle->driver->user->name : '-' }}</td>
+                                                                <td class="text-center">{{ $vehicle->trips->count() }}</td>
+                                                                <td class="text-center">{{ $vehicle->repairs->count() }}</td>
+                                                                <td class="text-center">{{ $vehicle->services->count() }}</td>
+                                                                <td class="text-center">{{ $vehicle->refuellings->count() }}</td>
+                                                                <td class="text-center">{{ $vehicle->trips->where('status', 'billed')->sum('total_price') }}</td>
+                                                                <td class="text-center">
+                                                                    {{
+                                                                        $vehicle->refuellings->where('status', 'billed')->sum('refuelling_cost') + $vehicle->repairs->where('status', 'billed')->sum('repair_cost') + $vehicle->services->where('status', 'billed')->sum('service_cost')
+                                                                    }}
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
                                                 </table>
                                             </div>
 
@@ -243,7 +262,7 @@
                         </div>
                     </div>
                     <div class="overlay"></div>
-                              @include('components.footer')
+                               @include('components.footer')
                 </div>
             </div>
             <!--end  vue page -->
