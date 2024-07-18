@@ -458,6 +458,8 @@ class RoleAndPermissionSeeder extends Seeder
 
         ];
 
+
+        
         $settingsPermissions = [
             'view settings',
             'create settings',
@@ -628,6 +630,17 @@ class RoleAndPermissionSeeder extends Seeder
             'manage vehicle maintenance',
         ];
 
+        $accountSettingPermissions = [
+            'view accounting setting',
+            'create accounting setting',
+            'edit accounting setting',
+            'delete accounting setting',
+            'update accounting setting',
+            'manage accounting setting',
+        ];
+
+
+       
         foreach($settingsPermissions as $permission) {
             PermissionGroup::firstOrCreate([
                 'permission_name' => $permission,
@@ -733,11 +746,20 @@ class RoleAndPermissionSeeder extends Seeder
             ]);
         }
 
+        foreach ($accountSettingPermissions as $permission) {
+            PermissionGroup::firstOrCreate([
+                'permission_name' => $permission,
+                'group_name' => 'account_setting'
+            ]);
+        }
+
 
 
         foreach ($permissions as $permission) {
             Permission::firstOrCreate(['name' => $permission]);
         }
+
+
 
         $admin = Role::where('name', 'admin')->first();
         $organisation = Role::where('name', 'organisation')->first();

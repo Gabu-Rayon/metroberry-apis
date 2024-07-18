@@ -14,7 +14,7 @@ class PermissionGroup extends Model
         'permission_name',
         'group_name'
     ];
-
+    
     public function permission () {
         return $this->belongsTo(Permission::class, 'permission_name', 'name');
     }

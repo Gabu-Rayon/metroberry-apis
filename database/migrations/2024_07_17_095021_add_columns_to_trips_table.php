@@ -12,10 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('trips', function (Blueprint $table) {
-            $table->decimal('vehicle_mileage', 8, 2)->nullable();
-            $table->decimal('engine_hours', 8, 2)->nullable();
-            $table->decimal('fuel_consumed', 8, 2)->nullable();
-            $table->decimal('idle_time', 8, 2)->nullable();
+            // $table->decimal('engine_hours', 8, 2)->nullable();
+            // $table->decimal('fuel_consumed', 8, 2)->nullable();
+            // $table->decimal('idle_time', 8, 2)->nullable();
         });
     }
 

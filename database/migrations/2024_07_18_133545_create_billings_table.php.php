@@ -30,7 +30,7 @@ return new class extends Migration {
             $table->string('payment_receipt');
             $table->string('reference');
             $table->string('qr_code_url')->nullable();
-            $table->string('created_by');
+            $table->unsignedBigInteger('created_by');
             $table->timestamps();
 
             // Foreign key constraints

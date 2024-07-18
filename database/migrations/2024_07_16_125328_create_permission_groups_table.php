@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('permission_groups', function (Blueprint $table) {
             $table->id();
             $table->string('permission_name');
-            $table->enum('group_name', [
+            $table->enum('group_name', [                
                 'settings',
                 'dashboard',
                 'employee',
@@ -30,6 +30,7 @@ return new class extends Migration
                 'trip',
                 'insurance_company',
                 'vehicle_maintenance',
+                'account_setting',
             ]);
 
             $table->unique(['permission_name', 'group_name']);
