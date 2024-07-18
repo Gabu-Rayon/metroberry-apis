@@ -221,7 +221,7 @@
                                                 <table class="table" id="driver-table">
                                                     <thead>
                                                         <tr>
-                                                            <th title="Name">Employee</th>
+                                                            <th title="Name">Driver</th>
                                                             <th title="Organisation">Vehicle</th>
                                                             <th title="Total Trips">Total Trips</th>
                                                             <th title="Cancelled Trips">Cancelled Trips</th>

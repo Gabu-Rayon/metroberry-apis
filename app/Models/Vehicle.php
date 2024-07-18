@@ -76,11 +76,21 @@ class Vehicle extends Model
 
     public function services()
     {
-        return $this->hasMany(VehicleService::class);
+        return $this->hasMany(MaintenanceService::class);
+    }
+
+    public function repairs()
+    {
+        return $this->hasMany(MaintenanceRepair::class);
     }
 
     public function insurance()
     {
         return $this->hasOne(VehicleInsurance::class);
+    }
+
+    public function refuellings()
+    {
+        return $this->hasMany(VehicleRefueling::class);
     }
 }
