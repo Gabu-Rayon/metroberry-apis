@@ -90,8 +90,8 @@ class VehicleInsuranceController extends Controller
                 'reminder' => 'required|numeric',
                 'deductible' => 'required|numeric',
                 'status' => 'required|numeric',
-                'remark' => 'required|string|max:255',
-                'policy_document' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'remark' => 'nullable|string',
+                'policy_document' => 'required|image|mimes:jpeg,png,jpg,gif,pdf|max:2048',
             ]);
 
             if ($validator->fails()) {

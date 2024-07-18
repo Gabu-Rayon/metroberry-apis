@@ -1,21 +1,22 @@
 <?php
 namespace App\Http\Controllers;
 
-use App\Models\BillingRates;
 use Exception;
+use Carbon\Carbon;
 use App\Models\Trip;
 use App\Models\Routes;
 use App\Models\Vehicle;
 use App\Models\Customer;
+use App\Models\TripPayment;
+use App\Models\BillingRates;
 use App\Models\Organisation;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Routing\RouteSignatureParameters;
-use Illuminate\Support\Facades\DB;
 
 class TripController extends Controller
 {
@@ -384,8 +385,9 @@ class TripController extends Controller
             ->get();
         return view('trips.cancelled', compact('cancelledTrips'));
     }
-    public function tripBilled(){
-        $billedTrips = Trip::where('status', 'billed')
+    public function tripBilled()
+    {
+        $billedTrips = Trip::whereIn('status', ['billed', 'paid', 'partially paid'])
             ->with('customer')
             ->with('vehicle')
             ->with('route')
@@ -396,6 +398,7 @@ class TripController extends Controller
         Log::info($billedTrips);
         return view('trips.billed', compact('billedTrips'));
     }
+
 
     public function completeTripForm($id){
         $trip = Trip::findOrFail($id);
@@ -612,4 +615,42 @@ class TripController extends Controller
             'rate_by_car_class' => $billingRate->rate_by_car_class,
         ]);
     }
+
+
+    public function tripPaymentCheckOut($id)
+    {
+        try {
+            // Fetch the trip details where the status is 'billed' or 'partially paid',' paid'
+            $trip = Trip::where('id', $id)
+                ->whereIn('status', ['billed','paid', 'partially paid'])
+                ->firstOrFail();
+
+            // Retrieve all payments for this trip
+            // $ThisTripPayments = TripPayment::where('trip_id', $id)->get();
+            $ThisTripPayments = TripPayment::where('trip_id', $id)->with('account')->get();
+            
+            Log::info('This trip payments data: ', $ThisTripPayments->toArray());
+
+            // Calculate the total paid amount from the trip_payments table
+            $totalPaid = TripPayment::where('trip_id', $id)->sum('total_amount');
+
+            // Calculate the remaining amount to be paid
+            $remainingAmount = $trip->total_price - $totalPaid;
+
+            // Return the view with the trip details and remaining amount
+            return view('trips.tripPaymentCheckout', compact('trip', 'remainingAmount','ThisTripPayments'));
+
+        } catch (Exception $e) {
+            Log::error('Error fetching trip details for payment checkout: ' . $e->getMessage());
+            return back()->with('error', 'An error occurred while fetching the trip details. Please try again.');
+        }
+    }
+
+
+    public function metroBerryInvoiceTemplate(){
+
+        return view('tripInvoiceTemplate.metro-berry-trip-invoice-template');
+     }
+
+
 }

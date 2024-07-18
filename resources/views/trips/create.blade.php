@@ -19,7 +19,6 @@
                         </select>
                     </div>
                 </div>
-
                 <div class="form-group row my-2">
                     <label for="preferred_route_id" class="col-sm-5 col-form-label">Route <i
                             class="text-danger">*</i></label>
@@ -37,7 +36,7 @@
                 <div class="form-group row my-2">
                     <label for="pickup_time" class="col-sm-5 col-form-label">Pickup Time <i class="text-danger">*</i></label>
                     <div class="col-sm-7">
-                        <select name="pickup_time" class="form-control" id="pickup_time" required>
+                        <!-- <select name="pickup_time" class="form-control" id="pickup_time" required>
                             <option value="">Select Pickup Time</option>
                             <option value="09:00">09:00 AM</option>
                             <option value="09:30">09:30 AM</option>
@@ -47,7 +46,9 @@
                             <option value="11:30">07:30 AM</option>
                             <option value="12:00">06:00 PM</option>
                             <option value="12:30">05:30 PM</option>
-                        </select>
+                        </select> -->
+
+                          <input name="pickup_time" class="form-control" type="time" id="pickup_time" required>
                     </div>
                 </div>
 

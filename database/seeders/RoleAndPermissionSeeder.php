@@ -61,6 +61,9 @@ class RoleAndPermissionSeeder extends Seeder
             'activate customer',
             'deactivate customer',
             'update customer',
+            'activate customer',
+            'deactivate customer',
+            
             'reset password',
             'edit password',
             'update password',
@@ -180,6 +183,7 @@ class RoleAndPermissionSeeder extends Seeder
             'manage trips',
             'complete trip',
             'cancel trip',
+            'bill trip',
 
             'view trip details',
             'create trip details',
@@ -443,6 +447,14 @@ class RoleAndPermissionSeeder extends Seeder
             'delete user interface',
             'update user interface',
             'manage user interface',
+
+
+            'view accounting setting',
+            'create accounting setting',
+            'edit accounting setting',
+            'delete accounting setting',
+            'update accounting setting',
+            'manage accounting setting',
 
         ];
 
@@ -877,6 +889,7 @@ class RoleAndPermissionSeeder extends Seeder
             'manage trips',
             'complete trip',
             'cancel trip',
+            'bill trip',
 
             'view trip details',
             'create trip details',
@@ -1129,6 +1142,13 @@ class RoleAndPermissionSeeder extends Seeder
             'delete user interface',
             'update user interface',
             'manage user interface',
+
+            'view accounting setting',
+            'create accounting setting',
+            'edit accounting setting',
+            'delete accounting setting',
+            'update accounting setting',
+            'manage accounting setting',
 
         ]);
 

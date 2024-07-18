@@ -1,17 +1,16 @@
 @extends('layouts.app')
 
-@section('title', 'Cancelled Trips')
+@section('title', 'Metro-Berry Account Settings')
 @section('content')
 
     <body class="fixed sidebar-mini">
-
         @include('components.preloader')
         <!-- react page -->
         <div id="app">
             <!-- Begin page -->
             <div class="wrapper">
                 <!-- start header -->
-                 @include('components.sidebar.sidebar')
+                @include('components.sidebar.sidebar')
                 <!-- end header -->
                 <div class="content-wrapper">
                     <div class="main-content">
@@ -23,12 +22,17 @@
                                     <div class="card-header">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div>
-                                                <h6 class="fs-17 fw-semi-bold mb-0">Cancelled Trips</h6>
+                                                <h6 class="fs-17 fw-semi-bold mb-0">Vehicle list</h6>
                                             </div>
                                             <div class="text-end">
                                                 <div class="actions">
                                                     <div class="accordion-header d-flex justify-content-end align-items-center"
                                                         id="flush-headingOne">
+                                                        <a class="btn btn-success btn-sm" href="javascript:void(0);"
+                                                            onclick="axiosModal('/accounting-setting/create')">
+                                                            <i class="fa fa-plus"></i>&nbsp;
+                                                            Add New Account
+                                                        </a>
 
                                                         <button type="button" class="btn btn-success btn-sm mx-2"
                                                             data-bs-toggle="collapse" data-bs-target="#flush-collapseOne"
@@ -219,54 +223,44 @@
 
                                         <div>
                                             <div class="table-responsive">
-                                                  <table class="table" id="driver-table">
+                                                <table class="table" id="driver-table">
                                                     <thead>
                                                         <tr>
-                                                            <th title="Name">Customer</th>
-                                                            <th title="Location">Driver</th>
-                                                            <th title="NoOfEmployee">Vehicle</th>
-                                                            <th title="Registration date">Route</th>
-                                                            <th title="Email">Time</th>
-                                                            <th title="Email">Date</th>
-                                                            <th title="Email">Pick Up</th>
-                                                            <th title="Email">Drop Off</th>
-                                                            <th title="Action">Action</th>
+                                                            <th title="Sl" width="30">SrNo</th>
+                                                            <th title="name">Name</th>
+                                                            <th title="Bank">Bank</th>
+                                                            <th title="Account Number">Account No</th>
+                                                            <th title="Current Balance">Current Balance</th>
+                                                            <th title="Contact">Contact
+                                                            </th>
+                                                            <th title="Bank branch">Branch
+                                                            </th>
+                                                            <th title="Action" width="150">Action</th>
                                                         </tr>
                                                     </thead>
-
-                                                    <tbody>
-                                                        @foreach ($cancelledTrips as $trip)
-                                                        <tr>
-                                                            <td class="text-center">{{ $trip->customer->user->name }}</td>
-                                                            <td class="text-center">
-                                                                @if ($trip->vehicle)
-                                                                    {{ $trip->vehicle->driver->user->name }}
-                                                                @else
-                                                                    <span class="btn btn-danger btn-sm">Unassigned</span>
-                                                                @endif
-                                                            </td>
-                                                            <td class="text-center">
-                                                                @if ($trip->vehicle)
-                                                                    <span class="btn btn-success btn-sm">{{ $trip->vehicle->plate_number }}</span>
-                                                                @else
-                                                                    <span class="btn btn-danger btn-sm">Unassigned</span>
-                                                                @endif
-                                                            </td>
-                                                            <td class="text-center">{{ $trip->route->name }}</td>
-                                                            <td class="text-center">{{ $trip->pick_up_time }}</td>
-                                                            <td class="text-center">
-                                                                {{ \Carbon\Carbon::parse($trip->trip_date)->isoFormat('MMMM Do, YYYY') }}
-                                                            </td>
-                                                            <td class="text-center">{{ $trip->pick_up_location }}</td>
-                                                            <td class="text-center">{{ $trip->drop_off_location }}</td>
-                                                            <td>
-                                                                <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="axiosModal('trip/{{ $trip->id }}/view')" title="View Details">
-                                                                    <i class="fas fa-eye"></i>
-                                                                </a>
-                                                            </td>
-                                                        </tr>
-                                                        @endforeach
-                                                    </tbody>
+                                                     <tbody>
+                @foreach ($settings as $key => $setting)
+                    <tr>
+                        <td>{{ $key + 1 }}</td>
+                        <td>{{ $setting->holder_name }}</td>
+                        <td>{{ $setting->bank_name }}</td>
+                        <td>{{ $setting->account_number }}</td>
+                        <td>{{ $setting->opening_balance }}</td>
+                        <td>{{ $setting->contact_number }}</td>
+                        <td>{{ $setting->bank_address }}</td>
+                        <td class="d-flex">
+                                                        <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="axiosModal('/accounting-setting/{{ $setting->id }}/edit')" title="Edit">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                        <span class='m-1'></span>                                                       
+                                                        <span class='m-1'></span>
+                                                        <a href="javascript:void(0);" class="btn btn-sm btn-danger" onclick="axiosModal('/accounting-setting/{{ $setting->id }}/edit')" title="Delete">
+                                                            <i class="fas fa-trash"></i>
+                                                        </a>
+                                                    </td>
+                    </tr>
+                @endforeach
+            </tbody>
                                                 </table>
                                             </div>
 

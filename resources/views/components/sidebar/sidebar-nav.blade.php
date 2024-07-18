@@ -190,5 +190,18 @@
             ])
         @endif
 
+
+
+
+         @if (\Auth::user()->can('manage settings'))
+            @include('components.sidebar.sidebar-dropdown', [
+                'title' => 'Accounting Setting',
+                'icon' => '<i class="fas fa-university"></i>',
+                'subitems' => array_filter([
+                    \Auth::user()->can('view accounting setting') ? ['label' => 'Bank Accounts', 'route' => route('metro.berry.account.setting')] : null,
+                ]),
+            ])
+        @endif
+
     </ul>
 </nav>

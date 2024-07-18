@@ -34,6 +34,17 @@
                             id="year" value="" required>
                     </div>
                 </div>
+                <div class="form-group row my-2">
+                    <label for="driver_id" class="col-sm-5 col-form-label">Select Vehicle Class</label>
+                    <div class="col-sm-7">
+                        <select class="form-control basic-single select2" name="vehicle_class" id="vehicle_class" tabindex="-1" aria-hidden="true">
+                            <option value="">Please Vehicle Class</option>
+                            @foreach ($vehicleClasses as $class)
+                                <option value="{{ $class->name }}">Class {{ $class->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
 
                 <div class="form-group row my-2">
                     <label for="plate_number" class="col-sm-5 col-form-label">Vehicle Number Plate <i

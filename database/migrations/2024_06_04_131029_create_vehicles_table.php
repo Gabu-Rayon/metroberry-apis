@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('plate_number')->unique();
             $table->string('color');
             $table->integer('seats');
-            $table->enum('class', ['A', 'B', 'C']);
+            $table->enum('class', ['A', 'B', 'C','D','E']);
             $table->string('fuel_type');
             $table->string('engine_size');
             $table->string('avatar')->nullable();
