@@ -1,10 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Billed Trips')
+@section('title', 'Metro-Berry Account Settings')
 @section('content')
 
     <body class="fixed sidebar-mini">
-
         @include('components.preloader')
         <!-- react page -->
         <div id="app">
@@ -20,6 +19,30 @@
                         <div class="body-content">
                             <div class="tile">
                                 <div class="card mb-4">
+                                    <div class="card-header">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h6 class="fs-17 fw-semi-bold mb-0">Vehicle list</h6>
+                                            </div>
+                                            <div class="text-end">
+                                                <div class="actions">
+                                                    <div class="accordion-header d-flex justify-content-end align-items-center"
+                                                        id="flush-headingOne">
+                                                        <a class="btn btn-success btn-sm" href="javascript:void(0);"
+                                                            onclick="axiosModal('/accounting-setting/create')">
+                                                            <i class="fa fa-plus"></i>&nbsp;
+                                                            Add New Account
+                                                        </a>
+
+                                                        <button type="button" class="btn btn-success btn-sm mx-2"
+                                                            data-bs-toggle="collapse" data-bs-target="#flush-collapseOne"
+                                                            aria-expanded="true" aria-controls="flush-collapseOne"> <i
+                                                                class="fas fa-filter"></i> Filter</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="card-body">
                                         <div class="row mb-3">
                                             <div class="col-12">
@@ -203,49 +226,46 @@
                                                 <table class="table" id="driver-table">
                                                     <thead>
                                                         <tr>
-                                                            <th title="Name">Customer</th>
-                                                            <th title="Billing Rate">Billing Rate</th>
-                                                            <th title="Total Price" width="150">Total Price</th>
-                                                            <th title="Billed At">Billed At</th>
-                                                            <th title="Trip Status">Status</th>
+                                                            <th title="Sl" width="30">SrNo</th>
+                                                            <th title="name">Name</th>
+                                                            <th title="Bank">Bank</th>
+                                                            <th title="Account Number">Account No</th>
+                                                            <th title="Current Balance">Current Balance</th>
+                                                            <th title="Contact">Contact
+                                                            </th>
+                                                            <th title="Bank branch">Branch
+                                                            </th>
                                                             <th title="Action" width="150">Action</th>
                                                         </tr>
                                                     </thead>
-
-                                                    <tbody>
-                                                        @foreach ($billedTrips as $trip)
-                                                            <tr>
-                                                                <td>{{ $trip->customer->user->name }}</td>
-                                                                <td>{{ $trip->billingRate->name }}</td>
-                                                                <td>{{ $trip->total_price }}</td>
-                                                                <td>{{ \Carbon\Carbon::parse($trip->billed_at)->format('F jS, Y \a\t h:i a') }}
-                                                                </td>
-                                                                <td>
-                                                                    @if ($trip->status == 'billed')
-                                                                        <span class="badge bg-success">Billed</span>
-                                                                    @elseif ($trip->status == 'paid')
-                                                                        <span class="badge bg-success">Paid</span>
-                                                                    @else
-                                                                        <span class="badge bg-danger">Partially Paid</span>
-                                                                    @endif
-                                                                </td>
-
-                                                                <td class="text-center">
-                                                                 <a href="{{ route('trip.payment.checkout', ['id' => $trip->id]) }}"
-                                                                            class="btn btn-primary btn-sm"
-                                                                            title="Proceed to pay for your trip.">
-                                                                            <small><i
-                                                                                    class="fa-solid fa-money-bill"></i></small>
-                                                                        </a>
-
-                                                                </td>
-                                                            </tr>
-                                                        @endforeach
-                                                    </tbody>
+                                                     <tbody>
+                @foreach ($settings as $key => $setting)
+                    <tr>
+                        <td>{{ $key + 1 }}</td>
+                        <td>{{ $setting->holder_name }}</td>
+                        <td>{{ $setting->bank_name }}</td>
+                        <td>{{ $setting->account_number }}</td>
+                        <td>{{ $setting->opening_balance }}</td>
+                        <td>{{ $setting->contact_number }}</td>
+                        <td>{{ $setting->bank_address }}</td>
+                        <td class="d-flex">
+                                                        <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="axiosModal('/accounting-setting/{{ $setting->id }}/edit')" title="Edit">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                        <span class='m-1'></span>                                                       
+                                                        <span class='m-1'></span>
+                                                        <a href="javascript:void(0);" class="btn btn-sm btn-danger" onclick="axiosModal('/accounting-setting/{{ $setting->id }}/edit')" title="Delete">
+                                                            <i class="fas fa-trash"></i>
+                                                        </a>
+                                                    </td>
+                    </tr>
+                @endforeach
+            </tbody>
                                                 </table>
                                             </div>
-                                            <div id="page-axios-data" data-table-id="#driver-table">
-                                            </div>
+
+
+                                            <div id="page-axios-data" data-table-id="#driver-table"></div>
                                         </div>
                                     </div>
                                 </div>

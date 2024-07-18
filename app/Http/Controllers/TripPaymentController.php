@@ -163,16 +163,31 @@ class TripPaymentController extends Controller
     public function billedTripRecievePayment($id)
     {
         try {
-            // Fetch the trip details where the status is 'billed'
-            $trip = Trip::where('id', $id)->where('status', 'billed')->firstOrFail();
+            Log::info('Trip billed to receive Payment');
+            Log::info($id);
+
+            // Fetch the trip details where the status is 'billed' or 'partially paid'
+            $trip = Trip::where('id', $id)
+                ->whereIn('status', ['billed', 'partially paid'])
+                ->firstOrFail();
+
+            // Calculate the total paid amount
+            $totalPaid = TripPayment::where('trip_id', $id)->sum('total_amount');
+
+            // Calculate the remaining amount
+            $remainingAmount = $trip->total_price - $totalPaid;
+
+            // Fetch all accounts
             $accounts = MetroBerryAccounts::all();
 
-            return view('trips.billed-recieve-payment', compact('trip','accounts'));
+            // Pass the necessary data to the view
+            return view('trips.billed-recieve-payment', compact('trip', 'remainingAmount', 'accounts'));
         } catch (\Exception $e) {
             Log::error('Error receiving payment for trip: ' . $e->getMessage());
             return back()->with('error', 'An error occurred while receiving the payment. Please try again.');
         }
     }
+
 
 
     public function billedTripRecievePaymentStore(Request $request, $id)
@@ -192,7 +207,7 @@ class TripPaymentController extends Controller
             $validator = Validator::make($data, [
                 'payment_date' => 'required|date',
                 'amount' => 'required|numeric',
-                'account_name' => 'required|string',
+                'account_id' => 'required|string',
                 'remark' => 'nullable|string',
                 'payment_receipt' => 'required|mimes:png,jpg,jpeg,pdf,doc,docx',
                 'reference' => 'required|string',
@@ -206,7 +221,6 @@ class TripPaymentController extends Controller
 
             $invoiceNo = $this->generateInvoiceNumber();
             Log::info('Invoice Generated No.');
-
             Log::info($invoiceNo);
 
             // Retrieve tripdetails based on $id
@@ -216,11 +230,12 @@ class TripPaymentController extends Controller
             $tripPayment->trip_id = $trip->id;
             $tripPayment->customer_id = $trip->customer_id;
             $tripPayment->invoice_no = $invoiceNo;
+            $tripPayment->account_id = $data['account_id'];
             $tripPayment->customer_tin = $trip->customer->user->customer_tin;
             $tripPayment->customer_name = $trip->customer->user->name;
-            $tripPayment->receipt_type_code = null; 
-            $tripPayment->payment_type_code = null; 
-            $tripPayment->confirm_date =null; 
+            $tripPayment->receipt_type_code = null;
+            $tripPayment->payment_type_code = null;
+            $tripPayment->confirm_date = null;
             $tripPayment->payment_date = $data['payment_date'];
             $tripPayment->total_taxable_amount = $trip->total_price;
             $tripPayment->total_tax_amount = null;
@@ -240,8 +255,16 @@ class TripPaymentController extends Controller
             }
 
             $tripPayment->save();
+            Log::info('Trip Payment Saved');
+            
+            if ($data['amount'] >= $trip->total_price) {
+                $trip->status = 'paid';
+            } else {
+                $trip->status = 'partially paid';
+            }
+            $trip->save();
 
-            return redirect()->route('trip.billed', ['id' => $id])
+            return redirect()->route('trip.payment.checkout', ['id' => $id])
                 ->with('success', 'Payment received && Added successfully.');
         } catch (\Exception $e) {
             Log::error('Error receiving payment for trip: ' . $e->getMessage());
@@ -320,5 +343,6 @@ class TripPaymentController extends Controller
             return back()->with('error', 'An error occurred while sending the TripPayment. Please try again.');
         }
     }
+     
 
 }

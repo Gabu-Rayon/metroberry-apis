@@ -15,6 +15,7 @@ class TripPayment extends Model
         'trip_id',
         'customer_id',
         'invoice_no',
+        'account_id',
         'customer_tin',
         'customer_name',
         'receipt_type_code',
@@ -27,7 +28,8 @@ class TripPayment extends Model
         'remark',
         'payment_receipt',
         'reference',
-        'qr_code_url'
+        'qr_code_url',
+        'created_by'
     ];
 
     public function trip()
@@ -39,5 +41,11 @@ class TripPayment extends Model
     {
         return $this->belongsTo(Customer::class);
     }
-       
+
+    public function account()
+    {
+        return $this->belongsTo(MetroBerryAccounts::class, 'account_id');
+    }
+
+
 }

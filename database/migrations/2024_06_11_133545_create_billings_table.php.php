@@ -15,6 +15,8 @@ return new class extends Migration {
             $table->unsignedBigInteger('trip_id');
             $table->unsignedBigInteger('customer_id');
             $table->string('invoice_no');
+            $table->string('account_id');
+            // reference the id in the accounts table 
             $table->string('customer_tin')->nullable();
             $table->string('customer_name');
             $table->string('receipt_type_code')->nullable();

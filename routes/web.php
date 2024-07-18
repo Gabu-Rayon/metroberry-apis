@@ -23,6 +23,7 @@ use App\Http\Controllers\DriversLicensesController;
 use App\Http\Controllers\InsuranceCompanyController;
 use App\Http\Controllers\VehicleInsuranceController;
 use App\Http\Controllers\VehicleRefuelingController;
+use App\Http\Controllers\AccountingSettingController;
 
 Route::get('dashboard', [DashboardController::class, 'index'])
     ->name('dashboard')
@@ -852,3 +853,48 @@ Route::put('/vehicle/insurance/{id}', [VehicleInsuranceController::class, 'updat
 Route::delete('/vehicle/insurance/{id}', [VehicleInsuranceController::class, 'destroy'])
     ->name('vehicle.insurance.destroy')
     ->middleware('can:delete vehicle insurance');
+
+/***
+ * Route for metro Berry Accounting Settings
+ * 
+ */
+
+Route::get('/metro-berry/accounting-setting', [AccountingSettingController::class, 'index'])
+    ->name('metro.berry.account.setting')
+    ->middleware('auth', 'can:view accounting setting');
+    
+Route::get('/accounting-setting/create', [AccountingSettingController::class, 'create'])
+    ->name('metro.berry.account.setting.create')
+    ->middleware('auth', 'can:create accounting setting');
+
+Route::post('/accounting-setting/store', [AccountingSettingController::class, 'store'])
+    ->name('metro.berry.account.setting.store')
+    ->middleware('auth', 'can:create accounting setting');
+
+Route::get('/accounting-setting/{id}/edit', [AccountingSettingController::class, 'edit'])
+    ->name('metro.berry.account.setting.edit')
+    ->middleware('auth', 'can:edit accounting setting');
+
+Route::put('/accounting-setting/{id}/update', [AccountingSettingController::class, 'update'])
+    ->name('metro.berry.account.setting.update')
+    ->middleware('auth', 'can:edit accounting setting');
+
+Route::get('/accounting-setting/{id}/delete', [AccountingSettingController::class, 'delete'])
+    ->name('metro.berry.account.setting.delete')
+    ->middleware('auth', 'can:delete accounting setting');
+Route::delete('/accounting-setting/{id}/destroy', [AccountingSettingController::class, 'destroy'])
+    ->name('metro.berry.account.setting.destroy')
+    ->middleware('auth', 'can:delete accounting setting');
+
+    /**
+     * For checking out the invoice blade template 
+     */
+
+
+Route::get('/admin/metro-Berry/Invoice', [TripController::class, 'metroBerryInvoiceTemplate'])
+    ->name('metro.berry.invoice.template')
+    ->middleware('can:edit trip');
+    
+
+
+    

@@ -14,17 +14,17 @@
                             id="payment_date" required>
                     </div>
                 </div>
-                <div class="form-group row my-2">
+                 <div class="form-group row my-2">
                     <label for="amount" class="col-sm-5 col-form-label">Amount <i class="text-danger">*</i></label>
                     <div class="col-sm-7">
                         <input name="amount" autocomplete="off" required class="form-control" type="number"
-                            placeholder="Amount" id="amount" value="{{ $trip->total_price }}">
+                            placeholder="Amount" id="amount" value="{{ $remainingAmount }}">
                     </div>
                 </div>
                 <div class="form-group row my-2">
                     <label for="account_name" class="col-sm-5 col-form-label">Account</label>
                     <div class="col-sm-7">
-                        <select class="form-control basic-single select2" name="account_name" id="account_name"
+                        <select class="form-control basic-single select2" name="account_id" id="account_id"
                             tabindex="-1" aria-hidden="true">
                             <option value="">Please Select Account</option>
                             @foreach ($accounts as $account)

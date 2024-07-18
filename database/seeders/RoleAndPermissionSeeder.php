@@ -445,6 +445,14 @@ class RoleAndPermissionSeeder extends Seeder
             'update user interface',
             'manage user interface',
 
+
+            'view accounting setting',
+            'create accounting setting',
+            'edit accounting setting',
+            'delete accounting setting',
+            'update accounting setting',
+            'manage accounting setting',
+
         ];
 
         $settingsPermissions = [
@@ -864,6 +872,13 @@ class RoleAndPermissionSeeder extends Seeder
             'delete user interface',
             'update user interface',
             'manage user interface',
+
+            'view accounting setting',
+            'create accounting setting',
+            'edit accounting setting',
+            'delete accounting setting',
+            'update accounting setting',
+            'manage accounting setting',
 
         ]);
 
