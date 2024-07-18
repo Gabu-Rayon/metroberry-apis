@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
@@ -12,6 +13,16 @@ class ReportController extends Controller
     public function index()
     {
         //
+    }
+
+    /**
+     * Display the employee report.
+     */
+
+    
+    public function employeeReport(){
+        $employees = Customer::with('trips')->get();
+        return view('report.employee', compact('employees'));
     }
 
     /**
@@ -60,17 +71,6 @@ class ReportController extends Controller
     public function destroy(string $id)
     {
         //
-    }
-
-
-    /**
-     * Display the employee report.
-     */
-    public function employeeReport()
-    {
-
-        // Return the view with the data
-        return view('report.employee');
     }
 
     /**

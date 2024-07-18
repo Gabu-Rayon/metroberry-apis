@@ -221,16 +221,27 @@
                                                 <table class="table" id="driver-table">
                                                     <thead>
                                                         <tr>
-                                                            <th title="Sl" width="30">Sl</th>
-                                                            <th title="Name">Name</th>
-                                                            <th title="Nid">Nid</th>
-                                                            <th title="Type">Type</th>
-                                                            <th title="Department">Department</th>
-                                                            <th title="Designation">Designation</th>
-                                                            <th title="Phone">Phone</th>
-                                                            <th title="Blood group">Blood group</th>
+                                                            <th title="Name">Employee</th>
+                                                            <th title="Organisation">Organisation</th>
+                                                            <th title="Total Trips">Total Trips</th>
+                                                            <th title="Cancelled Trips">Cancelled Trips</th>
+                                                            <th title="Billed Trips">Billed Trips</th>
+                                                            <th title="Total Income Generated">Total Income Generated</th>
                                                         </tr>
                                                     </thead>
+
+                                                    <tbody>
+                                                        @foreach ($employees as $employee)
+                                                            <tr>
+                                                                <td>{{ $employee->user->name }}</td>
+                                                                <td>{{ $employee->customer_organisation_code }}</td>
+                                                                <td>{{ $employee->trips->count() }}</td>
+                                                                <td>{{ $employee->trips->where('status', 'cancelled')->count() }}</td>
+                                                                <td>{{ $employee->trips->where('status', 'billed')->count() }}</td>
+                                                                <td>{{ $employee->trips->where('status', 'billed')->sum('total_price') }}</td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
                                                 </table>
                                             </div>
 

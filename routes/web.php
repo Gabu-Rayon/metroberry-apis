@@ -1045,13 +1045,16 @@ Route::get('/purchase/create', [PurchaseController::class, 'create'])
     ->name('purchase.create')
     ->middleware('auth', 'can:create purchase');
 /***
- * Reports routes 
- * 
- * 
+ * Reports routes
  */
-// Reports
+
+// Employee Reports
+
+// View Employee Reports
 Route::get('report/employee', [ReportController::class, 'employeeReport'])
     ->name('report.employee')
+
+
     ->middleware('auth', 'can:view report employee');
 Route::get('report/driver', [ReportController::class, 'driverReport'])
     ->name('report.driver')
