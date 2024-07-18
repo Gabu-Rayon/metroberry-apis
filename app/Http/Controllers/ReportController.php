@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\Driver;
 use Illuminate\Http\Request;
 
 class ReportController extends Controller
@@ -23,6 +24,11 @@ class ReportController extends Controller
     public function employeeReport(){
         $employees = Customer::with('trips')->get();
         return view('report.employee', compact('employees'));
+    }
+
+    public function driverReport(){
+        $drivers = Driver::with('vehicle')->get();
+        return view('report.driver', compact('drivers'));
     }
 
     /**
@@ -76,11 +82,6 @@ class ReportController extends Controller
     /**
      * Display the driver report.
      */
-    public function driverReport()
-    {
-        // Return the view with the data
-        return view('report.driver');
-    }
 
     /**
      * Display the vehicle report.

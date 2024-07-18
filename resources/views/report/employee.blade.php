@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Employee Report List')
+@section('title', 'Employees Report')
 @section('content')
 
     <body class="fixed sidebar-mini">
