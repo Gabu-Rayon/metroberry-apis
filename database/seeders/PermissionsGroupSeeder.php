@@ -40,7 +40,6 @@ class PermissionsGroupSeeder extends Seeder
                 'deactivate customer',
             ],
              'organisation'=> [
-
                     'manage organisations',
             'view organisations',
             'create organisation',
@@ -49,7 +48,6 @@ class PermissionsGroupSeeder extends Seeder
             'update organisation',
              ],
                 'drivers' => [
-
                         'manage drivers',
             'view drivers',
             'create driver',
@@ -104,7 +102,6 @@ class PermissionsGroupSeeder extends Seeder
             'create driver performance details',
                 ],
                 'vehicle' => [
-
                         'view vehicle',
             'create vehicle',
             'edit vehicle',
@@ -181,125 +178,7 @@ class PermissionsGroupSeeder extends Seeder
             'delete accounting setting',
             'update accounting setting',
             'manage accounting setting',
-                ],           
-             
-
-     
-
-
-       
-        // foreach($settingsPermissions as $permission) {
-        //     PermissionGroup::firstOrCreate([
-        //         'permission_name' => $permission,
-        //         'group_name' => 'settings'
-        //     ]);
-        // }
-
-        // foreach($dashboardPermissions as $permission) {
-        //     PermissionGroup::firstOrCreate([
-        //         'permission_name' => $permission,
-        //         'group_name' => 'dashboard'
-        //     ]);
-        // }
-
-        // foreach($organisationPermissions as $permission) {
-        //     PermissionGroup::firstOrCreate([
-        //         'permission_name' => $permission,
-        //         'group_name' => 'organisation'
-        //     ]);
-        // }
-
-        // foreach($employeePermissions as $permission) {
-        //     PermissionGroup::firstOrCreate([
-        //         'permission_name' => $permission,
-        //         'group_name' => 'employee'
-        //     ]);
-        // }
-
-        // foreach($driversPermissions as $permission) {
-        //     PermissionGroup::firstOrCreate([
-        //         'permission_name' => $permission,
-        //         'group_name' => 'drivers'
-        //     ]);
-        // }
-
-        // foreach($licensePermissions as $permission) {
-        //     PermissionGroup::firstOrCreate([
-        //         'permission_name' => $permission,
-        //         'group_name' => 'license'
-        //     ]);
-        // }
-
-        // foreach($psv_badgePermissions as $permission) {
-        //     PermissionGroup::firstOrCreate([
-        //         'permission_name' => $permission,
-        //         'group_name' => 'psv_badge'
-        //     ]);
-        // }
-
-        // foreach($driver_performancePermissions as $permission) {
-        //     PermissionGroup::firstOrCreate([
-        //         'permission_name' => $permission,
-        //         'group_name' => 'driver_performance'
-        //     ]);
-        // }
-
-        // foreach($vehiclePermissions as $permission) {
-        //     PermissionGroup::firstOrCreate([
-        //         'permission_name' => $permission,
-        //         'group_name' => 'vehicle'
-        //     ]);
-        // }
-
-        // foreach($vehicle_insurancePermissions as $permission) {
-        //     PermissionGroup::firstOrCreate([
-        //         'permission_name' => $permission,
-        //         'group_name' => 'vehicle_insurance'
-        //     ]);
-        // }
-
-        // foreach($routePermissions as $permission) {
-        //     PermissionGroup::firstOrCreate([
-        //         'permission_name' => $permission,
-        //         'group_name' => 'route'
-        //     ]);
-        // }
-
-        // foreach($route_locationPermissions as $permission) {
-        //     PermissionGroup::firstOrCreate([
-        //         'permission_name' => $permission,
-        //         'group_name' => 'route_location'
-        //     ]);
-        // }
-
-        // foreach($tripPermissions as $permission) {
-        //     PermissionGroup::firstOrCreate([
-        //         'permission_name' => $permission,
-        //         'group_name' => 'trip'
-        //     ]);
-        // }
-
-        // foreach($insurance_companyPermissions as $permission) {
-        //     PermissionGroup::firstOrCreate([
-        //         'permission_name' => $permission,
-        //         'group_name' => 'insurance_company'
-        //     ]);
-        // }
-
-        // foreach($vehicle_maintenancePermissions as $permission) {
-        //     PermissionGroup::firstOrCreate([
-        //         'permission_name' => $permission,
-        //         'group_name' => 'vehicle_maintenance'
-        //     ]);
-        // }
-
-        // foreach ($accountSettingPermissions as $permission) {
-        //     PermissionGroup::firstOrCreate([
-        //         'permission_name' => $permission,
-        //         'group_name' => 'account_setting'
-        //     ]);
-        // }
-
+                ],  
         ];
 
         foreach ($permissions as $groupName => $groupPermissions) {
