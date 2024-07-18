@@ -5,8 +5,10 @@ use App\Http\Controllers\TripController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RouteController;
 use App\Http\Controllers\DriverController;
+use App\Http\Controllers\RepairController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\PSVBadgeController;
@@ -16,24 +18,21 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\TripPaymentController;
+use App\Http\Controllers\VehiclePartController;
 use App\Http\Controllers\OrganisationController;
+use App\Http\Controllers\RepairCategoryController;
 use App\Http\Controllers\RouteLocationsController;
 use App\Http\Controllers\VehicleServiceController;
 use App\Http\Controllers\DriversLicensesController;
+use App\Http\Controllers\ServiceCategoryController;
 use App\Http\Controllers\InsuranceCompanyController;
-use App\Http\Controllers\MaintenanceRepairController;
-use App\Http\Controllers\MaintenanceServiceController;
-use App\Http\Controllers\RefuellingStationController;
-use App\Http\Controllers\RepairCategoryController;
-use App\Http\Controllers\RepairController;
 use App\Http\Controllers\VehicleInsuranceController;
 use App\Http\Controllers\VehicleRefuelingController;
-use App\Http\Controllers\RouteController;
-use App\Http\Controllers\RouteLocationsController;
-use App\Http\Controllers\ServiceCategoryController;
-use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\AccountingSettingController;
+use App\Http\Controllers\MaintenanceRepairController;
+use App\Http\Controllers\RefuellingStationController;
+use App\Http\Controllers\MaintenanceServiceController;
 use App\Http\Controllers\VehiclePartCategoryController;
-use App\Http\Controllers\VehiclePartController;
 
 Route::get('dashboard', [DashboardController::class, 'index'])
     ->name('dashboard')
@@ -474,8 +473,6 @@ Route::get('trip/{id}/bill', [TripController::class, 'bill'])
 Route::put('trips/{id}/bill', [TripController::class, 'billPut'])
     ->name('trips.bill')
     ->middleware('auth', 'can:bill trip');
-->name('trips.bill')
-->middleware('auth', 'can:edit trip');
 
 // Get Billing Rate
 
@@ -513,8 +510,6 @@ Route::get('billed/trip/{id}/send/invoice', [TripPaymentController::class, 'bill
     ->name('billed.trip.send.invoice')
     ->middleware('auth', 'can:bill trip');
 
-->name('trip.get-billing-rate')
-->middleware('auth', 'can:edit trip');
 
 /**
  * vehicle Routes
