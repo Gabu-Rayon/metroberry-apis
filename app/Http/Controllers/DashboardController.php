@@ -10,6 +10,7 @@ use App\Models\PSVBadge;
 use App\Models\Trip;
 use App\Models\Vehicle;
 use App\Models\VehicleInsurance;
+use App\Models\VehicleRefueling;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -33,6 +34,7 @@ class DashboardController extends Controller
         $tripsThisMonth = Trip::whereMonth('created_at', date('m'))->get();
         $services = MaintenanceService::where('service_status', 'billed')->get();
         $repairs = MaintenanceRepair::where('repair_status', 'billed')->get();
+        $refuelings = VehicleRefueling::where('status', 'billed')->get();
         $scheduledTrips = $tripsThisMonth->filter(function($trip) {
             return $trip->status == 'scheduled';
         });
@@ -53,6 +55,9 @@ class DashboardController extends Controller
         });
         $totalExpense += $repairs->sum(function ($repair) {
             return $repair->repair_cost;
+        });
+        $totalExpense += $refuelings->sum(function ($refueling) {
+            return $refueling->refuelling_cost;
         });
         $expiredInsurances = VehicleInsurance::where('insurance_date_of_expiry', '<', date('Y-m-d'))->get();
         $expiredInspectionCertificates = NTSAInspectionCertificate::where('ntsa_inspection_certificate_date_of_expiry', '<', date('Y-m-d'))->get();
