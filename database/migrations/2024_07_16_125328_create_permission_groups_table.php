@@ -14,7 +14,23 @@ return new class extends Migration
         Schema::create('permission_groups', function (Blueprint $table) {
             $table->id();
             $table->string('permission_name');
-            $table->enum('group_name', ['settings', 'user', 'report', 'purchase', 'maintenance']);
+            $table->enum('group_name', [
+                'settings',
+                'dashboard',
+                'employee',
+                'organisation',
+                'drivers',
+                'license',
+                'psv_badge',
+                'driver_performance',
+                'vehicle',
+                'vehicle_insurance',
+                'route',
+                'route_location',
+                'trip',
+                'insurance_company',
+                'vehicle_maintenance',
+            ]);
 
             $table->unique(['permission_name', 'group_name']);
             $table->foreign('permission_name')->references('name')->on('permissions')->onDelete('cascade');

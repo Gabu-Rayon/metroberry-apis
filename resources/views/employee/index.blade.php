@@ -142,18 +142,15 @@
                                                         @endif
                                                         <span class='m-1'></span>
                                                         @if (\Auth::user()->can('activate customer'))
-                                                        @if ($customer->status == 'active')
-                                                         @if (\Auth::user()->can('activate customer'))
-                                                            <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="axiosModal('employee/{{ $customer->id }}/deactivate')" title="Dectivate Driver">
-                                                                <i class="fas fa-toggle-on"></i>
-                                                            </a> 
+                                                            @if ($customer->status == 'active')
+                                                                <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="axiosModal('employee/{{ $customer->id }}/deactivate')" title="Dectivate Driver">
+                                                                    <i class="fas fa-toggle-on"></i>
+                                                                </a> 
+                                                            @else
+                                                                <a href="javascript:void(0);" class="btn btn-sm btn-secondary" onclick="axiosModal('employee/{{ $customer->id }}/activate')" title="Activate Driver">
+                                                                    <i class="fas fa-toggle-off"></i>
+                                                                </a>                                                        
                                                             @endif
-                                                        @else
-                                                         @if (\Auth::user()->can('deactivate customer'))
-                                                            <a href="javascript:void(0);" class="btn btn-sm btn-secondary" onclick="axiosModal('employee/{{ $customer->id }}/activate')" title="Activate Driver">
-                                                                <i class="fas fa-toggle-off"></i>
-                                                            </a>                                                        
-                                                        @endif
                                                         @endif
                                                         <span class='m-1'></span>
                                                         @endif

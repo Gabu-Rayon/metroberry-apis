@@ -15,6 +15,10 @@ class DatabaseSeeder extends Seeder
         $this->call([RoleAndPermissionSeeder::class]);
         // $this->call([UserSeeder::class]);
         // $this->call([BillingRatesSeeder::class]);
-        // $this->call([VehicleClassSeeder::class]);
+        $this->call([ServiceTypeSeeder::class]);
+        $this->call([ServiceTypeCategorySeeder::class]);
+        $this->call([RepairSeeder::class]);
+        $this->call([VehiclePartCategorySeeder::class]);
+        $this->call([VehiclePartSeeder::class]);
     }
 }
