@@ -873,19 +873,70 @@ Route::get('/driver/license', [DriversLicensesController::class, 'index'])
  * 
  * Manage Vehicle Refueling
  */
+
+// View Vehicle Refueling
 Route::get('refueling', [VehicleRefuelingController::class, 'index'])
-    ->name('vehicle.refueling.index')
+    ->name('refueling.index')
     ->middleware('auth', 'can:view vehicle refueling');
 
+// Create Vehicle Refueling
 Route::get('/refueling/create', [VehicleRefuelingController::class, 'create'])
-    ->name('vehicle.refueling.create')
+    ->name('refueling.create')
     ->middleware('auth', 'can:create vehicle refueling');
-Route::get('/refueling/requisition', [VehicleRefuelingController::class, 'requisition'])
-    ->name('vehicle.refueling.requisition')
+
+Route::post('/refueling/create', [VehicleRefuelingController::class, 'store'])
+    ->name('refueling.create')
     ->middleware('auth', 'can:create vehicle refueling');
-Route::get('/refueling/type', [VehicleRefuelingController::class, 'type'])
-    ->name('vehicle.refuel.type')
-    ->middleware('auth', 'can:create vehicle refueling');
+
+// Edit Vehicle Refueling
+Route::get('/refueling/{id}/edit', [VehicleRefuelingController::class, 'edit'])
+    ->name('refueling.edit')
+    ->middleware('auth', 'can:edit vehicle refueling');
+
+Route::put('/refueling/{id}/edit', [VehicleRefuelingController::class, 'update'])
+    ->name('refueling.edit')
+    ->middleware('auth', 'can:edit vehicle refueling');
+
+Route::get('/refueling/{id}/approve', [VehicleRefuelingController::class, 'approveForm'])
+    ->name('refueling.approve')
+    ->middleware('auth', 'can:edit vehicle refueling');
+
+Route::put('/refueling/{id}/approve', [VehicleRefuelingController::class, 'approve'])
+    ->name('refueling.approve')
+    ->middleware('auth', 'can:edit vehicle refueling');
+
+Route::get('/refueling/{id}/reject', [VehicleRefuelingController::class, 'rejectForm'])
+    ->name('refueling.reject')
+    ->middleware('auth', 'can:edit vehicle refueling');
+
+Route::put('/refueling/{id}/reject', [VehicleRefuelingController::class, 'reject'])
+    ->name('refueling.reject')
+    ->middleware('auth', 'can:edit vehicle refueling');
+
+Route::get('/refueling/{id}/bill', [VehicleRefuelingController::class, 'billForm'])
+    ->name('refueling.bill')
+    ->middleware('auth', 'can:edit vehicle refueling');
+
+Route::put('/refueling/{id}/bill', [VehicleRefuelingController::class, 'bill'])
+    ->name('refueling.bill')
+    ->middleware('auth', 'can:edit vehicle refueling');
+
+Route::get('/refueling/{id}/redo', [VehicleRefuelingController::class, 'redoForm'])
+    ->name('refueling.redo-refuel')
+    ->middleware('auth', 'can:edit vehicle refueling');
+
+Route::put('/refueling/{id}/redo', [VehicleRefuelingController::class, 'redo'])
+    ->name('refueling.redo-refuel')
+    ->middleware('auth', 'can:edit vehicle refueling');
+
+// Delete Vehicle Refueling
+Route::get('/refueling/{id}/delete', [VehicleRefuelingController::class, 'delete'])
+    ->name('refueling.delete')
+    ->middleware('auth', 'can:delete vehicle refueling');
+
+Route::delete('/refueling/{id}/delete', [VehicleRefuelingController::class, 'destroy'])
+    ->name('refueling.delete')
+    ->middleware('auth', 'can:delete vehicle refueling');
 
 /***
  * 
