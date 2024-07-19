@@ -39,13 +39,12 @@
                                 <div class="card rounded-0">
                                     <div class="card-header card_header px-3">
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <h6 class="fs-16 fw-bold mb-0">Last 12 month expense report</h6>
+                                            <h6 class="fs-16 fw-bold mb-0">Annual Expense Report</h6>
                                         </div>
                                     </div>
                                     <div class="card-body p-0 px-2">
-                                        <div id="doughnut_chart"
-                                            data-chat-data='[{"category":"Fuel","value":1554840.1399999997},{"category":"Maintenance","value":1494117.919999998},{"category":"Others","value":1622668.3900000013}]'
-                                            data-name='Expense report'></div>
+                                        {!! $expensePieChart->container() !!}
+                                        {!! $expensePieChart->script() !!}
                                     </div>
                                 </div>
                             </div>
@@ -56,15 +55,14 @@
                                 <div class="card rounded-0">
                                     <div class="card-header card_header px-3">
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <h6 class="fs-16 fw-bold mb-0">Last 12 months Trips Report
+                                            <h6 class="fs-16 fw-bold mb-0">Annual Trips Report
                                             </h6>
                                             </h6>
                                         </div>
                                     </div>
                                     <div class="card-body w-100 p-0 px-2">
-                                        <div id="venn_diagram"
-                                            data-chat-data='{"pending":{"name":"Pending","value":2567,"color":"#dfd7d7"},"approved":{"name":"Approved","value":2570,"color":"#17c653"},"rejected":{"name":"Rejected","value":2547,"color":"#dc3545e0"}}'
-                                            data-name='Vehicle requisition report'></div>
+                                        {!! $venDiagram->container() !!}
+                                        {!! $venDiagram->script() !!}
                                     </div>
 
                                 </div>

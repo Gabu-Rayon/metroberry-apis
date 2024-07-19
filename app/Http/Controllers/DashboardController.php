@@ -96,7 +96,45 @@ class DashboardController extends Controller
         $expiredInsurances = VehicleInsurance::where('insurance_date_of_expiry', '<', date('Y-m-d'))->get();
         $expiredInspectionCertificates = NTSAInspectionCertificate::where('ntsa_inspection_certificate_date_of_expiry', '<', date('Y-m-d'))->get();
         $expiredLicenses = DriversLicenses::where('driving_license_date_of_expiry', '<', date('Y-m-d'))->get();
-        $expiredPSVBadges = PSVBadge::where('psv_badge_date_of_expiry', '<', date('Y-m-d'))->get();      
+        $expiredPSVBadges = PSVBadge::where('psv_badge_date_of_expiry', '<', date('Y-m-d'))->get();
+
+        $fuelExpensesSum = VehicleRefueling::where('status', 'billed')->sum('refuelling_cost');
+        $serviceExpensesSum = MaintenanceService::where('service_status', 'billed')->sum('service_cost');
+        $repairExpensesSum = MaintenanceRepair::where('repair_status', 'billed')->sum('repair_cost');
+        $totalExpenses = $fuelExpensesSum + $serviceExpensesSum + $repairExpensesSum;
+
+        $expensePieChart = new MaintenanceCostReport;
+        $expensePieChart->labels(['Fuel', 'Service', 'Repair']);
+        $expensePieChart->dataset('Expenses', 'doughnut', [$fuelExpensesSum, $serviceExpensesSum, $repairExpensesSum])->options([
+            'fill' => 'true',
+            'backgroundColor' => ['#198754', '#0d6efd', '#dc3545'],
+            'scales' => [
+                'y' => [
+                    'display' => false,
+                ],
+                'x' => [
+                    'display' => false,
+                ]
+            ],
+        ]);
+
+        $cancelledTripsCount = $cancelledTrips->count();
+$completedTripsCount = $completedTrips->count();
+$scheduledTripsCount = $scheduledTrips->count();
+$billedTripsCount = $billedTrips->count();
+
+$venDiagram = new MaintenanceCostReport;
+
+$venDiagram->labels(['Scheduled', 'Completed', 'Cancelled', 'Billed']);
+
+$venDiagram->dataset('Trips', 'pie', [
+    $scheduledTripsCount,
+    $completedTripsCount,
+    $cancelledTripsCount,
+    $billedTripsCount,
+])->options([
+    'backgroundColor' => ['#198754', '#0d6efd', '#dc3545', '#ffc107'],
+]);
 
         return view('dashboard', compact(
             'activeVehicles',
@@ -112,7 +150,9 @@ class DashboardController extends Controller
             'expiredPSVBadges',
             'totalIncome',
             'totalExpense',
-            'maintenanceCostReport'
+            'maintenanceCostReport',
+            'expensePieChart',
+            'venDiagram',
         ));
     }
 
