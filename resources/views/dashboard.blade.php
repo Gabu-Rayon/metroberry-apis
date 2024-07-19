@@ -25,14 +25,13 @@
                                 <div class="card rounded-0">
                                     <div class="card-header card_header px-3">
                                         <div class="d-lg-flex justify-content-between align-items-center">
-                                            <h6 class="fs-16 fw-bold mb-0">Last 12 month maintenance cost report</h6>
+                                            <h6 class="fs-16 fw-bold mb-0">Annual Maintenance Cost Report</h6>
                                             </h6>
                                         </div>
                                     </div>
                                     <div class="card-body px-2">
-                                        <div id="line_chart"
-                                            data-chat-data='[{"label":"Sep","value":58385,"color":"#000000"},{"label":"Oct","value":41822,"color":"#FF5733"},{"label":"Nov","value":2169655,"color":"#000000"},{"label":"Dec","value":40049,"color":"#FF5733"},{"label":"Jan","value":48858,"color":"#000000"},{"label":"Feb","value":35518,"color":"#FF5733"},{"label":"Mar","value":49522,"color":"#000000"},{"label":"Apr","value":37414,"color":"#FF5733"},{"label":"May","value":241839,"color":"#000000"},{"label":"Jun","value":11001,"color":"#FF5733"},{"label":"Jul","value":0,"color":"#000000"},{"label":"Jul","value":0,"color":"#FF5733"}]'
-                                            data-name='Maintenance cost'></div>
+                                        {!! $maintenanceCostReport->container() !!}
+                                        {!! $maintenanceCostReport->script() !!}
                                     </div>
                                 </div>
                             </div>

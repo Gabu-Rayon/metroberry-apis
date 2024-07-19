@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Charts\MaintenanceCostReport;
 use App\Models\DriversLicenses;
 use App\Models\MaintenanceRepair;
 use App\Models\MaintenanceService;
@@ -11,6 +12,7 @@ use App\Models\Trip;
 use App\Models\Vehicle;
 use App\Models\VehicleInsurance;
 use App\Models\VehicleRefueling;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -59,6 +61,38 @@ class DashboardController extends Controller
         $totalExpense += $refuelings->sum(function ($refueling) {
             return $refueling->refuelling_cost;
         });
+        $maintenanceExpenses = $services->map(function($item) {
+            return [
+                'cost' => $item->service_cost,
+                'date' => $item->service_date,
+            ];
+        })->merge($repairs->map(function($item) {
+            return [
+                'cost' => $item->repair_cost,
+                'date' => $item->repair_date,
+            ];
+        }));
+        
+        $monthlyCosts = array_fill(0, 12, 0);
+        
+        // Iterate over maintenance expenses and accumulate costs for each month
+        $maintenanceExpenses->each(function($item) use (&$monthlyCosts) {
+            $month = (int) Carbon::parse($item['date'])->format('m') - 1;
+            $monthlyCosts[$month] += (float) $item['cost'];
+        });
+        $backgroundColors = [];
+        for ($i = 0; $i < 12; $i++) {
+            $backgroundColors[] = $i % 2 == 0 ? '#198754' : '#ffffff';
+        }
+    
+        $maintenanceCostReport = new MaintenanceCostReport;
+        $maintenanceCostReport->labels(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']);
+        $maintenanceCostReport->dataset('Cost', 'bar', $monthlyCosts)->options([
+            'fill' => 'true',
+            'backgroundColor' => $backgroundColors,
+        ]);
+        
+
         $expiredInsurances = VehicleInsurance::where('insurance_date_of_expiry', '<', date('Y-m-d'))->get();
         $expiredInspectionCertificates = NTSAInspectionCertificate::where('ntsa_inspection_certificate_date_of_expiry', '<', date('Y-m-d'))->get();
         $expiredLicenses = DriversLicenses::where('driving_license_date_of_expiry', '<', date('Y-m-d'))->get();
@@ -77,7 +111,8 @@ class DashboardController extends Controller
             'expiredLicenses',
             'expiredPSVBadges',
             'totalIncome',
-            'totalExpense'
+            'totalExpense',
+            'maintenanceCostReport'
         ));
     }
 
