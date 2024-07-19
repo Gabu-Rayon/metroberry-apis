@@ -1305,15 +1305,18 @@ Route::put('/accounting-setting/{id}/update', [AccountingSettingController::clas
 Route::get('/accounting-setting/{id}/delete', [AccountingSettingController::class, 'delete'])
     ->name('metro.berry.account.setting.delete')
     ->middleware('auth', 'can:delete accounting setting');
+    
 Route::delete('/accounting-setting/{id}/destroy', [AccountingSettingController::class, 'destroy'])
-    ->name('metro.berry.account.setting.destroy')
+    ->name('metro.berry.account.setting.destroy')    
     ->middleware('auth', 'can:delete accounting setting');
 
     /**
+     * 
      * For checking out the invoice blade template 
+     * 
+     * 
+     * 
      */
-
-
 Route::get('/admin/metro-Berry/Invoice', [TripController::class, 'metroBerryInvoiceTemplate'])
     ->name('metro.berry.invoice.template')
     ->middleware('can:edit trip');
