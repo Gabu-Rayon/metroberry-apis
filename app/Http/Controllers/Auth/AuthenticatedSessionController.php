@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
 class AuthenticatedSessionController extends Controller
@@ -27,6 +28,42 @@ class AuthenticatedSessionController extends Controller
     {
         try {
             $request->authenticate();
+
+            $user = $request->user();
+
+            if ($user->role == 'fuelling_station') {
+                if ($user->fuelling_station->status == 'inactive') {
+                    Auth::guard('web')->logout();
+
+                    $request->session()->invalidate();
+
+                    $request->session()->regenerateToken();
+
+                    return back()->with('error', 'Your Account is inactive. Please contact the Administrator.');
+                }
+            }
+
+            if ($user->role == 'organisation') {
+                if ($user->organisation->status == 'inactive') {
+                    Auth::guard('web')->logout();
+
+                    $request->session()->invalidate();
+
+                    $request->session()->regenerateToken();
+
+                    return back()->with('error', 'Your Account is inactive. Please contact the Administrator.');
+                }
+            }
+
+            if ($user->role == 'customer' || $user->role == 'driver') {
+                Auth::guard('web')->logout();
+
+                $request->session()->invalidate();
+
+                $request->session()->regenerateToken();
+
+                return back()->with('error', 'Kindly log in via the app');
+            }
 
             $request->session()->regenerate();
 

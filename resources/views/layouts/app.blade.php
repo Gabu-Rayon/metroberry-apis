@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     @csrf
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>
     <meta name="base-url"content="width=device-width, initial-scale=1" />
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible"content="IE=edge" />

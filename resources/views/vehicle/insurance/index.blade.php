@@ -23,7 +23,7 @@
                                     <div class="card-header">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div>
-                                                <h6 class="fs-17 fw-semi-bold mb-0">Insurances</h6>
+                                                <h6 class="fs-17 fw-semi-bold mb-0">Vehicle Insurances</h6>
                                             </div>
                                             <div class="text-end">
                                                 <div class="actions">
@@ -45,6 +45,8 @@
                                                             <th title="Name">Vehicle</th>
                                                             <th title="Type">Insurance Company</th>
                                                             <th title="Type">Policy Number</th>
+                                                            <th title="Type">Charges</th>
+                                                            <th title="Type">Status</th>
                                                             <th title="Nid">Issue Date</th>
                                                             <th title="Nid">Expiry Date</th>
                                                             <th title="Action" width="80">Action</th>
@@ -56,6 +58,14 @@
                                                         <td>{{ $insurance->vehicle->model }}<br>({{ $insurance->vehicle->plate_number }})</td>
                                                         <td>{{ $insurance->insuranceCompany->name }}</td>
                                                         <td>{{ $insurance->insurance_policy_no }}</td>
+                                                         <td>kes.{{ $insurance->charges_payable }}</td>
+                                                            <td>
+                                                        @if ($insurance->status == 1)
+                                                        <span class="badge bg-success">Active</span>
+                                                        @else
+                                                        <span class="badge bg-danger">Inactive</span>
+                                                        @endif
+                                                    </td>
                                                         <td>{{ $insurance->insurance_date_of_issue }}</td>
                                                         <td>{{ $insurance->insurance_date_of_expiry }}</td>
                                                         <td class="d-flex">
@@ -67,7 +77,7 @@
                                                             <span class="m-1"></span>
                                                             <a href="javascript:void(0);"
                                                                 class="btn btn-sm btn-danger"
-                                                                onclick="deleteVehicle({{ $insurance->id }})">
+                                                                onclick="axiosModal('/vehicle/insurance/{{ $insurance->id }}/')">
                                                                 <i class="fas fa-trash"></i>
                                                             </a>
                                                         </td>
