@@ -115,23 +115,7 @@
                         </div>
                     </div>
                     <div class="overlay"></div>
-                    <footer class="footer-content border-top">
-                        <div class="footer-text">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="copy">
-                                        © 2024 <a class="text-capitalize text-black" href="" target="_blank">Vms
-                                            laravel</a>.
-                                    </div>
-                                </div>
-                                <div class="col-md-6 text-end">
-                                    <div class="credit">Designed and developed by: <a class="text-black text-capitalize"
-                                            href="https://www.bdtask.com/" target="_blank">Bdtask<a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </footer>
+                     @include('components.footer')
                 </div>
             </div>
             <!--end  vue page -->

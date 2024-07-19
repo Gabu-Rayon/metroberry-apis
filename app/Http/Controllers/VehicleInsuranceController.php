@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use App\Models\InsuranceRecurringPeriod;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class VehicleInsuranceController extends Controller
 {
@@ -83,15 +84,15 @@ class VehicleInsuranceController extends Controller
                 'insurance_company_id' => 'required|numeric',
                 'insurance_policy_no' => 'required|numeric',
                 'insurance_date_of_issue' => 'required|date',
-                'insurance_date_of_expiry' => 'required|date',
+                'insurance_date_of_expiry' => 'required|date|after:insurance_date_of_issue',
                 'charges_payable' => 'required|numeric',
                 'recurring_period_id' => 'required|numeric',
                 'recurring_date' => 'required|date',
                 'reminder' => 'required|numeric',
                 'deductible' => 'required|numeric',
                 'status' => 'required|numeric',
-                'remark' => 'nullable|string',
-                'policy_document' => 'required|image|mimes:jpeg,png,jpg,gif,pdf|max:2048',
+                'remark' => 'nullable|string|max:500',
+                'policy_document' => 'required|file|mimes:pdf|max:2048',
             ]);
 
             if ($validator->fails()) {
@@ -124,7 +125,7 @@ class VehicleInsuranceController extends Controller
             $vehicleInsurance->status = $request->status;
             $vehicleInsurance->remark = $request->remark;
             $vehicleInsurance->policy_document = $policyDocumnet;
-            $vehicleInsurance->created_by = 1; 
+            $vehicleInsurance->created_by = Auth::user()->id;
 
             $vehicleInsurance->save();
 
@@ -155,7 +156,7 @@ class VehicleInsuranceController extends Controller
             $vehicleInsurance = VehicleInsurance::findOrFail($id);
             $insuranceCompanies = InsuranceCompany::where('status', 1)->get();
             $recurringPeriods = InsuranceRecurringPeriod::all();
-            $vehicles = Vehicle::where('status', 'active')->get();
+            $vehicles = Vehicle::all();
 
             return view('vehicle.insurance.edit', compact('vehicleInsurance', 'insuranceCompanies', 'recurringPeriods', 'vehicles'));
         } catch (Exception $e) {
@@ -180,14 +181,14 @@ class VehicleInsuranceController extends Controller
             'insurance_company_id' => 'required|exists:insurance_companies,id',
             'insurance_policy_no' => 'required|string|max:255',
             'insurance_date_of_issue' => 'nullable|date',
-            'insurance_date_of_expiry' => 'nullable|date',
+            'insurance_date_of_expiry' => 'nullable|date|after:insurance_date_of_issue',
             'charges_payable' => 'required|numeric',
             'recurring_period_id' => 'required|exists:insurance_recurring_periods,id',
             'recurring_date' => 'nullable|date',
             'reminder' => 'required|boolean',
             'deductible' => 'required|numeric',
             'status' => 'required|boolean',
-            'remark' => 'nullable|string|max:255',
+            'remark' => 'nullable|string|max:500',
             'policy_document' => 'nullable|file|mimes:jpeg,png,pdf|max:2048'
         ]);
 
@@ -243,8 +244,49 @@ class VehicleInsuranceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(VehicleInsurance $vehicleInsurance)
+    /**
+     * Show the form for deleting the specified resource.
+     */
+    public function delete($id)
     {
-        //
+        try {
+            $insurance = VehicleInsurance::findOrFail($id);
+            return view('vehicle.insurance.delete', compact('insurance'));
+        } catch (Exception $e) {
+            Log::error('Error fetching vehicle insurance for delete: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'An error occurred while fetching the insurance details. Please try again.');
+        }
     }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        try {
+            $insurance = VehicleInsurance::find($id);
+
+            if (!$insurance) {
+                return redirect()->back()->with('error', 'Vehicle insurance not found');
+            }
+
+            // Delete old policy document if it exists
+            if ($insurance->policy_document) {
+                Storage::disk('public')->delete($insurance->policy_document);
+            }
+
+            DB::beginTransaction();
+
+            $insurance->delete();
+
+            DB::commit();
+
+            return redirect()->route('vehicle.insurance.index')->with('success', 'Vehicle Insurance Details deleted successfully!');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('DELETE Vehicle Insurance Details ERROR: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'An error occurred while deleting Vehicle Insurance Details');
+        }
+    }
+
 }
