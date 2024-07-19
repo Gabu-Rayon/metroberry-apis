@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\Driver;
+use App\Models\MaintenanceService;
+use App\Models\Trip;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
 
@@ -35,6 +37,16 @@ class ReportController extends Controller
     public function vehicleReport(){
         $vehicles = Vehicle::with('driver', 'repairs')->get();
         return view('report.vehicle', compact('vehicles'));
+    }
+
+    public function tripsReport(){
+        $trips = Trip::with('customer', 'vehicle')->get();
+        return view('report.trip', compact('trips'));
+    }
+
+    public function serviceReport(){
+        $services = MaintenanceService::with('vehicle')->get();
+        return view('report.service', compact('services'));
     }
 
     /**

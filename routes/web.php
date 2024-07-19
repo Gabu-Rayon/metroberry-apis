@@ -1082,22 +1082,35 @@ Route::get('/purchase/create', [PurchaseController::class, 'create'])
  */
 
 // Employee Reports
-
-// View Employee Reports
 Route::get('report/employee', [ReportController::class, 'employeeReport'])
     ->name('report.employee')
-
-
     ->middleware('auth', 'can:view report employee');
+
+// Driver Reports
 Route::get('report/driver', [ReportController::class, 'driverReport'])
     ->name('report.driver')
     ->middleware('auth', 'can:view report driver');
+
+// Vehicle Reports
 Route::get('report/vehicle', [ReportController::class, 'vehicleReport'])
     ->name('report.vehicle')
     ->middleware('auth', 'can:view report vehicle');
-Route::get('report/admin/vehicle/requisition', [ReportController::class, 'vehicleRequisitionReport'])
-    ->name('report.vehicle.requisition')
+
+// Trips Reports
+Route::get('report/trips', [ReportController::class, 'tripsReport'])
+    ->name('report.trips')
     ->middleware('auth', 'can:view report vehicle requisition');
+
+// Service Reports
+Route::get('report/service', [ReportController::class, 'serviceReport'])
+    ->name('report.service')
+    ->middleware('auth', 'can:view report vehicle requisition');
+
+// Repairs Reports
+Route::get('report/repairs', [ReportController::class, 'repairsReport'])
+    ->name('report.repairs')
+    ->middleware('auth', 'can:view report vehicle requisition');
+
 Route::get('report/admin/pickdrop/requisition', [ReportController::class, 'pickDropRequisitionReport'])
     ->name('report.pickdrop.requisition')
     ->middleware('auth', 'can:view report pick drop requisition');

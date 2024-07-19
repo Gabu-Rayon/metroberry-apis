@@ -66,7 +66,7 @@ class MaintenanceServiceController extends Controller
 
             DB::commit();
 
-            return redirect()->route('maintenance.services')->with('success', 'Maintenance service created successfully');
+            return redirect()->route('maintenance.service')->with('success', 'Maintenance service created successfully');
         } catch (Exception $e) {
             DB::rollBack();
             Log::error('STORE MAINTENANCE SERVICE ERROR');
