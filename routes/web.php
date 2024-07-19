@@ -1111,6 +1111,11 @@ Route::get('report/repairs', [ReportController::class, 'repairsReport'])
     ->name('report.repairs')
     ->middleware('auth', 'can:view report vehicle requisition');
 
+// Refueling Reports
+Route::get('report/refueling', [ReportController::class, 'fuelReport'])
+    ->name('report.refueling')
+    ->middleware('auth', 'can:view report vehicle requisition');
+
 Route::get('report/admin/pickdrop/requisition', [ReportController::class, 'pickDropRequisitionReport'])
     ->name('report.pickdrop.requisition')
     ->middleware('auth', 'can:view report pick drop requisition');

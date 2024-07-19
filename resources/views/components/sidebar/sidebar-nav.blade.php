@@ -135,6 +135,7 @@
                     \Auth::user()->can('view report vehicle') ? ['label' => 'Trips Report', 'route' => route('report.trips')] : null,
                     \Auth::user()->can('view report maintenance') ? ['label' => 'Service Report', 'route' => route('report.service')] : null,
                     \Auth::user()->can('view report maintenance') ? ['label' => 'Repairs Report', 'route' => route('report.repairs')] : null,
+                    \Auth::user()->can('view report maintenance') ? ['label' => 'Fueling Report', 'route' => route('report.refueling')] : null,
                 ]),
             ])
         @endif
