@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\MetroBerryAccounts;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class AccountingSettingController extends Controller
 {
@@ -35,9 +37,8 @@ class AccountingSettingController extends Controller
     public function store(Request $request)
     {
         try {
-
             $data = $request->all();
-            $creator = Auth::user();
+            $creator = Auth::user()->id;
 
             $validator = Validator::make($data, [
                 'holder_name' => 'required|string|max:255',
@@ -49,20 +50,32 @@ class AccountingSettingController extends Controller
             ]);
 
             if ($validator->fails()) {
-                Log::info('VALIDATION ERROR');
-                Log::info($validator->errors());
+                Log::info('Validation Error:', $validator->errors()->toArray());
                 return redirect()->back()->with('error', $validator->errors()->first())->withInput();
             }
 
-            // Create a new MetroBerry account record
-            MetroBerryAccounts::create($request->all());
+            // Log the request data
+            Log::info('Account Setting Data from the Form request:', $request->all());
 
-            // Redirect to the index page with success message
-            return redirect()->route('account-setting.index')
+            $metroBerryAccounts = new MetroBerryAccounts();
+
+            // Create the Bank Account record
+            $metroBerryAccounts->holder_name = $request->holder_name;
+            $metroBerryAccounts->bank_name = $request->bank_name;
+            $metroBerryAccounts->account_number = $request->account_number;
+            $metroBerryAccounts->opening_balance = $request->opening_balance;
+            $metroBerryAccounts->contact_number = $request->contact_number;
+            $metroBerryAccounts->bank_address = $request->bank_address;
+            $metroBerryAccounts->created_by = $creator;
+
+            $metroBerryAccounts->save();
+
+            // Redirect to the index page with a success message
+            return redirect()->route('metro.berry.account.setting')
                 ->with('success', 'Accounting setting created successfully.');
         } catch (\Exception $e) {
             // Log any errors that occur during the process
-            Log::error('Error storing accounting setting: ' . $e->getMessage());
+            Log::error('Error storing accounting setting:', ['message' => $e->getMessage()]);
 
             // Redirect back with an error message if an exception is caught
             return back()->with('error', 'An error occurred while creating the accounting setting.');
@@ -86,20 +99,54 @@ class AccountingSettingController extends Controller
     public function update(Request $request, $id)
     {
         try {
-            $request->validate([
-                'name' => 'required|string|max:255',
-                'value' => 'required|string|max:255',
+            $data = $request->all();
+
+            $validator = Validator::make($data, [
+                'holder_name' => 'required|string|max:255',
+                'bank_name' => 'required|string|max:255',
+                'account_number' => 'required|string|max:255',
+                'opening_balance' => 'required|numeric',
+                'contact_number' => 'required|string|max:20',
+                'bank_address' => 'required|string|max:255',
             ]);
 
-            $setting = MetroBerryAccounts::findOrFail($id);
-            $setting->update($request->all());
+            if ($validator->fails()) {
+                Log::info('Validation Error:', $validator->errors()->toArray());
+                return redirect()->back()->with('error', $validator->errors()->first())->withInput();
+            }
 
-            return redirect()->route('account-setting.index')
+            // Log the request data
+            Log::info('Account Setting Data from the Form request:', $request->all());
+
+            $metroBerryAccounts = MetroBerryAccounts::findOrFail($id);
+
+            // Update the Bank Account record
+            $metroBerryAccounts->holder_name = $request->holder_name;
+            $metroBerryAccounts->bank_name = $request->bank_name;
+            $metroBerryAccounts->account_number = $request->account_number;
+            $metroBerryAccounts->opening_balance = $request->opening_balance;
+            $metroBerryAccounts->contact_number = $request->contact_number;
+            $metroBerryAccounts->bank_address = $request->bank_address;
+
+            $metroBerryAccounts->save();
+
+            // Redirect to the index page with a success message
+            return redirect()->route('metro.berry.account.setting')
                 ->with('success', 'Accounting setting updated successfully.');
         } catch (\Exception $e) {
-            Log::error('Error updating accounting setting: ' . $e->getMessage());
+            // Log any errors that occur during the process
+            Log::error('Error updating accounting setting:', ['message' => $e->getMessage()]);
+
+            // Redirect back with an error message if an exception is caught
             return back()->with('error', 'An error occurred while updating the accounting setting.');
         }
+    }
+
+
+    public function delete($id)
+    {
+        $setting = MetroBerryAccounts::findOrFail($id);
+        return view('accounting-setting.delete', compact('setting'));
     }
 
     // Remove the specified resource from storage
@@ -109,7 +156,7 @@ class AccountingSettingController extends Controller
             $setting = MetroBerryAccounts::findOrFail($id);
             $setting->delete();
 
-            return redirect()->route('account-setting.index')
+            return redirect()->route('metro.berry.account.setting')
                 ->with('success', 'Accounting setting deleted successfully.');
         } catch (\Exception $e) {
             Log::error('Error deleting accounting setting: ' . $e->getMessage());

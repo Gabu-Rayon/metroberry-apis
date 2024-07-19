@@ -64,7 +64,7 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="bank_address" class="form-control" type="text" placeholder="Bank Address" id="bank_address" required />
+                       <textarea name="bank_address" class="form-control" placeholder="Bank Address" id="bank_address" required></textarea>
                     </div>
                 </div>
             </div>
