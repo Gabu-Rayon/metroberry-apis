@@ -91,4 +91,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(VehicleService::class, 'created_by');
     }
+
+    public function fuelling_station()
+    {
+        return $this->hasOne(RefuellingStation::class);
+    }
 }

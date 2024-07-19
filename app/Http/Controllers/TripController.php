@@ -648,9 +648,6 @@ class TripController extends Controller
 
 
     public function metroBerryInvoiceTemplate(){
-
         return view('tripInvoiceTemplate.metro-berry-trip-invoice-template');
-     }
-
-
+    }
 }

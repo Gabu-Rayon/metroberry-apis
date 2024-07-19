@@ -15,6 +15,19 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+        /*
+    |--------------------------------------------------------------------------
+    | Application Description
+    |--------------------------------------------------------------------------
+    |
+    | This value is the description of your application, which will be used when the
+    | framework needs to place the application's description in a notification or
+    | other UI elements where an application description needs to be displayed.
+    |
+    */
+
+    'description' => env('APP_DESCRIPTION', 'Laravel'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment

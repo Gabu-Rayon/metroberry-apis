@@ -31,4 +31,8 @@ class Routes extends Model
     public function route_locations () {
         return $this->hasMany(RouteLocations::class, 'route_id', 'id');
     }
+
+    public function locations () {
+        return $this->hasMany(RouteLocations::class, 'route_id', 'id');
+    }
 }

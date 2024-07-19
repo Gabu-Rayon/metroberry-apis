@@ -1135,8 +1135,15 @@ Route::get('report/maintenance', [ReportController::class, 'maintenanceReport'])
  * Settings Routes
  * 
  */
-Route::get('/admin/setting', [SettingsController::class, 'index'])
-    ->name('settings.index')
+
+//  Update Settings
+Route::put('settings', [SettingsController::class, 'update'])
+    ->name('settings')
+    ->middleware('auth', 'can:edit settings');
+
+//  Site Settings
+Route::get('/settings/site', [SettingsController::class, 'site'])
+    ->name('settings.site')
     ->middleware('auth', 'can:view settings');
 
 /**
