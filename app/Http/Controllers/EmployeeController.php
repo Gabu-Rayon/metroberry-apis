@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class EmployeeController extends Controller
@@ -361,42 +362,7 @@ class EmployeeController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        try {
-
-            $customer = Customer::find($id);
-
-            if (!$customer) {
-                return redirect()->back()->with('error', 'Customer not found');
-            }
-
-            $user = User::find($customer->user_id);
-
-            if (!$user) {
-                return redirect()->back()->with('error', 'User not found');
-            }
-
-            DB::beginTransaction();
-
-            $customer->delete();
-            $user->delete();
-
-            DB::commit();
-
-
-            return redirect()->route('employee')->with('success', 'Customer deleted successfully');
-        } catch (Exception $e) {
-            DB::rollBack();
-            Log::info('DELETE CUSTOMER ERROR');
-            Log::info($e);
-            return redirect()->back()->with('error', 'An error occurred while deleting customer');
-        }
-    }
-
+   
     public function activateForm ($id) {
         $customer = Customer::findOrFail($id);
         return view('employee.activate', compact('customer'));
@@ -476,4 +442,64 @@ class EmployeeController extends Controller
             return redirect()->back()->with('error', 'Something Went Wrong');
         }
     }
+
+
+
+    public function delete($id)
+    {
+        $customer = Customer::findOrFail($id);
+
+        $user = User::find($customer->user_id);
+        return view('employee.delete', compact('customer', 'user'));
+        
+    }
+
+    // Remove the specified resource from storage
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        try {
+            $customer = Customer::find($id);
+
+            if (!$customer) {
+                return redirect()->back()->with('error', 'Customer not found');
+            }
+
+            $user = User::find($customer->user_id);
+
+            if (!$user) {
+                return redirect()->back()->with('error', 'User not found');
+            }
+
+            // Delete associated files
+            if ($user->avatar) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+
+            if ($customer->national_id_front_avatar) {
+                Storage::disk('public')->delete($customer->national_id_front_avatar);
+            }
+
+            if ($customer->national_id_behind_avatar) {
+                Storage::disk('public')->delete($customer->national_id_behind_avatar);
+            }
+
+            DB::beginTransaction();
+
+            $customer->delete();
+            $user->delete();
+
+            DB::commit();
+
+            return redirect()->route('employee')->with('success', 'Customer Details deleted successfully!');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::info('DELETE CUSTOMER ERROR');
+            Log::info($e);
+            return redirect()->back()->with('error', 'An error occurred while deleting customer');
+        }
+    }
+
 }
