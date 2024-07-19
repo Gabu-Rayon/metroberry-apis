@@ -12997,6 +12997,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
 });
+/******
 document.addEventListener("DOMContentLoaded", function () {
   $.fn.dataTable.ext.buttons.add = {
     name: "add",
@@ -13055,6 +13056,7 @@ document.addEventListener("DOMContentLoaded", function () {
     },
   };
 });
+
 document.addEventListener("DOMContentLoaded", function () {
   $.fn.dataTable.ext.buttons.print = {
     name: "print",
@@ -13396,6 +13398,7 @@ document.addEventListener("DOMContentLoaded", function () {
       },
     });
 });
+***/
 document.addEventListener("DOMContentLoaded", function () {
   ($.fn.dataTable.render.badge = function (e) {
     return function (t, r, a) {

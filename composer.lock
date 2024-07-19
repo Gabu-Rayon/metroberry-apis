@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b277396258f4d4cb5eeb7424bbf7211f",
+    "content-hash": "4ce995e16c281c61d4d8bb08f4a07116",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -308,62 +308,6 @@
                 }
             ],
             "time": "2024-02-09T16:56:22+00:00"
-        },
-        {
-            "name": "consoletvs/charts",
-            "version": "6.7.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ConsoleTVs/Charts.git",
-                "reference": "408b62609d79be06d229181d3b4c3a4cf6e27a1b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ConsoleTVs/Charts/zipball/408b62609d79be06d229181d3b4c3a4cf6e27a1b",
-                "reference": "408b62609d79be06d229181d3b4c3a4cf6e27a1b",
-                "shasum": ""
-            },
-            "require": {
-                "balping/json-raw-encoder": "^1.0",
-                "illuminate/console": "^5.0|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
-                "illuminate/support": "^5.0|^6.0|^7.0|^8.0|^9.0|^10.0|^11.0",
-                "php": ">=7.0"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "ConsoleTVs\\Charts\\ChartsServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "ConsoleTVs\\Charts\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Èrik Campobadal Forés",
-                    "email": "soc@erik.cat"
-                }
-            ],
-            "description": "The laravel charting package",
-            "support": {
-                "issues": "https://github.com/ConsoleTVs/Charts/issues",
-                "source": "https://github.com/ConsoleTVs/Charts/tree/6.7.0"
-            },
-            "funding": [
-                {
-                    "url": "https://www.patreon.com/ErikCampobadal",
-                    "type": "patreon"
-                }
-            ],
-            "time": "2024-03-13T10:55:51+00:00"
         },
         {
             "name": "dasprid/enum",
@@ -847,6 +791,67 @@
                 }
             ],
             "time": "2023-10-06T06:47:41+00:00"
+        },
+        {
+            "name": "ezyang/htmlpurifier",
+            "version": "v4.17.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ezyang/htmlpurifier.git",
+                "reference": "bbc513d79acf6691fa9cf10f192c90dd2957f18c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/bbc513d79acf6691fa9cf10f192c90dd2957f18c",
+                "reference": "bbc513d79acf6691fa9cf10f192c90dd2957f18c",
+                "shasum": ""
+            },
+            "require": {
+                "php": "~5.6.0 || ~7.0.0 || ~7.1.0 || ~7.2.0 || ~7.3.0 || ~7.4.0 || ~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0"
+            },
+            "require-dev": {
+                "cerdic/css-tidy": "^1.7 || ^2.0",
+                "simpletest/simpletest": "dev-master"
+            },
+            "suggest": {
+                "cerdic/css-tidy": "If you want to use the filter 'Filter.ExtractStyleBlocks'.",
+                "ext-bcmath": "Used for unit conversion and imagecrash protection",
+                "ext-iconv": "Converts text to and from non-UTF-8 encodings",
+                "ext-tidy": "Used for pretty-printing HTML"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "library/HTMLPurifier.composer.php"
+                ],
+                "psr-0": {
+                    "HTMLPurifier": "library/"
+                },
+                "exclude-from-classmap": [
+                    "/library/HTMLPurifier/Language/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-2.1-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Edward Z. Yang",
+                    "email": "admin@htmlpurifier.org",
+                    "homepage": "http://ezyang.com"
+                }
+            ],
+            "description": "Standards compliant HTML filter written in PHP",
+            "homepage": "http://htmlpurifier.org/",
+            "keywords": [
+                "html"
+            ],
+            "support": {
+                "issues": "https://github.com/ezyang/htmlpurifier/issues",
+                "source": "https://github.com/ezyang/htmlpurifier/tree/v4.17.0"
+            },
+            "time": "2023-11-17T15:01:25+00:00"
         },
         {
             "name": "fruitcake/php-cors",
@@ -2223,73 +2228,6 @@
             "time": "2024-01-28T23:22:08+00:00"
         },
         {
-            "name": "masterminds/html5",
-            "version": "2.9.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Masterminds/html5-php.git",
-                "reference": "f5ac2c0b0a2eefca70b2ce32a5809992227e75a6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Masterminds/html5-php/zipball/f5ac2c0b0a2eefca70b2ce32a5809992227e75a6",
-                "reference": "f5ac2c0b0a2eefca70b2ce32a5809992227e75a6",
-                "shasum": ""
-            },
-            "require": {
-                "ext-dom": "*",
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.8.35 || ^5.7.21 || ^6 || ^7 || ^8 || ^9"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.7-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Masterminds\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Matt Butcher",
-                    "email": "technosophos@gmail.com"
-                },
-                {
-                    "name": "Matt Farina",
-                    "email": "matt@mattfarina.com"
-                },
-                {
-                    "name": "Asmir Mustafic",
-                    "email": "goetas@gmail.com"
-                }
-            ],
-            "description": "An HTML5 parser and serializer.",
-            "homepage": "http://masterminds.github.io/html5-php",
-            "keywords": [
-                "HTML5",
-                "dom",
-                "html",
-                "parser",
-                "querypath",
-                "serializer",
-                "xml"
-            ],
-            "support": {
-                "issues": "https://github.com/Masterminds/html5-php/issues",
-                "source": "https://github.com/Masterminds/html5-php/tree/2.9.0"
-            },
-            "time": "2024-03-31T07:05:07+00:00"
-        },
-        {
             "name": "monolog/monolog",
             "version": "3.7.0",
             "source": {
@@ -2789,96 +2727,6 @@
                 }
             ],
             "time": "2024-03-06T16:17:14+00:00"
-        },
-        {
-            "name": "phenx/php-font-lib",
-            "version": "0.5.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/dompdf/php-font-lib.git",
-                "reference": "a1681e9793040740a405ac5b189275059e2a9863"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/dompdf/php-font-lib/zipball/a1681e9793040740a405ac5b189275059e2a9863",
-                "reference": "a1681e9793040740a405ac5b189275059e2a9863",
-                "shasum": ""
-            },
-            "require": {
-                "ext-mbstring": "*"
-            },
-            "require-dev": {
-                "symfony/phpunit-bridge": "^3 || ^4 || ^5 || ^6"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "FontLib\\": "src/FontLib"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL-2.1-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Ménager",
-                    "email": "fabien.menager@gmail.com"
-                }
-            ],
-            "description": "A library to read, parse, export and make subsets of different types of font files.",
-            "homepage": "https://github.com/PhenX/php-font-lib",
-            "support": {
-                "issues": "https://github.com/dompdf/php-font-lib/issues",
-                "source": "https://github.com/dompdf/php-font-lib/tree/0.5.6"
-            },
-            "time": "2024-01-29T14:45:26+00:00"
-        },
-        {
-            "name": "phenx/php-svg-lib",
-            "version": "0.5.4",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/dompdf/php-svg-lib.git",
-                "reference": "46b25da81613a9cf43c83b2a8c2c1bdab27df691"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/dompdf/php-svg-lib/zipball/46b25da81613a9cf43c83b2a8c2c1bdab27df691",
-                "reference": "46b25da81613a9cf43c83b2a8c2c1bdab27df691",
-                "shasum": ""
-            },
-            "require": {
-                "ext-mbstring": "*",
-                "php": "^7.1 || ^8.0",
-                "sabberworm/php-css-parser": "^8.4"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^7.5 || ^8.5 || ^9.5"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Svg\\": "src/Svg"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL-3.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Ménager",
-                    "email": "fabien.menager@gmail.com"
-                }
-            ],
-            "description": "A library to read, parse and export to PDF SVG files.",
-            "homepage": "https://github.com/PhenX/php-svg-lib",
-            "support": {
-                "issues": "https://github.com/dompdf/php-svg-lib/issues",
-                "source": "https://github.com/dompdf/php-svg-lib/tree/0.5.4"
-            },
-            "time": "2024-04-08T12:52:34+00:00"
         },
         {
             "name": "phpoption/phpoption",

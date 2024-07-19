@@ -116,7 +116,17 @@
                 <div class="form-group row my-2">
                     <label for="policy_document" class="col-sm-5 col-form-label">Policy Document <span class="text-danger">*</span></label>
                     <div class="col-sm-7">
-                        <input type="file" accept="image/*" name="policy_document" id="policy_document" required onchange="get_img_url(this, '#document_image');">
+                        <input type="file"  name="policy_document" id="organisation_certificate" required onchange="get_img_url(this, '#document_image');">
+
+                        <!--  <input
+                            name="organisation_certificate"
+                            class="form-control"
+                            type="file"
+                            placeholder="Certificate of Organisation"
+                            id="organisation_certificate"
+                            required
+                        /> -->
+
                         <img id="document_image" src="" width="120px" class="mt-1">
                     </div>
                 </div>
