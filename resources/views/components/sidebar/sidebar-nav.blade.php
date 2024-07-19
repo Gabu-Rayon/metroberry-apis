@@ -129,15 +129,13 @@
                                                                                         <path d="M4.9585 17.75H6.37516V19.6386H4.9585V17.75Z" fill="#6C6C6C" />
                                                                                     </svg>',
                 'subitems' => array_filter([
-                    \Auth::user()->can('view report employee') ? ['label' => 'Employee report', 'route' => route('report.employee')] : null,
-                    \Auth::user()->can('view report driver') ? ['label' => 'Driver report', 'route' => route('report.driver')] : null,
-                    \Auth::user()->can('view report vehicle') ? ['label' => 'Vehicle report', 'route' => route('report.vehicle')] : null,
-                    \Auth::user()->can('view report vehicle requisition') ? ['label' => 'Vehicle requisition report', 'route' => route('report.vehicle.requisition')] : null,
-                    \Auth::user()->can('view report pick drop requisition') ? ['label' => 'Pick and drop requisition report', 'route' => route('report.pickdrop.requisition')] : null,
-                    \Auth::user()->can('view report refuel requisition') ? ['label' => 'Refuel requisition report', 'route' => route('report.refuel.requisition')] : null,
-                    \Auth::user()->can('view report purchase') ? ['label' => 'Purchase report', 'route' => route('report.purchase')] : null,
-                    \Auth::user()->can('view report expense') ? ['label' => 'Expense report', 'route' => route('report.expense')] : null,
-                    \Auth::user()->can('view report maintenance') ? ['label' => 'Maintenance report', 'route' => route('report.maintenance')] : null,
+                    \Auth::user()->can('view report employee') ? ['label' => 'Employee Report', 'route' => route('report.employee')] : null,
+                    \Auth::user()->can('view report driver') ? ['label' => 'Driver Report', 'route' => route('report.driver')] : null,
+                    \Auth::user()->can('view report vehicle') ? ['label' => 'Vehicle Report', 'route' => route('report.vehicle')] : null,
+                    \Auth::user()->can('view report vehicle') ? ['label' => 'Trips Report', 'route' => route('report.trips')] : null,
+                    \Auth::user()->can('view report maintenance') ? ['label' => 'Service Report', 'route' => route('report.service')] : null,
+                    \Auth::user()->can('view report maintenance') ? ['label' => 'Repairs Report', 'route' => route('report.repairs')] : null,
+                    \Auth::user()->can('view report maintenance') ? ['label' => 'Fueling Report', 'route' => route('report.refueling')] : null,
                 ]),
             ])
         @endif

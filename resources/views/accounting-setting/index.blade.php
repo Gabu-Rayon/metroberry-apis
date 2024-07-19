@@ -22,7 +22,7 @@
                                     <div class="card-header">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div>
-                                                <h6 class="fs-17 fw-semi-bold mb-0">Vehicle list</h6>
+                                                <h6 class="fs-17 fw-semi-bold mb-0">Manage Bank Account</h6>
                                             </div>
                                             <div class="text-end">
                                                 <div class="actions">
@@ -238,33 +238,40 @@
                                                             <th title="Action" width="150">Action</th>
                                                         </tr>
                                                     </thead>
-                                                     <tbody>
-                @foreach ($settings as $key => $setting)
-                    <tr>
-                        <td>{{ $key + 1 }}</td>
-                        <td>{{ $setting->holder_name }}</td>
-                        <td>{{ $setting->bank_name }}</td>
-                        <td>{{ $setting->account_number }}</td>
-                        <td>{{ $setting->opening_balance }}</td>
-                        <td>{{ $setting->contact_number }}</td>
-                        <td>{{ $setting->bank_address }}</td>
-                        <td class="d-flex">
-                                                        <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="axiosModal('/accounting-setting/{{ $setting->id }}/edit')" title="Edit">
-                                                            <i class="fas fa-edit"></i>
-                                                        </a>
-                                                        <span class='m-1'></span>                                                       
-                                                        <span class='m-1'></span>
-                                                        <a href="javascript:void(0);" class="btn btn-sm btn-danger" onclick="axiosModal('/accounting-setting/{{ $setting->id }}/edit')" title="Delete">
-                                                            <i class="fas fa-trash"></i>
-                                                        </a>
-                                                    </td>
-                    </tr>
-                @endforeach
-            </tbody>
+                                                    <tbody>
+                                                        @foreach ($settings as $key => $setting)
+                                                            <tr>
+                                                                <td>{{ $key + 1 }}</td>
+                                                                <td>{{ $setting->holder_name }}</td>
+                                                                <td>{{ $setting->bank_name }}</td>
+                                                                <td>{{ $setting->account_number }}</td>
+                                                                <td>{{ $setting->opening_balance }}</td>
+                                                                <td>{{ $setting->contact_number }}</td>
+                                                                <td>{{ $setting->bank_address }}</td>
+                                                                <td class="d-flex">
+                                                                    @if (\Auth::user()->can('edit accounting setting'))
+                                                                    <a href="javascript:void(0);"
+                                                                        class="btn btn-sm btn-primary"
+                                                                        onclick="axiosModal('/accounting-setting/{{ $setting->id }}/edit')"
+                                                                        title="Edit">
+                                                                        <i class="fas fa-edit"></i>
+                                                                    </a>
+                                                                    @endif
+                                                                    <span class='m-1'></span>
+                                                                    @if (\Auth::user()->can('delete accounting setting'))
+                                                                    <a href="javascript:void(0);"
+                                                                        class="btn btn-sm btn-danger"
+                                                                        onclick="axiosModal('/accounting-setting/{{ $setting->id }}/delete')"
+                                                                        title="Delete">
+                                                                        <i class="fas fa-trash"></i>
+                                                                    </a>
+                                                                    @endif
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
                                                 </table>
                                             </div>
-
-
                                             <div id="page-axios-data" data-table-id="#driver-table"></div>
                                         </div>
                                     </div>
