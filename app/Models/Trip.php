@@ -59,12 +59,6 @@ class Trip extends Model
         return $this->belongsTo(BillingRates::class);
     }
 
-
-    public function billingsInvoices()
-    {
-        return $this->hasMany(Invoice::class);
-    }
-
     public function getIsBillableAttribute()
 {
     $can_be_billed = 0;
