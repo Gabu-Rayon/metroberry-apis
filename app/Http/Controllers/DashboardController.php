@@ -119,22 +119,22 @@ class DashboardController extends Controller
         ]);
 
         $cancelledTripsCount = $cancelledTrips->count();
-$completedTripsCount = $completedTrips->count();
-$scheduledTripsCount = $scheduledTrips->count();
-$billedTripsCount = $billedTrips->count();
+        $completedTripsCount = $completedTrips->count();
+        $scheduledTripsCount = $scheduledTrips->count();
+        $billedTripsCount = $billedTrips->count();
 
-$venDiagram = new MaintenanceCostReport;
+        $venDiagram = new MaintenanceCostReport;
 
-$venDiagram->labels(['Scheduled', 'Completed', 'Cancelled', 'Billed']);
+        $venDiagram->labels(['Scheduled', 'Completed', 'Cancelled', 'Billed']);
 
-$venDiagram->dataset('Trips', 'pie', [
-    $scheduledTripsCount,
-    $completedTripsCount,
-    $cancelledTripsCount,
-    $billedTripsCount,
-])->options([
-    'backgroundColor' => ['#198754', '#0d6efd', '#dc3545', '#ffc107'],
-]);
+        $venDiagram->dataset('Trips', 'pie', [
+            $scheduledTripsCount,
+            $completedTripsCount,
+            $cancelledTripsCount,
+            $billedTripsCount,
+        ])->options([
+            'backgroundColor' => ['#198754', '#0d6efd', '#dc3545', '#ffc107'],
+        ]);
 
         return view('dashboard', compact(
             'activeVehicles',

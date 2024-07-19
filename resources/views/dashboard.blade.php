@@ -72,7 +72,7 @@
                                     <div class="card-header card_header px-3">
                                         <div class="d-lg-flex justify-content-between
                                          align-items-center">
-                                            <h6 class="fs-16 fw-bold mb-0">Last 12 month requisition report</h6>
+                                            <h6 class="fs-16 fw-bold mb-0">Annual Trips report</h6>
                                         </div>
                                     </div>
                                     <div class="card-body">
