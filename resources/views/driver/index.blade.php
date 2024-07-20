@@ -78,7 +78,8 @@
                                                     <th title="Email">Email</th>
                                                     <th title="Phone">Phone</th>
                                                     <th title="Address">Address</th>
-                                                    <th title="Address">Status</th>
+                                                    <th title="Vehicle">Vehicle</th>
+                                                    <th title="Status">Status</th>
                                                     <th title="Action" width="80">Action</th>
                                                 </tr>
                                             </thead>
@@ -89,6 +90,7 @@
                                                     <td>{{ $driver->user->email }}</td>
                                                     <td>{{ $driver->user->phone }}</td>
                                                     <td>{{ $driver->user->address }}</td>
+                                                    <td class="text-center">{{ $driver->vehicle ? $driver->vehicle->plate_number : '-' }}</td>
                                                     <td>
                                                         @if ($driver->status == 'active')
                                                         <span class="badge bg-success">Active</span>
@@ -121,6 +123,12 @@
                                                         <span class='m-1'></span>
                                                         <a href="javascript:void(0);" class="btn btn-sm btn-danger" onclick="deleteDriver({{ $driver->id }})" title="Delete Driver">
                                                             <i class="fas fa-trash"></i>
+                                                        </a>
+                                                        @endif
+                                                        @if (!$driver->vehicle && $driver->status == 'active')
+                                                        <span class='m-1'></span>
+                                                        <a href="javascript:void(0);" class="btn btn-sm btn-info" onclick="axiosModal('{{ route('driver.vehicle.assign', $driver->id) }}')" title="Assign Driver">
+                                                            <i class="fa-solid fa-key"></i>
                                                         </a>
                                                         @endif
                                                     </td>

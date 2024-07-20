@@ -515,13 +515,8 @@ class EmployeeController extends Controller
     //     return Excel::download(new EmployeeExport, $fileName);
     // }
 
-    public function export()
-    {
-        $name = 'employees_' . date('Y-m-d i:h:s');
-        $exportData = Excel::download(new EmployeeExport(), $name . '.xlsx');
-        ob_end_clean();
-
-        return $exportData;
+    public function export(){
+        return Excel::download(new EmployeeExport, 'employees.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }
 
 
