@@ -607,9 +607,29 @@ class VehicleController extends Controller
         ]);
 
         try {
-            $vehicle = Vehicle::findOrFail($id);
+            $vehicle = Vehicle::with('insurance')->findOrFail($id);
             $driver = Driver::findOrFail($request->input('driver_id'));
-            
+
+            // Check if the vehicle has valid insurance
+            if (!$vehicle->insurance) {
+                return redirect()->back()->with('error', 'Vehicle has no insurance.');
+            }
+
+            $insurance = $vehicle->insurance;
+            $today = now()->toDateString();
+            $insuranceStartDate = $insurance->insurance_date_of_issue;
+            $insuranceEndDate = $insurance->insurance_date_of_expiry;
+
+            // Validate insurance dates
+            if ($today < $insuranceStartDate || $today > $insuranceEndDate) {
+                return redirect()->back()->with('error', 'Insurance is not valid today.');
+            }
+
+            // Check if insurance status is active
+            if ($insurance->status != 1) {
+                return redirect()->back()->with('error', 'Insurance is not active.');
+            }
+
             // Assign driver to vehicle
             $vehicle->driver_id = $driver->id;
             $vehicle->save();
@@ -618,13 +638,13 @@ class VehicleController extends Controller
             $driver->vehicle_id = $vehicle->id;
             $driver->save();
 
-
             return redirect()->route('vehicle')->with('success', 'Driver assigned successfully.');
         } catch (Exception $e) {
             Log::error('Error assigning driver to vehicle: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to assign driver.');
         }
     }
+
 
     public function activate_vehicle($id) {
         try {
@@ -694,24 +714,43 @@ class VehicleController extends Controller
     public function activate($id)
     {
         try {
-
+            // Fetch the vehicle with its insurance details
             $vehicle = Vehicle::with('insurance')->findOrFail($id);
 
             Log::info('VEHICLE');
             Log::info($vehicle);
 
+            // Check if the vehicle is already active
             if ($vehicle->status == 'active') {
                 return redirect()->back()->with('error', 'Vehicle is already active');
             }
 
+            // Check if the vehicle has associated insurance
             if (!$vehicle->insurance) {
                 return redirect()->back()->with('error', 'Vehicle has no insurance');
             }
 
+            // Retrieve insurance details
+            $insurance = $vehicle->insurance;
+
+            // Check if insurance dates are within the allowed range
+            $today = now()->toDateString();
+            $insuranceStartDate = $insurance->insurance_date_of_issue;
+            $insuranceEndDate = $insurance->insurance_date_of_expiry;
+
+            if ($today < $insuranceStartDate || $today > $insuranceEndDate) {
+                return redirect()->back()->with('error', 'Insurance is not valid today');
+            }
+
+            // Check if insurance status is active
+            if ($insurance->status != 1) {
+                return redirect()->back()->with('error', 'Insurance is not active');
+            }
+
+            // Activate the vehicle
             DB::beginTransaction();
 
             $vehicle->status = 'active';
-
             $vehicle->save();
 
             DB::commit();
@@ -721,9 +760,10 @@ class VehicleController extends Controller
             DB::rollBack();
             Log::error('ACTIVATE VEHICLE ERROR');
             Log::error($e);
-            return redirect()->back()->with('error', 'An error occurred');
+            return redirect()->back()->with('error', 'An error occurred while activating the vehicle');
         }
     }
+
 
 
     public function deactivateForm($id)

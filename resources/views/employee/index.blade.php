@@ -22,8 +22,16 @@
                                         <div class="text-end">
                                             <div class="actions">
                                                 <div class="accordion-header d-flex justify-content-end align-items-center" id="flush-headingOne">
+                                                     <a class="btn btn-success btn-sm" href="javascript:void(0);" onclick="axiosModal('employee/export')" title="Export to xlsx excel file">
+                                                        <i class="fa-solid fa-file-export"></i>&nbsp; Export
+                                                    </a>
+                                                     <span class='m-1'></span>
+                                                    <a class="btn btn-success btn-sm" href="javascript:void(0);" onclick="axiosModal('employee/import')" title="Import From csv excel file">
+                                                        <i class="fa-solid fa-file-arrow-up"></i>&nbsp; Import
+                                                    </a>
+                                                     <span class='m-1'></span>
                                                     @if(\Auth::user()->can('create customer'))
-                                                    <a class="btn btn-success btn-sm" href="javascript:void(0);" onclick="axiosModal('employee/create')">
+                                                    <a class="btn btn-success btn-sm" href="javascript:void(0);" onclick="axiosModal('employee/create')" title="Add new Employee Details.">
                                                         <i class="fa fa-plus"></i>&nbsp; Add employee
                                                     </a>
                                                     @endif
@@ -143,20 +151,20 @@
                                                         <span class='m-1'></span>
                                                         @if (\Auth::user()->can('activate customer'))
                                                             @if ($customer->status == 'active')
-                                                                <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="axiosModal('employee/{{ $customer->id }}/deactivate')" title="Dectivate Driver">
+                                                                <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="axiosModal('employee/{{ $customer->id }}/deactivate')" title="Dectivate Employee">
                                                                     <i class="fas fa-toggle-on"></i>
                                                                 </a> 
                                                             @else
-                                                                <a href="javascript:void(0);" class="btn btn-sm btn-secondary" onclick="axiosModal('employee/{{ $customer->id }}/activate')" title="Activate Driver">
+                                                                <a href="javascript:void(0);" class="btn btn-sm btn-secondary" onclick="axiosModal('employee/{{ $customer->id }}/activate')" title="Activate Employee">
                                                                     <i class="fas fa-toggle-off"></i>
                                                                 </a>                                                        
                                                             @endif
                                                         @endif
                                                         <span class='m-1'></span>
-                                                        @if (\Auth::user()->can('delete customer'))
-                                                        <a href="javascript:void(0);" class="btn btn-sm btn-danger" onclick="deleteCustomer({{ $customer->id }})">
-                                                            <i class="fas fa-trash"></i>
-                                                        </a>
+                                                         @if (\Auth::user()->can('delete customer'))
+                                                         <a href="javascript:void(0);" class="btn btn-sm btn-danger" onclick="axiosModal('employee/{{ $customer->id }}/delete')" title="Delete Customer">
+                                                                    <i class="fas fa-trash"></i>
+                                                                </a> 
                                                         @endif
                                                     </td>
                                                 </tr>

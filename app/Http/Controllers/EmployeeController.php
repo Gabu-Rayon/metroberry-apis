@@ -7,9 +7,13 @@ use App\Models\User;
 use App\Models\Customer;
 use App\Models\Organisation;
 use Illuminate\Http\Request;
+use App\Exports\EmployeeExport;
+use App\Imports\EmployeeImport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class EmployeeController extends Controller
@@ -361,42 +365,7 @@ class EmployeeController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        try {
-
-            $customer = Customer::find($id);
-
-            if (!$customer) {
-                return redirect()->back()->with('error', 'Customer not found');
-            }
-
-            $user = User::find($customer->user_id);
-
-            if (!$user) {
-                return redirect()->back()->with('error', 'User not found');
-            }
-
-            DB::beginTransaction();
-
-            $customer->delete();
-            $user->delete();
-
-            DB::commit();
-
-
-            return redirect()->route('employee')->with('success', 'Customer deleted successfully');
-        } catch (Exception $e) {
-            DB::rollBack();
-            Log::info('DELETE CUSTOMER ERROR');
-            Log::info($e);
-            return redirect()->back()->with('error', 'An error occurred while deleting customer');
-        }
-    }
-
+   
     public function activateForm ($id) {
         $customer = Customer::findOrFail($id);
         return view('employee.activate', compact('customer'));
@@ -476,4 +445,122 @@ class EmployeeController extends Controller
             return redirect()->back()->with('error', 'Something Went Wrong');
         }
     }
+
+
+
+    public function delete($id)
+    {
+        $customer = Customer::findOrFail($id);
+
+        $user = User::find($customer->user_id);
+        return view('employee.delete', compact('customer', 'user'));
+        
+    }
+
+    // Remove the specified resource from storage
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        try {
+            $customer = Customer::find($id);
+
+            if (!$customer) {
+                return redirect()->back()->with('error', 'Customer not found');
+            }
+
+            $user = User::find($customer->user_id);
+
+            if (!$user) {
+                return redirect()->back()->with('error', 'User not found');
+            }
+
+            // Delete associated files
+            if ($user->avatar) {
+                Storage::disk('public')->delete($user->avatar);
+            }
+
+            if ($customer->national_id_front_avatar) {
+                Storage::disk('public')->delete($customer->national_id_front_avatar);
+            }
+
+            if ($customer->national_id_behind_avatar) {
+                Storage::disk('public')->delete($customer->national_id_behind_avatar);
+            }
+
+            DB::beginTransaction();
+
+            $customer->delete();
+            $user->delete();
+
+            DB::commit();
+
+            return redirect()->route('employee')->with('success', 'Customer Details deleted successfully!');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::info('DELETE CUSTOMER ERROR');
+            Log::info($e);
+            return redirect()->back()->with('error', 'An error occurred while deleting customer');
+        }
+    }
+
+
+    // public function export()
+    // {
+    //     $fileName = 'employees_' . date('Y-m-d_H-i-s') . '.xlsx';
+
+    //     \Log::info('Exporting file: ' . $fileName);
+
+    //     return Excel::download(new EmployeeExport, $fileName);
+    // }
+
+    public function export()
+    {
+        $name = 'employees_' . date('Y-m-d i:h:s');
+        $exportData = Excel::download(new EmployeeExport(), $name . '.xlsx');
+        ob_end_clean();
+
+        return $exportData;
+    }
+
+
+
+    /**
+     * 
+     *Import Employee detials 
+
+     */
+    public function importFile()
+    {
+        return view('employee.importEmployee');
+    }
+
+    public function import(Request $request)
+    {
+        $rules = [
+            'file' => 'required|mimes:csv,txt',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with('error', $validator->errors()->first());
+        }
+
+        try {
+            Excel::import(new EmployeeImport, $request->file('file'));
+
+            //log 
+            Log::info('data from Employee CSV File being Imported : ');
+            Log::info($request->file('file'));
+
+            return redirect()->back()->with('success', 'Records imported successfully.');
+        } catch (Exception $e) {
+            Log::error('Error importing employees: ' . $e->getMessage());
+            
+            return redirect()->back()->with('error', 'An error occurred while importing the Employee records.');
+        }
+    }
+
 }
