@@ -6,6 +6,7 @@ use Exception;
 use App\Models\User;
 use App\Models\Driver;
 use App\Models\Organisation;
+use App\Models\Vehicle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -266,6 +267,60 @@ class DriverController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
             Log::error('UPDATE DRIVER ERROR');
+            Log::error($e);
+            return redirect()->back()->with('error', 'An error occurred');
+        }
+    }
+
+    public function assignVehicleForm($id){
+        $driver = Driver::with('vehicle')->findOrfail($id);
+        $vehicles = Vehicle::where('status', 'active')
+                  ->doesntHave('driver')
+                  ->get();
+        return view('driver.assign-vehicle', compact('driver', 'vehicles'));
+    }
+
+    public function assignVehicle(Request $request, $id) {
+        try {
+
+            $driver = Driver::find($id);
+            $data = $request->all();
+
+            $validator = Validator::make($data, [
+                'vehicle_id' => 'required|exists:vehicles,id',
+            ]);
+
+            if ($validator->fails()) {
+                Log::error('VALIDATION ERROR');
+                Log::error($validator->errors());
+                return redirect()->back()->with('error', $validator->errors()->first());
+            }
+
+            if (!$driver) {
+                return redirect()->back()->with('error', 'Driver not found');
+            }
+
+            $vehicle = Vehicle::find($data['vehicle_id']);
+
+            if (!$vehicle) {
+                return redirect()->back()->with('error', 'Vehicle not found');
+            }
+
+            if ($vehicle->driver) {
+                return redirect()->back()->with('error', 'Vehicle is already assigned to another driver');
+            }
+
+            DB::beginTransaction();
+
+            $vehicle->driver_id = $driver->id;
+            $vehicle->save();
+
+            DB::commit();
+
+            return redirect()->route('driver')->with('success', 'Vehicle assigned successfully');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('ASSIGN VEHICLE ERROR');
             Log::error($e);
             return redirect()->back()->with('error', 'An error occurred');
         }

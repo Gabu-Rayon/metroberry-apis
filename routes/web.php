@@ -236,6 +236,15 @@ Route::post('driver', [DriverController::class, 'store'])
 Route::put('driver/{id}/update', [DriverController::class, 'update'])
     ->name('driver.update')
     ->middleware('auth', 'can:edit driver');
+
+Route::get('driver/{id}/vehicle/assign', [DriverController::class, 'assignVehicleForm'])
+->name('driver.vehicle.assign')
+->middleware('auth', 'can:edit driver');
+
+Route::post('driver/{id}/vehicle/assign', [DriverController::class, 'assignVehicle'])
+->name('driver.vehicle.assign')
+->middleware('auth', 'can:edit driver');
+
 Route::get('driver/{id}/edit', [DriverController::class, 'edit'])
     ->name('driver.edit')
     ->middleware('auth', 'can:edit driver');
@@ -1376,6 +1385,6 @@ Route::delete('/accounting-setting/{id}/destroy', [AccountingSettingController::
  * 
  * 
  */
-Route::get('/admin/metro-Berry/Invoice', [TripController::class, 'metroBerryInvoiceTemplate'])
+Route::get('invoice', [TripController::class, 'invoice'])
     ->name('metro.berry.invoice.template')
     ->middleware('can:edit trip');
