@@ -1342,7 +1342,7 @@ Route::delete('/accounting-setting/{id}/destroy', [AccountingSettingController::
      * 
      * 
      */
-Route::get('/admin/metro-Berry/Invoice', [TripController::class, 'metroBerryInvoiceTemplate'])
+Route::get('invoice', [TripController::class, 'invoice'])
     ->name('metro.berry.invoice.template')
     ->middleware('can:edit trip');
     

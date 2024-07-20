@@ -10,13 +10,17 @@ use App\Models\Customer;
 use App\Models\TripPayment;
 use App\Models\BillingRates;
 use App\Models\Organisation;
+use Barryvdh\DomPDF\PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Routing\RouteSignatureParameters;
+use Dompdf\Dompdf;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\View;
 
 class TripController extends Controller
 {
@@ -647,7 +651,40 @@ class TripController extends Controller
     }
 
 
-    public function metroBerryInvoiceTemplate(){
-        return view('tripInvoiceTemplate.metro-berry-trip-invoice-template');
+    public function invoice(){
+        $organisationCode = auth()->user()->organisation->organisation_code;
+
+        $trips = Trip::where('status', 'billed')
+            ->whereHas('customer', function ($query) use ($organisationCode) {
+                $query->where('customer_organisation_code', $organisationCode);
+            })
+            ->with('customer')
+            ->with('vehicle')
+            ->with('route')
+            ->with('billingRate')
+            ->get();
+
+        Log::info('TRIPS');
+        Log::info($trips);
+
+        
+        $data = [
+            'title' => 'Invoice',
+            'date' => date('m/d/Y'),
+            'due_date' => date('m/d/Y', strtotime('+30 days')),
+            'customer' => auth()->user()->organisation->user->name,
+            'address' => auth()->user()->organisation->user->address,
+            'invoice_number' => 'INV-'.time(),
+            'items' => $trips,
+        ];
+        $dompdf = new Dompdf();
+        $options = $dompdf->getOptions();
+        $options->set('fontDir', public_path('fonts'));
+        $options->set('fontCache', storage_path('fonts'));
+        $dompdf->getOptions()->set('defaultFont', 'Roboto');
+        $filesystem = new Filesystem;
+        $pdf = new PDF($dompdf, Config::getFacadeRoot(), $filesystem, View::getFacadeRoot());
+        $pdf = $pdf->loadView('invoices.invoice', compact('data'));
+        return $pdf->stream('invoice.pdf');
     }
 }
