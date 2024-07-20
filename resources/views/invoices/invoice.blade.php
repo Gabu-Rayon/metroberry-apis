@@ -2,13 +2,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-      rel="stylesheet"
-    />
+    <script src="https://kit.fontawesome.com/e53bf7a0b8.js" crossorigin="anonymous"></script>
     <title>Invoice Template</title>
 
     <style>
@@ -28,7 +22,7 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  bottom: -20rem;
+  bottom: -10rem;
   width: 19rem;
   display: flex;
   flex-direction: column;
@@ -45,13 +39,14 @@ body {
   color: #8899a6;
   text-align: center;
   padding: 1rem;
-  margin-bottom: 7rem;
+  position: absolute;
+  bottom: 5rem;
 }
 
 .right-side {
   position: absolute;
   top: 0;
-  left: 20rem;
+  left: 19rem;
   height: 100vh;
   background-color: #f0f2f5;
   padding: 1rem;
@@ -95,7 +90,7 @@ body {
 
 .total {
   position: relative;
-  right: -21rem;
+  right: -16rem;
   width: 25%;
   background-color: #dc3545;
   padding: 1rem;
@@ -136,7 +131,7 @@ ul {
 .signature {
   position: relative;
   top: 19rem;
-  left: 23rem;
+  left: 18rem;
   width: 25%;
   padding: 1rem;
   text-align: center;
@@ -152,7 +147,7 @@ ul {
 
 .ending {
   position: relative;
-  top: 16rem;
+  top: 20rem;
   width: 100%;
   bottom: 1rem;
   left: -5rem;
@@ -165,11 +160,19 @@ ul {
   font-size: 1.5rem;
 }
 
+@media print {
+  body {
+    -webkit-print-color-adjust: exact; /* Chrome, Safari */
+    print-color-adjust: exact; /* Firefox */
+  }
+}
+
+
     </style>
   </head>
   <body>
     <div class="left-side">
-      <img src="{{ asset('logo.png') }}" alt="Logo" />
+      <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('logo.png'))) }}" alt="Logo" />
       <div class="bottom-text">
         If you have any questions concerning this invoice, use the following
         contact information: Contact Thomas, Phone Number,+254748 156 366.
@@ -179,42 +182,73 @@ ul {
 
     <div class="right-side">
       <div class="title">
-        <span>INVOICE</span>
-
+        <span>{{ $data['title'] }}</span>
+    
         <div class="details">
-          <div>Invoice #</div>
-          <div class="variable">001</div>
+            <div>Invoice #</div>
+            <div class="variable">{{ $data['invoice_number'] }}</div>
         </div>
-
+    
         <div class="details">
-          <div>Date:</div>
-          <div class="variable">2024-01-01</div>
+            <div>Date:</div>
+            <div class="variable">{{ $data['date'] }}</div>
         </div>
-      </div>
-
-      <div class="user-details">
-        <div class="name">Dickson Munene</div>
-        <div class="location">Westlands</div>
-        <div class="country">Kenya</div>
-      </div>
-
-      <table class="invoice-table">
+    </div>
+    
+    <div class="user-details">
+        <div class="name">{{ $data['customer'] }}</div>
+        <div class="location">{{ $data['address'] }}</div>
+    </div>
+    
+    <table class="invoice-table">
         <thead>
-          <tr>
-            <th>Description</th>
-            <th>Amount</th>
-          </tr>
+            <tr>
+                <th>Customer</th>
+                <th>Billed By</th>
+                <th>Trip Info</th>
+                <th>Price</th>
+            </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>Product 1</td>
-            <td>KES 100</td>
-          </tr>
+            @foreach ($data['items'] as $item)
+            <tr>
+                <td class="text-center">{{ $item->customer->user->name }}</td>
+                <td class="text-center">
+                  @php
+                      if ($item->billed_by == 'distance') {
+                        $text = 'Distance';
+                      }
+                  @endphp
+                  {{ $text }}
+                </td>
+                <td class="text-center">
+                  @php
+                      if ($item->billed_by == 'distance') {
+                        $info = 'KM: ' . $item->vehicle_mileage;
+                      } elseif ($item->billed_by == 'time') {
+                        $info = 'HRS: ' . $item->engine_hours;
+                        $info2 = 'Idle Time: ' . $item->idle_time;
+                      } elseif ($item->billed_by == 'car_class') {
+                        $info = 'Class: ' . $item->vehicle->class;
+                      }
+                  @endphp
+                  {{ $info }}
+                  {{$item->billed_by == 'time' ? $info2 : ''}}
+                </td>
+                <td class="text-center">{{ $item['total_price'] }}</td>
+            </tr>
+            @endforeach
         </tbody>
-      </table>
+    </table>
       <br />
 
-      <div class="total">Total: KES 100</div>
+      @php
+          $total = 0;
+          foreach ($data['items'] as $item) {
+            $total += $item['total_price'];
+          }
+      @endphp
+      <div class="total">Total: KES {{ $total }}</div>
 
       <div class="payment-details">
         <div class="pay-title">Payment Info:</div>
