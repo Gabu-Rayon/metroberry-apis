@@ -711,6 +711,37 @@ Route::put('maintenance/service/{id}/bill', [MaintenanceServiceController::class
     ->name('maintenance.service.bill')
     ->middleware('auth', 'can:edit vehicle maintenance');
 
+Route::get('maintenance/service/{id}/payment/checkout', [MaintenanceServiceController::class, 'maintenanceServicePaymentCheckOut'])
+    ->name('vehicle.service.checkout')
+    ->middleware('auth', 'can:bill vehicle maintenance');
+
+/**
+ * MaintenanceService Payment Routes
+ * 
+ */
+
+Route::get('maintenance/service/{id}/receive/payment', [MaintenanceServiceController::class, 'billedVehicleServiceMaintenanceRecievePayment'])
+    ->name('billed.vehicle.service.receive.payment')
+    ->middleware('auth', 'can:bill vehicle service maintenance');
+
+Route::post('maintenance/service/{id}/recieve/payment/store', [MaintenanceServiceController::class, 'billedVehicleServiceMaintenanceRecievePaymentStore'])
+    ->name('billed.vehicle.service.receive.payment.store')
+    ->middleware('auth', 'can:bill vehicle service maintenance');
+
+
+Route::get('maintenance/service/{id}/download/invoice', [MaintenanceServiceController::class, 'billedVehicleServiceMaintenanceDownloadInvoice'])
+    ->name('billed.vehicle.service.download.invoice')
+    ->middleware('auth', 'can:bill vehicle service maintenance');
+
+Route::get('maintenance/service/{id}/resend/invoice', [MaintenanceServiceController::class, 'billedVehicleServiceMaintenanceResendInvoice'])
+    ->name('billed.trip.resend.invoice')
+    ->middleware('auth', 'can:bill vehicle service maintenance');
+
+Route::get('maintenance/service/{id}/send/invoice', [MaintenanceServiceController::class, 'billedVehicleServiceMaintenanceSendInvoice'])
+    ->name('billed.vehicle.service.send.invoice')
+    ->middleware('auth', 'can:bill vehicle service maintenance');
+
+
 /***
  * Vehicle Servicing Routes
  */
