@@ -181,7 +181,7 @@ class TripPaymentController extends Controller
             $accounts = MetroBerryAccounts::all();
 
             // Pass the necessary data to the view
-            return view('trips.billed-recieve-payment', compact('trip', 'remainingAmount', 'accounts'));
+            return view('trips.billed-receive-payment', compact('trip', 'remainingAmount', 'accounts'));
         } catch (\Exception $e) {
             Log::error('Error receiving payment for trip: ' . $e->getMessage());
             return back()->with('error', 'An error occurred while receiving the payment. Please try again.');
@@ -295,7 +295,9 @@ class TripPaymentController extends Controller
             $trip = Trip::where('id', $id)->where('status', 'billed')->firstOrFail();
 
             // Logic to generate and download the TripPayment
-            // ...
+            //Now to download will call a template pass all the data for this invoice to
+            //  the template the download it  in a pdf  
+            // the template  is in tripInvoiceTemplate.metro-berry-trip-invoice-template 
 
             // return response()->download($TripPaymentPath);
         } catch (\Exception $e) {

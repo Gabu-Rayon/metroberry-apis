@@ -236,6 +236,7 @@ class RoleAndPermissionSeeder extends Seeder
             'delete vehicle maintenance',
             'update vehicle maintenance',
             'manage vehicle maintenance',
+            'bill vehicle maintenance',
 
             // License Permissions
             'view driver license',
@@ -670,6 +671,7 @@ class RoleAndPermissionSeeder extends Seeder
             'delete vehicle maintenance',
             'update vehicle maintenance',
             'manage vehicle maintenance',
+            'bill vehicle maintenance',
 
             // License Permissions
             'view driver license',

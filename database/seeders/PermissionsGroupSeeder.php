@@ -171,6 +171,7 @@ class PermissionsGroupSeeder extends Seeder
                 'delete vehicle maintenance',
                 'update vehicle maintenance',
                 'manage vehicle maintenance',
+                'bill vehicle maintenance',
             ],
             'account_setting' => [
                 'view accounting setting',
