@@ -27,8 +27,7 @@
                                             </div>
                                             <div class="text-end">
                                                 <div class="actions">
-                                                    <a class="btn btn-success btn-sm"
-                                                        href="javascript:void(0);"
+                                                    <a class="btn btn-success btn-sm" href="javascript:void(0);"
                                                         onclick="axiosModal('{{ route('maintenance.service.create') }}')">
                                                         <i class="fa fa-plus"></i>
                                                         &nbsp;
@@ -69,24 +68,43 @@
                                                                         <span class="badge bg-info">Approved</span>
                                                                     @elseif ($service->service_status == 'rejected')
                                                                         <span class="badge bg-danger">Rejected</span>
+                                                                        @elseif ($service->service_status == 'paid')
+                                                                        <span class="badge bg-danger">paid</span>
+                                                                        @elseif ($service->service_status == 'partially paid')
+                                                                        <span class="badge bg-danger">partially paid</span>
                                                                     @else
                                                                         <span class="badge bg-warning">Invalid Status</span>
                                                                     @endif
                                                                 </td>
                                                                 <td class="text-center">
                                                                     @if ($service->service_status == 'pending')
-                                                                        <a href="javascript:void(0);" onclick="axiosModal('{{ route('maintenance.service.approve', $service->id) }}')" class="btn btn-primary btn-sm" title="Approve">
+                                                                        <a href="javascript:void(0);"
+                                                                            onclick="axiosModal('{{ route('maintenance.service.approve', $service->id) }}')"
+                                                                            class="btn btn-primary btn-sm" title="Approve">
                                                                             <i class="fa-solid fa-thumbs-up"></i>
                                                                         </a>
-                                                                        <a href="javascript:void(0);" onclick="axiosModal('{{ route('maintenance.service.reject', $service->id) }}')" class="btn btn-danger btn-sm" title="Reject">
+                                                                        <a href="javascript:void(0);"
+                                                                            onclick="axiosModal('{{ route('maintenance.service.reject', $service->id) }}')"
+                                                                            class="btn btn-danger btn-sm" title="Reject">
                                                                             <i class="fa-solid fa-ban"></i>
                                                                         </a>
                                                                     @endif
                                                                     @if ($service->service_status == 'approved')
-                                                                        <a href="javascript:void(0);" onclick="axiosModal('{{ route('maintenance.service.bill', $service->id) }}')" class="btn btn-primary btn-sm" title="Bill">
+                                                                        <a href="javascript:void(0);"
+                                                                            onclick="axiosModal('{{ route('maintenance.service.bill', $service->id) }}')"
+                                                                            class="btn btn-primary btn-sm" title="Bill">
                                                                             <i class="fa-solid fa-money-bill"></i>
                                                                         </a>
                                                                     @endif
+                                                                    @if (in_array($service->service_status, ['billed', 'paid', 'partially paid']))
+    <a href="{{ route('maintenance.service.payment.checkout', ['id' => $service->id]) }}"
+        class="btn btn-primary btn-sm"
+        title="Checkout to Pay Vehicle maintenance service charges.">
+        <small><i class="fa-solid fa-money-bill"></i></small>
+    </a>
+@endif
+
+
                                                                 </td>
                                                             </tr>
                                                         @endforeach

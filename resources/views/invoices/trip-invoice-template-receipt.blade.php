@@ -27,6 +27,7 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+   margin:0;
 }
 
 .left-side .logo img {
@@ -146,7 +147,7 @@ ul {
 
 .ending {
   position: relative;
-  top: 20rem;
+  top: 27rem;
   width: 100%;
   bottom: 1rem;
   left: -5rem;
@@ -234,7 +235,7 @@ ul {
                   {{ $info }}
                   {{$item->billed_by == 'time' ? $info2 : ''}}
                 </td>
-                <td class="text-center">{{ $item['total_price'] }}</td>
+                <td class="text-center">Kes. {{ $item['total_price'] }}</td>
             </tr>
             @endforeach
         </tbody>

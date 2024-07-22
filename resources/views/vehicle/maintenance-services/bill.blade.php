@@ -1,4 +1,5 @@
-<form action="{{ route('maintenance.service.bill', $service->id) }}" method="POST" class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
+<form action="{{ route('maintenance.service.bill', $service->id) }}" method="POST" class="needs-validation modal-content"
+    novalidate="novalidate" enctype="multipart/form-data">
     @csrf
     @method('PUT')
     <div class="card-header my-3 p-2 border-bottom">
@@ -44,7 +45,7 @@
                         <div class="form-control">{{ $service->service_description }}</div>
                     </div>
                 </div>
-                
+
             </div>
 
             <div class="col-md-12 col-lg-6">
@@ -75,8 +76,9 @@
                         <div class="form-control">{{ $service->service_cost }}</div>
                     </div>
                 </div>
-                
+
             </div>
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
