@@ -891,6 +891,7 @@ class RoleAndPermissionSeeder extends Seeder
         ]);
 
         $organisation->syncPermissions([
+            'view route location',
             'view dashboard',
             'edit profile',
             'update profile',

@@ -25,7 +25,7 @@ class VehicleController extends Controller
     public function index()
     {
         // Check if the authenticated user has the 'view vehicle' permission
-        if (Auth::user()->can('view vehicle')) {
+
             try {
                 $vehicles = null;
 
@@ -46,16 +46,13 @@ class VehicleController extends Controller
 
                 Log::info('Vehicles fetched: ', ['vehicles' => $vehicles]);
 
-                return view('vehicle', compact('vehicles'));
+                return view('vehicle.index', compact('vehicles'));
             } catch (Exception $e) {
                 // Log the error message
                 Log::error('Error fetching vehicles: ' . $e->getMessage());
 
                 return back()->with('error', 'An error occurred while fetching the vehicles. Please try again.');
             }
-        } else {
-            return back()->with('error', 'Permission Denied.');
-        }
     }
 
 
