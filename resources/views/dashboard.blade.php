@@ -52,7 +52,7 @@
                         <!-- 2nd  -->
                         <div class="row mb-4">
                             <div class="col-xl-4 mb-4 mb-xl-0">
-                                <div class="card rounded-0">
+                                <div class="card rounded-0 w-100">
                                     <div class="card-header card_header px-3">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <h6 class="fs-16 fw-bold mb-0">Annual Trips Report
@@ -63,22 +63,6 @@
                                     <div class="card-body w-100 p-0 px-2">
                                         {!! $venDiagram->container() !!}
                                         {!! $venDiagram->script() !!}
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="col-xl-8">
-                                <div class="card rounded-0">
-                                    <div class="card-header card_header px-3">
-                                        <div class="d-lg-flex justify-content-between
-                                         align-items-center">
-                                            <h6 class="fs-16 fw-bold mb-0">Annual Trips report</h6>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <div id="multi_axis_line"
-                                            data-chat-data='[{"date":1690848000000,"pending":275,"approved":286},{"date":1693526400000,"pending":257,"approved":278},{"date":1696118400000,"pending":279,"approved":300},{"date":1698796800000,"pending":294,"approved":252},{"date":1701388800000,"pending":311,"approved":279},{"date":1704067200000,"pending":272,"approved":269},{"date":1706745600000,"pending":276,"approved":284},{"date":1709251200000,"pending":276,"approved":287},{"date":1711929600000,"pending":259,"approved":268},{"date":1714521600000,"pending":66,"approved":64},{"date":1717200000000,"pending":2,"approved":3},{"date":1719792000000,"pending":0,"approved":0}]'
-                                            data-name='Vehicle requisition report'></div>
                                     </div>
                                 </div>
                             </div>

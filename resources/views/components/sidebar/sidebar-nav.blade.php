@@ -41,6 +41,7 @@
                 'subitems' => array_filter([
                     \Auth::user()->can('view vehicle') ? ['label' => 'Vehicles', 'route' => route('vehicle')] : null,
                     \Auth::user()->can('manage vehicle insurance') ? ['label' => 'Vehicle Insurances', 'route' => route('vehicle.insurance.index')] : null,
+                    \Auth::user()->can('view vehicle inspection certificate') ? ['label' => 'NTSA Inspection Certificates', 'route' => route('vehicle.inspection.certificate')] : null,
                 ]),
             ])
         @endif

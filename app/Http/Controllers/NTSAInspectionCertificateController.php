@@ -142,6 +142,7 @@ class NTSAInspectionCertificateController extends Controller
                 'ntsa_inspection_certificate_date_of_issue' => $data['ntsa_inspection_certificate_date_of_issue'],
                 'ntsa_inspection_certificate_date_of_expiry' => $data['ntsa_inspection_certificate_date_of_expiry'],
                 'ntsa_inspection_certificate_avatar' => $avatarPath,
+                'verified' => false,
             ]);
 
             $certificate->save();

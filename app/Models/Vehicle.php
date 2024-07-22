@@ -29,7 +29,6 @@ class Vehicle extends Model
 
     protected $hidden = [
         'organisation_id',
-        'created_by',
         'created_at',
         'updated_at',
     ];
