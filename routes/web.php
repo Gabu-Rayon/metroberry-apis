@@ -32,6 +32,7 @@ use App\Http\Controllers\AccountingSettingController;
 use App\Http\Controllers\MaintenanceRepairController;
 use App\Http\Controllers\RefuellingStationController;
 use App\Http\Controllers\MaintenanceServiceController;
+use App\Http\Controllers\NTSAInspectionCertificateController;
 use App\Http\Controllers\VehiclePartCategoryController;
 
 Route::get('dashboard', [DashboardController::class, 'index'])
@@ -1388,3 +1389,55 @@ Route::delete('/accounting-setting/{id}/destroy', [AccountingSettingController::
 Route::get('invoice', [TripController::class, 'invoice'])
     ->name('metro.berry.invoice.template')
     ->middleware('can:edit trip');
+
+/**
+ * NTSA Inspection Certificate Routes
+ */
+
+// View Vehicle Inspection Certificate
+Route::get('vehicle/inspection-certificate', [NTSAInspectionCertificateController::class, 'index'])
+    ->name('vehicle.inspection.certificate')
+    ->middleware('auth', 'can:view vehicle inspection certificate');
+
+// Create Vehicle Inspection Certificate
+Route::get('vehicle/inspection-certificate/create', [NTSAInspectionCertificateController::class, 'create'])
+    ->name('vehicle.inspection.certificate.create')
+    ->middleware('auth', 'can:create vehicle inspection certificate');
+
+Route::post('vehicle/inspection-certificate/create', [NTSAInspectionCertificateController::class, 'store'])
+    ->name('vehicle.inspection.certificate.create')
+    ->middleware('auth', 'can:create vehicle inspection certificate');
+
+// Edit Vehicle Inspection Certificate
+Route::get('vehicle/inspection-certificate/{id}/edit', [NTSAInspectionCertificateController::class, 'edit'])
+    ->name('vehicle.inspection.certificate.edit')
+    ->middleware('auth', 'can:edit vehicle inspection certificate');
+
+Route::put('vehicle/inspection-certificate/{id}/edit', [NTSAInspectionCertificateController::class, 'update'])
+    ->name('vehicle.inspection.certificate.edit')
+    ->middleware('auth', 'can:edit vehicle inspection certificate');
+
+Route::get('vehicle/inspection-certificate/{id}/verify', [NTSAInspectionCertificateController::class, 'verifyForm'])
+->name('vehicle.inspection.certificate.verify')
+->middleware('auth', 'can:edit vehicle inspection certificate');
+
+Route::put('vehicle/inspection-certificate/{id}/verify', [NTSAInspectionCertificateController::class, 'verify'])
+    ->name('vehicle.inspection.certificate.verify')
+    ->middleware('auth', 'can:edit vehicle inspection certificate');
+
+Route::get('vehicle/inspection-certificate/{id}/suspend', [NTSAInspectionCertificateController::class, 'suspendForm'])
+->name('vehicle.inspection.certificate.suspend')
+->middleware('auth', 'can:edit vehicle inspection certificate');
+
+Route::put('vehicle/inspection-certificate/{id}/suspend', [NTSAInspectionCertificateController::class, 'suspend'])
+    ->name('vehicle.inspection.certificate.suspend')
+    ->middleware('auth', 'can:edit vehicle inspection certificate');
+
+// Delete Vehicle Inspection Certificate
+Route::get('vehicle/inspection-certificate/{id}/delete', [NTSAInspectionCertificateController::class, 'delete'])
+    ->name('vehicle.inspection.certificate.delete')
+    ->middleware('auth', 'can:delete vehicle inspection certificate');
+
+Route::delete('vehicle/inspection-certificate/{id}/delete', [NTSAInspectionCertificateController::class, 'destroy'])
+    ->name('vehicle.inspection.certificate.delete')
+    ->middleware('auth', 'can:delete vehicle inspection certificate');

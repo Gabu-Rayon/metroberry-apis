@@ -93,4 +93,9 @@ class Vehicle extends Model
     {
         return $this->hasMany(VehicleRefueling::class);
     }
+
+    public function inspectionCertificates()
+    {
+        return $this->hasMany(NTSAInspectionCertificate::class);
+    }
 }
