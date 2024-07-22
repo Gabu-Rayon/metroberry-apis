@@ -64,9 +64,13 @@
                                                             <span class="badge bg-info">Approved</span>
                                                         @elseif ($maintenanceRepair->repair_status == 'rejected')
                                                             <span class="badge bg-danger">Rejected</span>
-                                                        @else
-                                                            <span class="badge bg-warning">Invalid Status</span>
-                                                        @endif
+                                                        @elseif ($service->service_status == 'paid')
+                                                                        <span class="badge bg-danger">paid</span>
+                                                                        @elseif ($service->service_status == 'partially paid')
+                                                                        <span class="badge bg-danger">partially paid</span>
+                                                                    @else
+                                                                        <span class="badge bg-warning">Invalid Status</span>
+                                                                    @endif
                                                     </td>
                                                     <td class="text-center">
                                                         @if ($maintenanceRepair->repair_status == 'pending' || $maintenanceRepair->repair_status == 'approved')
@@ -97,6 +101,15 @@
                                                                 <i class="fa fa-trash"></i>
                                                             </a>
                                                         @endif
+
+                                                           @if (in_array($service->service_status, ['billed', 'paid', 'partially paid']))
+    <a href="{{ route('repair.service.payment.checkout', ['id' => $maintenanceRepair->id]) }}"
+        class="btn btn-primary btn-sm"
+        title="Checkout to Pay Vehicle maintenance service charges.">
+        <small><i class="fa-solid fa-money-bill"></i></small>
+    </a>
+@endif
+
                                                     </td>
                                                 </tr>
                                                 @endforeach

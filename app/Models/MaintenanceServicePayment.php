@@ -10,19 +10,20 @@ class MaintenanceServicePayment extends Model
     use HasFactory;
 
     protected $fillable = [
+        'maintenance_service_id',
         'vehicle_id',
         'service_type_id',
         'service_category_id',
         'service_date',
         'service_cost',
-        'invoice_id',
         'account_id',
+        'invoice_no',
         'receipt_type_code',
         'payment_type_code',
         'confirm_date',
         'payment_date',
-        'total_taxable',
-        'amount',
+        'total_taxable_amount',
+        'total_tax_amount',
         'total_amount',
         'remark',
         'payment_receipt',
@@ -30,6 +31,7 @@ class MaintenanceServicePayment extends Model
         'qr_code_url',
         'created_by'
     ];
+
 
     public function vehicle()
     {

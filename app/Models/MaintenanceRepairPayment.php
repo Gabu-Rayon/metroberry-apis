@@ -10,18 +10,19 @@ class MaintenanceRepairPayment extends Model
     use HasFactory;
 
     protected $fillable = [
+        'maintenance_repair_id',
         'vehicle_id',
         'part_id',
         'repair_type',
         'repair_cost',
-        'invoice_id',
         'account_id',
+        'invoice_no',
         'receipt_type_code',
         'payment_type_code',
         'confirm_date',
         'payment_date',
-        'total_taxable',
-        'amount',
+        'total_taxable_amount',
+        'total_tax_amount',
         'total_amount',
         'remark',
         'payment_receipt',

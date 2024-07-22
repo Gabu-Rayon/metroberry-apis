@@ -196,31 +196,32 @@ class MaintenanceServiceController extends Controller
     public function maintenanceServicePaymentCheckOut($id)
     {
         try {
-            // Fetch the trip details where the status is 'billed' or 'partially paid',' paid'
-            $maintenanceService = MaintenanceService::where('id', $id)
-                ->whereIn('status', ['billed', 'paid', 'partially paid'])
+            // Fetch the service details where the status is 'billed', 'paid', or 'partially paid'
+            $service = MaintenanceService::where('id', $id)
+                ->whereIn('service_status', ['billed', 'paid', 'partially paid'])
                 ->firstOrFail();
 
-            // Retrieve all payments for this trip
-            // $ThisMaintenanceServicePayment = MaintenanceServicePayment::where('trip_id', $id)->get();
-            $ThisMaintenanceServicePayment = MaintenanceServicePayment::where('trip_id', $id)->with('account')->get();
+            // Retrieve all payments for this service
+            $ThisMaintenanceServicePayment = MaintenanceServicePayment::where('maintenance_service_id', $id)->with('account')->get();
 
             Log::info('This Maintenance Service payments data: ', $ThisMaintenanceServicePayment->toArray());
 
             // Calculate the total paid amount from the MaintenanceServicePayment table
-            $totalPaid = MaintenanceServicepayment::where('trip_id', $id)->sum('total_amount');
+            $totalPaid = MaintenanceServicePayment::where('maintenance_service_id', $id)->sum('total_amount');
 
             // Calculate the remaining amount to be paid
-            $remainingAmount = $maintenanceService->total_price - $totalPaid;
+            $remainingAmount = $service->service_cost - $totalPaid;
 
-            // Return the view with the trip details and remaining amount
-            return view('maintenance-services.serviceCheckout.vehicle-service-checkout', compact('maintenanceService', 'remainingAmount', 'ThisTripPayments'));
+            // Return the view with the service details and remaining amount
+            return view('vehicle.maintenance-services.serviceCheckout.vehicle-service-checkout', compact('service', 'remainingAmount', 'ThisMaintenanceServicePayment'));
 
         } catch (Exception $e) {
-            Log::error('Error fetching trip details for payment checkout: ' . $e->getMessage());
-            return back()->with('error', 'An error occurred while fetching the trip details. Please try again.');
+            Log::error('Error fetching service details for payment checkout: ' . $e->getMessage());
+            return back()->with('error', 'An error occurred while fetching the service details. Please try again.');
         }
     }
+
+
 
 
     /**
