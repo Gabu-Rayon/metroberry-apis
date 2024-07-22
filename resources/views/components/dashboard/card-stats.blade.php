@@ -11,6 +11,7 @@
             
             <div class="card-body px-3">
                 <div class="d-flex flex-column gap-2">
+
                     <div>
                         <i class="fas fa-car-on text-success"></i>
 
@@ -54,6 +55,7 @@
             </div>
             <div class="card-body px-3">
                 <div class="d-flex flex-column gap-2">
+
                     <div>
                         <i class="fa-solid fa-calendar-days text-primary"></i>
                         
@@ -201,7 +203,7 @@
     
                     <div>
                         <i class="fas fa-money-check {{ $textClass }}"></i>
-                        <a class="{{ $textClass }}" href="inventory/stock">
+                        <a class="{{ $textClass }}" href="#">
                             Total Expenses
                             <span class="float-end {{ $textClass }}">
                                 <strong>KES {{ $totalExpense }}</strong>

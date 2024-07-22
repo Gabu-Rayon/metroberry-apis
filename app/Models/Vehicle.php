@@ -29,7 +29,6 @@ class Vehicle extends Model
 
     protected $hidden = [
         'organisation_id',
-        'created_by',
         'created_at',
         'updated_at',
     ];
@@ -92,5 +91,10 @@ class Vehicle extends Model
     public function refuellings()
     {
         return $this->hasMany(VehicleRefueling::class);
+    }
+
+    public function inspectionCertificates()
+    {
+        return $this->hasMany(NTSAInspectionCertificate::class);
     }
 }

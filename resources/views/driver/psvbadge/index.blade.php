@@ -108,7 +108,8 @@
                                                                 if ($isExpired) {
                                                                     $badgeClass = 'badge bg-danger';
                                                                     $badgeText = 'Expired';
-                                                                } elseif ($daysUntilExpiry > 0 && $daysUntilExpiry <= 30) { // Adjusted condition here
+                                                                } elseif ($daysUntilExpiry > 0 && $daysUntilExpiry <= 30) { 
+                                                                    // Adjusted condition here
                                                                     if (!$psvbadge->verified) {
                                                                         $badgeClass = 'badge bg-warning text-dark'; // Yellow badge for pending verification.
                                                                         $badgeText = 'Pending Verification';

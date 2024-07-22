@@ -42,39 +42,20 @@
                                                 <table class="table" id="driver-table">
                                                     <thead>
                                                         <tr>
-                                                            <th title="Sl" width="30">SrNo</th>
-                                                            <th title="Seats">Model</th>
-                                                            <th title="Plate Number">Year</th>
-                                                            <th title="Insurance Issue Date">NumberPlate</th>
-                                                            <th title="Insurance Expriry Date">Seats</th>
-                                                            <th title="Insurance Issue Organisation">FuelType
-                                                            </th>
-                                                            <th title="Insurance Issue Organisation">EngineCC
-                                                            </th>
-                                                            <th title="Avatar">Avatar</th>
                                                             <th title="Driver">Driver</th>
-                                                             <th title="Address">Status</th>
+                                                            <th title="Make">Make</th>
+                                                            <th title="Model">Model</th>
+                                                            <th title="Plate Number">Plate Number</th>
+                                                            <th title="Seats">Seats</th>
+                                                            <th title="Fuel Type">Fuel Type</th>
+                                                            <th title="Engine Size (CC)">Engine Size (CC)</th>
+                                                            <th title="Status">Status</th>
                                                             <th title="Action" width="150">Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         @foreach ($vehicles as $vehicle)
                                                             <tr>
-                                                                <td>{{ $vehicle->id }}</td>
-                                                                <td>{{ $vehicle->model }}</td>
-                                                                <td>{{ $vehicle->year }}</td>
-                                                                <td>{{ $vehicle->plate_number }}</td>
-                                                                <td>{{ $vehicle->seats }}</td>
-                                                                <td>{{ $vehicle->fuel_type }}
-                                                                </td>
-                                                                <td>{{ $vehicle->engine_size }}<i>cc
-                                                                    </i></td>
-                                                                <td>
-                                                                    @if ($vehicle->avatar)
-                                                                        <img src="{{ asset('images/' . $vehicle->avatar) }}"
-                                                                            alt="Avatar" width="50" height="50">
-                                                                    @endif
-                                                                </td>
                                                                 <td>
                                                                 @if ($vehicle->driver && $vehicle->driver->user)
                                                                     {{ $vehicle->driver->user->name }}
@@ -87,15 +68,22 @@
                                                                     </a>
                                                                     @endif
                                                                 @endif
-                                                            </td>
-                                                             <td>
-                                                        @if ($vehicle->status == 'active')
+                                                                </td>
+                                                                <td>{{ $vehicle->make }}</td>
+                                                                <td>{{ $vehicle->model }}</td>
+                                                                <td>{{ $vehicle->plate_number }}</td>
+                                                                <td>{{ $vehicle->seats }}</td>
+                                                                <td>{{ $vehicle->fuel_type }}
+                                                                </td>
+                                                                <td>{{ $vehicle->engine_size }}<i>CC</i></td>
+                                                                <td>
+                                                                    @if ($vehicle->status == 'active')
                                                         <span class="badge bg-success">Active</span>
                                                         @else
                                                         <span class="badge bg-danger">Inactive</span>
                                                         @endif
                                                     </td>
-                                                    <td class="d-flex">
+                                                    <td class="text-center">
                                                          @if (\Auth::user()->can('edit vehicle'))
                                                         <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="axiosModal('/vehicle/{{ $vehicle->id }}/edit')" title="Edit Driver">
                                                             <i class="fas fa-edit"></i>

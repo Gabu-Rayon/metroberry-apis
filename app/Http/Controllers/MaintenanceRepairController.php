@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\MaintenanceRepair;
+use Exception;
 use App\Models\Vehicle;
 use App\Models\VehiclePart;
-use Exception;
 use Illuminate\Http\Request;
+use App\Models\MaintenanceRepair;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Models\MaintenanceRepairPayment;
 use Illuminate\Support\Facades\Validator;
 
 class MaintenanceRepairController extends Controller
@@ -316,6 +317,35 @@ class MaintenanceRepairController extends Controller
             Log::error('DELETE MAINTENANCE REPAIR ERROR');
             Log::error($e);
             return redirect()->back()->with('error', 'Something went wrong.');
+        }
+    }
+
+
+    public function maintenanceServicePaymentCheckOut($id)
+    {
+        try {
+            // Fetch the service details where the status is 'billed', 'paid', or 'partially paid'
+            $maintenanceRepair = MaintenanceRepair::where('id', $id)
+                ->whereIn('repair_status', ['billed', 'paid', 'partially paid'])
+                ->firstOrFail();
+
+            // Retrieve all payments for this MaintenanceRepair
+            $ThisMaintenanceRepairPayment = MaintenanceRepairPayment::where('maintenance_repair_id', $id)->with('account')->get();
+
+            Log::info('This Maintenance Repair payments data: ', $ThisMaintenanceRepairPayment->toArray());
+
+            // Calculate the total paid amount from the Maintenance MaintenanceRepair table
+            $totalPaid = MaintenanceRepairPayment::where('maintenance_repair_id', $id)->sum('total_amount');
+
+            // Calculate the remaining amount to be paid
+            $remainingAmount = $maintenanceRepair->repair_cost - $totalPaid;
+
+            // Return the view with the MaintenanceRepair details and remaining amount
+            return view('vehicle.maintenance-repairs.repairsCheckout.vehicle-repair-checkout', compact('maintenanceRepair', 'remainingAmount', 'ThisMaintenanceRepairPayment'));
+
+        } catch (Exception $e) {
+            Log::error('Error fetching service details for payment checkout: ' . $e->getMessage());
+            return back()->with('error', 'An error occurred while fetching the Maintenance Repair details. Please try again.');
         }
     }
 }

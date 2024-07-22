@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\MaintenanceService;
-use App\Models\ServiceType;
-use App\Models\Vehicle;
 use Exception;
+use App\Models\Vehicle;
+use App\Models\ServiceType;
 use Illuminate\Http\Request;
+use App\Models\MaintenanceService;
+use App\Models\MetroBerryAccounts;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use App\Models\MaintenanceServicePayment;
 use Illuminate\Support\Facades\Validator;
 
 class MaintenanceServiceController extends Controller
@@ -186,4 +189,34 @@ class MaintenanceServiceController extends Controller
     {
         //
     }
+
+   public function maintenanceServicePaymentCheckOut($id)
+    {
+        try {
+            // Fetch the service details where the status is 'billed', 'paid', or 'partially paid'
+            $service = MaintenanceService::where('id', $id)
+                ->whereIn('service_status', ['billed', 'paid', 'partially paid'])
+                ->firstOrFail();
+
+            // Retrieve all payments for this service
+            $ThisMaintenanceServicePayment = MaintenanceServicePayment::where('maintenance_service_id', $id)->with('account')->get();
+
+            Log::info('This Maintenance Service payments data: ', $ThisMaintenanceServicePayment->toArray());
+
+            // Calculate the total paid amount from the MaintenanceServicePayment table
+            $totalPaid = MaintenanceServicePayment::where('maintenance_service_id', $id)->sum('total_amount');
+
+            // Calculate the remaining amount to be paid
+            $remainingAmount = $service->service_cost - $totalPaid;
+
+            // Return the view with the service details and remaining amount
+            return view('vehicle.maintenance-services.serviceCheckout.vehicle-service-checkout', compact('service', 'remainingAmount', 'ThisMaintenanceServicePayment'));
+
+        } catch (Exception $e) {
+            Log::error('Error fetching service details for payment checkout: ' . $e->getMessage());
+            return back()->with('error', 'An error occurred while fetching the service details. Please try again.');
+        }
+    }
+
+
 }

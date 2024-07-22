@@ -40,6 +40,11 @@ class RoleAndPermissionSeeder extends Seeder
             'update settings',
             'manage settings',
 
+            'view vehicle inspection certificate',
+            'create vehicle inspection certificate',
+            'edit vehicle inspection certificate',
+            'delete vehicle inspection certificate',
+
             'view dashboard',
             'edit profile',
             'update profile',
@@ -65,7 +70,7 @@ class RoleAndPermissionSeeder extends Seeder
             'deactivate customer',
             'import customer',
             'export customer',
-            
+
             'reset password',
             'edit password',
             'update password',
@@ -96,7 +101,7 @@ class RoleAndPermissionSeeder extends Seeder
             'delete driver trips',
             'update driver trips details',
             'update driver trips',
-            
+
             'manage drivers performances',
             'view driver performance',
             'create driver performance',
@@ -219,7 +224,7 @@ class RoleAndPermissionSeeder extends Seeder
             'delete driver assignment',
             'update driver assignment',
             'manage driver assignment details',
-            
+
             'manage vehicles',
             'view vehicle details',
             'create vehicle details',
@@ -236,6 +241,7 @@ class RoleAndPermissionSeeder extends Seeder
             'delete vehicle maintenance',
             'update vehicle maintenance',
             'manage vehicle maintenance',
+            'bill vehicle maintenance',
 
             // License Permissions
             'view driver license',
@@ -350,6 +356,10 @@ class RoleAndPermissionSeeder extends Seeder
             'delete report trip',
             'update report trip',
             'manage report trip',
+            'pay trip',
+            'download trip invoice',
+            'resend  trip invoice',
+            'send trip invoice',
 
             'view report vehicle requisition',
             'create report vehicle requisition',
@@ -464,8 +474,6 @@ class RoleAndPermissionSeeder extends Seeder
             Permission::firstOrCreate(['name' => $permission]);
         }
 
-
-
         $admin = Role::where('name', 'admin')->first();
         $organisation = Role::where('name', 'organisation')->first();
         $customer = Role::where('name', 'customer')->first();
@@ -477,6 +485,12 @@ class RoleAndPermissionSeeder extends Seeder
             'edit profile',
             'update profile',
             'delete profile',
+
+
+            'view vehicle inspection certificate',
+            'create vehicle inspection certificate',
+            'edit vehicle inspection certificate',
+            'delete vehicle inspection certificate',
 
             'manage users',
             'view user',
@@ -518,7 +532,7 @@ class RoleAndPermissionSeeder extends Seeder
             'edit driver',
             'delete driver',
             'update driver',
-            
+
             'activate driver',
             'deactivate driver',
             'assign driver',
@@ -530,6 +544,10 @@ class RoleAndPermissionSeeder extends Seeder
             'delete driver trips',
             'update driver trips details',
             'update driver trips',
+            'pay trip',
+            'download trip invoice',
+            'resend  trip invoice',
+            'send trip invoice',
 
             'manage drivers performances',
             'view driver performance',
@@ -670,6 +688,7 @@ class RoleAndPermissionSeeder extends Seeder
             'delete vehicle maintenance',
             'update vehicle maintenance',
             'manage vehicle maintenance',
+            'bill vehicle maintenance',
 
             // License Permissions
             'view driver license',
@@ -853,7 +872,7 @@ class RoleAndPermissionSeeder extends Seeder
             'edit vehicle insurance company',
             'delete vehicle insurance company',
             'activate vehicle insurance company',
-            'deactivate vehicle insurance company',            
+            'deactivate vehicle insurance company',
             'update vehicle insurance company',
             'manage vehicle insurance company',
 
@@ -882,6 +901,7 @@ class RoleAndPermissionSeeder extends Seeder
         ]);
 
         $organisation->syncPermissions([
+            'view route location',
             'view dashboard',
             'edit profile',
             'update profile',
@@ -898,7 +918,7 @@ class RoleAndPermissionSeeder extends Seeder
             'create customer',
             'edit customer',
             'update customer',
-            'import customer',            
+            'import customer',
 
             'reset password',
             'edit password',
@@ -918,6 +938,8 @@ class RoleAndPermissionSeeder extends Seeder
             'cancel trip',
             'update trip',
             'manage trips',
+            'pay trip',
+            'download trip invoice',
 
             'view trip details',
             'create trip details',
@@ -996,7 +1018,7 @@ class RoleAndPermissionSeeder extends Seeder
             'delete trip',
             'update trip',
             'manage trips',
-            
+
             'view route',
             'update profile',
             'reset password',
