@@ -39,7 +39,7 @@ return new class extends Migration
             $table->foreign('maintenance_service_id')->references('id')->on('maintenance_services')->onDelete('cascade');
             $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
             $table->foreign('service_type_id')->references('id')->on('service_types')->onDelete('cascade');
-            $table->foreign('service_category_id')->references('id')->on('service_categories')->onDelete('cascade');
+            $table->foreign('service_category_id')->references('id')->on('service_type_categories')->onDelete('cascade');
             $table->foreign('account_id')->references('id')->on('accounts')->onDelete('cascade');
             $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
         });

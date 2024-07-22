@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Checkout Vehicle Service')
+@section('title', 'Checkout Vehicle maintenanceRepair')
 @section('content')
 
     <body class="fixed sidebar-mini">
@@ -24,7 +24,7 @@
                                     <div class="card-header">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div>
-                                                <h6 class="fs-17 fw-semi-bold mb-0">Vehicle Service Payment</h6>
+                                                <h6 class="fs-17 fw-semi-bold mb-0">Vehicle maintenanceRepair Payment</h6>
                                             </div>
                                         </div>
                                     </div>
@@ -32,9 +32,9 @@
                                         <div class="row">
                                             <div class="actions">
                                                 <p class="mb-0 mr-3 text-dark fw-bold">Status :</p>
-                                                @if ($service->service_status == 'billed')
+                                                @if ($maintenanceRepair->repair_status == 'billed')
                                                     <span class="badge bg-success">Billed</span>
-                                                @elseif ($service->service_status  == 'paid')
+                                                @elseif ($maintenanceRepair->repair_status  == 'paid')
                                                     <span class="badge bg-success">Paid</span>
                                                 @else
                                                     <span class="badge bg-danger">Partially Paid</span>
@@ -42,31 +42,31 @@
                                                 <div class="accordion-header d-flex justify-content-end align-items-center"
                                                     id="flush-headingOne">
                                                     <a class="btn btn-success btn-sm" href="javascript:void(0);"
-                                                        onclick="axiosModal('{{ route('billed.vehicle.service.send.invoice', ['id' => $service->id]) }}')">
+                                                        onclick="axiosModal('{{ route('billed.maintenance.repair.send.invoice', ['id' => $maintenanceRepair->id]) }}')">
                                                         <i class="fa-solid fa-arrow-right"></i> &nbsp;
-                                                        Send Vehicle Service Invoice
+                                                        Send M-Repair Invoice
                                                     </a>
 
                                                     <span class="m-1"></span>
                                                     <a class="btn btn-success btn-sm" href="javascript:void(0);"
-                                                        onclick="axiosModal('{{ route('billed.vehicle.service.resend.invoice', ['id' => $service->id]) }}')">
+                                                        onclick="axiosModal('{{ route('billed.maintenance.repair.resend.invoice', ['id' => $maintenanceRepair->id]) }}')">
                                                         <i class="fas fa-share-square"></i> &nbsp;
-                                                        Resend Vehicle Service Invoice
+                                                        Resend M-Repair Invoice
                                                     </a>
 
                                                     <span class="m-1"></span>
                                                     <a class="btn btn-success btn-sm" href="javascript:void(0);"
-                                                        onclick="axiosModal('{{ route('billed.vehicle.service.download.invoice', ['id' => $service->id]) }}')">
+                                                        onclick="axiosModal('{{ route('billed.maintenance.repair.download.invoice', ['id' => $maintenanceRepair->id]) }}')">
                                                         <i class="fa-solid fa-download"></i> &nbsp;
-                                                        Download Vehicle Service Invoice
+                                                        Download M-Repair Invoice
                                                     </a>
 
                                                     <span class="m-1"></span>
-                                                    @if (in_array($service->service_status, ['billed', 'partially paid']))
+                                                    @if (in_array($maintenanceRepair->repair_status, ['billed', 'partially paid']))
                                                         <a class="btn btn-success btn-sm" href="javascript:void(0);"
-                                                            onclick="axiosModal('{{ route('billed.vehicle.service.receive.payment', ['id' => $service->id]) }}')">
+                                                            onclick="axiosModal('{{ route('billed.maintenance.repair.receive.payment', ['id' => $maintenanceRepair->id]) }}')">
                                                             <i class="fa-solid fa-plus"></i> &nbsp;
-                                                            Receive Vehicle Service Payment
+                                                            Receive M-Repair Payment
                                                         </a>
                                                     @endif
                                                 </div>
@@ -84,13 +84,13 @@
                                                 <thead>
                                                     <tr>
                                                         <th title="SrNo" width="30">SrNo</th>
-                                                        <th title="Trip Route">Vehicle</th>
-                                                        <th title="Billed By">Service Type</th>
-                                                        <th title="Charges or Trip price ">Date </th>
-                                                         <th title="Charges or Trip price ">Description </th>
-                                                         <th title="Billed By"> Vehicle Plate</th>
-                                                        <th title="Charges or Trip price ">Service Category </th>
-                                                         <th title="Charges or Trip price ">Cost </th>
+                                                        <th title="Vehicle">Vehicle</th>
+                                                        <th title="Parts">Part</th>
+                                                        <th title="Date ">Date </th>
+                                                         <th title="Type ">Type </th>
+                                                         <th title="Cost">Cost</th>
+                                                        <th title="Amount ">Amount </th>
+                                                         <th title="Description ">Description </th>
 
                                                     </tr>
                                                 </thead>
@@ -98,19 +98,19 @@
                                                     @php $item = 1 @endphp
                                                     <tr>
                                                         <td>{{ $item++ }}</td>
-                                                        <td> {{ $service->vehicle->plate_number  }}</td>
-                                                        <td> {{ $service->serviceType->name  }} </td>
-                                                        <td>{{ $service->service_date }}</td>
-                                                        <td> {{ $service->service_description}}</td>
-                                                        <td> {{ $service->vehicle->plate_number  }}</td>
-                                                        <td>{{ $service->serviceCategory->name }}</td>
-                                                        <td>Kes. {{ $service->service_cost }}</td>
+                                                        <td> {{ $maintenanceRepair->vehicle->model  }}</td>
+                                                        <td> {{ $maintenanceRepair->part->name  }} </td>
+                                                        <td>{{ $maintenanceRepair->repair_date}}</td>
+                                                        <td> Kes. {{ $maintenanceRepair->repair_type }}</td>
+                                                        <td> Kes. {{ $maintenanceRepair->repair_cost  }}</td>
+                                                        <td>{{ $maintenanceRepair->amount }}</td>
+                                                        <td>{{ $maintenanceRepair->repair_description }}</td>
 
                                                     </tr>
                                                     <tr>
                                                         <td colspan="3" class="text-right my-20"><strong>Total</strong>
                                                         </td>
-                                                        <td><strong>Kes.{{ $service->service_cost }}</strong></td>
+                                                        <td><strong>Kes.{{ $maintenanceRepair->repair_cost }}</strong></td>
                                                     </tr>
                                                     <tr>
                                                         <td colspan="3" class="text-right my-20">
@@ -152,9 +152,9 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach ($ThisMaintenanceServicePayment as $payment)
+                                                    @foreach ($ThisMaintenanceRepairPayment as $payment)
                                                         <tr>
-                                                            <td> <a href="{{ route('billed.vehicle.service.download.invoice', ['id' => $payment->id]) }}"
+                                                            <td> <a href="{{ route('billed.maintenance.repair.download.invoice', ['id' => $payment->id]) }}"
                                                                     class="btn btn-primary btn-sm"> <i
                                                                         class="fa-solid fa-download"></i> &nbsp;</a></td>
                                                             <td>{{ $payment->payment_date }}</td>
@@ -164,7 +164,7 @@
                                                             <td>{{ $payment->reference }}</td>
                                                             <td>{{ $payment->remark }}</td>
                                                             <td>
-                                                                <a href="{{ asset('payment_receipts/' . $payment->payment_receipt) }}"
+                                                                <a href="{{ asset('maintenance_repair_payment_receipts/' . $payment->payment_receipt) }}"
                                                                     download>
                                                                     <i class="fa-solid fa-file-pdf"></i> Receipt
                                                                 </a>

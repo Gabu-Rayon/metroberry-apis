@@ -20,8 +20,8 @@ return new class extends Migration
             $table->decimal('repair_cost', 10, 2);
             $table->unsignedBigInteger('account_id');
             $table->string('invoice_no');
-            $table->string('receipt_type_code');
-            $table->string('payment_type_code');
+            $table->string('receipt_type_code')->nullable();
+            $table->string('payment_type_code')->nullable();
             $table->date('confirm_date')->nullable();
             $table->date('payment_date');
             $table->decimal('total_taxable_amount', 10, 2)->nullable();
@@ -37,7 +37,7 @@ return new class extends Migration
             // Foreign keys and indexes
             $table->foreign('maintenance_repair_id')->references('id')->on('maintenance_repairs')->onDelete('cascade');
             $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
-            $table->foreign('part_id')->references('id')->on('parts')->onDelete('cascade');
+            $table->foreign('part_id')->references('id')->on('vehicle_parts')->onDelete('cascade');
             $table->foreign('account_id')->references('id')->on('accounts')->onDelete('cascade');
             $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
         });

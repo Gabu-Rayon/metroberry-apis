@@ -1,4 +1,4 @@
-<form action="{{ route('billed.vehicle.service.receive.payment.store', $service->id) }}" method="POST"
+<form action="{{ route('billed.maintenance.repair.receive.payment.store', $maintenanceRepair->id) }}" method="POST"
     class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
     @csrf
     <div class="card-header my-3 p-2 border-bottom">

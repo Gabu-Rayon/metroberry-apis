@@ -109,7 +109,7 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <textarea name="description" class="form-control" id="description" rows="4">{{ $repair->description }}</textarea>
+                        <textarea name="description" class="form-control" id="description" rows="4">{{ $repair->repair_description ?? '-' }}</textarea>
                     </div>
                 </div>                
 

@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\MaintenanceRepair;
 use App\Models\MetroBerryAccounts;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use App\Models\MaintenanceRepairPayment;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Str;
 
-class MaintenanceRapairPaymentController extends Controller
+class MaintenanceRepairPaymentController extends Controller
 {
 
     /**
@@ -22,24 +23,24 @@ class MaintenanceRapairPaymentController extends Controller
             Log::info('Vehicle Maintainance Repair to receive Payment');
             Log::info($id);
 
-            // Fetch the Vehicle Maintainance Repair details where the status is 'billed' or 'partially paid'
-            $service = MaintenanceRepair::where('id', $id)
-                ->whereIn('service_status', ['billed', 'partially paid'])
+            // Fetch the service details where the status is 'billed', 'paid', or 'partially paid'
+            $maintenanceRepair = MaintenanceRepair::where('id', $id)
+                ->whereIn('repair_status', ['billed', 'paid', 'partially paid'])
                 ->firstOrFail();
 
-            // Calculate the total paid amount
-            $totalPaid = MaintenanceRepairPayment::where('maintenance_service_id', $id)->sum('total_amount');
+            // Calculate the total paid amount from the Maintenance MaintenanceRepair table
+            $totalPaid = MaintenanceRepairPayment::where('maintenance_repair_id', $id)->sum('total_amount');
 
-            // Calculate the remaining amount
-            $remainingAmount = $service->service_cost - $totalPaid;
+            // Calculate the remaining amount to be paid
+            $remainingAmount = $maintenanceRepair->repair_cost - $totalPaid;
 
             // Fetch all accounts
             $accounts = MetroBerryAccounts::all();
 
             // Pass the necessary data to the view
-            return view('vehicle.maintenance-repair.repairCheckout.vehicle-repair-receive-payment', compact('service', 'remainingAmount', 'accounts'));
+            return view('vehicle.maintenance-repairs.repairsCheckout.vehicle-repair-receive-payment', compact('maintenanceRepair', 'remainingAmount', 'accounts'));
         } catch (\Exception $e) {
-            Log::error('Error receiving payment for Vehicle Maintainance: ' . $e->getMessage());
+            Log::error('Error receiving payment for Vehicle Maintainance Repair: ' . $e->getMessage());
             return back()->with('error', 'An error occurred while receiving the payment. Please try again.');
         }
     }
@@ -51,7 +52,7 @@ class MaintenanceRapairPaymentController extends Controller
         try {
             $data = $request->all();
 
-            Log::info('Data from the Form to receive payment of billed service');
+            Log::info('Data from the Form to receive payment of billed Vehicle Repair Maintenance ');
             Log::info($data);
 
             $creator = Auth::user();
@@ -63,7 +64,7 @@ class MaintenanceRapairPaymentController extends Controller
             $validator = Validator::make($data, [
                 'payment_date' => 'required|date',
                 'amount' => 'required|numeric',
-                'account_id' => 'required|exists:accounts,id', // Assuming 'accounts' is the table name and 'id' is the primary key
+                'account_id' => 'required|exists:accounts,id', 
                 'remark' => 'nullable|string',
                 'payment_receipt' => 'required|mimes:png,jpg,jpeg,pdf,doc,docx|max:2048',
                 'reference' => 'required|string',
@@ -80,55 +81,55 @@ class MaintenanceRapairPaymentController extends Controller
             Log::info($invoiceNo);
 
             // Retrieve service details based on $id
-            $service = MaintenanceRepair::findOrFail($id);
+            $maintenanceRepair = MaintenanceRepair::findOrFail($id);
 
-            $maintenanceServicePayment = new MaintenanceRepairPayment();
-            $maintenanceServicePayment->maintenance_service_id = $service->id;
-            $maintenanceServicePayment->vehicle_id = $service->vehicle_id;
-            $maintenanceServicePayment->service_type_id = $service->service_type_id;
-            $maintenanceServicePayment->service_category_id = $service->service_category_id;
-            $maintenanceServicePayment->service_date = $service->service_date;
-            $maintenanceServicePayment->service_cost = $service->service_cost;
-            $maintenanceServicePayment->invoice_no = $invoiceNo;
-            $maintenanceServicePayment->account_id = $data['account_id'];
-            $maintenanceServicePayment->receipt_type_code = null;
-            $maintenanceServicePayment->payment_type_code = null;
-            $maintenanceServicePayment->confirm_date = null;
-            $maintenanceServicePayment->payment_date = $data['payment_date'];
-            $maintenanceServicePayment->total_taxable_amount = $service->service_cost; // Adjust as needed
-            $maintenanceServicePayment->total_tax_amount = null; // Adjust as needed
-            $maintenanceServicePayment->total_amount = $data['amount'];
-            $maintenanceServicePayment->remark = $data['remark'];
-            $maintenanceServicePayment->reference = $data['reference'];
-            $maintenanceServicePayment->qr_code_url = null;
-            $maintenanceServicePayment->created_by = $creator->id;
+
+            $maintenanceRepairPayment = new MaintenanceRepairPayment();
+            $maintenanceRepairPayment->maintenance_repair_id = $maintenanceRepair->id;
+            $maintenanceRepairPayment->vehicle_id = $maintenanceRepair->vehicle_id;
+            $maintenanceRepairPayment->part_id = $maintenanceRepair->part_id;
+            $maintenanceRepairPayment->repair_type = $maintenanceRepair->repair_type;
+            $maintenanceRepairPayment->repair_cost = $maintenanceRepair->repair_cost;
+            $maintenanceRepairPayment->account_id = $data['account_id'];
+            $maintenanceRepairPayment->invoice_no = $invoiceNo;
+            $maintenanceRepairPayment->receipt_type_code = null;
+            $maintenanceRepairPayment->payment_type_code = null;
+            $maintenanceRepairPayment->confirm_date = null;
+            $maintenanceRepairPayment->payment_date = $data['payment_date'];
+            $maintenanceRepairPayment->total_taxable_amount = $maintenanceRepair->service_cost;
+            $maintenanceRepairPayment->total_tax_amount = null; 
+            $maintenanceRepairPayment->total_amount = $data['amount'];
+            $maintenanceRepairPayment->remark = $data['remark'];
+            $maintenanceRepairPayment->reference = $data['reference'];
+            $maintenanceRepairPayment->qr_code_url = null;
+            $maintenanceRepairPayment->created_by = $creator->id;
 
             // Handle payment receipt file upload
             if ($request->hasFile('payment_receipt')) {
                 $file = $request->file('payment_receipt');
                 $fileName = Str::random(20) . '.' . $file->getClientOriginalExtension();
-                $file->move(public_path('maintenance_service_payment_receipts'), $fileName);
-                $maintenanceServicePayment->payment_receipt = $fileName;
+                $file->move(public_path('maintenance_repair_payment_receipts'), $fileName);
+                $maintenanceRepairPayment->payment_receipt = $fileName;
             }
 
-            $maintenanceServicePayment->save();
-            Log::info('Maintenance Service Payment Saved');
+            $maintenanceRepairPayment->save();
+            Log::info('Maintenance Repair Payment Saved');
 
             // Update the MaintenanceService status
-            $totalPaid = MaintenanceRepairPayment::where('maintenance_service_id', $service->id)->sum('total_amount');
+            $totalPaid = MaintenanceRepairPayment::where('maintenance_repair_id', $maintenanceRepair->id)->sum('total_amount');
 
-            if ($totalPaid >= $service->service_cost) {
-                $service->service_status = 'paid';
+            if ($totalPaid >= $maintenanceRepair->repair_cost) {
+                $maintenanceRepair->repair_status = 'paid';
             } else {
-                $service->service_status = 'partially paid';
+                $maintenanceRepair->repair_status = 'partially paid';
             }
-            $service->save();
+            $maintenanceRepair->save();
 
-            return redirect()->route('maintenance.service.payment.checkout', ['id' => $id])
+            return redirect()->route('maintenance.repair.payment.checkout', ['id' => $id])
                 ->with('success', 'Payment received and added successfully.');
         } catch (\Exception $e) {
             Log::error('Error receiving payment for Maintenance Service: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'An error occurred while receiving the payment for the Maintenance Service. Please try again.');
+            return redirect()->back()->with('error', 'An error occurred while receiving the payment for the Maintenance Repair. Please try again.');
         }
     }
 
