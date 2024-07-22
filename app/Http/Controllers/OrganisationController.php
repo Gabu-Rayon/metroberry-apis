@@ -360,7 +360,7 @@ class OrganisationController extends Controller
 
             DB::commit();
 
-            return redirect()->route('organisation.index')->with('success', 'Organisation deleted successfully');
+            return redirect()->route('organisation')->with('success', 'Organisation deleted successfully');
         } catch (Exception $e) {
             DB::rollBack();
             Log::error('ERROR DELETING Organisation');

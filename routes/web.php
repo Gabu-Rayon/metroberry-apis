@@ -214,7 +214,11 @@ Route::put('organisation/{id}/update', [OrganisationController::class, 'update']
     ->middleware('auth', 'can:edit organisation');
 
 // Delete Organisation
-Route::get('organisation/{id}/delete', [OrganisationController::class, 'destroy'])
+Route::get('organisation/{id}/delete', [OrganisationController::class, 'delete'])
+    ->name('organisation.delete')
+    ->middleware('auth', 'can:delete organisation');
+
+Route::delete('organisation/{id}/delete', [OrganisationController::class, 'destroy'])
     ->name('organisation.destroy')
     ->middleware('auth', 'can:delete organisation');
 
