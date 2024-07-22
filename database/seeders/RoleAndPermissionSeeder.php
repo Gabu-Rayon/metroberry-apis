@@ -40,6 +40,11 @@ class RoleAndPermissionSeeder extends Seeder
             'update settings',
             'manage settings',
 
+            'view vehicle inspection certificate',
+            'create vehicle inspection certificate',
+            'edit vehicle inspection certificate',
+            'delete vehicle inspection certificate',
+
             'view dashboard',
             'edit profile',
             'update profile',
@@ -469,8 +474,6 @@ class RoleAndPermissionSeeder extends Seeder
             Permission::firstOrCreate(['name' => $permission]);
         }
 
-
-
         $admin = Role::where('name', 'admin')->first();
         $organisation = Role::where('name', 'organisation')->first();
         $customer = Role::where('name', 'customer')->first();
@@ -482,6 +485,12 @@ class RoleAndPermissionSeeder extends Seeder
             'edit profile',
             'update profile',
             'delete profile',
+
+
+            'view vehicle inspection certificate',
+            'create vehicle inspection certificate',
+            'edit vehicle inspection certificate',
+            'delete vehicle inspection certificate',
 
             'manage users',
             'view user',
@@ -892,6 +901,7 @@ class RoleAndPermissionSeeder extends Seeder
         ]);
 
         $organisation->syncPermissions([
+            'view route location',
             'view dashboard',
             'edit profile',
             'update profile',

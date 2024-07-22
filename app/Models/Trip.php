@@ -31,7 +31,7 @@ class Trip extends Model
         'billing_rate_id',
         'billed_by',
         'total_price',
-        'billed_at'
+        'billed_at',
     ];
 
     protected $casts = [

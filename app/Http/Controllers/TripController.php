@@ -106,7 +106,12 @@ class TripController extends Controller
      */
     public function create()
     {
-        $employees = Customer::where('status', 'Active')->get();
+        $employees = null;
+
+        if (auth()->user()->role = 'organisation') {
+            $employees = Customer::where('organisation_id', auth()->user()->organisation_id)->get();
+        }
+        $employees = Customer::where('status', 'active')->get();
         $routes = Routes::all();
         return view('trips.create', compact('employees', 'routes'));
     }
@@ -162,9 +167,6 @@ class TripController extends Controller
         try {            
             $data = $request->all();
             $creator = Auth::user();
-
-            Log::info('TRIP DATA');
-            Log::info($data);
 
             $validator = Validator::make($data, [
                 'customer_id' => 'required|exists:customers,id',

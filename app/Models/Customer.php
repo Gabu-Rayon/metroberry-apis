@@ -59,9 +59,4 @@ class Customer extends Model
     {
         return $this->hasMany(Trip::class);
     }
-
-    public function billingsInvoices()
-    {
-        return $this->hasMany(Invoice::class);
-    }
 }
