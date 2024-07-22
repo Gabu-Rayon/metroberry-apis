@@ -153,6 +153,10 @@ class PermissionsGroupSeeder extends Seeder
                 'manage trips',
                 'complete trip',
                 'cancel trip',
+                'pay trip',
+                'download trip invoice',
+                'resend  trip invoice',
+                'send trip invoice',
             ],
             'insurance_company' => [
                 'view vehicle insurance company',

@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\MetroBerryAccounts;
 use Exception;
 use App\Models\Trip;
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\TripPayment;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\MetroBerryAccounts;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
-use Illuminate\Support\Str;
+
 
 
 class TripPaymentController extends Controller
@@ -256,7 +258,7 @@ class TripPaymentController extends Controller
 
             $tripPayment->save();
             Log::info('Trip Payment Saved');
-            
+
             if ($data['amount'] >= $trip->total_price) {
                 $trip->status = 'paid';
             } else {
@@ -291,20 +293,122 @@ class TripPaymentController extends Controller
     public function billedTripDownloadInvoice($id)
     {
         try {
-            // Fetch the trip details where the status is 'billed'
-            $trip = Trip::where('id', $id)->where('status', 'billed')->firstOrFail();
+            // Fetch the trip details where the status is 'billed' or 'partially paid'
+            $trip = Trip::where('id', $id)->whereIn('status', ['billed', 'partially paid'])->firstOrFail();
+            // Fetch related payments
+            $payments = $trip->payments;
 
-            // Logic to generate and download the TripPayment
-            //Now to download will call a template pass all the data for this invoice to
-            //  the template the download it  in a pdf  
-            // the template  is in tripInvoiceTemplate.metro-berry-trip-invoice-template 
+            Log::info('This trip payments data To Download: ', $trip->toArray());
 
-            // return response()->download($TripPaymentPath);
+            // Prepare data for the view
+            $organisationCode = auth()->user()->organisation->organisation_code;
+
+            $trips = Trip::whereIn('status', ['billed', 'partially paid'])
+                ->whereHas('customer', function ($query) use ($organisationCode) {
+                    $query->where('customer_organisation_code', $organisationCode);
+                })
+                ->with('customer')
+                ->with('vehicle')
+                ->with('route')
+                ->with('billingRate')
+                ->get();
+
+            Log::info('TRIPS');
+            Log::info($trips);
+
+            // Calculate total amount and balance
+            $totalAmount = $payments->sum('amount');
+            $balance = $trip->total_price - $totalAmount;
+
+            // Fetch the first payment to get the invoice number (assuming it's the same for all related payments)
+            $invoiceNumber = $payments->first() ? $payments->first()->invoice_no : 'MB-INV-' . time();
+
+            $data = [
+                'title' => 'Invoice',
+                'date' => date('m/d/Y'),
+                'due_date' => date('m/d/Y', strtotime('+30 days')),
+                'customer' => auth()->user()->organisation->user->name,
+                'address' => auth()->user()->organisation->user->address,
+                'invoice_number' => $invoiceNumber,
+                'total_amount' => $totalAmount,
+                'balance' => $balance,
+                'items' => $trips,
+                'status' => $trip->status,
+            ];
+
+            // Load the view and pass the data
+            $pdf = Pdf::loadView('invoices.trip-invoice-template', compact('data'));
+
+            // Download the PDF
+            return $pdf->download('trip_invoice_' . $trip->id . '.pdf');
+
         } catch (\Exception $e) {
             Log::error('Error downloading TripPayment for trip: ' . $e->getMessage());
             return back()->with('error', 'An error occurred while downloading the TripPayment. Please try again.');
         }
     }
+
+
+
+    public function billedTripDownloadInvoiceReceipt($id)
+    {
+        try {
+            // Fetch the trip details where the status is 'billed' or 'partially paid'
+            $trip = Trip::where('id', $id)->whereIn('status', ['billed', 'partially paid'])->firstOrFail();
+            // Fetch related payments
+            $payments = $trip->payments;
+
+            Log::info('This trip payments data To Download: ', $trip->toArray());
+
+            // Prepare data for the view
+            $organisationCode = auth()->user()->organisation->organisation_code;
+
+            $trips = Trip::whereIn('status', ['billed', 'partially paid'])
+                ->whereHas('customer', function ($query) use ($organisationCode) {
+                    $query->where('customer_organisation_code', $organisationCode);
+                })
+                ->with('customer')
+                ->with('vehicle')
+                ->with('route')
+                ->with('billingRate')
+                ->get();
+
+            Log::info('TRIPS');
+            Log::info($trips);
+
+            // Calculate total amount and balance
+            $totalAmount = $payments->sum('amount');
+            $balance = $trip->total_price - $totalAmount;
+
+            // Fetch the first payment to get the invoice number (assuming it's the same for all related payments)
+            $invoiceNumber = $payments->first() ? $payments->first()->invoice_no : 'MB-INV-' . time();
+
+            $data = [
+                'title' => 'Invoice',
+                'date' => date('m/d/Y'),
+                'due_date' => date('m/d/Y', strtotime('+30 days')),
+                'customer' => auth()->user()->organisation->user->name,
+                'address' => auth()->user()->organisation->user->address,
+                'invoice_number' => $invoiceNumber,
+                'total_amount' => $totalAmount,
+                'balance' => $balance,
+                'items' => $trips,
+                'status' => $trip->status,
+            ];
+
+            // Load the view and pass the data
+            $pdf = Pdf::loadView('invoices.trip-invoice-template', compact('data'));
+
+            // Download the PDF
+            return $pdf->download('trip_invoice_' . $trip->id . '.pdf');
+
+        } catch (\Exception $e) {
+            Log::error('Error downloading TripPayment for trip: ' . $e->getMessage());
+            return back()->with('error', 'An error occurred while downloading the TripPayment. Please try again.');
+        }
+    }
+
+
 
     /**
      * Resend TripPayment for a billed trip.
@@ -345,6 +449,6 @@ class TripPaymentController extends Controller
             return back()->with('error', 'An error occurred while sending the TripPayment. Please try again.');
         }
     }
-     
+
 
 }
