@@ -75,7 +75,7 @@ class DriverController extends Controller
             if ($validator->fails()) {
                 Log::error('VALIDATION ERROR');
                 Log::error($validator->errors());
-                return redirect()->back()->withErrors($validator)->withInput();
+                return redirect()->back()->with('errors', $validator->errors()->first());
             }
 
             DB::beginTransaction();

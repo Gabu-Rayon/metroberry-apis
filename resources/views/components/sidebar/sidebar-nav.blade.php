@@ -141,7 +141,7 @@
             ])
         @endif
 
-        @if (\Auth::user()->can('manage permission'))
+        {{-- @if (\Auth::user()->can('manage permission'))
             @include('components.sidebar.sidebar-dropdown', [
                 'title' => 'Role permission',
                 'icon' => '<svg width="30" height="30" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -161,7 +161,7 @@
                     \Auth::user()->can('create role') ? ['label' => 'Role', 'route' => route('permission.role')] : null,
                 ]),
             ])
-        @endif
+        @endif --}}
 
         @if (\Auth::user()->can('manage settings'))
             @include('components.sidebar.sidebar-item', [
