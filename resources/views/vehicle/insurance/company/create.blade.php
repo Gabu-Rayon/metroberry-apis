@@ -1,4 +1,5 @@
-<form action="{{ route('vehicle.insurance.company.store') }}" method="POST" class="needs-validation modal-content" novalidate enctype="multipart/form-data">
+<form action="{{ route('vehicle.insurance.company.store') }}" method="POST" class="needs-validation modal-content"
+    enctype="multipart/form-data">
     @csrf
     <div class="card-header my-3 p-2 border-bottom">
         <h4>Add Insurance Company</h4>
@@ -7,30 +8,35 @@
         <div class="row">
             <div class="col-md-12 col-lg-6">
                 <div class="form-group row my-2">
-                    <label for="name" class="col-sm-5 col-form-label">Company Name <i class="text-danger">*</i></label>
+                    <label for="name" class="col-sm-5 col-form-label">Company Name <i
+                            class="text-danger">*</i></label>
                     <div class="col-sm-7">
-                        <input name="name" class="form-control" type="text" placeholder="Company Name" id="name" value="{{ old('name') }}" required>
+                        <input name="name" class="form-control" type="text" placeholder="Company Name"
+                            id="name" value="{{ old('name') }}" required>
                     </div>
                 </div>
 
                 <div class="form-group row my-2">
                     <label for="email" class="col-sm-5 col-form-label">Email</label>
                     <div class="col-sm-7">
-                        <input name="email" autocomplete="off" class="form-control" type="email" placeholder="Email" id="email" value="{{ old('email') }}">
+                        <input name="email" autocomplete="off" class="form-control" type="email" placeholder="Email"
+                            id="email" value="{{ old('email') }}">
                     </div>
                 </div>
 
                 <div class="form-group row my-2">
                     <label for="address" class="col-sm-5 col-form-label">Address</label>
                     <div class="col-sm-7">
-                        <input name="address" class="form-control" type="text" placeholder="Address" id="address" value="{{ old('address') }}">
+                        <input name="address" class="form-control" type="text" placeholder="Address" id="address"
+                            value="{{ old('address') }}">
                     </div>
                 </div>
 
                 <div class="form-group row my-2">
                     <label for="website" class="col-sm-5 col-form-label">Website</label>
                     <div class="col-sm-7">
-                        <input name="website" class="form-control" type="text" placeholder="Website" id="website" value="{{ old('website') }}">
+                        <input name="website" class="form-control" type="text" placeholder="Website" id="website"
+                            value="{{ old('website') }}">
                     </div>
                 </div>
             </div>

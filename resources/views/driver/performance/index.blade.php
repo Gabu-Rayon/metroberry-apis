@@ -49,9 +49,15 @@
                                                         @foreach ($drivers as $driver)
                                                             <tr>
                                                                 <td class="text-center">{{ $driver->user->name }}</td>
-                                                                <td class="text-center">{{ $driver->vehicle ? count($driver->vehicle->trips) : '-' }}</td>
-                                                                <td class="text-center">{{ $driver->vehicle ? count($driver->vehicle->trips->where('status', 'cancelled')) : '-' }}</td>
-                                                                <td class="text-center">{{ $driver->vehicle ? count($driver->vehicle->trips->where('status', 'billed')) : '-' }}</td>
+                                                                <td class="text-center">
+                                                                    {{ $driver->vehicle ? count($driver->vehicle->trips) : '-' }}
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    {{ $driver->vehicle ? count($driver->vehicle->trips->where('status', 'cancelled')) : '-' }}
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    {{ $driver->vehicle ? count($driver->vehicle->trips->where('status', 'billed')) : '-' }}
+                                                                </td>
                                                                 <td class="text-center">
                                                                     <a href="" class="btn btn-primary btn-sm">
                                                                         <i class="fa fa-eye"></i>
@@ -70,7 +76,7 @@
                         </div>
                     </div>
                     <div class="overlay"></div>
-                     @include('components.footer')
+                    @include('components.footer')
                 </div>
             </div>
             <!--end  vue page -->

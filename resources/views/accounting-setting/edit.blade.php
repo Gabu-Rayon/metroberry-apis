@@ -1,8 +1,9 @@
-<form action="{{ route('metro.berry.account.setting.update', $setting->id) }}" method="POST" class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
+<form action="{{ route('metro.berry.account.setting.update', $setting->id) }}" method="POST"
+    class="needs-validation modal-content" enctype="multipart/form-data">
     @csrf
-  @method('PUT')
-  <div class="card-header my-3 p-2 border-bottom">
-      <h4>Edit {{ $setting->holder_name}}'s Account Details</h4>
+    @method('PUT')
+    <div class="card-header my-3 p-2 border-bottom">
+        <h4>Edit {{ $setting->holder_name }}'s Account Details</h4>
     </div>
     <div class="modal-body">
         <div class="row">
@@ -13,7 +14,8 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="holder_name" class="form-control" type="text" placeholder="Account Holder Name" id="holder_name" required value="{{ $setting->holder_name }}" />
+                        <input name="holder_name" class="form-control" type="text" placeholder="Account Holder Name"
+                            id="holder_name" required value="{{ $setting->holder_name }}" />
                     </div>
                 </div>
 
@@ -23,7 +25,8 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="bank_name" class="form-control" type="text" placeholder="Bank Name" id="bank_name" required value="{{ $setting->bank_name }}" />
+                        <input name="bank_name" class="form-control" type="text" placeholder="Bank Name"
+                            id="bank_name" required value="{{ $setting->bank_name }}" />
                     </div>
                 </div>
 
@@ -33,7 +36,8 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="account_number" class="form-control" type="text" placeholder="Account Number" id="account_number" required value="{{ $setting->account_number }}" />
+                        <input name="account_number" class="form-control" type="text" placeholder="Account Number"
+                            id="account_number" required value="{{ $setting->account_number }}" />
                     </div>
                 </div>
 
@@ -43,7 +47,8 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="opening_balance" class="form-control" type="number" placeholder="Opening Balance" id="opening_balance" required value="{{ $setting->opening_balance }}" />
+                        <input name="opening_balance" class="form-control" type="number" placeholder="Opening Balance"
+                            id="opening_balance" required value="{{ $setting->opening_balance }}" />
                     </div>
                 </div>
             </div>
@@ -55,7 +60,8 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="contact_number" class="form-control" type="text" placeholder="Contact Number" id="contact_number" required value="{{ $setting->contact_number }}" />
+                        <input name="contact_number" class="form-control" type="text" placeholder="Contact Number"
+                            id="contact_number" required value="{{ $setting->contact_number }}" />
                     </div>
                 </div>
 

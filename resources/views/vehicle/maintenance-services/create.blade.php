@@ -1,4 +1,5 @@
-<form action="{{ route('maintenance.service.create') }}" method="POST" class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
+<form action="{{ route('maintenance.service.create') }}" method="POST" class="needs-validation modal-content"
+    enctype="multipart/form-data">
     @csrf
     <div class="card-header my-3 p-2 border-bottom">
         <h4>Add Vehicle Service</h4>
@@ -31,7 +32,9 @@
                         <select name="service_type_id" class="form-control" id="service_type_id" required>
                             <option value="">Select Service Type</option>
                             @foreach ($serviceTypes as $serviceType)
-                                <option value="{{ $serviceType->id }}" {{ $serviceType->service_type_id == $serviceType->id ? 'selected' : '' }}>{{ $serviceType->name }}</option>
+                                <option value="{{ $serviceType->id }}"
+                                    {{ $serviceType->service_type_id == $serviceType->id ? 'selected' : '' }}>
+                                    {{ $serviceType->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -93,11 +96,11 @@
                         <input type="number" name="service_cost" class="form-control" id="service_cost" required>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>
-</div>
+    </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
             Close
@@ -123,7 +126,8 @@
                 })
                 .catch(error => console.error('Error fetching service categories:', error));
         } else {
-            document.getElementById('service_category_id').innerHTML = '<option value="">Select Service Category</option>';
+            document.getElementById('service_category_id').innerHTML =
+                '<option value="">Select Service Category</option>';
         }
     }
 

@@ -27,7 +27,8 @@
                                             </div>
                                             <div class="text-end">
                                                 <div class="actions">
-                                                    <a class="btn btn-success btn-sm" href="javascript:void(0);" onclick="axiosModal('vehicle/create')">
+                                                    <a class="btn btn-success btn-sm" href="javascript:void(0);"
+                                                        onclick="axiosModal('vehicle/create')">
                                                         <i class="fa fa-plus"></i>
                                                         &nbsp;
                                                         Add vehicle
@@ -57,17 +58,17 @@
                                                         @foreach ($vehicles as $vehicle)
                                                             <tr>
                                                                 <td>
-                                                                @if ($vehicle->driver && $vehicle->driver->user)
-                                                                    {{ $vehicle->driver->user->name }}
-                                                                @else
-                                                                 @if (\Auth::user()->can('assign vehicle'))
-                                                                    <a href="javascript:void(0);"
-                                                                        class="btn btn-sm btn-primary"
-                                                                        onclick="axiosModal('/vehicle/{{ $vehicle->id }}/assign/driver')">
-                                                                        Assign Driver
-                                                                    </a>
+                                                                    @if ($vehicle->driver && $vehicle->driver->user)
+                                                                        {{ $vehicle->driver->user->name }}
+                                                                    @else
+                                                                        @if (\Auth::user()->can('assign vehicle'))
+                                                                            <a href="javascript:void(0);"
+                                                                                class="btn btn-sm btn-primary"
+                                                                                onclick="axiosModal('/vehicle/{{ $vehicle->id }}/assign/driver')">
+                                                                                Assign Driver
+                                                                            </a>
+                                                                        @endif
                                                                     @endif
-                                                                @endif
                                                                 </td>
                                                                 <td>{{ $vehicle->make }}</td>
                                                                 <td>{{ $vehicle->model }}</td>
@@ -78,38 +79,50 @@
                                                                 <td>{{ $vehicle->engine_size }}<i>CC</i></td>
                                                                 <td>
                                                                     @if ($vehicle->status == 'active')
-                                                        <span class="badge bg-success">Active</span>
-                                                        @else
-                                                        <span class="badge bg-danger">Inactive</span>
-                                                        @endif
-                                                    </td>
-                                                    <td class="text-center">
-                                                         @if (\Auth::user()->can('edit vehicle'))
-                                                        <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="axiosModal('/vehicle/{{ $vehicle->id }}/edit')" title="Edit Driver">
-                                                            <i class="fas fa-edit"></i>
-                                                        </a>
-                                                        @endif
-                                                        <span class='m-1'></span>
-                                                        @if ($vehicle->status == 'active')
-                                                        @if (\Auth::user()->can('deactivate vehicle'))
-                                                            <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="axiosModal('/vehicle/{{ $vehicle->id }}/deactivate')" title="Dectivate Driver">
-                                                                <i class="fas fa-toggle-on"></i>
-                                                            </a> 
-                                                            @endif
-                                                        @else
-                                                            @if (\Auth::user()->can('activate vehicle'))
-                                                            <a href="javascript:void(0);" class="btn btn-sm btn-secondary" onclick="axiosModal('/vehicle/{{ $vehicle->id }}/activate')" title="Activate Driver">
-                                                                <i class="fas fa-toggle-off"></i>
-                                                            </a>  
-                                                            @endif                                                      
-                                                        @endif
-                                                        <span class='m-1'></span>
-                                                         @if (\Auth::user()->can('delete vehicle'))
-                                                        <a href="javascript:void(0);" class="btn btn-sm btn-danger" onclick="axiosModal('vehicle/{{ $vehicle->id }}/delete')" title="Delete">
-                                                            <i class="fas fa-trash"></i>
-                                                        </a>
-                                                        @endif
-                                                    </td>
+                                                                        <span class="badge bg-success">Active</span>
+                                                                    @else
+                                                                        <span class="badge bg-danger">Inactive</span>
+                                                                    @endif
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    @if (\Auth::user()->can('edit vehicle'))
+                                                                        <a href="javascript:void(0);"
+                                                                            class="btn btn-sm btn-primary"
+                                                                            onclick="axiosModal('/vehicle/{{ $vehicle->id }}/edit')"
+                                                                            title="Edit Driver">
+                                                                            <i class="fas fa-edit"></i>
+                                                                        </a>
+                                                                    @endif
+                                                                    <span class='m-1'></span>
+                                                                    @if ($vehicle->status == 'active')
+                                                                        @if (\Auth::user()->can('deactivate vehicle'))
+                                                                            <a href="javascript:void(0);"
+                                                                                class="btn btn-sm btn-success"
+                                                                                onclick="axiosModal('/vehicle/{{ $vehicle->id }}/deactivate')"
+                                                                                title="Dectivate Driver">
+                                                                                <i class="fas fa-toggle-on"></i>
+                                                                            </a>
+                                                                        @endif
+                                                                    @else
+                                                                        @if (\Auth::user()->can('activate vehicle'))
+                                                                            <a href="javascript:void(0);"
+                                                                                class="btn btn-sm btn-secondary"
+                                                                                onclick="axiosModal('/vehicle/{{ $vehicle->id }}/activate')"
+                                                                                title="Activate Driver">
+                                                                                <i class="fas fa-toggle-off"></i>
+                                                                            </a>
+                                                                        @endif
+                                                                    @endif
+                                                                    <span class='m-1'></span>
+                                                                    @if (\Auth::user()->can('delete vehicle'))
+                                                                        <a href="javascript:void(0);"
+                                                                            class="btn btn-sm btn-danger"
+                                                                            onclick="axiosModal('vehicle/{{ $vehicle->id }}/delete')"
+                                                                            title="Delete">
+                                                                            <i class="fas fa-trash"></i>
+                                                                        </a>
+                                                                    @endif
+                                                                </td>
                                                             </tr>
                                                         @endforeach
                                                     </tbody>

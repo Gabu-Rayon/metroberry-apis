@@ -1,5 +1,4 @@
-<form action="/vehicle/store" method="POST" class="needs-validation modal-content" novalidate="novalidate"
-    enctype="multipart/form-data">
+<form action="/vehicle/store" method="POST" class="needs-validation modal-content" enctype="multipart/form-data">
     @csrf
     <div class="card-header my-3 p-2 border-bottom">
         <h4>Add New Vehicle</h4>
@@ -37,7 +36,8 @@
                 <div class="form-group row my-2">
                     <label for="driver_id" class="col-sm-5 col-form-label">Select Vehicle Class</label>
                     <div class="col-sm-7">
-                        <select class="form-control basic-single select2" name="vehicle_class" id="vehicle_class" tabindex="-1" aria-hidden="true">
+                        <select class="form-control basic-single select2" name="vehicle_class" id="vehicle_class"
+                            tabindex="-1" aria-hidden="true">
                             <option value="">Please Vehicle Class</option>
                             @foreach ($vehicleClasses as $class)
                                 <option value="{{ $class->name }}">Class {{ $class->name }}</option>
@@ -82,26 +82,27 @@
                             id="engine_size" value="" required>
                     </div>
                 </div>
-                 <div class="form-group row my-2">
-                    <label for="color" class="col-sm-5 col-form-label">Vehicle Color<i class="text-danger">*</i> </label>
+                <div class="form-group row my-2">
+                    <label for="color" class="col-sm-5 col-form-label">Vehicle Color<i class="text-danger">*</i>
+                    </label>
                     <div class="col-sm-7">
-                        <input name="color" class="form-control" type="text"
-                            placeholder="Enter Vehicle Color" id="color"
-                            value="" required>
+                        <input name="color" class="form-control" type="text" placeholder="Enter Vehicle Color"
+                            id="color" value="" required>
                     </div>
-                </div>                
-                 <div class="form-group row my-2">
+                </div>
+                <div class="form-group row my-2">
                     <label for="seats" class="col-sm-5 col-form-label">No of Seats <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="seats" class="form-control" type="number"
-                            placeholder="No of Seats" id="seats" value="" required>
+                        <input name="seats" class="form-control" type="number" placeholder="No of Seats"
+                            id="seats" value="" required>
                     </div>
                 </div>
                 <div class="form-group row my-2">
                     <label for="driver_id" class="col-sm-5 col-form-label">Select Vehicle Org</label>
                     <div class="col-sm-7">
-                        <select class="form-control basic-single select2" name="organisation_id" id="organisation_id" tabindex="-1" aria-hidden="true">
+                        <select class="form-control basic-single select2" name="organisation_id" id="organisation_id"
+                            tabindex="-1" aria-hidden="true">
                             <option value="">Please Vehicle Organisation</option>
                             @foreach ($organisations as $organisation)
                                 <option value="{{ $organisation->id }}">{{ $organisation->user->name }}</option>

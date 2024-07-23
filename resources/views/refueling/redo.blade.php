@@ -1,4 +1,5 @@
-<form action="{{ route('refueling.redo-refuel', $refueling->id) }}" method="POST" class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
+<form action="{{ route('refueling.redo-refuel', $refueling->id) }}" method="POST" class="needs-validation modal-content"
+    enctype="multipart/form-data">
     @csrf
     @method('PUT')
     <div class="card-header my-3 p-2 border-bottom">
@@ -23,9 +24,10 @@
                         Date
                     </label>
                     <div class="col-sm-7">
-                        <input type="date" class="form-control" id="refuelling_date" name="refuelling_date" value="{{ $refueling->refuelling_date }}">
+                        <input type="date" class="form-control" id="refuelling_date" name="refuelling_date"
+                            value="{{ $refueling->refuelling_date }}">
                     </div>
-                </div>                
+                </div>
 
                 <div class="form-group row my-2">
                     <div class="col-sm-5 col-form-label">
@@ -41,9 +43,10 @@
                         Attendant Name
                     </label>
                     <div class="col-sm-7">
-                        <input type="text" class="form-control" id="attendant_name" name="attendant_name" value="{{ $refueling->attendant_name }}">
+                        <input type="text" class="form-control" id="attendant_name" name="attendant_name"
+                            value="{{ $refueling->attendant_name }}">
                     </div>
-                </div>                
+                </div>
 
                 <div class="form-group row my-2">
                     <div class="col-sm-5 col-form-label">
@@ -53,7 +56,7 @@
                         <div class="form-control">{{ $refueling->creator->name }}</div>
                     </div>
                 </div>
-                
+
             </div>
 
             <div class="col-md-12 col-lg-6">
@@ -72,9 +75,10 @@
                         Time
                     </label>
                     <div class="col-sm-7">
-                        <input type="time" class="form-control" id="refuelling_time" name="refuelling_time" value="{{ $refueling->refuelling_time }}">
+                        <input type="time" class="form-control" id="refuelling_time" name="refuelling_time"
+                            value="{{ $refueling->refuelling_time }}">
                     </div>
-                </div>                
+                </div>
 
                 <div class="form-group row my-2">
                     <div class="col-sm-5 col-form-label">
@@ -90,16 +94,17 @@
                         Attendant Phone
                     </label>
                     <div class="col-sm-7">
-                        <input type="tel" class="form-control" id="attendant_phone" name="attendant_phone" value="{{ $refueling->attendant_phone }}">
+                        <input type="tel" class="form-control" id="attendant_phone" name="attendant_phone"
+                            value="{{ $refueling->attendant_phone }}">
                     </div>
-                </div>                
-                
+                </div>
+
             </div>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-            Close
-        </button>
-        <button class="btn btn-success" type="submit">Redo</button>
-    </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                Close
+            </button>
+            <button class="btn btn-success" type="submit">Redo</button>
+        </div>
 </form>

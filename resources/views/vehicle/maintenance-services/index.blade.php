@@ -68,9 +68,9 @@
                                                                         <span class="badge bg-info">Approved</span>
                                                                     @elseif ($service->service_status == 'rejected')
                                                                         <span class="badge bg-danger">Rejected</span>
-                                                                        @elseif ($service->service_status == 'paid')
+                                                                    @elseif ($service->service_status == 'paid')
                                                                         <span class="badge bg-danger">paid</span>
-                                                                        @elseif ($service->service_status == 'partially paid')
+                                                                    @elseif ($service->service_status == 'partially paid')
                                                                         <span class="badge bg-danger">partially paid</span>
                                                                     @else
                                                                         <span class="badge bg-warning">Invalid Status</span>
@@ -97,12 +97,13 @@
                                                                         </a>
                                                                     @endif
                                                                     @if (in_array($service->service_status, ['billed', 'paid', 'partially paid']))
-    <a href="{{ route('maintenance.service.payment.checkout', ['id' => $service->id]) }}"
-        class="btn btn-primary btn-sm"
-        title="Checkout to Pay Vehicle maintenance service charges.">
-        <small><i class="fa-solid fa-money-bill"></i></small>
-    </a>
-@endif
+                                                                        <a href="{{ route('maintenance.service.payment.checkout', ['id' => $service->id]) }}"
+                                                                            class="btn btn-primary btn-sm"
+                                                                            title="Checkout to Pay Vehicle maintenance service charges.">
+                                                                            <small><i
+                                                                                    class="fa-solid fa-money-bill"></i></small>
+                                                                        </a>
+                                                                    @endif
 
 
                                                                 </td>

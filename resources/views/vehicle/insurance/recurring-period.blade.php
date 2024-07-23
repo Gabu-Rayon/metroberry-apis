@@ -54,10 +54,12 @@
                                                             <tr>
                                                                 <td>{{ $period->period }}</td>
                                                                 <td>
-                                                                    @if($period->status)
-                                                                        <i class="fas fa-check-circle text-success" title="Active"></i>
+                                                                    @if ($period->status)
+                                                                        <i class="fas fa-check-circle text-success"
+                                                                            title="Active"></i>
                                                                     @else
-                                                                        <i class="fas fa-times-circle text-danger" title="Inactive"></i>
+                                                                        <i class="fas fa-times-circle text-danger"
+                                                                            title="Inactive"></i>
                                                                     @endif
                                                                 </td>
                                                                 <td>{{ $period->description }}</td>
@@ -68,12 +70,12 @@
                                                                         <i class="fas fa-edit"></i>
                                                                     </a>
                                                                     <span class='m-1'></span>
-                                                                     @if (\Auth::user()->can('delete vehicle insurance company'))
-                                                                    <a href="javascript:void(0);"
-                                                                        class="btn btn-sm btn-danger"
-                                                                        onclick="deleteVehicle({{ $period->id }})">
-                                                                        <i class="fas fa-trash"></i>
-                                                                    </a>
+                                                                    @if (\Auth::user()->can('delete vehicle insurance company'))
+                                                                        <a href="javascript:void(0);"
+                                                                            class="btn btn-sm btn-danger"
+                                                                            onclick="deleteVehicle({{ $period->id }})">
+                                                                            <i class="fas fa-trash"></i>
+                                                                        </a>
                                                                     @endif
                                                                 </td>
                                                             </tr>
@@ -87,4 +89,4 @@
                             </div>
                         </div>
 
-@endsection
+                    @endsection

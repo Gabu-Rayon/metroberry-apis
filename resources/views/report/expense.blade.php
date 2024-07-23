@@ -5,7 +5,7 @@
 
     <body class="fixed sidebar-mini">
 
-       @include('components.preloader')
+        @include('components.preloader')
         <!-- react page -->
         <div id="app">
             <!-- Begin page -->
@@ -111,8 +111,7 @@
                                                                                     class="col-sm-5 col-form-label justify-content-start text-left">Date
                                                                                     to </label>
                                                                                 <div class="col-sm-7">
-                                                                                    <input name="date_to"
-                                                                                        autocomplete="off"
+                                                                                    <input name="date_to" autocomplete="off"
                                                                                         class="form-control w-100"
                                                                                         type="date" placeholder="To"
                                                                                         id="d_to">
@@ -164,7 +163,7 @@
                         </div>
                     </div>
                     <div class="overlay"></div>
-                               @include('components.footer')
+                    @include('components.footer')
                 </div>
             </div>
             <!--end  vue page -->

@@ -52,7 +52,7 @@
 
                                                     <span class="m-1"></span>
                                                     {{-- @if (\Auth::user()->can('bill trip')) --}}
-                                                          {{-- <a href="{{ route('trip.download.invoice', ['id' => $trip->id]) }}"
+                                                    {{-- <a href="{{ route('trip.download.invoice', ['id' => $trip->id]) }}"
                                                                             class="btn btn-primary btn-sm"
                                                                             title="Proceed to pay for your trip.">
                                                                             <small><i class="fa-solid fa-download"></i> &nbsp;</small>

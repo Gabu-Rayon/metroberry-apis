@@ -1,10 +1,11 @@
-<form action="{{ route('vehicle.maintenance.repairs.edit', $repair->id) }}" method="POST" class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
+<form action="{{ route('vehicle.maintenance.repairs.edit', $repair->id) }}" method="POST"
+    class="needs-validation modal-content" enctype="multipart/form-data">
     @csrf
     @method('PUT')
     <div class="card-header my-3 p-2 border-bottom">
         <h4>Edit {{ $repair->name }} Details</h4>
     </div>
-    
+
     <div class="modal-body">
         <div class="row">
             <div class="col-md-6">
@@ -12,7 +13,8 @@
                 <div class="form-group row my-2">
                     <label for="name" class="col-sm-5 col-form-label">Name</label>
                     <div class="col-sm-7">
-                        <input name="name" required class="form-control" type="text" placeholder="Name" id="name" value="{{ $repair->name }}" />
+                        <input name="name" required class="form-control" type="text" placeholder="Name"
+                            id="name" value="{{ $repair->name }}" />
                     </div>
                 </div>
 

@@ -1,4 +1,4 @@
-<form action="license" method="POST" class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
+<form action="license" method="POST" class="needs-validation modal-content" enctype="multipart/form-data">
     @csrf
     <div class="card-header my-3 p-2 border-bottom">
         <h4>Add License</h4>
@@ -13,12 +13,7 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <select
-                            name="driver"
-                            id="driver"
-                            class="form-control"
-                            required
-                        >
+                        <select name="driver" id="driver" class="form-control" required>
                             <option value="">Select Driver</option>
                             @foreach ($drivers as $driver)
                                 <option value="{{ $driver->id }}">{{ $driver->user->name }}</option>
@@ -33,24 +28,19 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="issue_date" class="form-control" type="date" placeholder="Issue Date" id="issue_date" required />
+                        <input name="issue_date" class="form-control" type="date" placeholder="Issue Date"
+                            id="issue_date" required />
                     </div>
                 </div>
-                
+
 
                 <div class="form-group row my-2">
                     <label for="front_page_id" class="col-sm-5 col-form-label">
                         Front Page License Picture
                     </label>
                     <div class="col-sm-7">
-                        <input
-                            name="front_page_id"
-                            class="form-control"
-                            type="file"
-                            placeholder="Front Page License Picture"
-                            id="front_page_id"
-                            value=""
-                        />
+                        <input name="front_page_id" class="form-control" type="file"
+                            placeholder="Front Page License Picture" id="front_page_id" required />
                     </div>
                 </div>
             </div>
@@ -62,8 +52,8 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="license_no" class="form-control" type="text" placeholder="License No" id="license_no" required
-                        />
+                        <input name="license_no" class="form-control" type="text" placeholder="License No"
+                            id="license_no" required />
                     </div>
                 </div>
 
@@ -73,7 +63,8 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="expiry_date" class="form-control" type="date" placeholder="Expiry Date" id="expiry_date" required />
+                        <input name="expiry_date" class="form-control" type="date" placeholder="Expiry Date"
+                            id="expiry_date" required />
                     </div>
                 </div>
 
@@ -82,23 +73,17 @@
                         Back Page License Picture
                     </label>
                     <div class="col-sm-7">
-                        <input
-                            name="back_page_id"
-                            class="form-control"
-                            type="file"
-                            placeholder="Back Page License Picture"
-                            id="back_page_id"
-                            value=""
-                        />
+                        <input name="back_page_id" class="form-control" type="file"
+                            placeholder="Back Page License Picture" id="back_page_id" required />
                     </div>
                 </div>
 
+            </div>
         </div>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-            Close
-        </button>
-        <button class="btn btn-success" type="submit">Save</button>
-    </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                Close
+            </button>
+            <button class="btn btn-success" type="submit">Save</button>
+        </div>
 </form>

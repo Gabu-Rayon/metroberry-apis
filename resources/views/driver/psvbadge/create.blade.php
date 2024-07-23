@@ -1,4 +1,4 @@
-<form action="psvbadge" method="POST" class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
+<form action="psvbadge" method="POST" class="needs-validation modal-content" enctype="multipart/form-data">
     @csrf
     <div class="card-header my-3 p-2 border-bottom">
         <h4>Add PSV Badge</h4>
@@ -28,18 +28,19 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="issue_date" class="form-control" type="date" placeholder="Issue Date" id="issue_date" required />
+                        <input name="issue_date" class="form-control" type="date" placeholder="Issue Date"
+                            id="issue_date" required />
                     </div>
                 </div>
-                
+
 
                 <div class="form-group row my-2">
                     <label for="psv_badge_avatar" class="col-sm-5 col-form-label">
                         PSV Badge Copy
                     </label>
                     <div class="col-sm-7">
-                        <input name="psv_badge_avatar" class="form-control" type="file" placeholder="Badge Picture" id="psv_badge_avatar" value=""
-                        />
+                        <input name="psv_badge_avatar" class="form-control" type="file" placeholder="Badge Picture"
+                            id="psv_badge_avatar" value="" />
                     </div>
                 </div>
             </div>
@@ -51,8 +52,8 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="psvbadge_no" class="form-control" type="text" placeholder="Badge No" id="psvbadge_no" required
-                        />
+                        <input name="psvbadge_no" class="form-control" type="text" placeholder="Badge No"
+                            id="psvbadge_no" required />
                     </div>
                 </div>
 
@@ -62,16 +63,17 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="expiry_date" class="form-control" type="date" placeholder="Expiry Date" id="expiry_date" required />
+                        <input name="expiry_date" class="form-control" type="date" placeholder="Expiry Date"
+                            id="expiry_date" required />
                     </div>
                 </div>
 
+            </div>
         </div>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-            Close
-        </button>
-        <button class="btn btn-success" type="submit">Save</button>
-    </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                Close
+            </button>
+            <button class="btn btn-success" type="submit">Save</button>
+        </div>
 </form>

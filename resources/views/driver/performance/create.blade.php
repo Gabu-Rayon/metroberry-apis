@@ -1,5 +1,5 @@
-<form action="admin/vehicle" method="POST" class="needs-validation modal-content" novalidate="novalidate"
-    enctype="multipart/form-data" onsubmit="submitFormAxios(event)">
+<form action="admin/vehicle" method="POST" class="needs-validation modal-content" enctype="multipart/form-data"
+    onsubmit="submitFormAxios(event)">
     @crsf
     <div class="card-header my-3 p-2 border-bottom">
         <h4>Add Driver Performance</h4>

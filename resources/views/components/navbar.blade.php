@@ -10,23 +10,26 @@
                 <a class="language-menu_item border rounded-circle d-flex justify-content-center align-items-center overflow-hidden"
                     href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 
-                    <img src=" {{asset('storage/language/flag/2qUSHXENGj7TKN86U1SChajzSsmqlPupBn9hOULH.svg?v=1')}}">
+                    <img src=" {{ asset('storage/language/flag/2qUSHXENGj7TKN86U1SChajzSsmqlPupBn9hOULH.svg?v=1') }}">
                 </a>
                 <div class="dropdown-menu language_dropdown">
                     <a href="lang/en" class="language_item d-flex align-items-center gap-3">
-                        <img src=" {{asset('storage/language/flag/2qUSHXENGj7TKN86U1SChajzSsmqlPupBn9hOULH.svg?v=1')}}">
+                        <img
+                            src=" {{ asset('storage/language/flag/2qUSHXENGj7TKN86U1SChajzSsmqlPupBn9hOULH.svg?v=1') }}">
                         <span>
                             English
                         </span>
                     </a>
                     <a href="lang/bn" class="language_item d-flex align-items-center gap-3">
-                        <img src="{{asset('storage/language/flag/NnhGPAjhaSbw08YybMOMvkZvb2jTRzeJpJDXJ7cA.svg?v=1')}}">
+                        <img
+                            src="{{ asset('storage/language/flag/NnhGPAjhaSbw08YybMOMvkZvb2jTRzeJpJDXJ7cA.svg?v=1') }}">
                         <span>
                             Swahili
                         </span>
                     </a>
                     <a href="lang/ar" class="language_item d-flex align-items-center gap-3">
-                        <img src="{{asset('storage/language/flag/jzq7Njrm2LjCU0gtBnrh40xsM42ygZtifAcLMCqK.png?v=1')}}">
+                        <img
+                            src="{{ asset('storage/language/flag/jzq7Njrm2LjCU0gtBnrh40xsM42ygZtifAcLMCqK.png?v=1') }}">
                         <span>
                             French
                         </span>
@@ -46,13 +49,14 @@
                         <div class="user_img">
                             <!-- <img src="https://ui-avatars.com/api/?name=A&amp;color=7F9CF5&amp;background=EBF4FF"
                                 alt="">
- -->                        </div>
+ -->
+                        </div>
                         <div>
                             <p class="mb-0 fw-bold fs-16">
                                 Admin
                             </p>
                             <p class="mb-0 text-muted fs-14">
-                               {{ Auth::user()->name }} 
+                                {{ Auth::user()->name }}
                             </p>
                         </div>
                     </div>
@@ -67,15 +71,14 @@
                         <li class="">
                             <a class="d-block" href="user/profile-setting">Account settings</a>
                         </li>
-                        <form method="POST" action="{{route('logout')}}" class="d-inline">
-                             @csrf
-                             @METHOD('POST')
-                                 <button type="submit" id="logout-btn"
-                                class="btn_sign_out text-black w-auto">
+                        <form method="POST" action="{{ route('logout') }}" class="d-inline">
+                            @csrf
+                            @METHOD('POST')
+                            <button type="submit" id="logout-btn" class="btn_sign_out text-black w-auto">
                                 Sign out
                             </button>
                         </form>
-                        <link href="{{asset('admin-assets/css/logout.css?v=1')}}" rel="stylesheet">
+                        <link href="{{ asset('admin-assets/css/logout.css?v=1') }}" rel="stylesheet">
 
                     </ul>
 

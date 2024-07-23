@@ -54,12 +54,12 @@
                                                                 </td>
 
                                                                 <td class="text-center">
-                                                                 <a href="{{ route('trip.payment.checkout', ['id' => $trip->id]) }}"
-                                                                            class="btn btn-primary btn-sm"
-                                                                            title="Proceed to pay for your trip.">
-                                                                            <small><i
-                                                                                    class="fa-solid fa-money-bill"></i></small>
-                                                                        </a>
+                                                                    <a href="{{ route('trip.payment.checkout', ['id' => $trip->id]) }}"
+                                                                        class="btn btn-primary btn-sm"
+                                                                        title="Proceed to pay for your trip.">
+                                                                        <small><i
+                                                                                class="fa-solid fa-money-bill"></i></small>
+                                                                    </a>
 
                                                                 </td>
                                                             </tr>

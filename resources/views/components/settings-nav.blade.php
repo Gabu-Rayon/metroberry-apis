@@ -3,7 +3,8 @@
     <ul class=" nav">
 
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button"
+                aria-expanded="false">
                 <i class="typcn typcn-adjust-brightness"></i>
                 General Settings
             </a>
@@ -64,6 +65,6 @@
                 Fix storage link
             </a>
         </li>
-        
+
     </ul>
 </nav>

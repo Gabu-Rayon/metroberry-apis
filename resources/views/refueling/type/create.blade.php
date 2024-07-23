@@ -1,5 +1,5 @@
-<form action="admin/refueling/type" method="POST" class="needs-validation modal-content" novalidate="novalidate"
-    enctype="multipart/form-data" onsubmit="submitFormAxios(event)">
+<form action="admin/refueling/type" method="POST" class="needs-validation modal-content" enctype="multipart/form-data"
+    onsubmit="submitFormAxios(event)">
     <input type="hidden" name="_token" value="AQNLvAb467g0eZtkGATqrKcNNVohCNfvLiX4IjQc" autocomplete="off" />
     <div class="card-header my-3 p-2 border-bottom">
         <h4>fuel Type Lists</h4>

@@ -34,7 +34,7 @@
                                                 <p class="mb-0 mr-3 text-dark fw-bold">Status :</p>
                                                 @if ($service->service_status == 'billed')
                                                     <span class="badge bg-success">Billed</span>
-                                                @elseif ($service->service_status  == 'paid')
+                                                @elseif ($service->service_status == 'paid')
                                                     <span class="badge bg-success">Paid</span>
                                                 @else
                                                     <span class="badge bg-danger">Partially Paid</span>
@@ -87,10 +87,10 @@
                                                         <th title="Trip Route">Vehicle</th>
                                                         <th title="Billed By">Service Type</th>
                                                         <th title="Charges or Trip price ">Date </th>
-                                                         <th title="Charges or Trip price ">Description </th>
-                                                         <th title="Billed By"> Vehicle Plate</th>
+                                                        <th title="Charges or Trip price ">Description </th>
+                                                        <th title="Billed By"> Vehicle Plate</th>
                                                         <th title="Charges or Trip price ">Service Category </th>
-                                                         <th title="Charges or Trip price ">Cost </th>
+                                                        <th title="Charges or Trip price ">Cost </th>
 
                                                     </tr>
                                                 </thead>
@@ -98,11 +98,11 @@
                                                     @php $item = 1 @endphp
                                                     <tr>
                                                         <td>{{ $item++ }}</td>
-                                                        <td> {{ $service->vehicle->plate_number  }}</td>
-                                                        <td> {{ $service->serviceType->name  }} </td>
+                                                        <td> {{ $service->vehicle->plate_number }}</td>
+                                                        <td> {{ $service->serviceType->name }} </td>
                                                         <td>{{ $service->service_date }}</td>
-                                                        <td> {{ $service->service_description}}</td>
-                                                        <td> {{ $service->vehicle->plate_number  }}</td>
+                                                        <td> {{ $service->service_description }}</td>
+                                                        <td> {{ $service->vehicle->plate_number }}</td>
                                                         <td>{{ $service->serviceCategory->name }}</td>
                                                         <td>Kes. {{ $service->service_cost }}</td>
 

@@ -5,13 +5,13 @@
 
     <body class="fixed sidebar-mini">
 
-         @include('components.preloader')
+        @include('components.preloader')
         <!-- react page -->
         <div id="app">
             <!-- Begin page -->
             <div class="wrapper">
                 <!-- start header -->
-                 @include('components.sidebar.sidebar')
+                @include('components.sidebar.sidebar')
                 <!-- end header -->
                 <div class="content-wrapper">
                     <div class="main-content">
@@ -27,7 +27,8 @@
                                             </div>
                                             <div class="text-end">
                                                 <div class="actions">
-                                                    <a class="btn btn-success" href="javascript:void(0);" onclick="axiosModal('{{ route("refueling.station.create") }}')">
+                                                    <a class="btn btn-success" href="javascript:void(0);"
+                                                        onclick="axiosModal('{{ route('refueling.station.create') }}')">
                                                         <i class="fa fa-plus"></i>&nbsp;
                                                         Add Refueling Station
                                                     </a>
@@ -59,14 +60,16 @@
                                                                 <td>{{ $station->user->address }}</td>
                                                                 <td class="text-center">
                                                                     @php
-                                                                        $certificateOfOperations = $station->certificate_of_operations;
+                                                                        $certificateOfOperations =
+                                                                            $station->certificate_of_operations;
 
                                                                         if ($station->status == 'inactive') {
                                                                             if (!$certificateOfOperations) {
                                                                                 $badgeClass = 'badge bg-danger';
                                                                                 $badgeText = 'Missing Documents';
                                                                             } else {
-                                                                                $badgeClass = 'badge bg-warning text-dark';
+                                                                                $badgeClass =
+                                                                                    'badge bg-warning text-dark';
                                                                                 $badgeText = 'Pending Verification';
                                                                             }
                                                                         } else {
@@ -74,22 +77,33 @@
                                                                             $badgeText = 'Active';
                                                                         }
                                                                     @endphp
-                                                                    <span class="{{ $badgeClass }}">{{ $badgeText }}</span>
-                                                                </td>   
+                                                                    <span
+                                                                        class="{{ $badgeClass }}">{{ $badgeText }}</span>
+                                                                </td>
                                                                 <td class="text-center">
-                                                                    <a href="javascript:void(0);" onclick="axiosModal('{{ route('refueling.station.edit', $station->id) }}')" class="btn btn-primary btn-sm">
+                                                                    <a href="javascript:void(0);"
+                                                                        onclick="axiosModal('{{ route('refueling.station.edit', $station->id) }}')"
+                                                                        class="btn btn-primary btn-sm">
                                                                         <i class="fa fa-edit fa-sm"></i>
                                                                     </a>
                                                                     @if ($station->status == 'active')
-                                                                        <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="axiosModal('{{ route('refueling.station.deactivate', $station->id) }}')" title="Deactivate Station">
+                                                                        <a href="javascript:void(0);"
+                                                                            class="btn btn-sm btn-success"
+                                                                            onclick="axiosModal('{{ route('refueling.station.deactivate', $station->id) }}')"
+                                                                            title="Deactivate Station">
                                                                             <i class="fas fa-toggle-on"></i>
-                                                                        </a> 
+                                                                        </a>
                                                                     @else
-                                                                        <a href="javascript:void(0);" class="btn btn-sm btn-secondary" onclick="axiosModal('{{ route('refueling.station.activate', $station->id) }}')" title="Activate Station">
+                                                                        <a href="javascript:void(0);"
+                                                                            class="btn btn-sm btn-secondary"
+                                                                            onclick="axiosModal('{{ route('refueling.station.activate', $station->id) }}')"
+                                                                            title="Activate Station">
                                                                             <i class="fas fa-toggle-off"></i>
                                                                         </a>
                                                                     @endif
-                                                                    <a href="javascript:void(0);" onclick="axiosModal('{{ route('refueling.station.delete', $station->id) }}')" class="btn btn-danger btn-sm">
+                                                                    <a href="javascript:void(0);"
+                                                                        onclick="axiosModal('{{ route('refueling.station.delete', $station->id) }}')"
+                                                                        class="btn btn-danger btn-sm">
                                                                         <i class="fa fa-trash fa-sm"></i>
                                                                     </a>
                                                                 </td>

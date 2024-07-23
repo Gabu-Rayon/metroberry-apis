@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
     @csrf
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>
@@ -48,18 +49,17 @@
 
 
     <link rel="stylesheet"href="{{ asset('admin-assets/css/dashboard.min.css?v=1') }}">
-    <link href="{{asset('admin-assets/css/logout.css?v=1')}}" rel="stylesheet">
+    <link href="{{ asset('admin-assets/css/logout.css?v=1') }}" rel="stylesheet">
 </head>
 
 <body class="fixed sidebar-mini">
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js" 
-        integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" 
-        crossorigin="anonymous">
-</script>
-<script src="repeater.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"
+        integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ" crossorigin="anonymous">
+    </script>
+    <script src="repeater.js"></script>
     <div class="main">
-                @yield('content')
-                
+        @yield('content')
+
     </div>
 
     <script src="{{ asset('admin-assets/vendor/jQuery/jquery.min.js?v=1') }}"></script>
@@ -95,31 +95,32 @@
     <!-- Toastr Notification Script -->
     <script type="text/javascript">
         $(document).ready(function() {
-            @if(Session::has('success'))
+            @if (Session::has('success'))
                 toastr.success('{{ Session::get('success') }}');
             @endif
 
-            @if(Session::has('error'))
+            @if (Session::has('error'))
                 toastr.error('{{ Session::get('error') }}');
             @endif
 
-            @if(Session::has('info'))
+            @if (Session::has('info'))
                 toastr.info('{{ Session::get('info') }}');
             @endif
 
-            @if(Session::has('warning'))
+            @if (Session::has('warning'))
                 toastr.warning('{{ Session::get('warning') }}');
             @endif
         });
     </script>
-     <!-- DataTables Initialization -->
+    <!-- DataTables Initialization -->
     <script type="text/javascript">
-        $(function () {
+        $(function() {
             window.LaravelDataTables = window.LaravelDataTables || {};
             window.LaravelDataTables["driver-table"] = $("#driver-table").DataTable({
-                
+
             });
         });
-    </script>   
+    </script>
 </body>
+
 </html>

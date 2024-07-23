@@ -1,4 +1,5 @@
-<form action="employee/{{ $customer->id }}/deactivate" method="POST" class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
+<form action="employee/{{ $customer->id }}/deactivate" method="POST" class="needs-validation modal-content"
+    enctype="multipart/form-data">
     @csrf
     @method('PUT')
     <div class="card-header text-center my-3 p-2 border-bottom">
