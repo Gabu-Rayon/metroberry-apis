@@ -73,7 +73,7 @@
                                                         @endif
                                                     </td>
                                                     <td class="text-center">
-                                                         @if (\Auth::user()->can('edit customer'))
+                                                        @if (\Auth::user()->can('edit customer'))
                                                         <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="axiosModal('employee/{{ $customer->id }}/edit')">
                                                             <i class="fas fa-edit"></i>
                                                         </a>

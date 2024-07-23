@@ -11,7 +11,7 @@ class Organisation extends Model
     use HasFactory;
 
     protected $table = 'organisations';
-    
+
     protected $fillable = [
         'user_id',
         'certificate_of_organisation',
@@ -24,11 +24,13 @@ class Organisation extends Model
 
     protected $with = ['customers', 'vehicles', 'drivers'];
 
-    public function drivers() {
+    public function drivers()
+    {
         return $this->hasMany(Driver::class);
     }
 
-    public function vehicles() {
+    public function vehicles()
+    {
         return $this->hasMany(Vehicle::class, 'organisation_id', 'id');
     }
 
@@ -40,7 +42,7 @@ class Organisation extends Model
     {
         return $this->hasMany(Customer::class, 'organisation_id', 'id');
     }
-        public function user()
+    public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
@@ -57,13 +59,21 @@ class Organisation extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    protected static function boot() {
+    protected static function boot()
+    {
         parent::boot();
-        static::deleting(function($organisation) {
-            $organisation->drivers()->delete();
-            $organisation->vehicles()->delete();
-            $organisation->customers()->delete();
-            $organisation->user()->delete();
+
+        static::deleting(function ($organisation) {
+            foreach ($organisation->drivers as $driver) {
+                $driver->delete();
+            }
+            foreach ($organisation->vehicles as $vehicle) {
+                $vehicle->delete();
+            }
+            foreach ($organisation->customers as $customer) {
+                $customer->delete();
+            }
+            $organisation->user->delete();
         });
     }
 }

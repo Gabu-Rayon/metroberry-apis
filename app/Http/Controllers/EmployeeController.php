@@ -67,15 +67,15 @@ class EmployeeController extends Controller
             
             $validator = Validator::make($data, [
                 'name' => 'required|string',
-                'phone' => 'required|string',
-                'organisation' => 'required|string',
+                'phone' => 'required|string|unique:users,phone',
+                'organisation' => 'required|string|exists:organisations,organisation_code',
                 'email' => 'required|email|unique:users,email',
-                'address' => 'nullable|string',
-                'national_id' => 'required|string',
+                'address' => 'required|string',
+                'national_id' => 'required|string|unique:customers,national_id_no',
                 'front_page_id' => 'required|file|mimes:jpg,jpeg,png,webp',
                 'back_page_id' => 'required|file|mimes:jpg,jpeg,png,webp',
                 'avatar' => 'nullable|file|mimes:jpg,jpeg,png,webp',
-                'password' => 'required|string', 
+                'password' => 'required|string|min:6', 
             ]);
 
             if ($validator->fails()) {

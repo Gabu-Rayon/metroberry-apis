@@ -22,19 +22,23 @@ class Driver extends Model
 
     protected $with = ['user'];
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function driverLicense() {
+    public function driverLicense()
+    {
         return $this->hasOne(DriversLicenses::class);
     }
 
-    public function vehicle() {
+    public function vehicle()
+    {
         return $this->hasOne(Vehicle::class);
     }
-  
-    public function organization() {
+
+    public function organization()
+    {
         return $this->belongsTo(Organisation::class);
     }
 
@@ -43,11 +47,31 @@ class Driver extends Model
         return $this->hasMany(Trip::class);
     }
 
-    public function license () {
+    public function license()
+    {
         return $this->hasOne(DriversLicenses::class);
     }
 
-    public function psvBadge() {
+    public function psvBadge()
+    {
         return $this->hasOne(PSVBadge::class);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($driver) {
+            $driver->user->delete();
+            if ($driver->driverLicense) {
+                $driver->driverLicense->delete();
+            }
+            if ($driver->vehicle) {
+                $driver->vehicle->delete();
+            }
+            if ($driver->psvBadge) {
+                $driver->psvBadge->delete();
+            }
+        });
     }
 }
