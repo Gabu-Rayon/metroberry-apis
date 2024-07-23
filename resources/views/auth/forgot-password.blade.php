@@ -1,26 +1,52 @@
-<x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
+@extends('layouts.app')
+
+@section('title', 'Forgot Password')
+
+@section('content')
+    @include ('components.preloader')
+    <div class="container-fluid ">
+
+        <div class="row h-100vh align-aitems-center px-0">
+
+            <div class="col-lg-6 d-flex align-aitems-center">
+
+                <div class="form-wrapper m-auto">
+
+                    <div>
+
+                        <div class="">
+
+                            <div class="mb-4">
+
+                                <h2 class="fs-32 fw-bold text-center">Forgot password?</h3>
+                                    <p class="text-muted text-center mb-0">Enter your email to reset your password</p>
+                            </div>
+
+
+                            <form class="register-form validate" method="POST" action="{{ route('password.email') }}">
+                                @csrf
+                                <div class="mb-3">
+                                    <input type="email" class="form-control input-py " id="email" name="email"
+                                        placeholder="Enter email" required autocomplete="email">
+                                </div>
+                                <button type="submit" class="btn btn-success w-100">
+                                    Send password reset link
+                                </button>
+                            </form>
+                        </div>
+
+                        <x-auth-session-status class="mb-4" :status="session('status')" />
+
+                        <x-auth-validation-errors class="mb-4" :errors="$errors" />
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 login-bg d-none d-lg-block overflow-hidden text-end py-2"
+                style="background-image: url('{{ asset('admin-assets/img/login-bg.png?v=1') }}')">
+                <img class="#" height="50" width="150" src="{{ asset('admin-assets/img/sidebar-logo.png?v=1') }}"
+                    alt="Brand Logo" />
+            </div>
+        </div>
     </div>
-
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
-
-    <form method="POST" action="{{ route('password.email') }}">
-        @csrf
-
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required
-                autofocus />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Email Password Reset Link') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+@endsection

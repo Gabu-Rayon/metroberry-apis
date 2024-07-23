@@ -50,7 +50,7 @@
                                     </div>
                                 </div>
                                 <div class="col-6 text-end">
-                                    <a class="text-primary" href="forgot-password">Recover password</a>
+                                    <a class="text-primary" href="{{ route('password.request') }}">Forgot Password?</a>
                                 </div>
                             </div>
                             <button type="submit" class="btn signin-btn w-100">Sign in</button>
