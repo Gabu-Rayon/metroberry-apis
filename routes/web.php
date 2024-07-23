@@ -528,7 +528,7 @@ Route::get('get-billing-rate/{id}', [TripController::class, 'getBillingRate'])
 
 Route::get('trip/billed/{id}/payment/checkout', [TripController::class, 'tripPaymentCheckOut'])
     ->name('trip.payment.checkout')
-    ->middleware('auth', 'can:pay trip');
+    ->middleware('auth');
 
 /**
  * Trip Payment Routes
@@ -537,24 +537,14 @@ Route::get('trip/billed/{id}/payment/checkout', [TripController::class, 'tripPay
 
 Route::get('trip/billed/{id}/recieve/payment', [TripPaymentController::class, 'billedTripRecievePayment'])
     ->name('billed.trip.recieve.payment')
-    ->middleware('auth', 'can:pay trip');
+    ->middleware('auth');
 
 Route::post('trip/billed/{id}/recieve/payment/store', [TripPaymentController::class, 'billedTripRecievePaymentStore'])
     ->name('billed.trip.recieve.payment.store')
-    ->middleware('auth', 'can:pay trip');
-
-
-Route::get('billed/trip/{id}/download/invoice', [TripPaymentController::class, 'billedTripDownloadInvoice'])
-    ->name('billed.trip.download.invoice')
-    ->middleware('auth', 'can:download trip invoice');
-
-Route::get('billed/trip/{id}/download/invoice', [TripPaymentController::class, 'billedTripDownloadInvoiceReceipt'])
-    ->name('billed.trip.download.invoice.receipt')
-    ->middleware('auth', 'can:download trip invoice');
-
+    ->middleware('auth');
 Route::get('billed/trip/{id}/resend/invoice', [TripPaymentController::class, 'billedTripResendInvoice'])
     ->name('billed.trip.resend.invoice')
-    ->middleware('auth', 'can:resend  trip invoice');
+    ->middleware('auth', 'can:bill trip');
 
 Route::get('billed/trip/{id}/send/invoice', [TripPaymentController::class, 'billedTripSendInvoice'])
     ->name('billed.trip.send.invoice')
@@ -1515,3 +1505,14 @@ Route::get('vehicle/inspection-certificate/{id}/delete', [NTSAInspectionCertific
 Route::delete('vehicle/inspection-certificate/{id}/delete', [NTSAInspectionCertificateController::class, 'destroy'])
     ->name('vehicle.inspection.certificate.delete')
     ->middleware('auth', 'can:delete vehicle inspection certificate');
+
+
+
+Route::get('billed/trip/{id}/download/invoice', [TripPaymentController::class, 'billedTripDownloadInvoice'])
+->name('trip.download.invoice')
+->middleware('auth');
+
+
+Route::get('billed/trip/{id}/download/invoice', [TripPaymentController::class, 'billedTripDownloadInvoiceReceipt'])
+    ->name('billed.trip.download.invoice.receipt')
+    ->middleware('auth', 'can:bill trip');

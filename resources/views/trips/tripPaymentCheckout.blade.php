@@ -42,7 +42,7 @@
                                                     @endif
 
                                                     <span class="m-1"></span>
-                                                    @if (\Auth::user()->can('resend trip invoice'))
+                                                    @if (\Auth::user()->can('bill trip'))
                                                         <a class="btn btn-success btn-sm" href="javascript:void(0);"
                                                             onclick="axiosModal('{{ route('billed.trip.resend.invoice', ['id' => $trip->id]) }}')">
                                                             <i class="fas fa-share-square"></i> &nbsp;
@@ -51,14 +51,14 @@
                                                     @endif
 
                                                     <span class="m-1"></span>
-                                                    @if (\Auth::user()->can('download trip invoice'))
-                                                          <a href="{{ route('billed.trip.download.invoice', ['id' => $trip->id]) }}"
+                                                    {{-- @if (\Auth::user()->can('bill trip')) --}}
+                                                          {{-- <a href="{{ route('trip.download.invoice', ['id' => $trip->id]) }}"
                                                                             class="btn btn-primary btn-sm"
                                                                             title="Proceed to pay for your trip.">
                                                                             <small><i class="fa-solid fa-download"></i> &nbsp;</small>
                                                                              Download Trip Invoice
-                                                                        </a>
-                                                    @endif
+                                                                        </a> --}}
+                                                    {{-- @endif --}}
 
                                                     <span class="m-1"></span>
                                                     @if (in_array($trip->status, ['billed', 'partially paid']))
@@ -258,9 +258,9 @@
                                                 <tbody>
                                                     @foreach ($ThisTripPayments as $payment)
                                                         <tr>
-                                                            <td> <a href="{{ route('billed.trip.download.invoice.receipt', ['id' => $payment->id]) }}"
+                                                            {{-- <td> <a href="{{ route('billed.trip.download.invoice.receipt', ['id' => $payment->id]) }}"
                                                                     class="btn btn-primary btn-sm"> <i
-                                                                        class="fa-solid fa-download"></i> &nbsp;</a></td>
+                                                                        class="fa-solid fa-download"></i> &nbsp;</a></td> --}}
                                                             <td>{{ $payment->payment_date }}</td>
                                                             <td>Kes.{{ $payment->total_amount }}</td>
                                                             <td>{{ $payment->payment_type_code }}</td>
