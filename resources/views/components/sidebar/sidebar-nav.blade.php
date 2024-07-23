@@ -176,7 +176,7 @@
         @endif
 
 
-         @if (\Auth::user()->can('manage settings'))
+         @if (\Auth::user()->can('manage accounting setting'))
             @include('components.sidebar.sidebar-dropdown', [
                 'title' => 'Accounting Setting',
                 'icon' => '<i class="fas fa-university"></i>',

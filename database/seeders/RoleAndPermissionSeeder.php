@@ -242,6 +242,10 @@ class RoleAndPermissionSeeder extends Seeder
             'update vehicle maintenance',
             'manage vehicle maintenance',
             'bill vehicle maintenance',
+            'pay vehicle maintenance',
+            'download vehicle maintenance',
+            'resend vehicle maintenance',
+            'send vehicle maintenance',
 
             // License Permissions
             'view driver license',
@@ -358,7 +362,7 @@ class RoleAndPermissionSeeder extends Seeder
             'manage report trip',
             'pay trip',
             'download trip invoice',
-            'resend  trip invoice',
+            'resend trip invoice',
             'send trip invoice',
 
             'view report vehicle requisition',
@@ -546,7 +550,7 @@ class RoleAndPermissionSeeder extends Seeder
             'update driver trips',
             'pay trip',
             'download trip invoice',
-            'resend  trip invoice',
+            'resend trip invoice',
             'send trip invoice',
 
             'manage drivers performances',
@@ -637,6 +641,10 @@ class RoleAndPermissionSeeder extends Seeder
             'complete trip',
             'cancel trip',
             'bill trip',
+            'pay trip',
+            'download trip invoice',
+            'resend trip invoice',
+            'send trip invoice',
 
             'view trip details',
             'create trip details',
@@ -689,6 +697,10 @@ class RoleAndPermissionSeeder extends Seeder
             'update vehicle maintenance',
             'manage vehicle maintenance',
             'bill vehicle maintenance',
+            'pay vehicle maintenance',
+            'download vehicle maintenance',
+            'resend vehicle maintenance',
+            'send vehicle maintenance',
 
             // License Permissions
             'view driver license',

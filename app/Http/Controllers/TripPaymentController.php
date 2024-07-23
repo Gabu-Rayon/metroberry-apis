@@ -197,14 +197,13 @@ class TripPaymentController extends Controller
         try {
             $data = $request->all();
 
-            Log::info('data from the Form  receive payment of billed trip');
+            Log::info('Data from the Form receive payment of billed trip:');
             Log::info($data);
 
             $creator = Auth::user();
-
-            Log::info('User Mwenye anaweka ndoo ya trip');
-
+            Log::info('User making the payment:');
             Log::info($creator);
+
             // Validation rules
             $validator = Validator::make($data, [
                 'payment_date' => 'required|date',
@@ -216,16 +215,15 @@ class TripPaymentController extends Controller
             ]);
 
             if ($validator->fails()) {
-                Log::info('VALIDATION ERROR');
-                Log::info($validator->errors());
+                // Log::info('VALIDATION ERROR:', $validator->errors());
                 return redirect()->back()->with('error', $validator->errors()->first())->withInput();
             }
 
             $invoiceNo = $this->generateInvoiceNumber();
-            Log::info('Invoice Generated No.');
+            Log::info('Invoice Generated No.:');
             Log::info($invoiceNo);
 
-            // Retrieve tripdetails based on $id
+            // Retrieve trip details based on $id
             $trip = Trip::findOrFail($id);
 
             $tripPayment = new TripPayment();
@@ -257,14 +255,23 @@ class TripPaymentController extends Controller
             }
 
             $tripPayment->save();
-            Log::info('Trip Payment Saved');
+            Log::info('Trip Payment Saved:');
+            Log::info($tripPayment);
 
-            if ($data['amount'] >= $trip->total_price) {
+            $totalPaidAmount = TripPayment::where('trip_id', $trip->id)->sum('total_amount');
+            Log::info('Total Paid Amount:');
+            Log::info($totalPaidAmount);
+
+
+            // Update trip status based on total paid amount
+            if ($totalPaidAmount >= $trip->total_price) {
                 $trip->status = 'paid';
             } else {
                 $trip->status = 'partially paid';
             }
             $trip->save();
+            Log::info('Trip Status Updated:');
+            Log::info($trip->status);
 
             return redirect()->route('trip.payment.checkout', ['id' => $id])
                 ->with('success', 'Payment received && Added successfully.');
@@ -273,6 +280,7 @@ class TripPaymentController extends Controller
             return redirect()->back()->with('error', 'An error occurred while receiving the payment. Please try again.');
         }
     }
+
 
     /**
      * Generate a unique invoice number.
@@ -294,27 +302,12 @@ class TripPaymentController extends Controller
     {
         try {
             // Fetch the trip details where the status is 'billed' or 'partially paid'
-            $trip = Trip::where('id', $id)->whereIn('status', ['billed', 'partially paid'])->firstOrFail();
+            $trip = Trip::where('id', $id)->whereIn('status', ['billed', 'partially paid'])->with('customer.user')->firstOrFail();
+
             // Fetch related payments
             $payments = $trip->payments;
 
             Log::info('This trip payments data To Download: ', $trip->toArray());
-
-            // Prepare data for the view
-            $organisationCode = auth()->user()->organisation->organisation_code;
-
-            $trips = Trip::whereIn('status', ['billed', 'partially paid'])
-                ->whereHas('customer', function ($query) use ($organisationCode) {
-                    $query->where('customer_organisation_code', $organisationCode);
-                })
-                ->with('customer')
-                ->with('vehicle')
-                ->with('route')
-                ->with('billingRate')
-                ->get();
-
-            Log::info('TRIPS');
-            Log::info($trips);
 
             // Calculate total amount and balance
             $totalAmount = $payments->sum('amount');
@@ -323,16 +316,22 @@ class TripPaymentController extends Controller
             // Fetch the first payment to get the invoice number (assuming it's the same for all related payments)
             $invoiceNumber = $payments->first() ? $payments->first()->invoice_no : 'MB-INV-' . time();
 
+            // Fetch customer details
+            $customer = $trip->customer;
+            if (!$customer || !$customer->user) {
+                return back()->with('error', 'Customer information is missing.');
+            }
+
             $data = [
                 'title' => 'Invoice',
                 'date' => date('m/d/Y'),
                 'due_date' => date('m/d/Y', strtotime('+30 days')),
-                'customer' => auth()->user()->organisation->user->name,
-                'address' => auth()->user()->organisation->user->address,
+                'customer' => $customer->user->name,
+                'address' => $customer->user->address,
                 'invoice_number' => $invoiceNumber,
                 'total_amount' => $totalAmount,
                 'balance' => $balance,
-                'items' => $trips,
+                'items' => [$trip],
                 'status' => $trip->status,
             ];
 
@@ -347,6 +346,7 @@ class TripPaymentController extends Controller
             return back()->with('error', 'An error occurred while downloading the TripPayment. Please try again.');
         }
     }
+
 
 
 

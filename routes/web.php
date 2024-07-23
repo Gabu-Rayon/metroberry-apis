@@ -548,13 +548,13 @@ Route::get('billed/trip/{id}/download/invoice', [TripPaymentController::class, '
     ->name('billed.trip.download.invoice')
     ->middleware('auth', 'can:download trip invoice');
 
-Route::get('billed/trip/{id}/download/invoice', [TripPaymentController::class, 'billedTripDownloadInvoiceReceipt'])
+Route::get('billed/trip/{id}/download/invoice/payment/receipt', [TripPaymentController::class, 'billedTripDownloadInvoiceReceipt'])
     ->name('billed.trip.download.invoice.receipt')
     ->middleware('auth', 'can:download trip invoice');
 
 Route::get('billed/trip/{id}/resend/invoice', [TripPaymentController::class, 'billedTripResendInvoice'])
     ->name('billed.trip.resend.invoice')
-    ->middleware('auth', 'can:resend  trip invoice');
+    ->middleware('auth', 'can:resend trip invoice');
 
 Route::get('billed/trip/{id}/send/invoice', [TripPaymentController::class, 'billedTripSendInvoice'])
     ->name('billed.trip.send.invoice')
@@ -698,24 +698,24 @@ Route::get('maintenance/repair/{id}/payment/checkout', [MaintenanceRepairControl
 
 Route::get('maintenance/repair/{id}/receive/payment', [MaintenanceRepairPaymentController::class, 'billedVehicleRepairMaintenanceRecievePayment'])
     ->name('billed.maintenance.repair.receive.payment')
-    ->middleware('auth', 'can:bill vehicle maintenance');
+    ->middleware('auth', 'can:pay vehicle maintenance');
 
 Route::post('maintenance/repair/{id}/recieve/payment/store', [MaintenanceRepairPaymentController::class, 'billedVehicleRepairMaintenanceRecievePaymentStore'])
     ->name('billed.maintenance.repair.receive.payment.store')
-    ->middleware('auth', 'can:bill vehicle maintenance');
+    ->middleware('auth', 'can:pay vehicle maintenance');
 
 
 Route::get('maintenance/repair/id}/download/invoice', [MaintenanceRepairPaymentController::class, 'billedVehicleRepairMaintenanceDownloadInvoice'])
     ->name('billed.maintenance.repair.download.invoice')
-    ->middleware('auth', 'can:bill vehicle maintenance');
+    ->middleware('auth', 'can:pay vehicle maintenance');
 
 Route::get('maintenance/repair/{id}/resend/invoice', [MaintenanceRepairPaymentController::class, 'billedVehicleRepairMaintenanceResendInvoice'])
     ->name('billed.maintenance.repair.resend.invoice')
-    ->middleware('auth', 'can:bill vehicle maintenance');
+    ->middleware('auth', 'can:resend vehicle maintenance');
 
 Route::get('maintenance/repair/{id}/send/invoice', [MaintenanceRepairPaymentController::class, 'billedVehicleRepairMaintenanceSendInvoice'])
     ->name('billed.maintenance.repair.send.invoice')
-    ->middleware('auth', 'can:bill vehicle maintenance');
+    ->middleware('auth', 'can:send vehicle maintenance');
 
 
 

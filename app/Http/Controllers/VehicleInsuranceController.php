@@ -59,10 +59,17 @@ class VehicleInsuranceController extends Controller
     {
         $insuranceCompanies = InsuranceCompany::where('status', 1)->get();
         $recurringPeriods = InsuranceRecurringPeriod::all();
-        $vehicles = Vehicle::all();
+
+        // Get vehicle IDs that already have an insurance record
+        $insuredVehicleIds = VehicleInsurance::pluck('vehicle_id')->toArray();
+
+        // Select vehicles that do not have an insurance record
+        $vehicles = Vehicle::whereNotIn('id', $insuredVehicleIds)->get();
+        // $vehicles = Vehicle::whereDoesntHave('insurance')->get();
 
         return view('vehicle.insurance.create', compact('insuranceCompanies', 'recurringPeriods', 'vehicles'));
     }
+
 
 
     /**
@@ -91,7 +98,7 @@ class VehicleInsuranceController extends Controller
                 'reminder' => 'required|numeric',
                 'deductible' => 'required|numeric',
                 'status' => 'required|numeric',
-                'remark' => 'nullable|string|max:500',
+                'remark' => 'nullable|string',
                 'policy_document' => 'required|file|mimes:pdf|max:2048',
             ]);
 

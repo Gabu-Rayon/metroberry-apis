@@ -35,73 +35,131 @@
 
                                         <div>
                                             <div class="table-responsive">
+                                               @if ($groupByOrganisation)
+                                                @foreach ($trips as $organisationName => $tripsGroup)
+                                                    <h5>{{ $organisationName }}</h5>
+                                                     <table class="table" id="driver-table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Customer</th>
+                                                                <th>Driver</th>
+                                                                <th>Vehicle</th>
+                                                                <th>Route</th>
+                                                                <th>Pick Up Time</th>
+                                                                <th>Date</th>
+                                                                <th>Pick Up Location</th>
+                                                                <th>Drop Off Location</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach ($tripsGroup as $trip)
+                                                                <tr>
+                                                                    <td class="text-center">{{ $trip->customer->user->name ?? 'N/A' }}</td>
+                                                                    <td class="text-center">
+                                                                        @if ($trip->vehicle && $trip->vehicle->driver)
+                                                                            {{ $trip->vehicle->driver->user->name ?? 'Unassigned' }}
+                                                                        @else
+                                                                            <span class="btn btn-danger btn-sm">Unassigned</span>
+                                                                        @endif
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        @if ($trip->vehicle)
+                                                                            <span class="btn btn-success btn-sm">{{ $trip->vehicle->plate_number }}</span>
+                                                                        @else
+                                                                            <span class="btn btn-danger btn-sm">Unassigned</span>
+                                                                        @endif
+                                                                    </td>
+                                                                    <td class="text-center">{{ $trip->route->name ?? 'N/A' }}</td>
+                                                                    <td class="text-center">{{ $trip->pick_up_time }}</td>
+                                                                    <td class="text-center">
+                                                                        {{ \Carbon\Carbon::parse($trip->trip_date)->format('F j, Y') }}
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        @php
+                                                                            $location = match($trip->pick_up_location) {
+                                                                                'Home' => $trip->customer->user->address ?? 'N/A',
+                                                                                'Office' => $trip->customer->organisation->user->address ?? 'N/A',
+                                                                                default => $trip->route->locations->where('id', $trip->pick_up_location)->first()->name ?? 'N/A'
+                                                                            };
+                                                                        @endphp
+                                                                        {{ $location }}
+                                                                    </td>
+                                                                    <td class="text-center">
+                                                                        @php
+                                                                            $location = match($trip->drop_off_location) {
+                                                                                'Home' => $trip->customer->user->address ?? 'N/A',
+                                                                                'Office' => $trip->customer->organisation->user->address ?? 'N/A',
+                                                                                default => $trip->route->locations->where('id', $trip->drop_off_location)->first()->name ?? 'N/A'
+                                                                            };
+                                                                        @endphp
+                                                                        {{ $location }}
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                @endforeach
+                                            @else
                                                 <table class="table" id="driver-table">
                                                     <thead>
                                                         <tr>
-                                                            <th title="Name">Customer</th>
-                                                            <th title="Location">Driver</th>
-                                                            <th title="NoOfEmployee">Vehicle</th>
-                                                            <th title="Registration date">Route</th>
-                                                            <th title="Email">Pickup Time</th>
-                                                            <th title="Email">Date</th>
-                                                            <th title="Email">Pickup</th>
-                                                            <th title="Email">Dropoff</th>
-                                                            <th title="Email">Dropoff Time</th>
+                                                            <th>Customer</th>
+                                                            <th>Driver</th>
+                                                            <th>Vehicle</th>
+                                                            <th>Route</th>
+                                                            <th>Pick Up Time</th>
+                                                            <th>Date</th>
+                                                            <th>Pick Up Location</th>
+                                                            <th>Drop Off Location</th>
+                                                             @if (auth()->user()->role == 'admin' || auth()->user()->role == 'organisation' )
                                                             <th title="Action" width="150">Action</th>
+                                                            @endif
                                                         </tr>
                                                     </thead>
-
                                                     <tbody>
-                                                        @foreach($completedTrips as $trip)
+                                                        @forelse ($trips as $trip)
                                                             <tr>
-                                                                <td class="text-center">{{ $trip->customer->user->name }}</td>
+                                                                <td class="text-center">{{ $trip->customer->user->name ?? 'N/A' }}</td>
                                                                 <td class="text-center">
-                                                                    @if ($trip->vehicle)
-                                                                        {{ $trip->vehicle->driver->user->name }}
+                                                                    @if ($trip->vehicle && $trip->vehicle->driver)
+                                                                        {{ $trip->vehicle->driver->user->name ?? 'Unassigned' }}
                                                                     @else
-                                                                        <span class="btn btn-warning btn-sm">TBD</span>
+                                                                        <span class="btn btn-danger btn-sm">Unassigned</span>
                                                                     @endif
                                                                 </td>
                                                                 <td class="text-center">
                                                                     @if ($trip->vehicle)
                                                                         <span class="btn btn-success btn-sm">{{ $trip->vehicle->plate_number }}</span>
                                                                     @else
-                                                                        <span class="btn btn-warning btn-sm">TBD</span>
+                                                                        <span class="btn btn-danger btn-sm">Unassigned</span>
                                                                     @endif
                                                                 </td>
-                                                                <td class="text-center">{{ $trip->route->name }}</td>
+                                                                <td class="text-center">{{ $trip->route->name ?? 'N/A' }}</td>
                                                                 <td class="text-center">{{ $trip->pick_up_time }}</td>
                                                                 <td class="text-center">
-                                                                    {{ \Carbon\Carbon::parse($trip->trip_date)->isoFormat('MMMM Do, YYYY') }}
-                                                                </td>                                                                
+                                                                    {{ \Carbon\Carbon::parse($trip->trip_date)->format('F j, Y') }}
+                                                                </td>
                                                                 <td class="text-center">
                                                                     @php
-                                                                        $location = null;
-                                                                        if ($trip->pick_up_location == 'Home') {
-                                                                            $location = $trip->customer->user->address;
-                                                                        } elseif ($trip->pick_up_location == 'Office') {
-                                                                            $location = $trip->customer->organisation->user->address;
-                                                                        } else {
-                                                                            $location = $trip->route->locations->where('id', $trip->pick_up_location)->first()->name;
-                                                                        }
+                                                                        $location = match($trip->pick_up_location) {
+                                                                            'Home' => $trip->customer->user->address ?? 'N/A',
+                                                                            'Office' => $trip->customer->organisation->user->address ?? 'N/A',
+                                                                            default => $trip->route->locations->where('id', $trip->pick_up_location)->first()->name ?? 'N/A'
+                                                                        };
                                                                     @endphp
                                                                     {{ $location }}
                                                                 </td>
                                                                 <td class="text-center">
                                                                     @php
-                                                                        $location = null;
-                                                                        if ($trip->drop_off_location == 'Home') {
-                                                                            $location = $trip->customer->user->address;
-                                                                        } elseif ($trip->drop_off_location == 'Office') {
-                                                                            $location = $trip->customer->organisation->user->address;
-                                                                        } else {
-                                                                            $location = $trip->route->locations->where('id', $trip->drop_off_location)->first()->name;
-                                                                        }
+                                                                        $location = match($trip->drop_off_location) {
+                                                                            'Home' => $trip->customer->user->address ?? 'N/A',
+                                                                            'Office' => $trip->customer->organisation->user->address ?? 'N/A',
+                                                                            default => $trip->route->locations->where('id', $trip->drop_off_location)->first()->name ?? 'N/A'
+                                                                        };
                                                                     @endphp
                                                                     {{ $location }}
                                                                 </td>
-                                                                <td class="text-center">{{ $trip->drop_off_time }}</td>
-                                                                <td class="text-center">
+                                                                 <td class="text-center">
                                                                     <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="axiosModal('{{ $trip->id }}/details')" title="Details">
                                                                         <i class="fa-solid fa-circle-info"></i>
                                                                     </a>
@@ -113,10 +171,14 @@
                                                                     @endif
                                                                 </td>
                                                             </tr>
-                                                        @endforeach
+                                                        @empty
+                                                            <tr>
+                                                                <td colspan="8" class="text-center">No completed trips available.</td>
+                                                            </tr>
+                                                        @endforelse
                                                     </tbody>
-
                                                 </table>
+                                            @endif
                                             </div>
 
 
@@ -160,3 +222,22 @@
             </div>
         </div>
     @endsection
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+
+
+
+

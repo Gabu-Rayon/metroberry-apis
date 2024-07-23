@@ -27,7 +27,7 @@ class TripController extends Controller
     /**
      * Display a listing of the resource.
      */
-//     public function index(){
+    //     public function index(){
 //         $scheduledTrips = Trip::with(['customer.user', 'vehicle.driver.user', 'vehicle', 'route'])
 //             ->where('status', 'scheduled')
 //             ->orderBy('pick_up_time')
@@ -36,14 +36,14 @@ class TripController extends Controller
 //                 return $trip->customer->user->organisation->name;
 //             });
 
-//         $scheduledTrips = $scheduledTrips->groupBy(function ($trip) {
+    //         $scheduledTrips = $scheduledTrips->groupBy(function ($trip) {
 //             return $trip->customer->organization;
 //         });
 
-//         Log::info('SCHEDULED TRIPS');
+    //         Log::info('SCHEDULED TRIPS');
 //         Log::info($scheduledTrips);            
-            
-//         return view('trips.scheduled', compact('scheduledTrips'));
+
+    //         return view('trips.scheduled', compact('scheduledTrips'));
 // }
 
 
@@ -161,10 +161,10 @@ class TripController extends Controller
     // }
 
 
-   
+
     public function store(Request $request)
     {
-        try {            
+        try {
             $data = $request->all();
             $creator = Auth::user();
 
@@ -183,18 +183,18 @@ class TripController extends Controller
                 Log::info($validator->errors());
 
                 return redirect()->back()->with('error', $validator->errors()->first())->withInput();
-            } 
-            
+            }
+
             //For pick_up_time will be the  shift_end_time
             // drop_off_or_pick_up_date will be trip date 
             //then if user select 'pick_up_location' => 'Home', and vice versa for Home 
             //  we then get there home address from the table of users  by referencing using the customer_id 
-             //then we will get the lat and long of the address and store it in the database
-               
-              //then if user select 'dropOffLocation' => 'Office', and vice verse for Home
+            //then we will get the lat and long of the address and store it in the database
+
+            //then if user select 'dropOffLocation' => 'Office', and vice verse for Home
             //   we will get there organisation address by referecing using their customer_id then
             //     we get organisation address using the models relationship where the data for organisation is also in the users table 
-              
+
             //then 
             // if user select  'drop_off_location' => '4',  which in this case will came id we will get the  
 
@@ -207,7 +207,7 @@ class TripController extends Controller
                 'pick_up_location' => $data['pick_up_location'],
                 'drop_off_location' => $data['drop_off_location'],
                 'trip_date' => $data['trip_date'],
-                'created_by' => $creator->id,
+                'created_by' => Auth::user()->id,
             ]);
 
             DB::commit();
@@ -415,191 +415,246 @@ class TripController extends Controller
         }
     }
 
-    public function tripScheduled() {
-        $scheduledTrips = Trip::with(['customer.user', 'vehicle.driver.user', 'route'])
-            ->where('status', 'scheduled')
-            ->orderBy('pick_up_time')
-            ->get();
-    
-        $groupedTrips = $scheduledTrips->groupBy(function ($trip) {
-            return $trip->customer->customer_organisation_code;
-        });
+    // public function tripScheduled()
+    // {
+    //     $scheduledTrips = Trip::with(['customer.user', 'vehicle.driver.user', 'route'])
+    //         ->where('status', 'scheduled')
+    //         ->orderBy('pick_up_time')
+    //         ->get();
 
-        $organisations = Organisation::all();
-    
-        return view('trips.scheduled', compact('groupedTrips', 'organisations'));
-    }
-    
-    public function tripCompleted(){
-        $completedTrips = Trip::where('status', 'completed')
-            ->with('customer')
-            ->with('vehicle')
-            ->with('route')
-            ->get();
-        return view('trips.completed', compact('completedTrips'));
+    //     $groupedTrips = $scheduledTrips->groupBy(function ($trip) {
+    //         return $trip->customer->customer_organisation_code;
+    //     });
 
-    }
-    public function tripCancelled(){
-        $cancelledTrips = Trip::where('status', 'cancelled')
-            ->with('customer')
-            ->with('vehicle')
-            ->with('route')
-            ->get();
-        return view('trips.cancelled', compact('cancelledTrips'));
-    }
-    public function tripBilled()
-    {
-        $billedTrips = Trip::whereIn('status', ['billed', 'paid', 'partially paid'])
-            ->with('customer')
-            ->with('vehicle')
-            ->with('route')
-            ->with('billingRate')
-            ->get();
+    //     $organisations = Organisation::all();
 
-        Log::info('BILLED TRIPS');
-        Log::info($billedTrips);
-        return view('trips.billed', compact('billedTrips'));
-    }
-
-
+    //     return view('trips.scheduled', compact('groupedTrips', 'organisations'));
+    // }
 
     // public function tripCompleted()
     // {
-    //     try {
-    //         $trips = null;
+    //     $completedTrips = Trip::where('status', 'completed')
+    //         ->with('customer')
+    //         ->with('vehicle')
+    //         ->with('route')
+    //         ->get();
+    //     return view('trips.completed', compact('completedTrips'));
 
-    //         if (Auth::user()->role == 'admin') {
-    //             $trips = Trip::where('status', 'completed')
-    //                 ->with(['customer.user', 'vehicle.driver.user', 'vehicle', 'route'])
-    //                 ->get()
-    //                 ->groupBy(function ($trip) {
-    //                     return $trip->customer->user->organisation->name;
-    //                 });
-    //         } elseif (Auth::user()->role == 'organisation') {
-    //             $organisation = Organisation::where('user_id', Auth::user()->id)->first();
-    //             if ($organisation) {
-    //                 $trips = Trip::where('status', 'completed')
-    //                     ->whereHas('customer', function ($query) use ($organisation) {
-    //                         $query->where('customer_organisation_code', $organisation->organisation_code);
-    //                     })
-    //                     ->with(['customer.user', 'vehicle.driver.user', 'vehicle', 'route'])
-    //                     ->get()
-    //                     ->groupBy(function ($trip) {
-    //                         return $trip->customer->user->organisation->name;
-    //                     });
-    //             }
-    //         } else {
-    //             $trips = Trip::where('status', 'completed')
-    //                 ->where('created_by', Auth::user()->id)
-    //                 ->with(['customer.user', 'vehicle.driver.user', 'vehicle', 'route'])
-    //                 ->get()
-    //                 ->groupBy(function ($trip) {
-    //                     return $trip->customer->user->organisation->name;
-    //                 });
-    //         }
-
-    //         return view('trips.completed', compact('trips'));
-    //     } catch (\Exception $e) {
-    //         Log::error('Error fetching completed trips: ' . $e->getMessage());
-    //         return back()->with('error', 'An error occurred while fetching the completed trips. Please try again.');
-    //     }
     // }
-
     // public function tripCancelled()
     // {
-    //     try {
-    //         $cancelledTrips = null;
-
-    //         if (Auth::user()->role == 'admin') {
-    //             $cancelledTrips = Trip::where('status', 'cancelledTrips')
-    //                 ->with(['customer.user', 'vehicle.driver.user', 'vehicle', 'route'])
-    //                 ->get()
-    //                 ->groupBy(function ($trip) {
-    //                     return $trip->customer->user->organisation->name;
-    //                 });
-    //         } elseif (Auth::user()->role == 'organisation') {
-    //             $organisation = Organisation::where('user_id', Auth::user()->id)->first();
-    //             if ($organisation) {
-    //                 $cancelledTrips = Trip::where('status', 'cancelled')
-    //                     ->whereHas('customer', function ($query) use ($organisation) {
-    //                         $query->where('customer_organisation_code', $organisation->organisation_code);
-    //                     })
-    //                     ->with(['customer.user', 'vehicle.driver.user', 'vehicle', 'route'])
-    //                     ->get()
-    //                     ->groupBy(function ($trip) {
-    //                         return $trip->customer->user->organisation->name;
-    //                     });
-    //             }
-    //         } else {
-    //             $cancelledTrips = Trip::where('status', 'cancelled')
-    //                 ->where('created_by', Auth::user()->id)
-    //                 ->with(['customer.user', 'vehicle.driver.user', 'vehicle', 'route'])
-    //                 ->get()
-    //                 ->groupBy(function ($trip) {
-    //                     return $trip->customer->user->organisation->name;
-    //                 });
-    //         }
-
-    //         return view('trips.cancelled', compact('cancelledTrips'));
-    //     } catch (\Exception $e) {
-    //         Log::error('Error fetching cancelled trips: ' . $e->getMessage());
-    //         return back()->with('error', 'An error occurred while fetching the cancelled trips. Please try again.');
-    //     }
+    //     $cancelledTrips = Trip::where('status', 'cancelled')
+    //         ->with('customer')
+    //         ->with('vehicle')
+    //         ->with('route')
+    //         ->get();
+    //     return view('trips.cancelled', compact('cancelledTrips'));
     // }
-
     // public function tripBilled()
     // {
-    //     try {
-    //         $billedTrips = null;
+    //     $billedTrips = Trip::whereIn('status', ['billed', 'paid', 'partially paid'])
+    //         ->with('customer')
+    //         ->with('vehicle')
+    //         ->with('route')
+    //         ->with('billingRate')
+    //         ->get();
 
-    //         if (Auth::user()->role == 'admin') {
-    //             $billedTrips = Trip::whereIn('status', ['billedTrips', 'paid', 'partially paid'])
-    //                 ->with(['customer.user', 'vehicle.driver.user', 'vehicle', 'route', 'billingRate'])
-    //                 ->get()
-    //                 ->groupBy(function ($trip) {
-    //                     return $trip->customer->user->organisation->name;
-    //                 });
-    //         } elseif (Auth::user()->role == 'organisation') {
-    //             $organisation = Organisation::where('user_id', Auth::user()->id)->first();
-    //             if ($organisation) {
-    //                 $trips = Trip::whereIn('status', ['billedTrips', 'paid', 'partially paid'])
-    //                     ->whereHas('customer', function ($query) use ($organisation) {
-    //                         $query->where('customer_organisation_code', $organisation->organisation_code);
-    //                     })
-    //                     ->with(['customer.user', 'vehicle.driver.user', 'vehicle', 'route', 'billingRate'])
-    //                     ->get()
-    //                     ->groupBy(function ($trip) {
-    //                         return $trip->customer->user->organisation->name;
-    //                     });
-    //             }
-    //         } else {
-    //             $billedTrips = Trip::whereIn('status', ['billedTrips', 'paid', 'partially paid'])
-    //                 ->where('created_by', Auth::user()->id)
-    //                 ->with(['customer.user', 'vehicle.driver.user', 'vehicle', 'route', 'billingRate'])
-    //                 ->get()
-    //                 ->groupBy(function ($trip) {
-    //                     return $trip->customer->user->organisation->name;
-    //                 });
-    //         }
-
-    //         Log::info('BILLED TRIPS');
-    //         Log::info($trips);
-
-    //         return view('trips.billed', compact('billedTrips'));
-    //     } catch (\Exception $e) {
-    //         Log::error('Error fetching billed trips: ' . $e->getMessage());
-    //         return back()->with('error', 'An error occurred while fetching the billed trips. Please try again.');
-    //     }
+    //     Log::info('BILLED TRIPS');
+    //     Log::info($billedTrips);
+    //     return view('trips.billed', compact('billedTrips'));
     // }
 
 
+   public function tripScheduled()
+{
+    try {
+        $scheduledTrips = null;
+        $organisations = Organisation::all();
 
-    public function completeTripForm($id){
+        if (Auth::user()->role == 'admin') {
+            $scheduledTrips = Trip::where('status', 'scheduled')
+                ->with(['customer.user', 'vehicle.driver.user', 'vehicle', 'route'])
+                ->get()
+                ->groupBy(function ($trip) {
+                    return $trip->customer->customer_organisation_code;
+                });
+        } elseif (Auth::user()->role == 'organisation') {
+            $organisation = Organisation::where('user_id', Auth::user()->id)->first();
+            if ($organisation) {
+                $scheduledTrips = Trip::where('status', 'scheduled')
+                    ->whereHas('customer', function ($query) use ($organisation) {
+                        $query->where('customer_organisation_code', $organisation->organisation_code);
+                    })
+                    ->with(['customer.user', 'vehicle.driver.user', 'vehicle', 'route'])
+                    ->get()
+                    ->groupBy(function ($trip) {
+                        return $trip->customer->customer_organisation_code;
+                    });
+            }
+        } else {
+            $scheduledTrips = Trip::where('status', 'scheduled')
+                ->where('created_by', Auth::user()->id)
+                ->with(['customer.user', 'vehicle.driver.user', 'vehicle', 'route'])
+                ->get()
+                ->groupBy(function ($trip) {
+                    return $trip->customer->customer_organisation_code;
+                });
+        }
+
+        return view('trips.scheduled', compact('scheduledTrips', 'organisations'));
+    } catch (\Exception $e) {
+        Log::error('Error fetching scheduled trips: ' . $e->getMessage());
+        return back()->with('error', 'An error occurred while fetching the scheduled trips. Please try again.');
+    }
+}
+
+
+
+
+
+    public function tripCompleted(Request $request)
+{
+    try {
+        $groupByOrganisation = $request->query('group_by_organisation', false); // Optional grouping
+
+        $trips = collect();
+
+        if (Auth::user()->role == 'admin') {
+            $trips = Trip::where('status', 'completed')
+                ->with(['customer.user', 'vehicle.driver.user', 'vehicle', 'route'])
+                ->get();
+        } elseif (Auth::user()->role == 'organisation') {
+            $organisation = Organisation::where('user_id', Auth::user()->id)->first();
+            if ($organisation) {
+                $trips = Trip::where('status', 'completed')
+                    ->whereHas('customer', function ($query) use ($organisation) {
+                        $query->where('customer_organisation_code', $organisation->organisation_code);
+                    })
+                    ->with(['customer.user', 'vehicle.driver.user', 'vehicle', 'route'])
+                    ->get();
+            }
+        } else {
+            $trips = Trip::where('status', 'completed')
+                ->where('created_by', Auth::user()->id)
+                ->with(['customer.user', 'vehicle.driver.user', 'vehicle', 'route'])
+                ->get();
+        }
+
+        // Group by organization if required
+        if ($groupByOrganisation) {
+            $trips = $trips->groupBy(function ($trip) {
+                return $trip->customer->user->organisation->name ?? 'N/A'; // Use 'N/A' if organisation is null
+            });
+        }
+
+        return view('trips.completed', compact('trips', 'groupByOrganisation'));
+    } catch (\Exception $e) {
+        Log::error('Error fetching completed trips: ' . $e->getMessage());
+        return back()->with('error', 'An error occurred while fetching the completed trips. Please try again.');
+    }
+}
+
+    public function tripCancelled()
+    {
+        try {
+            $cancelledTrips = collect();
+
+            if (Auth::user()->role == 'admin') {
+                $cancelledTrips = Trip::where('status', 'cancelled')
+                    ->with(['customer.user.organisation', 'vehicle.driver.user', 'vehicle', 'route'])
+                    ->get()
+                    ->groupBy(function ($trip) {
+                        return optional($trip->customer->user->organisation)->name;
+                    });
+            } elseif (Auth::user()->role == 'organisation') {
+                $organisation = Organisation::where('user_id', Auth::user()->id)->first();
+                if ($organisation) {
+                    $cancelledTrips = Trip::where('status', 'cancelled')
+                        ->whereHas('customer', function ($query) use ($organisation) {
+                            $query->where('customer_organisation_code', $organisation->organisation_code);
+                        })
+                        ->with(['customer.user.organisation', 'vehicle.driver.user', 'vehicle', 'route'])
+                        ->get()
+                        ->groupBy(function ($trip) {
+                            return optional($trip->customer->user->organisation)->name;
+                        });
+                }
+            } else {
+                $cancelledTrips = Trip::where('status', 'cancelled')
+                    ->where('created_by', Auth::user()->id)
+                    ->with(['customer.user.organisation', 'vehicle.driver.user', 'vehicle', 'route'])
+                    ->get()
+                    ->groupBy(function ($trip) {
+                        return optional($trip->customer->user->organisation)->name;
+                    });
+            }
+
+            return view('trips.cancelled', compact('cancelledTrips'));
+        } catch (\Exception $e) {
+            Log::error('Error fetching cancelled trips: ' . $e->getMessage());
+            return back()->with('error', 'An error occurred while fetching the cancelled trips. Please try again.');
+        }
+    }
+
+
+
+
+    public function tripBilled()
+    {
+        try {
+            $billedTrips = collect();
+
+            if (Auth::user()->role == 'admin') {
+                $billedTrips = Trip::whereIn('status', ['billed', 'paid', 'partially paid'])
+                    ->with(['customer.user.organisation', 'vehicle.driver.user', 'vehicle', 'route', 'billingRate'])
+                    ->get()
+                    ->groupBy(function ($trip) {
+                        return optional($trip->customer->user->organisation)->name;
+                    });
+            } elseif (Auth::user()->role == 'organisation') {
+                $organisation = Organisation::where('user_id', Auth::user()->id)->first();
+                if ($organisation) {
+                    $billedTrips = Trip::whereIn('status', ['billed', 'paid', 'partially paid'])
+                        ->whereHas('customer', function ($query) use ($organisation) {
+                            $query->where('customer_organisation_code', $organisation->organisation_code);
+                        })
+                        ->with(['customer.user.organisation', 'vehicle.driver.user', 'vehicle', 'route', 'billingRate'])
+                        ->get()
+                        ->groupBy(function ($trip) {
+                            return optional($trip->customer->user->organisation)->name;
+                        });
+                }
+            } else {
+                $billedTrips = Trip::whereIn('status', ['billed', 'paid', 'partially paid'])
+                    ->where('created_by', Auth::user()->id)
+                    ->with(['customer.user.organisation', 'vehicle.driver.user', 'vehicle', 'route', 'billingRate'])
+                    ->get()
+                    ->groupBy(function ($trip) {
+                        return optional($trip->customer->user->organisation)->name;
+                    });
+            }
+
+            Log::info('BILLED TRIPS: ', ['billedTrips' => $billedTrips]);
+
+            return view('trips.billed', compact('billedTrips'));
+        } catch (\Exception $e) {
+            Log::error('Error fetching billed trips: ' . $e->getMessage());
+            return back()->with('error', 'An error occurred while fetching the billed trips. Please try again.');
+        }
+    }
+
+
+
+
+
+    public function completeTripForm($id)
+    {
         $trip = Trip::findOrFail($id);
         return view('trips.complete', compact('trip'));
     }
 
-    public function completeTrip($id) {
+    public function completeTrip($id)
+    {
         try {
             $trip = Trip::findOrFail($id);
 
@@ -620,12 +675,14 @@ class TripController extends Controller
         }
     }
 
-    public function cancelTripForm($id){
+    public function cancelTripForm($id)
+    {
         $trip = Trip::findOrFail($id);
         return view('trips.cancel', compact('trip'));
     }
 
-    public function cancelTrip($id) {
+    public function cancelTrip($id)
+    {
         try {
             $trip = Trip::findOrFail($id);
 
@@ -645,7 +702,8 @@ class TripController extends Controller
         }
     }
 
-    public function assignVehicleToTrips() {
+    public function assignVehicleToTrips()
+    {
         try {
             $currentTime = Carbon::now('Africa/Nairobi')->format('H:i:s');
             $oneHourLater = Carbon::now('Africa/Nairobi')->addHour()->format('H:i:s');
@@ -702,17 +760,19 @@ class TripController extends Controller
         } catch (Exception $e) {
             Log::error('ERROR ASSIGNING VEHICLE TO TRIPS');
             Log::error($e);
-            
+
             return redirect()->back()->with('error', 'Something Went Wrong');
         }
     }
 
-    public function details($id) {
+    public function details($id)
+    {
         $trip = Trip::with(['customer', 'vehicle'])->findOrFail($id);
         return view('trips.details', compact('trip'));
     }
 
-    public function detailsPut(Request $request, $id) {
+    public function detailsPut(Request $request, $id)
+    {
         try {
 
             $trip = Trip::findOrFail($id);
@@ -755,13 +815,15 @@ class TripController extends Controller
         }
     }
 
-    public function bill($id) {
+    public function bill($id)
+    {
         $trip = Trip::findOrFail($id);
         $billingRates = BillingRates::all();
         return view('trips.bill', compact('trip', 'billingRates'));
     }
 
-    public function billPut(Request $request, $id) {
+    public function billPut(Request $request, $id)
+    {
         try {
 
             $trip = Trip::findOrFail($id);
@@ -800,7 +862,8 @@ class TripController extends Controller
         }
     }
 
-    public function getBillingRate ($id) {
+    public function getBillingRate($id)
+    {
         $billingRate = BillingRates::findOrFail($id);
 
         return response()->json([
@@ -816,13 +879,16 @@ class TripController extends Controller
         try {
             // Fetch the trip details where the status is 'billed' or 'partially paid',' paid'
             $trip = Trip::where('id', $id)
-                ->whereIn('status', ['billed','paid', 'partially paid'])
+                ->whereIn('status', ['billed', 'paid', 'partially paid'])
                 ->firstOrFail();
+
+                Log::info('Trip payment: ');
+                Log::info($trip->payment);
 
             // Retrieve all payments for this trip
             // $ThisTripPayments = TripPayment::where('trip_id', $id)->get();
             $ThisTripPayments = TripPayment::where('trip_id', $id)->with('account')->get();
-            
+
             Log::info('This trip payments data: ', $ThisTripPayments->toArray());
 
             // Calculate the total paid amount from the trip_payments table
@@ -832,7 +898,7 @@ class TripController extends Controller
             $remainingAmount = $trip->total_price - $totalPaid;
 
             // Return the view with the trip details and remaining amount
-            return view('trips.tripPaymentCheckout', compact('trip', 'remainingAmount','ThisTripPayments'));
+            return view('trips.tripPaymentCheckout', compact('trip', 'remainingAmount', 'ThisTripPayments'));
 
         } catch (Exception $e) {
             Log::error('Error fetching trip details for payment checkout: ' . $e->getMessage());
@@ -841,7 +907,8 @@ class TripController extends Controller
     }
 
 
-    public function invoice(){
+    public function invoice()
+    {
         $organisationCode = auth()->user()->organisation->organisation_code;
 
         $trips = Trip::where('status', 'billed')
@@ -857,14 +924,14 @@ class TripController extends Controller
         Log::info('TRIPS');
         Log::info($trips);
 
-        
+
         $data = [
             'title' => 'Invoice',
             'date' => date('m/d/Y'),
             'due_date' => date('m/d/Y', strtotime('+30 days')),
             'customer' => auth()->user()->organisation->user->name,
             'address' => auth()->user()->organisation->user->address,
-            'invoice_number' => 'INV-'.time(),
+            'invoice_number' => 'INV-' . time(),
             'items' => $trips,
         ];
         $dompdf = new Dompdf();
