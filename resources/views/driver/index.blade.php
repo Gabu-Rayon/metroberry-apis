@@ -62,11 +62,33 @@
                                                                 {{ $driver->vehicle ? $driver->vehicle->plate_number : '-' }}
                                                             </td>
                                                             <td>
-                                                                @if ($driver->status == 'active')
-                                                                    <span class="badge bg-success">Active</span>
-                                                                @else
-                                                                    <span class="badge bg-danger">Inactive</span>
-                                                                @endif
+                                                                @php
+                                                                    $license = $driver->driverLicense;
+                                                                    $psvBadge = $driver->psvBadge;
+
+                                                                    if (!$license) {
+                                                                        $badgeClass = 'badge bg-danger';
+                                                                        $badgeText = 'Missing License';
+                                                                    } elseif ($license && !$license->verified) {
+                                                                        $badgeClass = 'badge bg-danger';
+                                                                        $badgeText = 'Unverified License';
+                                                                    } elseif ($psvBadge && !$psvBadge->verified) {
+                                                                        $badgeClass = 'badge bg-danger';
+                                                                        $badgeText = 'Unverified PSV Badge';
+                                                                    } elseif (!$psvBadge) {
+                                                                        $badgeClass = 'badge bg-danger';
+                                                                        $badgeText = 'Missing PSV Badge';
+                                                                    } else {
+                                                                        if ($driver->status == 'inactive') {
+                                                                            $badgeClass = 'badge bg-warning text-dark';
+                                                                            $badgeText = 'Pending Verification';
+                                                                        } else {
+                                                                            $badgeClass = 'badge bg-success';
+                                                                            $badgeText = 'Valid';
+                                                                        }
+                                                                    }
+                                                                @endphp
+                                                                <span class="{{ $badgeClass }}">{{ $badgeText }}</span>
                                                             </td>
                                                             @if (\Auth::user()->role == 'admin')
                                                                 <td class="text-center">
@@ -113,7 +135,7 @@
                                                                         <a href="javascript:void(0);"
                                                                             class="btn btn-sm btn-info"
                                                                             onclick="axiosModal('{{ route('driver.vehicle.assign', $driver->id) }}')"
-                                                                            title="Assign Driver">
+                                                                            title="Assign Vehicle">
                                                                             <i class="fa-solid fa-key"></i>
                                                                         </a>
                                                                     @endif
