@@ -59,7 +59,6 @@
     <script src="repeater.js"></script>
     <div class="main">
         @yield('content')
-
     </div>
 
     <script src="{{ asset('admin-assets/vendor/jQuery/jquery.min.js?v=1') }}"></script>

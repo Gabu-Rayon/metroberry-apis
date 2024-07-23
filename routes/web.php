@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TripController;
@@ -1482,16 +1483,16 @@ Route::put('vehicle/inspection-certificate/{id}/edit', [NTSAInspectionCertificat
     ->middleware('auth', 'can:edit vehicle inspection certificate');
 
 Route::get('vehicle/inspection-certificate/{id}/verify', [NTSAInspectionCertificateController::class, 'verifyForm'])
-->name('vehicle.inspection.certificate.verify')
-->middleware('auth', 'can:edit vehicle inspection certificate');
+    ->name('vehicle.inspection.certificate.verify')
+    ->middleware('auth', 'can:edit vehicle inspection certificate');
 
 Route::put('vehicle/inspection-certificate/{id}/verify', [NTSAInspectionCertificateController::class, 'verify'])
     ->name('vehicle.inspection.certificate.verify')
     ->middleware('auth', 'can:edit vehicle inspection certificate');
 
 Route::get('vehicle/inspection-certificate/{id}/suspend', [NTSAInspectionCertificateController::class, 'suspendForm'])
-->name('vehicle.inspection.certificate.suspend')
-->middleware('auth', 'can:edit vehicle inspection certificate');
+    ->name('vehicle.inspection.certificate.suspend')
+    ->middleware('auth', 'can:edit vehicle inspection certificate');
 
 Route::put('vehicle/inspection-certificate/{id}/suspend', [NTSAInspectionCertificateController::class, 'suspend'])
     ->name('vehicle.inspection.certificate.suspend')
@@ -1509,8 +1510,8 @@ Route::delete('vehicle/inspection-certificate/{id}/delete', [NTSAInspectionCerti
 
 
 Route::get('billed/trip/{id}/download/invoice', [TripPaymentController::class, 'billedTripDownloadInvoice'])
-->name('trip.download.invoice')
-->middleware('auth');
+    ->name('trip.download.invoice')
+    ->middleware('auth');
 
 
 Route::get('billed/trip/{id}/download/invoice', [TripPaymentController::class, 'billedTripDownloadInvoiceReceipt'])

@@ -46,21 +46,38 @@
                     </div>
                 </div>
 
-                <div class="form-group row my-2">
-                    <label for="organisation" class="col-sm-5 col-form-label">
-                        Organisation
-                        <i class="text-danger">*</i>
-                    </label>
-                    <div class="col-sm-7">
-                        <select name="organisation" id="organisation" class="form-control" required>
-                            <option value="">Select Organisation</option>
-                            @foreach ($organisations as $organisation)
-                                <option value="{{ $organisation->organisation_code }}">{{ $organisation->user->name }}
-                                </option>
-                            @endforeach
-                        </select>
+                @if (\Auth::user()->role == 'admin')
+                    <div class="form-group row my-2">
+                        <label for="organisation" class="col-sm-5 col-form-label">
+                            Organisation
+                            <i class="text-danger">*</i>
+                        </label>
+                        <div class="col-sm-7">
+                            <select name="organisation" id="organisation" class="form-control" required>
+                                <option value="">Select Organisation</option>
+                                @foreach ($organisations as $organisation)
+                                    <option value="{{ $organisation->organisation_code }}">
+                                        {{ $organisation->user->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
-                </div>
+                @else
+                    <div class="form-group row my-2">
+                        <label for="organisation" class="col-sm-5 col-form-label">
+                            Organisation
+                            <i class="text-danger">*</i>
+                        </label>
+                        <div class="col-sm-7">
+                            <select name="organisation" id="organisation" class="form-control" required>
+                                <option selected readonly value="{{ Auth::user()->organisation->organisation_code }}">
+                                    {{ Auth::user()->organisation->user->name }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                @endif
 
 
                 <div class="form-group row my-2">

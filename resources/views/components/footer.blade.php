@@ -4,7 +4,7 @@
             <div class="col-md-6">
                 <div class="copy">
                     © 2024 <a class="text-capitalize text-black" href="" target="_blank">Metro Berry Tour
-                        <small><i>$
+                        <small><i>&
                             </i></small> Travel</a>.
                 </div>
             </div>

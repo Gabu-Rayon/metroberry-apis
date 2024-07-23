@@ -46,7 +46,7 @@ class User extends Authenticatable
         'permissions',
     ];
 
-    protected $with = ['organisation'];
+    // protected $with = ['organisation'];
 
     /**
      * Get the attributes that should be cast.
@@ -65,7 +65,8 @@ class User extends Authenticatable
         ];
     }
 
-    public function driver() {
+    public function driver()
+    {
         return $this->hasOne(Driver::class);
     }
 
@@ -73,13 +74,15 @@ class User extends Authenticatable
     {
         return $this->hasOne(Customer::class, 'user_id', 'id');
     }
-    public function organisation() {
+    public function organisation()
+    {
         return $this->hasOne(Organisation::class);
     }
 
-    public static function boot () {
+    public static function boot()
+    {
         parent::boot();
-        static::deleting(function($user) {
+        static::deleting(function ($user) {
             $user->driver()->delete();
             $user->customer()->delete();
             $user->organisation()->delete();
