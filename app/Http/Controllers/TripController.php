@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Exception;
@@ -27,24 +28,24 @@ class TripController extends Controller
     /**
      * Display a listing of the resource.
      */
-//     public function index(){
-//         $scheduledTrips = Trip::with(['customer.user', 'vehicle.driver.user', 'vehicle', 'route'])
-//             ->where('status', 'scheduled')
-//             ->orderBy('pick_up_time')
-//             ->get()
-//             ->groupBy(function ($trip) {
-//                 return $trip->customer->user->organisation->name;
-//             });
+    //     public function index(){
+    //         $scheduledTrips = Trip::with(['customer.user', 'vehicle.driver.user', 'vehicle', 'route'])
+    //             ->where('status', 'scheduled')
+    //             ->orderBy('pick_up_time')
+    //             ->get()
+    //             ->groupBy(function ($trip) {
+    //                 return $trip->customer->user->organisation->name;
+    //             });
 
-//         $scheduledTrips = $scheduledTrips->groupBy(function ($trip) {
-//             return $trip->customer->organization;
-//         });
+    //         $scheduledTrips = $scheduledTrips->groupBy(function ($trip) {
+    //             return $trip->customer->organization;
+    //         });
 
-//         Log::info('SCHEDULED TRIPS');
-//         Log::info($scheduledTrips);            
-            
-//         return view('trips.scheduled', compact('scheduledTrips'));
-// }
+    //         Log::info('SCHEDULED TRIPS');
+    //         Log::info($scheduledTrips);            
+
+    //         return view('trips.scheduled', compact('scheduledTrips'));
+    // }
 
 
 
@@ -161,10 +162,10 @@ class TripController extends Controller
     // }
 
 
-   
+
     public function store(Request $request)
     {
-        try {            
+        try {
             $data = $request->all();
             $creator = Auth::user();
 
@@ -183,18 +184,18 @@ class TripController extends Controller
                 Log::info($validator->errors());
 
                 return redirect()->back()->with('error', $validator->errors()->first())->withInput();
-            } 
-            
+            }
+
             //For pick_up_time will be the  shift_end_time
             // drop_off_or_pick_up_date will be trip date 
             //then if user select 'pick_up_location' => 'Home', and vice versa for Home 
             //  we then get there home address from the table of users  by referencing using the customer_id 
-             //then we will get the lat and long of the address and store it in the database
-               
-              //then if user select 'dropOffLocation' => 'Office', and vice verse for Home
+            //then we will get the lat and long of the address and store it in the database
+
+            //then if user select 'dropOffLocation' => 'Office', and vice verse for Home
             //   we will get there organisation address by referecing using their customer_id then
             //     we get organisation address using the models relationship where the data for organisation is also in the users table 
-              
+
             //then 
             // if user select  'drop_off_location' => '4',  which in this case will came id we will get the  
 
@@ -415,31 +416,33 @@ class TripController extends Controller
         }
     }
 
-    public function tripScheduled() {
+    public function tripScheduled()
+    {
         $scheduledTrips = Trip::with(['customer.user', 'vehicle.driver.user', 'route'])
             ->where('status', 'scheduled')
             ->orderBy('pick_up_time')
             ->get();
-    
+
         $groupedTrips = $scheduledTrips->groupBy(function ($trip) {
             return $trip->customer->customer_organisation_code;
         });
 
         $organisations = Organisation::all();
-    
+
         return view('trips.scheduled', compact('groupedTrips', 'organisations'));
     }
-    
-    public function tripCompleted(){
+
+    public function tripCompleted()
+    {
         $completedTrips = Trip::where('status', 'completed')
             ->with('customer')
             ->with('vehicle')
             ->with('route')
             ->get();
         return view('trips.completed', compact('completedTrips'));
-
     }
-    public function tripCancelled(){
+    public function tripCancelled()
+    {
         $cancelledTrips = Trip::where('status', 'cancelled')
             ->with('customer')
             ->with('vehicle')
@@ -594,12 +597,14 @@ class TripController extends Controller
 
 
 
-    public function completeTripForm($id){
+    public function completeTripForm($id)
+    {
         $trip = Trip::findOrFail($id);
         return view('trips.complete', compact('trip'));
     }
 
-    public function completeTrip($id) {
+    public function completeTrip($id)
+    {
         try {
             $trip = Trip::findOrFail($id);
 
@@ -620,12 +625,14 @@ class TripController extends Controller
         }
     }
 
-    public function cancelTripForm($id){
+    public function cancelTripForm($id)
+    {
         $trip = Trip::findOrFail($id);
         return view('trips.cancel', compact('trip'));
     }
 
-    public function cancelTrip($id) {
+    public function cancelTrip($id)
+    {
         try {
             $trip = Trip::findOrFail($id);
 
@@ -645,11 +652,9 @@ class TripController extends Controller
         }
     }
 
-    public function assignVehicleToTrips() {
+    public function assignVehicleToTrips()
+    {
         try {
-            $currentTime = Carbon::now('Africa/Nairobi')->format('H:i:s');
-            $oneHourLater = Carbon::now('Africa/Nairobi')->addHour()->format('H:i:s');
-
             $currentTime = Carbon::now('Africa/Nairobi');
             $oneHourLater = $currentTime->copy()->addHour();
 
@@ -690,10 +695,28 @@ class TripController extends Controller
 
             DB::beginTransaction();
 
-            foreach ($trips as $trip) {
-                $vehicle = $vehicles->random();
-                $trip->vehicle_id = $vehicle->id;
-                $trip->save();
+            $routes = $trips->pluck('route_id')->unique();
+
+            $assignedVehicles = [];
+
+            foreach ($routes as $route) {
+                $routeTrips = $trips->where('route_id', $route);
+                $availableVehicles = $vehicles->filter(function ($vehicle) use ($assignedVehicles) {
+                    return !in_array($vehicle->id, $assignedVehicles);
+                });
+                if ($availableVehicles->count() == 0) {
+                    break; // skip this route if no vehicles are available
+                }
+                if ($availableVehicles->count() == 1) {
+                    $vehicle = $availableVehicles->first();
+                } else {
+                    $vehicle = $availableVehicles->random();
+                }
+                $assignedVehicles[] = $vehicle->id;
+                foreach ($routeTrips as $trip) {
+                    $trip->vehicle_id = $vehicle->id;
+                    $trip->save();
+                }
             }
 
             DB::commit();
@@ -702,17 +725,19 @@ class TripController extends Controller
         } catch (Exception $e) {
             Log::error('ERROR ASSIGNING VEHICLE TO TRIPS');
             Log::error($e);
-            
+
             return redirect()->back()->with('error', 'Something Went Wrong');
         }
     }
 
-    public function details($id) {
+    public function details($id)
+    {
         $trip = Trip::with(['customer', 'vehicle'])->findOrFail($id);
         return view('trips.details', compact('trip'));
     }
 
-    public function detailsPut(Request $request, $id) {
+    public function detailsPut(Request $request, $id)
+    {
         try {
 
             $trip = Trip::findOrFail($id);
@@ -755,13 +780,15 @@ class TripController extends Controller
         }
     }
 
-    public function bill($id) {
+    public function bill($id)
+    {
         $trip = Trip::findOrFail($id);
         $billingRates = BillingRates::all();
         return view('trips.bill', compact('trip', 'billingRates'));
     }
 
-    public function billPut(Request $request, $id) {
+    public function billPut(Request $request, $id)
+    {
         try {
 
             $trip = Trip::findOrFail($id);
@@ -792,7 +819,6 @@ class TripController extends Controller
             DB::commit();
 
             return redirect()->back()->with('success', 'Trip Billed Successfully');
-
         } catch (Exception $e) {
             Log::error('ERROR BILLING TRIP');
             Log::error($e);
@@ -800,7 +826,8 @@ class TripController extends Controller
         }
     }
 
-    public function getBillingRate ($id) {
+    public function getBillingRate($id)
+    {
         $billingRate = BillingRates::findOrFail($id);
 
         return response()->json([
@@ -816,13 +843,13 @@ class TripController extends Controller
         try {
             // Fetch the trip details where the status is 'billed' or 'partially paid',' paid'
             $trip = Trip::where('id', $id)
-                ->whereIn('status', ['billed','paid', 'partially paid'])
+                ->whereIn('status', ['billed', 'paid', 'partially paid'])
                 ->firstOrFail();
 
             // Retrieve all payments for this trip
             // $ThisTripPayments = TripPayment::where('trip_id', $id)->get();
             $ThisTripPayments = TripPayment::where('trip_id', $id)->with('account')->get();
-            
+
             Log::info('This trip payments data: ', $ThisTripPayments->toArray());
 
             // Calculate the total paid amount from the trip_payments table
@@ -832,8 +859,7 @@ class TripController extends Controller
             $remainingAmount = $trip->total_price - $totalPaid;
 
             // Return the view with the trip details and remaining amount
-            return view('trips.tripPaymentCheckout', compact('trip', 'remainingAmount','ThisTripPayments'));
-
+            return view('trips.tripPaymentCheckout', compact('trip', 'remainingAmount', 'ThisTripPayments'));
         } catch (Exception $e) {
             Log::error('Error fetching trip details for payment checkout: ' . $e->getMessage());
             return back()->with('error', 'An error occurred while fetching the trip details. Please try again.');
@@ -841,7 +867,8 @@ class TripController extends Controller
     }
 
 
-    public function invoice(){
+    public function invoice()
+    {
         $organisationCode = auth()->user()->organisation->organisation_code;
 
         $trips = Trip::where('status', 'billed')
@@ -857,14 +884,14 @@ class TripController extends Controller
         Log::info('TRIPS');
         Log::info($trips);
 
-        
+
         $data = [
             'title' => 'Invoice',
             'date' => date('m/d/Y'),
             'due_date' => date('m/d/Y', strtotime('+30 days')),
             'customer' => auth()->user()->organisation->user->name,
             'address' => auth()->user()->organisation->user->address,
-            'invoice_number' => 'INV-'.time(),
+            'invoice_number' => 'INV-' . time(),
             'items' => $trips,
         ];
         $dompdf = new Dompdf();
