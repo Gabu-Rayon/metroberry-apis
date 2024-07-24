@@ -1492,16 +1492,16 @@ Route::put('vehicle/inspection-certificate/{id}/edit', [NTSAInspectionCertificat
     ->middleware('auth', 'can:edit vehicle inspection certificate');
 
 Route::get('vehicle/inspection-certificate/{id}/verify', [NTSAInspectionCertificateController::class, 'verifyForm'])
-->name('vehicle.inspection.certificate.verify')
-->middleware('auth', 'can:edit vehicle inspection certificate');
+    ->name('vehicle.inspection.certificate.verify')
+    ->middleware('auth', 'can:edit vehicle inspection certificate');
 
 Route::put('vehicle/inspection-certificate/{id}/verify', [NTSAInspectionCertificateController::class, 'verify'])
     ->name('vehicle.inspection.certificate.verify')
     ->middleware('auth', 'can:edit vehicle inspection certificate');
 
 Route::get('vehicle/inspection-certificate/{id}/suspend', [NTSAInspectionCertificateController::class, 'suspendForm'])
-->name('vehicle.inspection.certificate.suspend')
-->middleware('auth', 'can:edit vehicle inspection certificate');
+    ->name('vehicle.inspection.certificate.suspend')
+    ->middleware('auth', 'can:edit vehicle inspection certificate');
 
 Route::put('vehicle/inspection-certificate/{id}/suspend', [NTSAInspectionCertificateController::class, 'suspend'])
     ->name('vehicle.inspection.certificate.suspend')
@@ -1520,7 +1520,7 @@ Route::delete('vehicle/inspection-certificate/{id}/delete', [NTSAInspectionCerti
 
 Route::get('/test-email', function () {
     Mail::raw('This is a test email For Metro berry Mailing Services!', function ($message) {
-        $message->to('christian.m@yourapps.co.ke')
+        $message->to('iamwizarddelta001@gmail.com')
             ->subject('Metro  metro Berry Test Email ');
     });
     return 'Test email sent!';
