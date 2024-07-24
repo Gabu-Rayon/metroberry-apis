@@ -238,6 +238,7 @@ Route::get('driver', [DriverController::class, 'index'])
 Route::get('driver/create', [DriverController::class, 'create'])
     ->name('driver.create')
     ->middleware('auth', 'can:create driver');
+
 Route::post('driver', [DriverController::class, 'store'])
     ->name('driver.store')
     ->middleware('auth', 'can:create driver');

@@ -664,64 +664,8 @@ class TripController extends Controller
                 ->where('status', 'scheduled')
                 ->get();
 
-            $vehicles = null;
-
-            if (!$trips || $trips->count() == 0) {
-                return redirect()->back()->with('error', 'No upcoming trips');
-            }
-
-            if ($trips->count() >= 1 && $trips->count() <= 4) {
-                $vehicles = Vehicle::where('status', 'active')
-                    ->where('class', '>=', 'A')
-                    ->get();
-            }
-
-            if ($trips->count() >= 5 && $trips->count() <= 6) {
-                $vehicles = Vehicle::where('status', 'active')
-                    ->where('class', '>=', 'B')
-                    ->where('isOccupied', false)
-                    ->get();
-            }
-
-            if ($trips->count() >= 7 && $trips->count() <= 14) {
-                $vehicles = Vehicle::where('status', 'active')
-                    ->where('class', '>=', 'C')
-                    ->get();
-            }
-
-            if (!$vehicles || $vehicles->count() == 0) {
-                return redirect()->back()->with('error', 'No vehicles available');
-            }
-
-            DB::beginTransaction();
-
-            $routes = $trips->pluck('route_id')->unique();
-
-            $assignedVehicles = [];
-
-            foreach ($routes as $route) {
-                $routeTrips = $trips->where('route_id', $route);
-                $availableVehicles = $vehicles->filter(function ($vehicle) use ($assignedVehicles) {
-                    return !in_array($vehicle->id, $assignedVehicles);
-                });
-                if ($availableVehicles->count() == 0) {
-                    break; // skip this route if no vehicles are available
-                }
-                if ($availableVehicles->count() == 1) {
-                    $vehicle = $availableVehicles->first();
-                } else {
-                    $vehicle = $availableVehicles->random();
-                }
-                $assignedVehicles[] = $vehicle->id;
-                foreach ($routeTrips as $trip) {
-                    $trip->vehicle_id = $vehicle->id;
-                    $trip->save();
-                }
-            }
-
-            DB::commit();
-
-            return redirect()->back()->with('success', 'Vehicles Assigned Successfully');
+            Log::info('TRIPS');
+            Log::info($trips);
         } catch (Exception $e) {
             Log::error('ERROR ASSIGNING VEHICLE TO TRIPS');
             Log::error($e);

@@ -15,7 +15,8 @@
     </style>
 </head>
 
-<form action="driver" method="POST" class="needs-validation modal-content" enctype="multipart/form-data">
+<form action="{{ route('driver.store') }}" method="POST" class="needs-validation modal-content"
+    enctype="multipart/form-data">
     @csrf
     <div class="card-header my-3 p-2 border-bottom">
         <h4>Add Driver</h4>
@@ -46,21 +47,44 @@
                     </div>
                 </div>
 
-                <div class="form-group row my-2">
-                    <label for="organisation" class="col-sm-5 col-form-label">
-                        Organisation
-                        <i class="text-danger">*</i>
-                    </label>
-                    <div class="col-sm-7">
-                        <select name="organisation" id="organisation" class="form-control" required>
-                            <option value="">Select Organisation</option>
-                            @foreach ($organisations as $organisation)
+                @if (Auth::user()->role == 'admin')
+
+                    <div class="form-group row my-2">
+                        <label for="organisation" class="col-sm-5 col-form-label">
+                            Organisation
+                            <i class="text-danger">*</i>
+                        </label>
+                        <div class="col-sm-7">
+                            <select name="organisation" id="organisation" class="form-control" required>
+                                <option value="">Select Organisation</option>
+                                @foreach ($organisations as $organisation)
+                                    <option value="{{ $organisation->organisation_code }}">
+                                        {{ $organisation->user->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                @else
+                    <div class="form-group row my-2">
+                        <label for="organisation" class="col-sm-5 col-form-label">
+                            Organisation
+                            <i class="text-danger">*</i>
+                        </label>
+                        <div class="col-sm-7">
+                            <select name="organisation" id="organisation" class="form-control" required readonly>
+                                @php
+                                    $organisation = $organisations->where('user_id', Auth::user()->id)->first();
+                                    Log::info('ORGANISATION');
+                                    Log::info($organisation);
+                                @endphp
                                 <option value="{{ $organisation->organisation_code }}">{{ $organisation->user->name }}
                                 </option>
-                            @endforeach
-                        </select>
+                            </select>
+                        </div>
                     </div>
-                </div>
+
+                @endif
 
 
                 <div class="form-group row my-2">

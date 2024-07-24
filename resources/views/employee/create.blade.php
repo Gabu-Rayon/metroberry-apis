@@ -70,9 +70,12 @@
                             <i class="text-danger">*</i>
                         </label>
                         <div class="col-sm-7">
-                            <select name="organisation" id="organisation" class="form-control" required>
-                                <option selected readonly value="{{ Auth::user()->organisation->organisation_code }}">
-                                    {{ Auth::user()->organisation->user->name }}
+                            <select name="organisation" id="organisation" class="form-control" required readonly>
+                                @php
+                                    $organisation = $organisations->where('user_id', Auth::user()->id)->first();
+                                @endphp
+                                <option selected readonly value="{{ $organisation->organisation_code }}">
+                                    {{ $organisation->user->name }}
                                 </option>
                             </select>
                         </div>

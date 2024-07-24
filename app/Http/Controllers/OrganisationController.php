@@ -25,30 +25,35 @@ class OrganisationController extends Controller
      * Display a listing of the resource.
      */
 
-    public function dashboard () {
-        $activeVehicles = Vehicle::where('organisation_id', Auth::user()->organisation->id)
+
+    public function dashboard()
+    {
+        $organisation = Organisation::where('user_id', Auth::user()->id)->first();
+        Log::info($organisation);
+        $activeVehicles = Vehicle::where('organisation_id', $organisation->id)
             ->where('status', 'active')
             ->get();
-        $inactiveVehicles = Vehicle::where('organisation_id', Auth::user()->organisation->id)
+        $inactiveVehicles = Vehicle::where('organisation_id', $organisation->id)
             ->where('status', 'inactive')
             ->get();
-        
-        $tripsThisMonth = Trip::whereMonth('created_at', date('m'))
-        ->whereHas('customer', function ($query) {
-            $query->where('customer_organisation_code', auth()->user()->organisation->organisation_code);
-        })
-        ->get();
 
-        $scheduledTrips = $tripsThisMonth->filter(function($trip) {
+        $tripsThisMonth = Trip::whereMonth('created_at', date('m'))
+            ->whereHas('customer', function ($query) {
+                $organisation = Organisation::where('user_id', Auth::user()->id)->first();
+                $query->where('customer_organisation_code', $organisation->organisation_code);
+            })
+            ->get();
+
+        $scheduledTrips = $tripsThisMonth->filter(function ($trip) {
             return $trip->status == 'scheduled';
         });
-        $completedTrips = $tripsThisMonth->filter(function($trip) {
+        $completedTrips = $tripsThisMonth->filter(function ($trip) {
             return $trip->status == 'completed';
         });
-        $cancelledTrips = $tripsThisMonth->filter(function($trip) {
+        $cancelledTrips = $tripsThisMonth->filter(function ($trip) {
             return $trip->status == 'cancelled';
         });
-        $billedTrips = $tripsThisMonth->filter(function($trip) {
+        $billedTrips = $tripsThisMonth->filter(function ($trip) {
             return $trip->status == 'billed';
         });
 
@@ -83,23 +88,27 @@ class OrganisationController extends Controller
         ]);
 
         $expiredInsurances = VehicleInsurance::whereHas('vehicle', function ($query) {
-            $query->where('organisation_id', auth()->user()->organisation->id);
+            $organisation = Organisation::where('user_id', Auth::user()->id)->first();
+            $query->where('organisation_id', $organisation->id);
         })->where('insurance_date_of_expiry', '<', date('Y-m-d'))->get();
 
         $expiredInspectionCertificates = NTSAInspectionCertificate::whereHas('vehicle', function ($query) {
-            $query->where('organisation_id', auth()->user()->organisation->id);
+            $organisation = Organisation::where('user_id', Auth::user()->id)->first();
+            $query->where('organisation_id', $organisation->id);
         })->where('ntsa_inspection_certificate_date_of_expiry', '<', date('Y-m-d'))->get();
 
         $expiredLicenses = DriversLicenses::whereHas('driver', function ($query) {
-            $query->where('organisation_id', auth()->user()->organisation->id);
+            $organisation = Organisation::where('user_id', Auth::user()->id)->first();
+            $query->where('organisation_id', $organisation->id);
         })->where('driving_license_date_of_expiry', '<', date('Y-m-d'))->get();
 
         $expiredPSVBadges = PSVBadge::whereHas('driver', function ($query) {
-            $query->where('organisation_id', auth()->user()->organisation->id);
+            $organisation = Organisation::where('user_id', Auth::user()->id)->first();
+            $query->where('organisation_id', $organisation->id);
         })->where('psv_badge_date_of_expiry', '<', date('Y-m-d'))->get();
 
 
-        
+
         return view('organisation.dashboard', compact(
             'activeVehicles',
             'inactiveVehicles',
@@ -116,11 +125,11 @@ class OrganisationController extends Controller
         ));
     }
 
-    public function index(){
+    public function index()
+    {
 
         $organisations = Organisation::where('created_by', Auth::user()->id)->get();
-        return view('organisation.index',compact('organisations'));
-        
+        return view('organisation.index', compact('organisations'));
     }
 
     /**
@@ -134,7 +143,7 @@ class OrganisationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    
+
     public function store(Request $request)
     {
         try {
@@ -239,15 +248,17 @@ class OrganisationController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id) {
+    public function edit(string $id)
+    {
         $organisation = Organisation::findOrfail($id);
-        return view('organisation.edit',compact('organisation'));
+        return view('organisation.edit', compact('organisation'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id) {
+    public function update(Request $request, string $id)
+    {
         try {
 
             $organisation = Organisation::findOrfail($id);
@@ -369,12 +380,14 @@ class OrganisationController extends Controller
         }
     }
 
-    public function activateForm(string $id) {
+    public function activateForm(string $id)
+    {
         $organisation = Organisation::findOrfail($id);
-        return view('organisation.activate',compact('organisation'));
+        return view('organisation.activate', compact('organisation'));
     }
 
-    public function activate ($id) {
+    public function activate($id)
+    {
         try {
 
             $organisation = Organisation::findOrfail($id);
@@ -408,12 +421,14 @@ class OrganisationController extends Controller
         }
     }
 
-    public function deactivateForm($id) {
+    public function deactivateForm($id)
+    {
         $organisation = Organisation::findOrfail($id);
-        return view('organisation.deactivate',compact('organisation'));
+        return view('organisation.deactivate', compact('organisation'));
     }
 
-    public function deactivate($id) {
+    public function deactivate($id)
+    {
         try {
 
             $organisation = Organisation::findOrfail($id);

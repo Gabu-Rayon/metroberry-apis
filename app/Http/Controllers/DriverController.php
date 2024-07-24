@@ -23,40 +23,36 @@ class DriverController extends Controller
      */
     public function index()
     {
-            try {
-                $drivers = null;
+        try {
+            $drivers = null;
 
-                // Check the user's role
-                if (Auth::user()->role == 'admin') {
-                    // If the user is an admin, fetch all drivers
-                    $drivers = Driver::with('user')->get();
-                } elseif (Auth::user()->role == 'organisation') {
-                    // If the user is an organisation, fetch drivers for that organisation
-                    // Assuming organisation_id in Driver references the organisation table
-                    $drivers = Driver::whereHas('user', function ($query) {
-                        $query->where('organisation_id', Auth::user()->organisation->id);
-                    })->with('user')->get();
-                } else {
-                    // If the user has another role, fetch drivers created by the user
-                    $drivers = Driver::where('created_by', Auth::user()->id)->with('user')->get();
-                }
-
-                Log::info('Drivers fetched: ', ['drivers' => $drivers]);
-
-                return view('driver.index', compact('drivers'));
-            } catch (Exception $e) {
-                // Log the error message
-                Log::error('Error fetching drivers: ' . $e->getMessage());
-
-                return back()->with('error', 'An error occurred while fetching the drivers. Please try again.');
+            if (Auth::user()->role == 'admin') {
+                $drivers = Driver::with('user')->get();
+            } elseif (Auth::user()->role == 'organisation') {
+                $drivers = Driver::whereHas('user', function ($query) {
+                    $organisation = Organisation::where('user_id', Auth::user()->id)->first();
+                    $query->where('organisation_id', $organisation->id);
+                })->with('user')->get();
+            } else {
+                $drivers = Driver::where('created_by', Auth::user()->id)->with('user')->get();
             }
-        
+
+            Log::info('Drivers fetched: ', ['drivers' => $drivers]);
+
+            return view('driver.index', compact('drivers'));
+        } catch (Exception $e) {
+            // Log the error message
+            Log::error('Error fetching drivers: ' . $e->getMessage());
+
+            return back()->with('error', 'An error occurred while fetching the drivers. Please try again.');
+        }
     }
 
     public function store(Request $request)
     {
         try {
-            
+
+
             $data = $request->all();
 
             $validator = Validator::make($data, [
@@ -68,19 +64,19 @@ class DriverController extends Controller
                 'national_id' => 'required|string',
                 'front_page_id' => 'required|file|mimes:jpg,jpeg,png,webp',
                 'back_page_id' => 'required|file|mimes:jpg,jpeg,png,webp',
-                'avatar' => 'nullable|file|mimes:jpg,jpeg,png,webp',
                 'password' => 'required|string',
+                'avatar' => 'nullable|file|mimes:jpg,jpeg,png,webp,jfif',
             ]);
 
             if ($validator->fails()) {
                 Log::error('VALIDATION ERROR');
                 Log::error($validator->errors());
-                return redirect()->back()->with('errors', $validator->errors()->first());
+                return redirect()->back()->with('error', $validator->errors()->first());
             }
 
             DB::beginTransaction();
 
-            $organisation = Organisation::where('organisation_code', $data['organisation'])->first();
+        $organisation = Organisation::where('organisation_code', $data['organisation'])->first();
 
             if (!$organisation) {
                 return redirect()->back()->with('error', 'Organisation not found')->withInput();
@@ -97,14 +93,14 @@ class DriverController extends Controller
                 $frontIdFileName = "{$email}-front-id.{$frontIdExtension}";
                 $frontIdPath = $frontIdFile->storeAs('uploads/front-page-ids', $frontIdFileName, 'public');
             }
-            
+
             if ($request->hasFile('back_page_id')) {
                 $backIdFile = $request->file('back_page_id');
                 $backIdExtension = $backIdFile->getClientOriginalExtension();
                 $backIdFileName = "{$email}-back-id.{$backIdExtension}";
                 $backIdPath = $backIdFile->storeAs('uploads/back-page-ids', $backIdFileName, 'public');
             }
-            
+
             if ($request->hasFile('avatar')) {
                 $avatarFile = $request->file('avatar');
                 $avatarExtension = $avatarFile->getClientOriginalExtension();
@@ -163,13 +159,15 @@ class DriverController extends Controller
         }
     }
 
-    public function create(){
+    public function create()
+    {
         $organisations = Organisation::where('status', 'active')->get();
         return view('driver.create', compact('organisations'));
     }
 
 
-    public function edit($id){
+    public function edit($id)
+    {
         $driver = Driver::with('vehicle')->findOrfail($id);
         Log::info('DRIVER');
         Log::info($driver);
@@ -177,7 +175,8 @@ class DriverController extends Controller
         return view('driver.edit', compact('driver', 'organisations'));
     }
 
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
         try {
 
             $driver = Driver::find($id);
@@ -263,7 +262,6 @@ class DriverController extends Controller
             DB::commit();
 
             return redirect()->route('driver')->with('success', 'Driver updated successfully');
-
         } catch (Exception $e) {
             DB::rollBack();
             Log::error('UPDATE DRIVER ERROR');
@@ -272,15 +270,17 @@ class DriverController extends Controller
         }
     }
 
-    public function assignVehicleForm($id){
+    public function assignVehicleForm($id)
+    {
         $driver = Driver::with('vehicle')->findOrfail($id);
         $vehicles = Vehicle::where('status', 'active')
-                  ->doesntHave('driver')
-                  ->get();
+            ->doesntHave('driver')
+            ->get();
         return view('driver.assign-vehicle', compact('driver', 'vehicles'));
     }
 
-    public function assignVehicle(Request $request, $id) {
+    public function assignVehicle(Request $request, $id)
+    {
         try {
 
             $driver = Driver::find($id);
@@ -365,25 +365,29 @@ class DriverController extends Controller
         }
     }
 
-    public function driverPerformance(){
+    public function driverPerformance()
+    {
         $drivers = Driver::with('user', 'vehicle')->get();
         return view('driver.performance.index', compact('drivers'));
     }
 
-     public function createDriverPerformance(){
+    public function createDriverPerformance()
+    {
         return view('driver.performance.create');
-     }
+    }
 
     /**
      * Activate driver
      */
 
-    public function activateForm ($id) {
+    public function activateForm($id)
+    {
         $driver = Driver::findOrfail($id);
         return view('driver.activate', compact('driver'));
     }
 
-    public function activate ($id) {
+    public function activate($id)
+    {
         try {
 
             $driver = Driver::with('driverLicense')->findOrFail($id);
@@ -447,7 +451,8 @@ class DriverController extends Controller
         }
     }
 
-    public function deactivateForm ($id) {
+    public function deactivateForm($id)
+    {
         $driver = Driver::findOrfail($id);
         return view('driver.deactivate', compact('driver'));
     }
@@ -456,7 +461,8 @@ class DriverController extends Controller
      * Deactivate driver
      */
 
-    public function deactivate ($id) {
+    public function deactivate($id)
+    {
         try {
 
             $driver = Driver::findOrfail($id);
@@ -481,5 +487,4 @@ class DriverController extends Controller
             return redirect()->back()->with('error', 'An error occurred');
         }
     }
-
 }

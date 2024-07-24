@@ -79,6 +79,11 @@ class User extends Authenticatable
         return $this->hasOne(Organisation::class);
     }
 
+    public function getOrganisationAttribute()
+    {
+        return $this->organisationRelation;
+    }
+
     public static function boot()
     {
         parent::boot();
