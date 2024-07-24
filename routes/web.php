@@ -105,7 +105,7 @@ Route::get('employee/create', [EmployeeController::class, 'create'])
     ->middleware('auth', 'can:create customer');
 
 Route::post('employee', [EmployeeController::class, 'store'])
-    ->name('employee.create.store')
+    ->name('employee.create')
     ->middleware('auth', 'can:create customer');
 
 // Update Employee Details
@@ -287,15 +287,15 @@ Route::get('performance/create', [DriverController::class, 'createDriverPerforma
 
 // View Licenses
 Route::get('driver/license', [DriversLicensesController::class, 'index'])
-    ->name('driver.license.index')
+    ->name('driver.license')
     ->middleware('auth', 'can:view driver licenses');
 
 // Create License
 Route::get('driver/license/create', [DriversLicensesController::class, 'create'])
     ->name('driver.license.create')
     ->middleware('auth', 'can:create driver license');
-Route::post('driver/license', [DriversLicensesController::class, 'store'])
-    ->name('driver.license')
+Route::post('driver/license/create', [DriversLicensesController::class, 'store'])
+    ->name('driver.license.create')
     ->middleware('auth', 'can:create driver license');
 
 // Update License Details
@@ -316,8 +316,9 @@ Route::put('driver/license/{id}/verify', [DriversLicensesController::class, 'ver
 
 // Revoke License
 Route::get('driver/license/{id}/revoke', [DriversLicensesController::class, 'revoke'])
-    ->name('driver.license.revoke.store')
+    ->name('driver.license.revoke')
     ->middleware('auth', 'can:revoke driver license');
+
 Route::put('driver/license/{id}/revoke', [DriversLicensesController::class, 'revokeStore'])
     ->name('driver.license.revoke')
     ->middleware('auth', 'can:revoke driver license');
@@ -1004,9 +1005,6 @@ Route::get('vehicle/maintenance/repairs/categories', [RepairCategoryController::
  * 
  *Manage Driver License 
  */
-Route::get('/driver/license', [DriversLicensesController::class, 'index'])
-    ->name('driver.license.index')
-    ->middleware('auth', 'can:view driver license');
 
 /***
  * 

@@ -162,7 +162,7 @@ class OrganisationController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return redirect()->back()->with('error', $validator->errors()->first());
+                return redirect()->back()->with('error', $validator->errors()->first())->withInput();
             }
 
             DB::beginTransaction();
@@ -213,7 +213,7 @@ class OrganisationController extends Controller
             DB::rollBack();
             Log::error('Error Creating Organisation');
             Log::error($e);
-            return redirect()->back()->with('error', 'An error occurred while creating organisation');
+            return redirect()->back()->with('error', 'An error occurred while creating organisation')->withInput();
         }
     }
 

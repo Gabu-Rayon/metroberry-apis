@@ -263,7 +263,7 @@ class EmployeeController extends Controller
      */
 
 
-    public function create()
+    public function create(Request $request)
     {
         $organisations = Organisation::with('user')->where('status', 'active')->get();
         return view('employee.create', compact('organisations'));

@@ -23,12 +23,11 @@
                                                 <div class="actions">
                                                     <div class="accordion-header d-flex justify-content-end align-items-center"
                                                         id="flush-headingOne">
-                                                        <a class="btn btn-success btn-sm" href="javascript:void(0);"
-                                                            onclick="axiosModal('psvbadge/create')">
-                                                            <i class="fa fa-plus"></i>
-                                                            &nbsp;
-                                                            Add PSV Badge
-                                                        </a>
+                                                        <button type="button" class="btn btn-success btn-sm"
+                                                            data-bs-toggle="modal" data-bs-target="#driverPSVBadgeModal">
+                                                            <i class="fa-solid fa-user-plus"></i>&nbsp; Add Driver's PSV
+                                                            Badge
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -40,10 +39,10 @@
                                             <table class="table" id="driver-table">
                                                 <thead>
                                                     <tr>
-                                                        <th title="Name">Badge No</th>
-                                                        <th title="Address">Driver</th>
-                                                        <th title="Email">Issue Date</th>
-                                                        <th title="Phone">Expiry Date</th>
+                                                        <th title="Badge No">Badge No</th>
+                                                        <th title="Driver">Driver</th>
+                                                        <th title="Issue Date">Issue Date</th>
+                                                        <th title="Expiry Date">Expiry Date</th>
                                                         <th title="Status">Status</th>
                                                         <th title="Action" width="80">Action</th>
                                                     </tr>
@@ -104,8 +103,6 @@
                                                                 @endphp
                                                                 <span class="{{ $badgeClass }}">{{ $badgeText }}</span>
                                                             </td>
-
-
                                                             <td class="d-flex">
                                                                 <a href="javascript:void(0);" class="btn btn-sm btn-primary"
                                                                     onclick="axiosModal('psvbadge/{{ $psvbadge->id }}/edit')"
@@ -148,6 +145,78 @@
                     <div class="overlay"></div>
                     @include('components.footer')
                 </div>
+            </div>
+        </div>
+
+        {{-- Driver's PSV Badge Modal --}}
+        <div class="modal fade" id="driverPSVBadgeModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <form action="psvbadge" method="POST" class="needs-validation modal-content" enctype="multipart/form-data">
+                    @csrf
+                    <div class="card-header my-3 p-2 border-bottom">
+                        <h4>Add PSV Badge</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12 col-lg-6">
+                                <div class="form-group row my-2">
+                                    <label for="driver" class="col-sm-5 col-form-label">Driver <i
+                                            class="text-danger">*</i></label>
+                                    <div class="col-sm-7">
+                                        <select name="driver" id="driver" class="form-control" required>
+                                            <option value="">Select Driver</option>
+                                            @foreach ($drivers as $driver)
+                                                <option value="{{ $driver->id }}">{{ $driver->user->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row my-2">
+                                    <label for="issue_date" class="col-sm-5 col-form-label">Issue Date <i
+                                            class="text-danger">*</i></label>
+                                    <div class="col-sm-7">
+                                        <input name="issue_date" class="form-control" type="date"
+                                            placeholder="Issue Date" id="issue_date" required
+                                            value="{{ old('issue_date') }}" />
+                                    </div>
+                                </div>
+                                <div class="form-group row my-2">
+                                    <label for="psv_badge_avatar" class="col-sm-5 col-form-label">PSV Badge Copy</label>
+                                    <div class="col-sm-7">
+                                        <input name="psv_badge_avatar" class="form-control" type="file"
+                                            placeholder="Badge Picture" id="psv_badge_avatar"
+                                            value="{{ old('psv_badge_avatar') }}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-lg-6">
+                                <div class="form-group row my-2">
+                                    <label for="psvbadge_no" class="col-sm-5 col-form-label">Badge No <i
+                                            class="text-danger">*</i></label>
+                                    <div class="col-sm-7">
+                                        <input name="psvbadge_no" class="form-control" type="text"
+                                            placeholder="Badge No" id="psvbadge_no" required
+                                            value="{{ old('psvbadge_no') }}" />
+                                    </div>
+                                </div>
+                                <div class="form-group row my-2">
+                                    <label for="expiry_date" class="col-sm-5 col-form-label">Expiry Date <i
+                                            class="text-danger">*</i></label>
+                                    <div class="col-sm-7">
+                                        <input name="expiry_date" class="form-control" type="date"
+                                            placeholder="Expiry Date" id="expiry_date" required
+                                            value="{{ old('expiry_date') }}" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        <button class="btn btn-success" type="submit">Save</button>
+                    </div>
+                </form>
             </div>
         </div>
     </body>

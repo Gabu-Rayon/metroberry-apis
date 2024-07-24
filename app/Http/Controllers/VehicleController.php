@@ -45,8 +45,10 @@ class VehicleController extends Controller
             }
 
             Log::info('Vehicles fetched: ', ['vehicles' => $vehicles]);
+            $organisations = Organisation::all();
+            $vehicleClasses = VehicleClass::all();
 
-            return view('vehicle.index', compact('vehicles'));
+            return view('vehicle.index', compact('vehicles', 'organisations', 'vehicleClasses'));
         } catch (Exception $e) {
             // Log the error message
             Log::error('Error fetching vehicles: ' . $e->getMessage());
@@ -64,10 +66,6 @@ class VehicleController extends Controller
 
     public function create()
     {
-
-        $organisations = Organisation::all();
-        $vehicleClasses = VehicleClass::all();
-        return view('vehicle.create', compact('organisations', 'vehicleClasses'));
     }
     public function store(Request $request)
     {
@@ -128,7 +126,7 @@ class VehicleController extends Controller
             // Log the error message
             Log::error('Error adding vehicle: ' . $e->getMessage());
 
-            return back()->with('error', 'An error occurred while adding the vehicle. Please try again.');
+            return back()->with('error', 'An error occurred while adding the vehicle. Please try again.')->withInput();
         }
     }
 
@@ -357,6 +355,7 @@ class VehicleController extends Controller
             $vehicle->engine_size = $request->engine_size;
             $vehicle->organisation_id = $request->organisation_id;
             $vehicle->class = $request->vehicle_class;
+            $vehicle->status = 'inactive';
 
             // Update driver_id in vehicles table if provided
             if ($request->has('driver_id')) {

@@ -16,23 +16,25 @@ class PSVBadgeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(){
+    public function index()
+    {
         $psvbadges = PSVBadge::all();
-        return view('driver.psvbadge.index', compact('psvbadges'));
+        $drivers = Driver::whereDoesntHave('psvBadge')->get();
+        return view('driver.psvbadge.index', compact('psvbadges', 'drivers'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create() {
-        $drivers = Driver::whereDoesntHave('psvBadge')->get();
-        return view('driver.psvbadge.create', compact('drivers'));
+    public function create()
+    {
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         try {
             $data = $request->all();
 
@@ -47,14 +49,14 @@ class PSVBadgeController extends Controller
             if ($validator->fails()) {
                 Log::error('PSV BADGE STORE VALIDATION ERROR');
                 Log::error($validator->errors()->all());
-                return redirect()->back()->with('error', $validator->errors()->first());
+                return redirect()->back()->with('error', $validator->errors()->first())->withInput();
             }
 
             $badgePath = null;
             $badgeNumber = $data['psvbadge_no'];
 
             DB::beginTransaction();
-            
+
             if ($request->hasFile('psv_badge_avatar')) {
                 $badgeFile = $request->file('psv_badge_avatar');
                 $badgeExtension = $badgeFile->getClientOriginalExtension();
@@ -73,11 +75,10 @@ class PSVBadgeController extends Controller
             DB::commit();
 
             return redirect()->back()->with('success', 'PSV Badge Created Successfully');
-
         } catch (Exception $e) {
             Log::error('PSV BADGE STORE ERROR');
             Log::error($e);
-            return redirect()->back()->with('error', 'Something Went Wrong');
+            return redirect()->back()->with('error', 'Something Went Wrong')->withInput();
         }
     }
 
@@ -92,7 +93,8 @@ class PSVBadgeController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id) {
+    public function edit($id)
+    {
         $psvbadge = PSVBadge::findOrFail($id);
         return view('driver.psvbadge.edit', compact('psvbadge'));
     }
@@ -100,7 +102,8 @@ class PSVBadgeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
         try {
             $data = $request->all();
             $psvbadge = PSVBadge::findOrFail($id);
@@ -139,6 +142,9 @@ class PSVBadgeController extends Controller
                 'psv_badge_avatar' => $badgePath,
             ]);
 
+            $psvbadge->driver->status = 'inactive';
+            $psvbadge->driver->save();
+
             DB::commit();
 
             return redirect()->back()->with('success', 'PSV Badge Updated Successfully');
@@ -150,15 +156,17 @@ class PSVBadgeController extends Controller
         }
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $psvbadge = PSVBadge::findOrFail($id);
-        return view('driver.psvbadge.delete',compact('psvbadge'));
+        return view('driver.psvbadge.delete', compact('psvbadge'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id){
+    public function destroy($id)
+    {
         try {
 
             $psvbadge = PSVBadge::findOrFail($id);
@@ -186,16 +194,18 @@ class PSVBadgeController extends Controller
         }
     }
 
-    public function verify ($id) {
+    public function verify($id)
+    {
         $psvbadge = PSVBadge::findOrFail($id);
         return view('driver.psvbadge.verify', compact('psvbadge'));
     }
 
-    public function verifyStore ($id) {
+    public function verifyStore($id)
+    {
         try {
-            
+
             $psvbadge = PSVBadge::findOrFail($id);
-    
+
             if (!$psvbadge) {
                 return redirect()->back()->with('error', 'Badge not found');
             }
@@ -213,7 +223,7 @@ class PSVBadgeController extends Controller
             }
 
             DB::beginTransaction();
-    
+
             $psvbadge->update([
                 'verified' => true
             ]);
@@ -228,12 +238,14 @@ class PSVBadgeController extends Controller
         }
     }
 
-    public function revoke ($id) {
+    public function revoke($id)
+    {
         $psvbadge = PSVBadge::findOrFail($id);
         return view('driver.psvbadge.revoke', compact('psvbadge'));
     }
 
-    public function revokeStore($id) {
+    public function revokeStore($id)
+    {
         try {
 
             $psvbadge = PSVBadge::findOrFail($id);
@@ -251,6 +263,8 @@ class PSVBadgeController extends Controller
             $psvbadge->update([
                 'verified' => false
             ]);
+
+            $psvbadge->driver->status = 'inactive';
 
             DB::commit();
 

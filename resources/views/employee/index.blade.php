@@ -3,6 +3,23 @@
 @section('title', 'Employees')
 @section('content')
 
+    <head>
+        <style>
+            .generate-btn-container {
+                position: absolute;
+                top: 0;
+                right: 0;
+                transform: translateY(-50%);
+                cursor: pointer;
+            }
+
+            .generate-btn {
+                padding: 5px 10px;
+                font-size: 0.8em;
+            }
+        </style>
+    </head>
+
     <body class="fixed sidebar-mini">
         @include('components.preloader')
         <div id="app">
@@ -36,11 +53,11 @@
                                                         </a>
                                                         <span class='m-1'></span>
                                                         @if (\Auth::user()->can('create customer'))
-                                                            <a class="btn btn-success btn-sm" href="javascript:void(0);"
-                                                                onclick="axiosModal('employee/create')"
-                                                                title="Add new Employee Details.">
-                                                                <i class="fa fa-plus"></i>&nbsp; Add employee
-                                                            </a>
+                                                            <button type="button" class="btn btn-success btn-sm"
+                                                                data-bs-toggle="modal" data-bs-target="#employeeModal">
+                                                                <i class="fa-solid fa-user-plus"></i>&nbsp;
+                                                                Add Employee
+                                                            </button>
                                                         @endif
                                                     </div>
                                                 </div>
@@ -131,6 +148,178 @@
             </div>
         </div>
 
+        {{-- Add Employee Modal --}}
+
+        <div class="modal fade" id="employeeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <form action="{{ route('employee.create') }}" method="POST" class="needs-validation modal-content"
+                    enctype="multipart/form-data">
+                    @csrf
+                    <div class="card-header my-3 p-2 border-bottom">
+                        <h4>Add Employee</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+
+                                <div class="form-group row my-3">
+                                    <label for="name" class="col-sm-4 col-form-label">
+                                        Name
+                                        <i class="text-danger">*</i>
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <input name="name" class="form-control" type="text" placeholder="Name"
+                                            id="name" required value="{{ old('name') }}" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row my-3">
+                                    <label for="phone" class="col-sm-4 col-form-label">
+                                        Phone
+                                        <i class="text-danger">*</i>
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <input name="phone" class="form-control" type="text" placeholder="Phone"
+                                            id="phone" required value="{{ old('phone') }}" />
+                                    </div>
+                                </div>
+
+                                @if (\Auth::user()->role == 'admin')
+                                    <div class="form-group row my-3">
+                                        <label for="organisation" class="col-sm-4 col-form-label">
+                                            Organisation
+                                            <i class="text-danger">*</i>
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <select name="organisation" id="organisation" class="form-control" required>
+                                                <option value="">Select Organisation</option>
+                                                @foreach ($organisations as $organisation)
+                                                    <option value="{{ $organisation->organisation_code }}">
+                                                        {{ $organisation->user->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                @else
+                                    <div class="form-group row my-3">
+                                        <label for="organisation" class="col-sm-4 col-form-label">
+                                            Organisation
+                                            <i class="text-danger">*</i>
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <select name="organisation" id="organisation" class="form-control" required
+                                                readonly>
+                                                @php
+                                                    $organisation = $organisations
+                                                        ->where('user_id', Auth::user()->id)
+                                                        ->first();
+                                                @endphp
+                                                <option selected readonly value="{{ $organisation->organisation_code }}">
+                                                    {{ $organisation->user->name }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                <div class="form-group row my-3">
+                                    <label for="front_page_id" class="col-sm-4 col-form-label">
+                                        Front Page ID Picture
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <input name="front_page_id" class="form-control" type="file"
+                                            placeholder="Front Page ID Picture" id="front_page_id"
+                                            value="{{ old('front_page_id') }}" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row my-3">
+                                    <label for="avatar" class="col-sm-4 col-form-label">
+                                        Avatar
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <input name="avatar" class="form-control" type="file" placeholder="Avatar"
+                                            id="avatar" value="{{ old('avatar') }}" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group row my-3">
+                                    <label for="email" class="col-sm-4 col-form-label">
+                                        Email
+                                        <i class="text-danger">*</i>
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <input name="email" class="form-control" type="email" placeholder="Email"
+                                            id="email" required value="{{ old('email') }}" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row my-3">
+                                    <label for="address" class="col-sm-4 col-form-label">
+                                        Address
+                                        <i class="text-danger">*</i>
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <input name="address" class="form-control" type="text" placeholder="Address"
+                                            id="address" required value="{{ old('address') }}" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row my-3">
+                                    <label for="national_id" class="col-sm-4 col-form-label">
+                                        ID number
+                                        <i class="text-danger">*</i>
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <input name="national_id" class="form-control" type="text"
+                                            placeholder="National ID number" id="national_id" required
+                                            value="{{ old('national_id') }}" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row my-3">
+                                    <label for="back_page_id" class="col-sm-4 col-form-label">
+                                        Back Page ID Picture
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <input name="back_page_id" class="form-control" type="file"
+                                            placeholder="Back Page ID Picture" id="back_page_id"
+                                            value="{{ old('back_page_id') }}" />
+                                    </div>
+                                </div>
+
+                                <div class="form-group row my-3">
+                                    <label for="password" class="col-sm-4 col-form-label">
+                                        Password
+                                        <i class="text-danger">*</i>
+                                    </label>
+                                    <div class="col-sm-8 position-relative">
+                                        <input name="password" class="form-control" type="password"
+                                            placeholder="Password" id="password" readonly required />
+                                        <div class="generate-btn-container" onclick="generatePassword()">
+                                            <span class="input-group-text generate-btn"
+                                                style="font-size: smaller;">Generate</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                                Close
+                            </button>
+                            <button class="btn btn-success" type="submit">Save</button>
+                        </div>
+                </form>
+            </div>
+        </div>
+
+
         <!-- Delete Modal -->
         <div class="modal fade" id="delete-modal" data-bs-keyboard="false" tabindex="-1" data-bs-backdrop="true"
             aria-hidden="true">
@@ -141,7 +330,8 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="javascript:void(0);" class="needs-validation" id="delete-modal-form" method="POST">
+                        <form action="javascript:void(0);" class="needs-validation" id="delete-modal-form"
+                            method="POST">
                             @csrf
                             <div class="modal-body">
                                 <p>Are you sure you want to delete this employee? This action cannot be undone.</p>
@@ -172,6 +362,16 @@
                 // Submit the delete form
                 var form = document.getElementById('delete-modal-form');
                 form.submit();
+            }
+
+            function generatePassword() {
+                var length = 12,
+                    charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+~`|}{[]:;?><,./-=",
+                    password = "";
+                for (var i = 0, n = charset.length; i < length; ++i) {
+                    password += charset.charAt(Math.floor(Math.random() * n));
+                }
+                document.getElementById("password").value = password;
             }
         </script>
 

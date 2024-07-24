@@ -37,9 +37,8 @@ class DriverController extends Controller
                 $drivers = Driver::where('created_by', Auth::user()->id)->with('user')->get();
             }
 
-            Log::info('Drivers fetched: ', ['drivers' => $drivers]);
-
-            return view('driver.index', compact('drivers'));
+            $organisations = Organisation::all();
+            return view('driver.index', compact('drivers', 'organisations'));
         } catch (Exception $e) {
             // Log the error message
             Log::error('Error fetching drivers: ' . $e->getMessage());
@@ -71,12 +70,12 @@ class DriverController extends Controller
             if ($validator->fails()) {
                 Log::error('VALIDATION ERROR');
                 Log::error($validator->errors());
-                return redirect()->back()->with('error', $validator->errors()->first());
+                return redirect()->back()->with('error', $validator->errors()->first())->withInput();
             }
 
             DB::beginTransaction();
 
-        $organisation = Organisation::where('organisation_code', $data['organisation'])->first();
+            $organisation = Organisation::where('organisation_code', $data['organisation'])->first();
 
             if (!$organisation) {
                 return redirect()->back()->with('error', 'Organisation not found')->withInput();
