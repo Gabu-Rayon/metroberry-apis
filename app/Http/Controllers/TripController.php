@@ -618,6 +618,8 @@ class TripController extends Controller
     public function assignVehicleToTrips()
     {
         try {
+            DB::beginTransaction(); // Start transaction to ensure data integrity
+
             $currentTime = Carbon::now('Africa/Nairobi');
             $oneHourLater = $currentTime->copy()->addHour();
 
@@ -628,25 +630,55 @@ class TripController extends Controller
                 ->get();
 
             if ($trips->isEmpty()) {
+                DB::rollBack(); // Rollback transaction if no trips found
                 return redirect()->back()->with('error', 'No Trips Found');
             }
 
-            $tripsByRouteAndOrg = $trips->groupBy(function ($trip) {
-                $organisationCode = $trip->customer->customer_organisation_code;
-                $routeId = $trip->route_id;
-                $pickupTime = $trip->pick_up_time;
-                return "{$routeId}-{$organisationCode}-{$pickupTime}";
-            });
+            $vehicles = Vehicle::with('scheduledTrips')->where('status', 'active')->get();
 
-            Log::info('TRIPS BY ROUTE AND ORGANISATION');
-            Log::info($tripsByRouteAndOrg);
-        } catch (Exception $e) {
+            foreach ($trips as $trip) {
+                $isTripAssigned = false;
+                $vehicleFound = false;
+
+                foreach ($vehicles as $vehicle) {
+                    if (!$vehicle->scheduledTrips->isEmpty()) {
+                        $first = $vehicle->scheduledTrips->first();
+                        if ($first->pick_up_time == $trip->pick_up_time && $first->route_id == $trip->route_id && $first->customer->customer_organisation_code == $trip->customer->customer_organisation_code) {
+                            $trip->vehicle_id = $vehicle->id;
+                            $isTripAssigned = true;
+                            break; // Exit inner loop once a suitable vehicle is found
+                        }
+                    } else {
+                        $trip->vehicle_id = $vehicle->id;
+                        $isTripAssigned = true;
+                        break; // Exit inner loop once a suitable vehicle is found
+                    }
+
+                    if (!$isTripAssigned) {
+                        $vehicleFound = true;
+                    }
+                }
+
+                if (!$isTripAssigned) {
+                    return redirect()->back()->with('error', 'No Suitable Vehicle Found for unassigned trips');
+                    Log::warning("No suitable vehicle found for trip: {$trip->id}");
+                } else {
+                    $trip->save(); // Save the trip with assigned vehicle
+                }
+            }
+
+            DB::commit(); // Commit transaction if all operations were successful
+
+            return redirect()->back()->with('success', 'Trips Assigned Successfully');
+        } catch (\Exception $e) {
+            DB::rollBack(); // Rollback transaction in case of any exception
             Log::error('ERROR ASSIGNING VEHICLE TO TRIPS');
-            Log::error($e);
+            Log::error($e->getMessage());
 
             return redirect()->back()->with('error', 'Something Went Wrong');
         }
     }
+
 
     public function details($id)
     {
