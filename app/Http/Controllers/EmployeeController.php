@@ -12,6 +12,7 @@ use App\Imports\EmployeeImport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -23,36 +24,36 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-            try {
-                $customers = null;
+        try {
+            $customers = null;
 
-                // Check the user's role
-                if (Auth::user()->role == 'admin') {
-                    // If the user is an admin, fetch all customers
-                    $customers = Customer::all();
-                } elseif (Auth::user()->role == 'organisation') {
-                    // If the user is an organisation, fetch customers for that organisation
-                    $organisation = Organisation::where('user_id', Auth::user()->id)->first();
-                    if ($organisation) {
-                        $customers = Customer::where('customer_organisation_code', $organisation->organisation_code)->get();
-                    }
-                } else {
-                    // If the user has another role, fetch customers created by the user
-                    $customers = Customer::where('created_by', Auth::user()->id)->get();
+            // Check the user's role
+            if (Auth::user()->role == 'admin') {
+                // If the user is an admin, fetch all customers
+                $customers = Customer::all();
+            } elseif (Auth::user()->role == 'organisation') {
+                // If the user is an organisation, fetch customers for that organisation
+                $organisation = Organisation::where('user_id', Auth::user()->id)->first();
+                if ($organisation) {
+                    $customers = Customer::where('customer_organisation_code', $organisation->organisation_code)->get();
                 }
-
-                Log::info('Customers fetched: ', ['customers' => $customers]);
-
-                // Fetch organisations with user information
-                $organisations = Organisation::with('user')->get();
-
-                return view('employee.index', compact('customers', 'organisations'));
-            } catch (Exception $e) {
-                // Log the error message
-                Log::error('Error fetching customers: ' . $e->getMessage());
-
-                return back()->with('error', 'An error occurred while fetching the customers. Please try again.');
+            } else {
+                // If the user has another role, fetch customers created by the user
+                $customers = Customer::where('created_by', Auth::user()->id)->get();
             }
+
+            Log::info('Customers fetched: ', ['customers' => $customers]);
+
+            // Fetch organisations with user information
+            $organisations = Organisation::with('user')->get();
+
+            return view('employee.index', compact('customers', 'organisations'));
+        } catch (Exception $e) {
+            // Log the error message
+            Log::error('Error fetching customers: ' . $e->getMessage());
+
+            return back()->with('error', 'An error occurred while fetching the customers. Please try again.');
+        }
     }
 
 
@@ -60,11 +61,12 @@ class EmployeeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         try {
             $data = $request->all();
             $creator = Auth::user();
-            
+
             $validator = Validator::make($data, [
                 'name' => 'required|string',
                 'phone' => 'required|string',
@@ -75,7 +77,7 @@ class EmployeeController extends Controller
                 'front_page_id' => 'required|file|mimes:jpg,jpeg,png,webp',
                 'back_page_id' => 'required|file|mimes:jpg,jpeg,png,webp',
                 'avatar' => 'nullable|file|mimes:jpg,jpeg,png,webp',
-                'password' => 'required|string', 
+                'password' => 'required|string',
             ]);
 
             if ($validator->fails()) {
@@ -96,6 +98,11 @@ class EmployeeController extends Controller
             $backIdPath = null;
             $avatarPath = null;
             $email = $data['email'];
+            $generatedPassword = $data['password'];
+
+            Log::info('password Generated for this user : ');
+
+            Log::info($generatedPassword);
 
             if ($request->hasFile('front_page_id')) {
                 $frontIdFile = $request->file('front_page_id');
@@ -103,21 +110,21 @@ class EmployeeController extends Controller
                 $frontIdFileName = "{$email}-front-id.{$frontIdExtension}";
                 $frontIdPath = $frontIdFile->storeAs('uploads/front-page-ids', $frontIdFileName, 'public');
             }
-            
+
             if ($request->hasFile('back_page_id')) {
                 $backIdFile = $request->file('back_page_id');
                 $backIdExtension = $backIdFile->getClientOriginalExtension();
                 $backIdFileName = "{$email}-back-id.{$backIdExtension}";
                 $backIdPath = $backIdFile->storeAs('uploads/back-page-ids', $backIdFileName, 'public');
             }
-            
+
             if ($request->hasFile('avatar')) {
                 $avatarFile = $request->file('avatar');
                 $avatarExtension = $avatarFile->getClientOriginalExtension();
                 $avatarFileName = "{$email}-avatar.{$avatarExtension}";
                 $avatarPath = $avatarFile->storeAs('uploads/user-avatars', $avatarFileName, 'public');
             }
-            
+
 
             $user = User::create([
                 'name' => $data['name'],
@@ -143,6 +150,16 @@ class EmployeeController extends Controller
             ]);
 
             DB::commit();
+
+            // Send email with the plain password
+            Mail::send('mail-view.employee-welcome-mail', [
+                'customer' => $user->name,
+                'email' => $user->email,
+                'password' => $generatedPassword
+            ], function ($message) use ($user) {
+                $message->to($user->email)
+                    ->subject('Your Account Created');
+            });
 
             Log::info('SUCCESS');
 
@@ -262,10 +279,11 @@ class EmployeeController extends Controller
      */
 
 
-      public function create(){
+    public function create()
+    {
         $organisations = Organisation::with('user')->where('status', 'active')->get();
         return view('employee.create', compact('organisations'));
-      }
+    }
 
     public function edit(Request $request, $id)
     {
@@ -357,7 +375,7 @@ class EmployeeController extends Controller
             return redirect()->route('employee')->with('success', 'Customer updated successfully');
 
 
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             Log::info('UPDATE CUSTOMER ERROR');
             Log::info($e);
@@ -365,13 +383,15 @@ class EmployeeController extends Controller
         }
     }
 
-   
-    public function activateForm ($id) {
+
+    public function activateForm($id)
+    {
         $customer = Customer::findOrFail($id);
         return view('employee.activate', compact('customer'));
     }
 
-    public function activate ($id) {
+    public function activate($id)
+    {
         try {
 
             $customer = Customer::find($id);
@@ -410,12 +430,14 @@ class EmployeeController extends Controller
         }
     }
 
-    public function deactivateForm ($id) {
+    public function deactivateForm($id)
+    {
         $customer = Customer::findOrFail($id);
         return view('employee.deactivate', compact('customer'));
     }
 
-    public function deactivate($id){
+    public function deactivate($id)
+    {
         try {
 
             $customer = Customer::find($id);
@@ -454,7 +476,7 @@ class EmployeeController extends Controller
 
         $user = User::find($customer->user_id);
         return view('employee.delete', compact('customer', 'user'));
-        
+
     }
 
     // Remove the specified resource from storage
@@ -515,7 +537,8 @@ class EmployeeController extends Controller
     //     return Excel::download(new EmployeeExport, $fileName);
     // }
 
-    public function export(){
+    public function export()
+    {
         return Excel::download(new EmployeeExport, 'employees.xlsx', \Maatwebsite\Excel\Excel::XLSX);
     }
 
@@ -553,7 +576,7 @@ class EmployeeController extends Controller
             return redirect()->back()->with('success', 'Records imported successfully.');
         } catch (Exception $e) {
             Log::error('Error importing employees: ' . $e->getMessage());
-            
+
             return redirect()->back()->with('error', 'An error occurred while importing the Employee records.');
         }
     }

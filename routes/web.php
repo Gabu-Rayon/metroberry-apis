@@ -1309,6 +1309,8 @@ Route::get('/admin/role', [RoleController::class, 'index'])
     ->middleware(['auth', 'can:view permission']);
 
 Route::get('/admin/role/create', [RoleController::class, 'create'])->name('permission.role.create');
+Route::post('/admin/role/store', [RoleController::class, 'store'])->name('permission.role.store');
+
 /**
  * 
  * Insurance companies
