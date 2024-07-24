@@ -2,9 +2,13 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use DateTime;
+use DateTimeZone;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Log;
 
 class Customer extends Model
 {
@@ -31,6 +35,11 @@ class Customer extends Model
     ];
 
     protected $with = ['user', 'creator'];
+
+    // casts
+    protected $casts = [
+        'isTrippedForNow' => 'boolean',
+    ];
 
     /**
      * Get the user that owns the customer.
@@ -59,6 +68,27 @@ class Customer extends Model
     {
         return $this->hasMany(Trip::class);
     }
+
+    public function isTrippedForNow()
+    {
+        $timezone = 'Africa/Nairobi';
+
+        $now = Carbon::now($timezone);
+        $oneHourLater = $now->copy()->addHour();
+
+        $currentDate = $now->format('Y-m-d');
+        $currentTime = $now->format('H:i:s');
+        $oneHourLaterTime = $oneHourLater->format('H:i:s');
+
+        // Use the defined 'trips' relationship to query for existing trips
+        $exists = $this->trips() // Use the 'trips' relationship method
+            ->where('trip_date', '=', $currentDate)
+            ->whereBetween('pick_up_time', [$currentTime, $oneHourLaterTime])
+            ->exists();
+
+        return $exists;
+    }
+
 
     protected static function boot()
     {

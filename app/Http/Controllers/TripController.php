@@ -108,60 +108,30 @@ class TripController extends Controller
     public function create()
     {
         $employees = null;
-
-        if (auth()->user()->role = 'organisation') {
-            $employees = Customer::where('organisation_id', auth()->user()->organisation_id)->get();
+        if (auth()->user()->role == 'organisation') {
+            $organisation = Organisation::where('user_id', auth()->user()->id)->first();
+            $employees = Customer::where('organisation_id', $organisation->id)
+                ->where('status', 'active')
+                ->get()
+                ->filter(function ($employee) {
+                    return !$employee->isTrippedForNow();
+                });
+        } else {
+            $employees = Customer::where('status', 'active')
+                ->get()
+                ->filter(function ($employee) {
+                    return !$employee->isTrippedForNow();
+                });
         }
-        $employees = Customer::where('status', 'active')->get();
         $routes = Routes::all();
         return view('trips.create', compact('employees', 'routes'));
     }
+
 
     /**
      * Store a newly created resource in storage.
      * 
      */
-
-
-
-    // public function store(Request $request)
-    // {
-    //     try {
-    //         $data = $request->validate([
-    //             'customer_id' => 'required|exists:customers,id',
-    //             'vehicle_id' => 'required|exists:vehicles,id',
-    //             'driver_id' => 'required|exists:drivers,id',
-    //             'preferred_route_id' => 'required|exists:routes,id',
-    //             'pick_up_time' => 'required|date_format:H:i',
-    //             'drop_off_or_pick_up_date' => 'required|date',
-    //             'pick_up_location' => 'required|in:Home,Office',
-    //             'mileage_gps' => 'required|numeric',
-    //             'mileage_can' => 'required|numeric',
-    //             'engine_hours_gps' => 'required|numeric',
-    //             'engine_hours_can' => 'required|numeric',
-    //             'can_distance_till_service' => 'required|numeric',
-    //             'average_fuel_consumption_litre_per_km' => 'required|numeric',
-    //             'average_fuel_consumption_litre_per_hour' => 'required|numeric',
-    //             'average_fuel_consumption_kg_per_km' => 'required|numeric',
-    //         ]);
-
-    //         $trip = Trip::create($data);
-
-    //         return response()->json([
-    //             'message' => 'Trip created successfully',
-    //             'trip' => $trip
-    //         ], 201);
-    //     } catch (Exception $e) {
-    //         Log::error('ERROR CREATING TRIP');
-    //         Log::error($e);
-    //         return response()->json([
-    //             'message' => 'An error occurred while creating trip',
-    //             'error' => $e->getMessage()
-    //         ], 500);
-    //     }
-    // }
-
-
 
     public function store(Request $request)
     {
@@ -185,19 +155,6 @@ class TripController extends Controller
 
                 return redirect()->back()->with('error', $validator->errors()->first())->withInput();
             }
-
-            //For pick_up_time will be the  shift_end_time
-            // drop_off_or_pick_up_date will be trip date 
-            //then if user select 'pick_up_location' => 'Home', and vice versa for Home 
-            //  we then get there home address from the table of users  by referencing using the customer_id 
-            //then we will get the lat and long of the address and store it in the database
-
-            //then if user select 'dropOffLocation' => 'Office', and vice verse for Home
-            //   we will get there organisation address by referecing using their customer_id then
-            //     we get organisation address using the models relationship where the data for organisation is also in the users table 
-
-            //then 
-            // if user select  'drop_off_location' => '4',  which in this case will came id we will get the  
 
             DB::beginTransaction();
 

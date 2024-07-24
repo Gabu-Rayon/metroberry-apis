@@ -43,7 +43,6 @@
                 <div class="dropdown-menu">
                     <div class="d-flex align-items-center gap-3 border-bottom pb-3">
                         <div class="user_img">
-                            {{ Log::info(\Auth::user()) }}
                             <img src="{{ url('storage/' . \Auth::user()->avatar) }}" alt="Avatar">
                         </div>
                         <div>

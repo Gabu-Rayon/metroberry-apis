@@ -93,6 +93,8 @@
                                                                 </tr>
                                                             @endif
                                                             @foreach ($trips as $trip)
+                                                                {{ Log::info('NIGGA TRIPPING') }}
+                                                                {{ Log::info($trip->customer->isTrippedForNow()) }}
                                                                 <tr>
                                                                     <td class="text-center">
                                                                         {{ $trip->customer->user->name }}</td>

@@ -1,6 +1,6 @@
 <form action="{{ route('trip.store') }}" method="POST"
     class="needs-validation modal-content"enctype="multipart/form-data">
-    <input type="hidden" name="_token" id="token" value="{{ csrf_token() }}">
+    @csrf
     <div class="card-header my-3 p-2 border-bottom">
         <h4>Schedule A Trip</h4>
     </div>
@@ -8,8 +8,7 @@
         <div class="row">
             <div class="col-md-12 col-lg-6">
                 <div class="form-group row my-2">
-                    <label for="customer_id" class="col-sm-5 col-form-label">Employee <i
-                            class="text-danger">*</i></label>
+                    <label for="customer_id" class="col-sm-5 col-form-label">Employee <i class="text-danger">*</i></label>
                     <div class="col-sm-7">
                         <select name="customer_id" class="form-control" id="customer_id" required>
                             <option value="" disabled>Select Employee</option>
@@ -25,7 +24,7 @@
                     <div class="col-sm-7">
                         <select name="preferred_route_id" class="form-control preferred_route_id"
                             id="preferred_route_id" data-url="{{ route('route.location.waypoints') }}" required>
-                            <option value="" disabled>Select Route</option>
+                            <option value="" readonly>Select Route</option>
                             @foreach ($routes as $routeData)
                                 <option value="{{ $routeData->id }}">{{ $routeData->name }}</option>
                             @endforeach
@@ -95,34 +94,27 @@
         var dropOffLocationSelect = $('#drop_off_location');
         var preferredRouteSelect = $('.preferred_route_id');
 
-        // Function to disable options in the other select element
         function disableSameOption(select1, select2) {
             $(select1).on('change', function() {
                 var selectedValue = $(this).val();
                 $(select2).find('option').each(function() {
                     if ($(this).val() === selectedValue) {
                         $(this).prop('disabled',
-                            true); // Disable same option in the other select
+                            true);
                     } else {
-                        $(this).prop('disabled', false); // Re-enable others
+                        $(this).prop('disabled', false);
                     }
                 });
             });
-
-            // Trigger change on initial load to disable initial matching option
             $(select1).trigger('change');
         }
 
-        // Call disableSameOption for initial setup
         disableSameOption(pickUpLocationSelect, dropOffLocationSelect);
         disableSameOption(dropOffLocationSelect, pickUpLocationSelect);
 
-        // Function to populate location options
         function populateLocations(routeId) {
             var url = preferredRouteSelect.data('url');
-
             console.log(url);
-
             $.ajax({
                 url: url,
                 type: 'POST',
@@ -133,11 +125,9 @@
                     route_id: routeId
                 },
                 success: function(data) {
-                    // Clear and re-populate drop_off_location and pick_up_location options
                     dropOffLocationSelect.empty();
                     pickUpLocationSelect.empty();
 
-                    // Add default options
                     dropOffLocationSelect.append(
                         '<option value="">Select Your preference Drop Off Location</option>');
                     pickUpLocationSelect.append('<option value="">Select Location</option>');
@@ -155,7 +145,6 @@
                             location.name + '</option>');
                     });
 
-                    // Add additional options like "Home" and "Office"
                     dropOffLocationSelect.append('<option value="Home">Home</option>');
                     dropOffLocationSelect.append('<option value="Office">Office</option>');
                     pickUpLocationSelect.append('<option value="Home">Home</option>');
@@ -167,14 +156,13 @@
                 },
                 error: function(xhr, status, error) {
                     console.error('Error:', error);
-                    // Handle errors or show appropriate messages
                 }
             });
         }
 
-        // Handle change event for preferred_route_id
         preferredRouteSelect.on('change', function() {
             var preferredRouteId = $(this).val();
+            console.log('rauti', preferredRouteId);
             populateLocations(preferredRouteId);
         });
 
