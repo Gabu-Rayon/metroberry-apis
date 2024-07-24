@@ -217,6 +217,66 @@
                         <td class="text-center">{{ $item->customer->user->name }}</td>
                         <td class="text-center">
                             @php
+                                if ($item->billed_by == 'distance') {
+                                    $text = 'Distance';
+                                }
+                            @endphp
+                            {{ $text }}
+                        </td>
+                        <td class="text-center">
+                            @php
+                                if ($item->billed_by == 'distance') {
+                                    $info = 'KM: ' . $item->vehicle_mileage;
+                                } elseif ($item->billed_by == 'time') {
+                                    $info = 'HRS: ' . $item->engine_hours;
+                                    $info2 = 'Idle Time: ' . $item->idle_time;
+                                } elseif ($item->billed_by == 'car_class') {
+                                    $info = 'Class: ' . $item->vehicle->class;
+                                }
+                            @endphp
+                            {{ $info }}
+                            {{ $item->billed_by == 'time' ? $info2 : '' }}
+                        </td>
+                        <td class="text-center">Kes. {{ $item['total_price'] }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+        <br />
+        <div class="title">
+            <span>{{ $data['title'] }}</span>
+
+            <div class="details">
+                <div>Invoice #</div>
+                <div class="variable">{{ $data['invoice_number'] }}</div>
+            </div>
+
+            <div class="details">
+                <div>Date:</div>
+                <div class="variable">{{ $data['date'] }}</div>
+            </div>
+        </div>
+
+        <div class="user-details">
+            <div class="name">{{ $data['customer'] }}</div>
+            <div class="location">{{ $data['address'] }}</div>
+        </div>
+
+        <table class="invoice-table">
+            <thead>
+                <tr>
+                    <th>Customer</th>
+                    <th>Billed By</th>
+                    <th>Trip Info</th>
+                    <th>Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($data['items'] as $item)
+                    <tr>
+                        <td class="text-center">{{ $item->customer->user->name }}</td>
+                        <td class="text-center">
+                            @php
                                 $text = 'N/A';
                                 if ($item->billed_by == 'distance') {
                                     $text = 'Distance';

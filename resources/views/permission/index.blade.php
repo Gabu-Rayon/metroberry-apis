@@ -27,9 +27,11 @@
                                             </div>
                                             <div class="text-end">
                                                 <div class="actions">
-                                                    <div class="accordion-header d-flex justify-content-end align-items-center"id="flush-headingOne">
+                                                    <div
+                                                        class="accordion-header d-flex justify-content-end align-items-center"id="flush-headingOne">
                                                         @if (\Auth::user()->can('create permission'))
-                                                            <a class="btn btn-success btn-sm" href="javascript:void(0);" onclick="axiosModal('permission/create')">
+                                                            <a class="btn btn-success btn-sm" href="javascript:void(0);"
+                                                                onclick="axiosModal('permission/create')">
                                                                 <i class="fa fa-plus"></i>
                                                                 &nbsp;
                                                                 Add Permission
@@ -62,12 +64,16 @@
                                                                 <td>
                                                                     <div class="d-flex gap-2">
                                                                         @if (\Auth::user()->can('edit permission'))
-                                                                            <a href="javascript:void(0);" onclick="axiosModal('permission/{{ $permission->id }}/edit')" class="btn btn-primary btn-sm">
+                                                                            <a href="javascript:void(0);"
+                                                                                onclick="axiosModal('permission/{{ $permission->id }}/edit')"
+                                                                                class="btn btn-primary btn-sm">
                                                                                 <i class="fa fa-edit fa-sm"></i>
                                                                             </a>
                                                                         @endif
                                                                         @if (\Auth::user()->can('delete permission'))
-                                                                            <a href="javascript:void(0);" onclick="axiosModal('permission/{{ $permission->id }}/delete')" class="btn btn-danger btn-sm">
+                                                                            <a href="javascript:void(0);"
+                                                                                onclick="axiosModal('permission/{{ $permission->id }}/delete')"
+                                                                                class="btn btn-danger btn-sm">
                                                                                 <i class="fa fa-trash fa-sm"></i>
                                                                             </a>
                                                                         @endif

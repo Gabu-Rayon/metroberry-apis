@@ -22,7 +22,7 @@
                             <div class="body-content">
                                 <div class="row">
                                     <div class="col-md-12 my-2">
-                                        <nav class="sidebar-nav card py-2 sub-side-bar p-2 py-3">
+                                        <nav class="sidebar-nav card sub-side-bar p-2 py-3">
                                             <ul class=" nav">
                                                 <li class="nav-item dropdown">
                                                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown"

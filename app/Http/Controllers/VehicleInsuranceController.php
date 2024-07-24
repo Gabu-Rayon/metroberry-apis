@@ -21,31 +21,26 @@ class VehicleInsuranceController extends Controller
      */
     public function index()
     {
-        // Check if the authenticated user has the 'view vehicle insurances' permission
-        if (\Auth::user()->can('view vehicle insurance')) {
-            try {
-                $vehicleInsurances = null;
+        try {
+            $vehicleInsurances = null;
 
-                // Check the user's role
-                if (Auth::user()->role == 'admin') {
-                    // If the user is an admin, fetch all vehicle insurances
-                    $vehicleInsurances = VehicleInsurance::all();
-                } else {
-                    // Otherwise, fetch vehicle insurances created by the authenticated user
-                    $vehicleInsurances = VehicleInsurance::where('created_by', Auth::user()->id)->get();
-                }
-
-                Log::info('Vehicle Insurances fetched: ', ['vehicleInsurances' => $vehicleInsurances]);
-
-                return view('vehicle.insurance.index', compact('vehicleInsurances'));
-            } catch (Exception $e) {
-                // Log the error message
-                Log::error('Error fetching vehicle insurances: ' . $e->getMessage());
-
-                return back()->with('error', 'An error occurred while fetching the vehicle insurances. Please try again.');
+            // Check the user's role
+            if (Auth::user()->role == 'admin') {
+                // If the user is an admin, fetch all vehicle insurances
+                $vehicleInsurances = VehicleInsurance::all();
+            } else {
+                // Otherwise, fetch vehicle insurances created by the authenticated user
+                $vehicleInsurances = VehicleInsurance::where('created_by', Auth::user()->id)->get();
             }
-        } else {
-            return back()->with('error', 'Permission Denied.');
+
+            Log::info('Vehicle Insurances fetched: ', ['vehicleInsurances' => $vehicleInsurances]);
+
+            return view('vehicle.insurance.index', compact('vehicleInsurances'));
+        } catch (Exception $e) {
+            // Log the error message
+            Log::error('Error fetching vehicle insurances: ' . $e->getMessage());
+
+            return back()->with('error', 'An error occurred while fetching the vehicle insurances. Please try again.');
         }
     }
 
@@ -59,13 +54,7 @@ class VehicleInsuranceController extends Controller
     {
         $insuranceCompanies = InsuranceCompany::where('status', 1)->get();
         $recurringPeriods = InsuranceRecurringPeriod::all();
-
-        // Get vehicle IDs that already have an insurance record
-        $insuredVehicleIds = VehicleInsurance::pluck('vehicle_id')->toArray();
-
-        // Select vehicles that do not have an insurance record
-        $vehicles = Vehicle::whereNotIn('id', $insuredVehicleIds)->get();
-        // $vehicles = Vehicle::whereDoesntHave('insurance')->get();
+        $vehicles = Vehicle::whereDoesntHave('insurance')->get();
 
         return view('vehicle.insurance.create', compact('insuranceCompanies', 'recurringPeriods', 'vehicles'));
     }
@@ -295,5 +284,4 @@ class VehicleInsuranceController extends Controller
             return redirect()->back()->with('error', 'An error occurred while deleting Vehicle Insurance Details');
         }
     }
-
 }

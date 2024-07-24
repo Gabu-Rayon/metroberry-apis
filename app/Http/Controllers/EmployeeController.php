@@ -69,15 +69,15 @@ class EmployeeController extends Controller
 
             $validator = Validator::make($data, [
                 'name' => 'required|string',
-                'phone' => 'required|string',
-                'organisation' => 'required|string',
+                'phone' => 'required|string|unique:users,phone',
+                'organisation' => 'required|string|exists:organisations,organisation_code',
                 'email' => 'required|email|unique:users,email',
-                'address' => 'nullable|string',
-                'national_id' => 'required|string',
+                'address' => 'required|string',
+                'national_id' => 'required|string|unique:customers,national_id_no',
                 'front_page_id' => 'required|file|mimes:jpg,jpeg,png,webp',
                 'back_page_id' => 'required|file|mimes:jpg,jpeg,png,webp',
                 'avatar' => 'nullable|file|mimes:jpg,jpeg,png,webp',
-                'password' => 'required|string',
+                'password' => 'required|string|min:6',
             ]);
 
             if ($validator->fails()) {
@@ -279,7 +279,7 @@ class EmployeeController extends Controller
      */
 
 
-    public function create()
+    public function create(Request $request)
     {
         $organisations = Organisation::with('user')->where('status', 'active')->get();
         return view('employee.create', compact('organisations'));
@@ -367,14 +367,16 @@ class EmployeeController extends Controller
                 $customer->national_id_behind_avatar = $backIdPath;
             }
 
+            $customer->organisation_id = $organisation->id;
+            $customer->customer_organisation_code = $data['organisation'];
+            $customer->status = 'inactive';
+
             $customer->save();
             $user->save();
 
             DB::commit();
 
             return redirect()->route('employee')->with('success', 'Customer updated successfully');
-
-
         } catch (Exception $e) {
             DB::rollBack();
             Log::info('UPDATE CUSTOMER ERROR');
@@ -476,7 +478,6 @@ class EmployeeController extends Controller
 
         $user = User::find($customer->user_id);
         return view('employee.delete', compact('customer', 'user'));
-
     }
 
     // Remove the specified resource from storage
@@ -580,5 +581,4 @@ class EmployeeController extends Controller
             return redirect()->back()->with('error', 'An error occurred while importing the Employee records.');
         }
     }
-
 }

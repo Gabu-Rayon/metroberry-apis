@@ -133,7 +133,6 @@ class RouteLocationsController extends Controller
     {
         try {
             $routeLocationWaypoints = RouteLocations::where('route_id', $request->route_id)
-                ->where('is_waypoint', 1)
                 ->get(['name', 'id', 'point_order']);
 
             // Log the request and response data for debugging
@@ -146,7 +145,5 @@ class RouteLocationsController extends Controller
             Log::error('Error fetching waypoints: ' . $e->getMessage());
             return response()->json(['error' => 'Failed to fetch waypoints'], 500);
         }
-
     }
-
 }

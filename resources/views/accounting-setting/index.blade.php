@@ -33,99 +33,12 @@
                                                             <i class="fa fa-plus"></i>&nbsp;
                                                             Add New Account
                                                         </a>
-
-                                                        <button type="button" class="btn btn-success btn-sm mx-2"
-                                                            data-bs-toggle="collapse" data-bs-target="#flush-collapseOne"
-                                                            aria-expanded="true" aria-controls="flush-collapseOne"> <i
-                                                                class="fas fa-filter"></i> Filter</button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="card-body">
-                                        <div class="row mb-3">
-                                            <div class="col-12">
-                                                <div class="accordion accordion-flush" id="accordionFlushExample">
-                                                    <div class="accordion-item">
-
-                                                        <div id="flush-collapseOne"
-                                                            class="accordion-collapse bg-white collapse"
-                                                            aria-labelledby="flush-headingOne"
-                                                            data-bs-parent="#accordionFlushExample" style="">
-
-                                                            <div class='row pb-3 my-filter-form'>
-
-                                                                <div class="col-sm-12 col-xl-4">
-                                                                    <div class="form-group row mb-1">
-                                                                        <label for="department"
-                                                                            class="col-sm-5 col-form-label justify-content-start text-left">Name
-                                                                        </label>
-                                                                        <div class="col-sm-7">
-                                                                            <select class="form-control basic-single"
-                                                                                name="department_id" id="department"
-                                                                                tabindex="-1" aria-hidden="true">
-                                                                                <option value="">Please select one
-                                                                                </option>
-
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-sm-12 col-xl-4">
-                                                                    <div class="form-group row mb-1">
-                                                                        <label for="ownership"
-                                                                            class="col-sm-5 col-form-label justify-content-start text-left">Account
-                                                                            No
-                                                                        </label>
-                                                                        <div class="col-sm-7">
-                                                                            <select class="form-control basic-single"
-                                                                                name="ownership_id" id="ownership"
-                                                                                tabindex="-1" aria-hidden="true">
-                                                                                <option value="">Please select one
-                                                                                </option>
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div class="col-sm-12 col-xl-4">
-                                                                    <div class="row">
-                                                                        <div class="col-sm-12 col-xl-12">
-                                                                            <div class="form-group row mb-1">
-                                                                                <label for="date_from"
-                                                                                    class="col-sm-5 col-form-label justify-content-start text-left">Holder
-                                                                                    name </label>
-                                                                                <div class="col-sm-7">
-                                                                                    <select
-                                                                                        class="form-control basic-single"
-                                                                                        name="ownership_id" id="ownership"
-                                                                                        tabindex="-1" aria-hidden="true">
-                                                                                        <option value="">Please select
-                                                                                            one
-                                                                                        </option>
-                                                                                    </select>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-
-
-                                                                <div class="col-md-2 d-flex align-items-center">
-                                                                    <button class="btn btn-success me-2 search-btn"
-                                                                        type="button">Search</button>
-                                                                    <button class="btn btn-danger me-2 reset-btn"
-                                                                        type="button">Reset</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
                                         <div>
                                             <div class="table-responsive">
                                                 <table class="table" id="driver-table">

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Exception;
@@ -107,14 +108,18 @@ class TripController extends Controller
     public function create()
     {
         $employees = null;
-
-        if (auth()->user()->role = 'organisation') {
-            $employees = Customer::where('organisation_id', auth()->user()->organisation_id)->get();
+        if (auth()->user()->role == 'organisation') {
+            $organisation = Organisation::where('user_id', auth()->user()->id)->first();
+            $employees = Customer::where('organisation_id', $organisation->id)
+                ->where('status', 'active')
+                ->get();
+        } else {
+            $employees = Customer::where('status', 'active')->get();
         }
-        $employees = Customer::where('status', 'active')->get();
         $routes = Routes::all();
         return view('trips.create', compact('employees', 'routes'));
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -705,8 +710,7 @@ class TripController extends Controller
     public function assignVehicleToTrips()
     {
         try {
-            $currentTime = Carbon::now('Africa/Nairobi')->format('H:i:s');
-            $oneHourLater = Carbon::now('Africa/Nairobi')->addHour()->format('H:i:s');
+            DB::beginTransaction(); // Start transaction to ensure data integrity
 
             $currentTime = Carbon::now('Africa/Nairobi');
             $oneHourLater = $currentTime->copy()->addHour();
@@ -717,53 +721,56 @@ class TripController extends Controller
                 ->where('status', 'scheduled')
                 ->get();
 
-            $vehicles = null;
-
-            if (!$trips || $trips->count() == 0) {
-                return redirect()->back()->with('error', 'No upcoming trips');
+            if ($trips->isEmpty()) {
+                DB::rollBack(); // Rollback transaction if no trips found
+                return redirect()->back()->with('error', 'No Trips Found');
             }
 
-            if ($trips->count() >= 1 && $trips->count() <= 4) {
-                $vehicles = Vehicle::where('status', 'active')
-                    ->where('class', '>=', 'A')
-                    ->get();
-            }
-
-            if ($trips->count() >= 5 && $trips->count() <= 6) {
-                $vehicles = Vehicle::where('status', 'active')
-                    ->where('class', '>=', 'B')
-                    ->where('isOccupied', false)
-                    ->get();
-            }
-
-            if ($trips->count() >= 7 && $trips->count() <= 14) {
-                $vehicles = Vehicle::where('status', 'active')
-                    ->where('class', '>=', 'C')
-                    ->get();
-            }
-
-            if (!$vehicles || $vehicles->count() == 0) {
-                return redirect()->back()->with('error', 'No vehicles available');
-            }
-
-            DB::beginTransaction();
+            $vehicles = Vehicle::with('scheduledTrips')->where('status', 'active')->get();
 
             foreach ($trips as $trip) {
-                $vehicle = $vehicles->random();
-                $trip->vehicle_id = $vehicle->id;
-                $trip->save();
+                $isTripAssigned = false;
+                $vehicleFound = false;
+
+                foreach ($vehicles as $vehicle) {
+                    if (!$vehicle->scheduledTrips->isEmpty()) {
+                        $first = $vehicle->scheduledTrips->first();
+                        if ($first->pick_up_time == $trip->pick_up_time && $first->route_id == $trip->route_id && $first->customer->customer_organisation_code == $trip->customer->customer_organisation_code) {
+                            $trip->vehicle_id = $vehicle->id;
+                            $isTripAssigned = true;
+                            break; // Exit inner loop once a suitable vehicle is found
+                        }
+                    } else {
+                        $trip->vehicle_id = $vehicle->id;
+                        $isTripAssigned = true;
+                        break; // Exit inner loop once a suitable vehicle is found
+                    }
+
+                    if (!$isTripAssigned) {
+                        $vehicleFound = true;
+                    }
+                }
+
+                if (!$isTripAssigned) {
+                    return redirect()->back()->with('error', 'No Suitable Vehicle Found for unassigned trips');
+                    Log::warning("No suitable vehicle found for trip: {$trip->id}");
+                } else {
+                    $trip->save(); // Save the trip with assigned vehicle
+                }
             }
 
-            DB::commit();
+            DB::commit(); // Commit transaction if all operations were successful
 
-            return redirect()->back()->with('success', 'Vehicles Assigned Successfully');
-        } catch (Exception $e) {
+            return redirect()->back()->with('success', 'Trips Assigned Successfully');
+        } catch (\Exception $e) {
+            DB::rollBack(); // Rollback transaction in case of any exception
             Log::error('ERROR ASSIGNING VEHICLE TO TRIPS');
-            Log::error($e);
+            Log::error($e->getMessage());
 
             return redirect()->back()->with('error', 'Something Went Wrong');
         }
     }
+
 
     public function details($id)
     {
@@ -854,7 +861,6 @@ class TripController extends Controller
             DB::commit();
 
             return redirect()->back()->with('success', 'Trip Billed Successfully');
-
         } catch (Exception $e) {
             Log::error('ERROR BILLING TRIP');
             Log::error($e);
@@ -899,7 +905,6 @@ class TripController extends Controller
 
             // Return the view with the trip details and remaining amount
             return view('trips.tripPaymentCheckout', compact('trip', 'remainingAmount', 'ThisTripPayments'));
-
         } catch (Exception $e) {
             Log::error('Error fetching trip details for payment checkout: ' . $e->getMessage());
             return back()->with('error', 'An error occurred while fetching the trip details. Please try again.');

@@ -1,4 +1,5 @@
-<form action="license/{{ $license->id }}/revoke" method="POST" class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
+<form action="license/{{ $license->id }}/revoke" method="POST" class="needs-validation modal-content"
+    enctype="multipart/form-data">
     @csrf
     @method('PUT')
     <div class="card-header text-center my-3 p-2 border-bottom">
@@ -12,7 +13,7 @@
             </p>
         </div>
     </div>
-    
+
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-danger" type="submit">Suspend</button>

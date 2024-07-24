@@ -159,4 +159,8 @@
         }
         document.getElementById("password").value = password;
     }
+<<<<<<< HEAD
 </script>
+=======
+</script>
+>>>>>>> Bill-Trips

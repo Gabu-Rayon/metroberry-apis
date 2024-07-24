@@ -1,5 +1,5 @@
 <form action="{{ route('vehicle.insurance.recurring.period.update', $period->id) }}" method="POST"
-    class="needs-validation modal-content" novalidate enctype="multipart/form-data">
+    class="needs-validation modal-content" enctype="multipart/form-data">
     @csrf
     @method('PUT')
     <div class="card-header my-3 p-2 border-bottom">
@@ -27,8 +27,10 @@
                     <label for="status" class="col-sm-5 col-form-label">Status</label>
                     <div class="col-sm-7">
                         <select name="status" class="form-control" id="status" required>
-                            <option value="1" {{ old('status', $period->status) == '1' ? 'selected' : '' }}>Active</option>
-                            <option value="0" {{ old('status', $period->status) == '0' ? 'selected' : '' }}>Inactive</option>
+                            <option value="1" {{ old('status', $period->status) == '1' ? 'selected' : '' }}>Active
+                            </option>
+                            <option value="0" {{ old('status', $period->status) == '0' ? 'selected' : '' }}>
+                                Inactive</option>
                         </select>
                     </div>
                 </div>

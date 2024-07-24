@@ -19,21 +19,24 @@ class DriversLicensesController extends Controller
     public function index()
     {
         $licenses = DriversLicenses::all();
-        return view('driver.license.index',compact('licenses'));
+        $drivers = Driver::whereDoesntHave('license')->get();
+        return view('driver.license.index', compact('licenses', 'drivers'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(){
+    public function create()
+    {
         $drivers = Driver::whereDoesntHave('license')->get();
-        return view('driver.license.create',compact('drivers'));
+        return view('driver.license.create', compact('drivers'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         try {
 
             $data = $request->all();
@@ -50,7 +53,7 @@ class DriversLicensesController extends Controller
             if ($validator->fails()) {
                 Log::error('CREATE LICENSE VALIDATION ERROR');
                 Log::error($validator->errors()->first());
-                return redirect()->back()->with('error', $validator->errors()->first());
+                return redirect()->back()->with('error', $validator->errors()->first())->withInput();
             }
 
             $frontLicensePath = null;
@@ -89,7 +92,7 @@ class DriversLicensesController extends Controller
             DB::rollBack();
             Log::error('CREATE LICENSE ERROR');
             Log::error($e);
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 
@@ -104,20 +107,22 @@ class DriversLicensesController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id) {
+    public function edit($id)
+    {
         $license = DriversLicenses::findOrFail($id);
-        return view('driver.license.edit',compact('license'));
+        return view('driver.license.edit', compact('license'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         try {
 
             $license = DriversLicenses::findOrFail($id);
             $data = $request->all();
-            
+
             $validator = Validator::make($data, [
                 'license_no' => 'required|string',
                 'driving_license_date_of_issue' => 'required|date',
@@ -163,6 +168,9 @@ class DriversLicensesController extends Controller
                 'verified' => false
             ]);
 
+            $license->driver->status = 'inactive';
+            $license->driver->save();
+
             DB::commit();
 
             return redirect()->route('driver.license')->with('success', 'License updated successfully');
@@ -174,15 +182,17 @@ class DriversLicensesController extends Controller
         }
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $license = DriversLicenses::findOrFail($id);
-        return view('driver.license.delete',compact('license'));
+        return view('driver.license.delete', compact('license'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id){
+    public function destroy($id)
+    {
         try {
 
             $license = DriversLicenses::findOrFail($id);
@@ -210,7 +220,8 @@ class DriversLicensesController extends Controller
         }
     }
 
-    public function verify ($id) {
+    public function verify($id)
+    {
         try {
 
             $license = DriversLicenses::findOrFail($id);
@@ -219,7 +230,7 @@ class DriversLicensesController extends Controller
                 return redirect()->back()->with('error', 'License not found');
             }
 
-            return view('driver.license.verify',compact('license'));
+            return view('driver.license.verify', compact('license'));
         } catch (Exception $e) {
             Log::error('VERIFY LICENSE ERROR');
             Log::error($e);
@@ -227,7 +238,8 @@ class DriversLicensesController extends Controller
         }
     }
 
-    public function verifyStore ($id) {
+    public function verifyStore($id)
+    {
         try {
 
             $license = DriversLicenses::findOrFail($id);
@@ -265,12 +277,20 @@ class DriversLicensesController extends Controller
         }
     }
 
-    public function revoke ($id) {
-        $license = DriversLicenses::findOrFail($id);
-        return view('driver.license.revoke',compact('license'));
+    public function revoke($id)
+    {
+        try {
+            $license = DriversLicenses::findOrFail($id);
+            return view('driver.license.revoke', compact('license'));
+        } catch (Exception $e) {
+            Log::error('REVOKE LICENSE ERROR');
+            Log::error($e);
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
-    public function revokeStore ($id) {
+    public function revokeStore($id)
+    {
         try {
 
             $license = DriversLicenses::findOrFail($id);
@@ -288,6 +308,9 @@ class DriversLicensesController extends Controller
             $license->update([
                 'verified' => false
             ]);
+
+            $license->driver->status = 'inactive';
+            $license->driver->save();
 
             DB::commit();
 

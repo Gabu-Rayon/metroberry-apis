@@ -5,7 +5,7 @@
 
     <body class="fixed sidebar-mini">
 
-       @include('components.preloader')
+        @include('components.preloader')
         <!-- react page -->
         <div id="app">
             <!-- Begin page -->
@@ -53,9 +53,12 @@
                                                                 <td>{{ $employee->user->name }}</td>
                                                                 <td>{{ $employee->customer_organisation_code }}</td>
                                                                 <td>{{ $employee->trips->count() }}</td>
-                                                                <td>{{ $employee->trips->where('status', 'cancelled')->count() }}</td>
-                                                                <td>{{ $employee->trips->where('status', 'billed')->count() }}</td>
-                                                                <td>{{ $employee->trips->where('status', 'billed')->sum('total_price') }}</td>
+                                                                <td>{{ $employee->trips->where('status', 'cancelled')->count() }}
+                                                                </td>
+                                                                <td>{{ $employee->trips->where('status', 'billed')->count() }}
+                                                                </td>
+                                                                <td>{{ $employee->trips->where('status', 'billed')->sum('total_price') }}
+                                                                </td>
                                                             </tr>
                                                         @endforeach
                                                     </tbody>
@@ -71,7 +74,7 @@
                         </div>
                     </div>
                     <div class="overlay"></div>
-                               @include('components.footer')
+                    @include('components.footer')
                 </div>
             </div>
             <!--end  vue page -->

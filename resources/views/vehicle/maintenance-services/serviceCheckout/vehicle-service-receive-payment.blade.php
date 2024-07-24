@@ -1,5 +1,5 @@
 <form action="{{ route('billed.vehicle.service.receive.payment.store', $service->id) }}" method="POST"
-    class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
+    class="needs-validation modal-content" enctype="multipart/form-data">
     @csrf
     <div class="card-header my-3 p-2 border-bottom">
         <h4>Add Payment</h4>
@@ -14,7 +14,7 @@
                             id="payment_date" required>
                     </div>
                 </div>
-                 <div class="form-group row my-2">
+                <div class="form-group row my-2">
                     <label for="amount" class="col-sm-5 col-form-label">Amount <i class="text-danger">*</i></label>
                     <div class="col-sm-7">
                         <input name="amount" autocomplete="off" required class="form-control" type="number"
@@ -43,8 +43,8 @@
                 <div class="form-group row my-2">
                     <label for="reference" class="col-sm-5 col-form-label">Reference <i
                             class="text-danger">*</i></label>
-                             <div class="col-sm-7">
-                    <input name="reference" class="form-control" type="text" placeholder="Reference"
+                    <div class="col-sm-7">
+                        <input name="reference" class="form-control" type="text" placeholder="Reference"
                             id="reference" required>
                     </div>
                 </div>

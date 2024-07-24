@@ -36,29 +36,33 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @foreach ($billedTrips as $groupedTrips)
-                                                            @foreach ($groupedTrips as $trip)
-                                                                <tr>
-                                                                    <td>{{ optional($trip->customer->user)->name }}</td>
-                                                                    <td>{{ optional($trip->billingRate)->name }}</td>
-                                                                    <td>{{ $trip->total_price }}</td>
-                                                                    <td>{{ \Carbon\Carbon::parse($trip->billed_at)->format('F jS, Y \a\t h:i a') }}</td>
-                                                                    <td>
-                                                                        @if ($trip->status == 'billed')
-                                                                            <span class="badge bg-success">Billed</span>
-                                                                        @elseif ($trip->status == 'paid')
-                                                                            <span class="badge bg-success">Paid</span>
-                                                                        @else
-                                                                            <span class="badge bg-danger">Partially Paid</span>
-                                                                        @endif
-                                                                    </td>
-                                                                    <td class="text-center">
-                                                                        <a href="{{ route('trip.payment.checkout', ['id' => $trip->id]) }}" class="btn btn-primary btn-sm" title="Proceed to pay for your trip.">
-                                                                            <small><i class="fa-solid fa-money-bill"></i></small>
-                                                                        </a>
-                                                                    </td>
-                                                                </tr>
-                                                            @endforeach
+                                                        @foreach ($billedTrips as $trip)
+                                                            <tr>
+                                                                <td>{{ $trip->customer->user->name }}</td>
+                                                                <td>{{ $trip->billingRate->name }}</td>
+                                                                <td>{{ $trip->total_price }}</td>
+                                                                <td>{{ \Carbon\Carbon::parse($trip->billed_at)->format('F jS, Y \a\t h:i a') }}
+                                                                </td>
+                                                                <td>
+                                                                    @if ($trip->status == 'billed')
+                                                                        <span class="badge bg-success">Billed</span>
+                                                                    @elseif ($trip->status == 'paid')
+                                                                        <span class="badge bg-success">Paid</span>
+                                                                    @else
+                                                                        <span class="badge bg-danger">Partially Paid</span>
+                                                                    @endif
+                                                                </td>
+
+                                                                <td class="text-center">
+                                                                    <a href="{{ route('trip.payment.checkout', ['id' => $trip->id]) }}"
+                                                                        class="btn btn-primary btn-sm"
+                                                                        title="Proceed to pay for your trip.">
+                                                                        <small><i
+                                                                                class="fa-solid fa-money-bill"></i></small>
+                                                                    </a>
+
+                                                                </td>
+                                                            </tr>
                                                         @endforeach
                                                     </tbody>
                                                 </table>

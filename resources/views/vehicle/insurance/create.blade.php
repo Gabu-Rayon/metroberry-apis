@@ -1,4 +1,5 @@
-<form action="{{ route('vehicle.insurance.store') }}" method="POST" class="needs-validation modal-content" novalidate enctype="multipart/form-data">
+<form action="{{ route('vehicle.insurance.store') }}" method="POST" class="needs-validation modal-content"
+    enctype="multipart/form-data">
     @csrf
     <div class="card-header my-3 p-2 border-bottom">
         <h4>Add Vehicle Insurance Details</h4>
@@ -7,11 +8,13 @@
         <div class="row">
             <div class="col-md-12 col-lg-6">
                 <div class="form-group row my-2">
-                    <label for="company_id" class="col-sm-5 col-form-label">Company Name <i class="text-danger">*</i></label>
+                    <label for="company_id" class="col-sm-5 col-form-label">Company Name <i
+                            class="text-danger">*</i></label>
                     <div class="col-sm-7">
-                        <select class="form-control basic-single" name="insurance_company_id" id="insurance_company_id" tabindex="-1" aria-hidden="true" required>
+                        <select class="form-control basic-single" name="insurance_company_id" id="insurance_company_id"
+                            tabindex="-1" aria-hidden="true" required>
                             <option value="">Select Company</option>
-                            @foreach($insuranceCompanies as $company)
+                            @foreach ($insuranceCompanies as $company)
                                 <option value="{{ $company->id }}">{{ $company->name }}</option>
                             @endforeach
                         </select>
@@ -19,25 +22,30 @@
                 </div>
 
                 <div class="form-group row my-2">
-                    <label for="policy_number" class="col-sm-5 col-form-label">Policy Number <i class="text-danger">*</i></label>
+                    <label for="policy_number" class="col-sm-5 col-form-label">Policy Number <i
+                            class="text-danger">*</i></label>
                     <div class="col-sm-7">
-                        <input name="insurance_policy_no" class="form-control" type="text" placeholder="Policy number" id="policy_number" value="" required>
+                        <input name="insurance_policy_no" class="form-control" type="text"
+                            placeholder="Policy number" id="policy_number" value="" required>
                     </div>
                 </div>
 
                 <div class="form-group row my-2">
                     <label for="start_date" class="col-sm-5 col-form-label">Start Date</label>
                     <div class="col-sm-7">
-                        <input name="insurance_date_of_issue" class="form-control" type="date" placeholder="Start date" id="start_date" value="">
+                        <input name="insurance_date_of_issue" class="form-control" type="date"
+                            placeholder="Start date" id="start_date" value="">
                     </div>
                 </div>
 
                 <div class="form-group row my-2">
-                    <label for="recurring_period_id" class="col-sm-5 col-form-label">Recurring Period <i class="text-danger">*</i></label>
+                    <label for="recurring_period_id" class="col-sm-5 col-form-label">Recurring Period <i
+                            class="text-danger">*</i></label>
                     <div class="col-sm-7">
-                        <select class="form-control basic-single" name="recurring_period_id" id="recurring_period_id" tabindex="-1" aria-hidden="true" required>
+                        <select class="form-control basic-single" name="recurring_period_id" id="recurring_period_id"
+                            tabindex="-1" aria-hidden="true" required>
                             <option value="">Select Recurring Period</option>
-                            @foreach($recurringPeriods as $period)
+                            @foreach ($recurringPeriods as $period)
                                 <option value="{{ $period->id }}">{{ $period->period }}</option>
                             @endforeach
                         </select>
@@ -76,9 +84,10 @@
                 <div class="form-group row mb-1">
                     <label for="vehicle_id" class="col-sm-5 col-form-label">Vehicle <i class="text-danger">*</i></label>
                     <div class="col-sm-7">
-                        <select class="form-control basic-single" name="vehicle_id" id="vehicle_id" tabindex="-1" aria-hidden="true" required>
+                        <select class="form-control basic-single" name="vehicle_id" id="vehicle_id" tabindex="-1"
+                            aria-hidden="true" required>
                             <option value="">Select Vehicle</option>
-                             @foreach($vehicles as $vehicle)
+                            @foreach ($vehicles as $vehicle)
                                 <option value="{{ $vehicle->id }}">{{ $vehicle->model }}</option>
                             @endforeach
                         </select>
@@ -86,37 +95,45 @@
                 </div>
 
                 <div class="form-group row my-2">
-                    <label for="charge_payable" class="col-sm-5 col-form-label">Charge Payable <i class="text-danger">*</i></label>
+                    <label for="charge_payable" class="col-sm-5 col-form-label">Charge Payable <i
+                            class="text-danger">*</i></label>
                     <div class="col-sm-7">
-                        <input name="charges_payable" class="form-control" type="number" step="any" placeholder="Charge payable" id="charge_payable" value="" required>
+                        <input name="charges_payable" class="form-control" type="number" step="any"
+                            placeholder="Charge payable" id="charge_payable" value="" required>
                     </div>
                 </div>
 
                 <div class="form-group row my-2">
                     <label for="end_date" class="col-sm-5 col-form-label">End Date</label>
                     <div class="col-sm-7">
-                        <input name="insurance_date_of_expiry" class="form-control" type="date" placeholder="insurance date of expiry" id="end_date" value="">
+                        <input name="insurance_date_of_expiry" class="form-control" type="date"
+                            placeholder="insurance date of expiry" id="end_date" value="">
                     </div>
                 </div>
 
                 <div class="form-group row my-2">
                     <label for="recurring_date" class="col-sm-5 col-form-label">Recurring Date</label>
                     <div class="col-sm-7">
-                        <input name="recurring_date" class="form-control" type="date" placeholder="Recurring date" id="recurring_date" value="">
+                        <input name="recurring_date" class="form-control" type="date"
+                            placeholder="Recurring date" id="recurring_date" value="">
                     </div>
                 </div>
 
                 <div class="form-group row my-2">
-                    <label for="deductible" class="col-sm-5 col-form-label">Deductible <i class="text-danger">*</i></label>
+                    <label for="deductible" class="col-sm-5 col-form-label">Deductible <i
+                            class="text-danger">*</i></label>
                     <div class="col-sm-7">
-                        <input name="deductible" class="form-control" type="number" step="any" placeholder="Deductible" id="deductible" value="" required>
+                        <input name="deductible" class="form-control" type="number" step="any"
+                            placeholder="Deductible" id="deductible" value="" required>
                     </div>
                 </div>
 
                 <div class="form-group row my-2">
-                    <label for="policy_document" class="col-sm-5 col-form-label">Policy Document <span class="text-danger">*</span></label>
+                    <label for="policy_document" class="col-sm-5 col-form-label">Policy Document <span
+                            class="text-danger">*</span></label>
                     <div class="col-sm-7">
-                        <input type="file"  name="policy_document" id="organisation_certificate" required onchange="get_img_url(this, '#document_image');">
+                        <input type="file" name="policy_document" id="organisation_certificate" required
+                            onchange="get_img_url(this, '#document_image');">
 
                         <!--  <input
                             name="organisation_certificate"

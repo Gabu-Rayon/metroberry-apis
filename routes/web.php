@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TripController;
@@ -104,7 +105,7 @@ Route::get('employee/create', [EmployeeController::class, 'create'])
     ->middleware('auth', 'can:create customer');
 
 Route::post('employee', [EmployeeController::class, 'store'])
-    ->name('employee.create.store')
+    ->name('employee.create')
     ->middleware('auth', 'can:create customer');
 
 // Update Employee Details
@@ -237,6 +238,7 @@ Route::get('driver', [DriverController::class, 'index'])
 Route::get('driver/create', [DriverController::class, 'create'])
     ->name('driver.create')
     ->middleware('auth', 'can:create driver');
+
 Route::post('driver', [DriverController::class, 'store'])
     ->name('driver.store')
     ->middleware('auth', 'can:create driver');
@@ -285,15 +287,15 @@ Route::get('performance/create', [DriverController::class, 'createDriverPerforma
 
 // View Licenses
 Route::get('driver/license', [DriversLicensesController::class, 'index'])
-    ->name('driver.license.index')
+    ->name('driver.license')
     ->middleware('auth', 'can:view driver licenses');
 
 // Create License
 Route::get('driver/license/create', [DriversLicensesController::class, 'create'])
     ->name('driver.license.create')
     ->middleware('auth', 'can:create driver license');
-Route::post('driver/license', [DriversLicensesController::class, 'store'])
-    ->name('driver.license')
+Route::post('driver/license/create', [DriversLicensesController::class, 'store'])
+    ->name('driver.license.create')
     ->middleware('auth', 'can:create driver license');
 
 // Update License Details
@@ -314,8 +316,9 @@ Route::put('driver/license/{id}/verify', [DriversLicensesController::class, 'ver
 
 // Revoke License
 Route::get('driver/license/{id}/revoke', [DriversLicensesController::class, 'revoke'])
-    ->name('driver.license.revoke.store')
+    ->name('driver.license.revoke')
     ->middleware('auth', 'can:revoke driver license');
+
 Route::put('driver/license/{id}/revoke', [DriversLicensesController::class, 'revokeStore'])
     ->name('driver.license.revoke')
     ->middleware('auth', 'can:revoke driver license');
@@ -528,7 +531,7 @@ Route::get('get-billing-rate/{id}', [TripController::class, 'getBillingRate'])
 
 Route::get('trip/billed/{id}/payment/checkout', [TripController::class, 'tripPaymentCheckOut'])
     ->name('trip.payment.checkout')
-    ->middleware('auth', 'can:pay trip');
+    ->middleware('auth');
 
 /**
  * Trip Payment Routes
@@ -537,24 +540,14 @@ Route::get('trip/billed/{id}/payment/checkout', [TripController::class, 'tripPay
 
 Route::get('trip/billed/{id}/recieve/payment', [TripPaymentController::class, 'billedTripRecievePayment'])
     ->name('billed.trip.recieve.payment')
-    ->middleware('auth', 'can:pay trip');
+    ->middleware('auth');
 
 Route::post('trip/billed/{id}/recieve/payment/store', [TripPaymentController::class, 'billedTripRecievePaymentStore'])
     ->name('billed.trip.recieve.payment.store')
-    ->middleware('auth', 'can:pay trip');
-
-
-Route::get('billed/trip/{id}/download/invoice', [TripPaymentController::class, 'billedTripDownloadInvoice'])
-    ->name('billed.trip.download.invoice')
-    ->middleware('auth', 'can:download trip invoice');
-
-Route::get('billed/trip/{id}/download/invoice/payment/receipt', [TripPaymentController::class, 'billedTripDownloadInvoiceReceipt'])
-    ->name('billed.trip.download.invoice.receipt')
-    ->middleware('auth', 'can:download trip invoice');
-
+    ->middleware('auth');
 Route::get('billed/trip/{id}/resend/invoice', [TripPaymentController::class, 'billedTripResendInvoice'])
     ->name('billed.trip.resend.invoice')
-    ->middleware('auth', 'can:resend trip invoice');
+    ->middleware('auth', 'can:bill trip');
 
 Route::get('billed/trip/{id}/send/invoice', [TripPaymentController::class, 'billedTripSendInvoice'])
     ->name('billed.trip.send.invoice')
@@ -1012,9 +1005,6 @@ Route::get('vehicle/maintenance/repairs/categories', [RepairCategoryController::
  * 
  *Manage Driver License 
  */
-Route::get('/driver/license', [DriversLicensesController::class, 'index'])
-    ->name('driver.license.index')
-    ->middleware('auth', 'can:view driver license');
 
 /***
  * 
@@ -1520,10 +1510,11 @@ Route::delete('vehicle/inspection-certificate/{id}/delete', [NTSAInspectionCerti
 
 
 
-Route::get('/test-email', function () {
-    Mail::raw('This is a test email For Metro berry Mailing Services!', function ($message) {
-        $message->to('iamwizarddelta001@gmail.com')
-            ->subject('Metro  metro Berry Test Email ');
-    });
-    return 'Test email sent!';
-});
+Route::get('billed/trip/{id}/download/invoice', [TripPaymentController::class, 'billedTripDownloadInvoice'])
+    ->name('trip.download.invoice')
+    ->middleware('auth');
+
+
+Route::get('billed/trip/{id}/download/invoice', [TripPaymentController::class, 'billedTripDownloadInvoiceReceipt'])
+    ->name('billed.trip.download.invoice.receipt')
+    ->middleware('auth', 'can:bill trip');

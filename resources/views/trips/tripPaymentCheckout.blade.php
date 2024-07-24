@@ -259,9 +259,9 @@
                                                 <tbody>
                                                     @foreach ($ThisTripPayments as $payment)
                                                         <tr>
-                                                            <td> <a href="{{ route('billed.trip.download.invoice.receipt', ['id' => $payment->id]) }}"
+                                                            {{-- <td> <a href="{{ route('billed.trip.download.invoice.receipt', ['id' => $payment->id]) }}"
                                                                     class="btn btn-primary btn-sm"> <i
-                                                                        class="fa-solid fa-download"></i> &nbsp;</a></td>
+                                                                        class="fa-solid fa-download"></i> &nbsp;</a></td> --}}
                                                             <td>{{ $payment->payment_date }}</td>
                                                             <td>Kes.{{ $payment->total_amount }}</td>
                                                             <td>{{ $payment->payment_type_code }}</td>

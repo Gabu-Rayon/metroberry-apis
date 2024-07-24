@@ -1,4 +1,5 @@
-<form action="{{ route('metro.berry.account.setting.store') }}" method="POST" class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
+<form action="{{ route('metro.berry.account.setting.store') }}" method="POST" class="needs-validation modal-content"
+    enctype="multipart/form-data">
     @csrf
     <div class="card-header my-3 p-2 border-bottom">
         <h4>Create New Bank Account</h4>
@@ -12,7 +13,8 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="holder_name" class="form-control" type="text" placeholder="Account Holder Name" id="holder_name" required />
+                        <input name="holder_name" class="form-control" type="text" placeholder="Account Holder Name"
+                            id="holder_name" required />
                     </div>
                 </div>
 
@@ -22,7 +24,8 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="bank_name" class="form-control" type="text" placeholder="Bank Name" id="bank_name" required />
+                        <input name="bank_name" class="form-control" type="text" placeholder="Bank Name"
+                            id="bank_name" required />
                     </div>
                 </div>
 
@@ -32,7 +35,8 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="account_number" class="form-control" type="text" placeholder="Account Number" id="account_number" required />
+                        <input name="account_number" class="form-control" type="text" placeholder="Account Number"
+                            id="account_number" required />
                     </div>
                 </div>
 
@@ -42,7 +46,8 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="opening_balance" class="form-control" type="number" placeholder="Opening Balance" id="opening_balance" required />
+                        <input name="opening_balance" class="form-control" type="number" placeholder="Opening Balance"
+                            id="opening_balance" required />
                     </div>
                 </div>
             </div>
@@ -54,7 +59,8 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="contact_number" class="form-control" type="text" placeholder="Contact Number" id="contact_number" required />
+                        <input name="contact_number" class="form-control" type="text" placeholder="Contact Number"
+                            id="contact_number" required />
                     </div>
                 </div>
 
@@ -64,7 +70,7 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                       <textarea name="bank_address" class="form-control" placeholder="Bank Address" id="bank_address" required></textarea>
+                        <textarea name="bank_address" class="form-control" placeholder="Bank Address" id="bank_address" required></textarea>
                     </div>
                 </div>
             </div>

@@ -1,5 +1,5 @@
 <form action="{{ route('vehicle.insurance.recurring.period.create.store') }}" method="POST"
-    class="needs-validation modal-content" novalidate enctype="multipart/form-data">
+    class="needs-validation modal-content" enctype="multipart/form-data">
     @csrf
     <div class="card-header my-3 p-2 border-bottom">
         <h4>Add Insurance Company</h4>

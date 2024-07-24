@@ -2,9 +2,13 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use DateTime;
+use DateTimeZone;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Log;
 
 class Customer extends Model
 {
@@ -30,7 +34,12 @@ class Customer extends Model
         'updated_at',
     ];
 
-    protected $with = ['user','creator'];
+    protected $with = ['user', 'creator'];
+
+    // casts
+    protected $casts = [
+        'isTrippedForNow' => 'boolean',
+    ];
 
     /**
      * Get the user that owns the customer.
@@ -58,5 +67,13 @@ class Customer extends Model
     public function trips()
     {
         return $this->hasMany(Trip::class);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::deleting(function ($customer) {
+            $customer->user->delete();
+        });
     }
 }

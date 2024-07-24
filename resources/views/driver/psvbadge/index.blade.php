@@ -3,165 +3,221 @@
 @section('title', 'PSV Badges')
 @section('content')
 
-<body class="fixed sidebar-mini">
-    @include('components.preloader')
-    <div id="app">
-        <div class="wrapper">
-            @include('components.sidebar.sidebar')
-            <div class="content-wrapper">
-                <div class="main-content">
-                    @include('components.navbar')
-                    <div class="body-content">
-                        <div class="tile">
-                            <div class="card mb-4">
-                                <div class="card-header">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <h6 class="fs-17 fw-semi-bold mb-0">PSV Badges</h6>
-                                        </div>
-                                        <div class="text-end">
-                                            <div class="actions">
-                                                <div class="accordion-header d-flex justify-content-end align-items-center" id="flush-headingOne">
-                                                    <a class="btn btn-success btn-sm" href="javascript:void(0);" onclick="axiosModal('psvbadge/create')">
-                                                        <i class="fa fa-plus"></i>
-                                                        &nbsp;
-                                                        Add PSV Badge
-                                                    </a>
-                                                    <button type="button" class="btn btn-success btn-sm mx-2" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="true" aria-controls="flush-collapseOne">
-                                                        <i class="fas fa-filter"></i>
-                                                        Filter
-                                                    </button>
-                                                </div>
+    <body class="fixed sidebar-mini">
+        @include('components.preloader')
+        <div id="app">
+            <div class="wrapper">
+                @include('components.sidebar.sidebar')
+                <div class="content-wrapper">
+                    <div class="main-content">
+                        @include('components.navbar')
+                        <div class="body-content">
+                            <div class="tile">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <h6 class="fs-17 fw-semi-bold mb-0">PSV Badges</h6>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="card-body">
-                                    <div class="row mb-3">
-                                        <div class="col-12">
-                                            <div class="accordion accordion-flush" id="accordionFlushExample">
-                                                <div class="accordion-item">
-                                                    <div id="flush-collapseOne" class="accordion-collapse bg-white collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample" style="">
-                                                        <div class='row pb-3 my-filter-form'>
-                                                            <div class="col-sm-12 col-xl-4">
-                                                                
-                                                                <div class="form-group row mb-1">
-                                                                    <label for="psvbadge_no"
-                                                                        class="col-sm-5 col-form-label justify-content-start text-left">Badge No</label>
-                                                                    <div class="col-sm-7">
-                                                                        <input type="text" class="form-control"
-                                                                            id="psvbadge_no" name="psvbadge_no"
-                                                                            placeholder="Badge No">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="col-md-2 d-flex align-items-center">
-                                                                <button class="btn btn-success me-2 search-btn"
-                                                                    type="button">Search</button>
-                                                                <button class="btn btn-danger me-2 reset-btn"
-                                                                    type="button">Reset</button>
-                                                            </div>
-                                                        </div>
+                                            <div class="text-end">
+                                                <div class="actions">
+                                                    <div class="accordion-header d-flex justify-content-end align-items-center"
+                                                        id="flush-headingOne">
+                                                        <button type="button" class="btn btn-success btn-sm"
+                                                            data-bs-toggle="modal" data-bs-target="#driverPSVBadgeModal">
+                                                            <i class="fa-solid fa-user-plus"></i>&nbsp; Add Driver's PSV
+                                                            Badge
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="table-responsive">
-                                        <table class="table" id="driver-table">
-                                            <thead>
-                                                <tr>
-                                                    <th title="Name">Badge No</th>
-                                                    <th title="Address">Driver</th>
-                                                    <th title="Email">Issue Date</th>
-                                                    <th title="Phone">Expiry Date</th>
-                                                    <th title="Status">Status</th>
-                                                    <th title="Action" width="80">Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($psvbadges as $psvbadge)
-                                                <tr>
-                                                    <td>{{ $psvbadge->psv_badge_no }}</td>
-                                                    <td>{{ $psvbadge->driver->user->name }}</td>
-                                                    <td>{{ $psvbadge->psv_badge_date_of_issue }}</td>
-                                                    <td>{{ $psvbadge->psv_badge_date_of_expiry }}</td>
-                                                    <td>
-                                                        @php
-                                                            $avatar = $psvbadge->psv_badge_avatar;
-                                                    
-                                                            if (!$avatar) {
-                                                                $badgeClass = 'badge bg-danger';
-                                                                $badgeText = 'Missing Documents';
-                                                            } else {
-                                                                $expiryDate = \Carbon\Carbon::parse($psvbadge->psv_badge_date_of_expiry);
-                                                                $today = \Carbon\Carbon::today();
-                                                                $daysUntilExpiry = $today->diffInDays($expiryDate, false);
-                                                                $isExpired = $daysUntilExpiry < 0;
+                                    <div class="card-body">
+                                        <div class="table-responsive">
+                                            <table class="table" id="driver-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th title="Badge No">Badge No</th>
+                                                        <th title="Driver">Driver</th>
+                                                        <th title="Issue Date">Issue Date</th>
+                                                        <th title="Expiry Date">Expiry Date</th>
+                                                        <th title="Status">Status</th>
+                                                        <th title="Action" width="80">Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($psvbadges as $psvbadge)
+                                                        <tr>
+                                                            <td>{{ $psvbadge->psv_badge_no }}</td>
+                                                            <td>{{ $psvbadge->driver->user->name }}</td>
+                                                            <td>{{ $psvbadge->psv_badge_date_of_issue }}</td>
+                                                            <td>{{ $psvbadge->psv_badge_date_of_expiry }}</td>
+                                                            <td>
+                                                                @php
+                                                                    $avatar = $psvbadge->psv_badge_avatar;
 
-                                                                {{ Log::info('Days until expiry: ' . $daysUntilExpiry); }}
-                                                    
-                                                                // Determine badge color and text based on days until expiry and verification status.
-                                                                if ($isExpired) {
-                                                                    $badgeClass = 'badge bg-danger';
-                                                                    $badgeText = 'Expired';
-                                                                } elseif ($daysUntilExpiry > 0 && $daysUntilExpiry <= 30) { 
-                                                                    // Adjusted condition here
-                                                                    if (!$psvbadge->verified) {
-                                                                        $badgeClass = 'badge bg-warning text-dark'; // Yellow badge for pending verification.
-                                                                        $badgeText = 'Pending Verification';
+                                                                    if (!$avatar) {
+                                                                        $badgeClass = 'badge bg-danger';
+                                                                        $badgeText = 'Missing Documents';
                                                                     } else {
-                                                                        $badgeClass = 'badge bg-warning text-dark'; // Yellow badge for expiring soon.
-                                                                        $badgeText = 'Expires Soon';
+                                                                        $expiryDate = \Carbon\Carbon::parse(
+                                                                            $psvbadge->psv_badge_date_of_expiry,
+                                                                        );
+                                                                        $today = \Carbon\Carbon::today();
+                                                                        $daysUntilExpiry = $today->diffInDays(
+                                                                            $expiryDate,
+                                                                            false,
+                                                                        );
+                                                                        $isExpired = $daysUntilExpiry < 0;
+
+                                                                        Log::info(
+                                                                            'Days until expiry: ' . $daysUntilExpiry,
+                                                                        );
+
+                                                                        if ($isExpired) {
+                                                                            $badgeClass = 'badge bg-danger';
+                                                                            $badgeText = 'Expired';
+                                                                        } elseif (
+                                                                            $daysUntilExpiry > 0 &&
+                                                                            $daysUntilExpiry <= 30
+                                                                        ) {
+                                                                            if (!$psvbadge->verified) {
+                                                                                $badgeClass =
+                                                                                    'badge bg-warning text-dark';
+                                                                                $badgeText = 'Pending Verification';
+                                                                            } else {
+                                                                                $badgeClass =
+                                                                                    'badge bg-warning text-dark';
+                                                                                $badgeText = 'Expires Soon';
+                                                                            }
+                                                                        } elseif (!$psvbadge->verified) {
+                                                                            $badgeClass = 'badge bg-warning text-dark';
+                                                                            $badgeText = 'Pending Verification';
+                                                                        } else {
+                                                                            $badgeClass = 'badge bg-success';
+                                                                            $badgeText = 'Valid';
+                                                                        }
                                                                     }
-                                                                } elseif (!$psvbadge->verified) {
-                                                                    $badgeClass = 'badge bg-warning text-dark'; // Yellow badge for pending verification.
-                                                                    $badgeText = 'Pending Verification';
-                                                                } else {
-                                                                    $badgeClass = 'badge bg-success';
-                                                                    $badgeText = 'Valid';
-                                                                }
-                                                            }
-                                                        @endphp
-                                                        <span class="{{ $badgeClass }}">{{ $badgeText }}</span>
-                                                    </td>
-                                                                                                       
-                                                    <td class="d-flex">
-                                                        <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="axiosModal('psvbadge/{{ $psvbadge->id }}/edit')" title="Edit">
-                                                            <i class="fas fa-edit"></i>
-                                                        </a>
-                                                        <span class='m-1'></span>
-                                                        @if (!$psvbadge->verified)
-                                                            <a href="javascript:void(0);" class="btn btn-sm btn-secondary" onclick="axiosModal('psvbadge/{{ $psvbadge->id }}/verify')" title="Verify">
-                                                                <i class="fas fa-toggle-off"></i>
-                                                            </a>
-                                                        @else
-                                                            <a href="javascript:void(0);" class="btn btn-sm btn-success" onclick="axiosModal('psvbadge/{{ $psvbadge->id }}/revoke')" title="Suspend">
-                                                                <i class="fas fa-toggle-on"></i>
-                                                            </a>
-                                                        @endif
-                                                        <span class='m-1'></span>
-                                                        <a href="javascript:void(0);" class="btn btn-sm btn-danger" onclick="axiosModal('psvbadge/{{ $psvbadge->id }}/delete')" title="Delete">
-                                                            <i class="fas fa-trash"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
+                                                                @endphp
+                                                                <span class="{{ $badgeClass }}">{{ $badgeText }}</span>
+                                                            </td>
+                                                            <td class="d-flex">
+                                                                <a href="javascript:void(0);" class="btn btn-sm btn-primary"
+                                                                    onclick="axiosModal('psvbadge/{{ $psvbadge->id }}/edit')"
+                                                                    title="Edit">
+                                                                    <i class="fas fa-edit"></i>
+                                                                </a>
+                                                                <span class='m-1'></span>
+                                                                @if (!$psvbadge->verified)
+                                                                    <a href="javascript:void(0);"
+                                                                        class="btn btn-sm btn-secondary"
+                                                                        onclick="axiosModal('psvbadge/{{ $psvbadge->id }}/verify')"
+                                                                        title="Verify">
+                                                                        <i class="fas fa-toggle-off"></i>
+                                                                    </a>
+                                                                @else
+                                                                    <a href="javascript:void(0);"
+                                                                        class="btn btn-sm btn-success"
+                                                                        onclick="axiosModal('psvbadge/{{ $psvbadge->id }}/revoke')"
+                                                                        title="Suspend">
+                                                                        <i class="fas fa-toggle-on"></i>
+                                                                    </a>
+                                                                @endif
+                                                                <span class='m-1'></span>
+                                                                <a href="javascript:void(0);" class="btn btn-sm btn-danger"
+                                                                    onclick="axiosModal('psvbadge/{{ $psvbadge->id }}/delete')"
+                                                                    title="Delete">
+                                                                    <i class="fas fa-trash"></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="overlay"></div>
+                    @include('components.footer')
                 </div>
-                <div class="overlay"></div>
-                @include('components.footer')
             </div>
         </div>
-    </div>
-</body>
+
+        {{-- Driver's PSV Badge Modal --}}
+        <div class="modal fade" id="driverPSVBadgeModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <form action="psvbadge" method="POST" class="needs-validation modal-content" enctype="multipart/form-data">
+                    @csrf
+                    <div class="card-header my-3 p-2 border-bottom">
+                        <h4>Add PSV Badge</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12 col-lg-6">
+                                <div class="form-group row my-2">
+                                    <label for="driver" class="col-sm-5 col-form-label">Driver <i
+                                            class="text-danger">*</i></label>
+                                    <div class="col-sm-7">
+                                        <select name="driver" id="driver" class="form-control" required>
+                                            <option value="">Select Driver</option>
+                                            @foreach ($drivers as $driver)
+                                                <option value="{{ $driver->id }}">{{ $driver->user->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row my-2">
+                                    <label for="issue_date" class="col-sm-5 col-form-label">Issue Date <i
+                                            class="text-danger">*</i></label>
+                                    <div class="col-sm-7">
+                                        <input name="issue_date" class="form-control" type="date"
+                                            placeholder="Issue Date" id="issue_date" required
+                                            value="{{ old('issue_date') }}" />
+                                    </div>
+                                </div>
+                                <div class="form-group row my-2">
+                                    <label for="psv_badge_avatar" class="col-sm-5 col-form-label">PSV Badge Copy</label>
+                                    <div class="col-sm-7">
+                                        <input name="psv_badge_avatar" class="form-control" type="file"
+                                            placeholder="Badge Picture" id="psv_badge_avatar"
+                                            value="{{ old('psv_badge_avatar') }}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12 col-lg-6">
+                                <div class="form-group row my-2">
+                                    <label for="psvbadge_no" class="col-sm-5 col-form-label">Badge No <i
+                                            class="text-danger">*</i></label>
+                                    <div class="col-sm-7">
+                                        <input name="psvbadge_no" class="form-control" type="text"
+                                            placeholder="Badge No" id="psvbadge_no" required
+                                            value="{{ old('psvbadge_no') }}" />
+                                    </div>
+                                </div>
+                                <div class="form-group row my-2">
+                                    <label for="expiry_date" class="col-sm-5 col-form-label">Expiry Date <i
+                                            class="text-danger">*</i></label>
+                                    <div class="col-sm-7">
+                                        <input name="expiry_date" class="form-control" type="date"
+                                            placeholder="Expiry Date" id="expiry_date" required
+                                            value="{{ old('expiry_date') }}" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                        <button class="btn btn-success" type="submit">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
 @endsection

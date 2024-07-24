@@ -11,7 +11,7 @@
             <!-- Begin page -->
             <div class="wrapper">
                 <!-- start header -->
-                 @include('components.sidebar.sidebar')
+                @include('components.sidebar.sidebar')
                 <!-- end header -->
                 <div class="content-wrapper">
                     <div class="main-content">
@@ -117,9 +117,10 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @forelse ($trips as $trip)
+                                                        @foreach ($completedTrips as $trip)
                                                             <tr>
-                                                                <td class="text-center">{{ $trip->customer->user->name ?? 'N/A' }}</td>
+                                                                <td class="text-center">{{ $trip->customer->user->name }}
+                                                                </td>
                                                                 <td class="text-center">
                                                                     @if ($trip->vehicle && $trip->vehicle->driver)
                                                                         {{ $trip->vehicle->driver->user->name ?? 'Unassigned' }}
@@ -129,7 +130,8 @@
                                                                 </td>
                                                                 <td class="text-center">
                                                                     @if ($trip->vehicle)
-                                                                        <span class="btn btn-success btn-sm">{{ $trip->vehicle->plate_number }}</span>
+                                                                        <span
+                                                                            class="btn btn-success btn-sm">{{ $trip->vehicle->plate_number }}</span>
                                                                     @else
                                                                         <span class="btn btn-danger btn-sm">Unassigned</span>
                                                                     @endif
@@ -137,35 +139,57 @@
                                                                 <td class="text-center">{{ $trip->route->name ?? 'N/A' }}</td>
                                                                 <td class="text-center">{{ $trip->pick_up_time }}</td>
                                                                 <td class="text-center">
-                                                                    {{ \Carbon\Carbon::parse($trip->trip_date)->format('F j, Y') }}
+                                                                    {{ \Carbon\Carbon::parse($trip->trip_date)->isoFormat('MMMM Do, YYYY') }}
                                                                 </td>
                                                                 <td class="text-center">
                                                                     @php
-                                                                        $location = match($trip->pick_up_location) {
-                                                                            'Home' => $trip->customer->user->address ?? 'N/A',
-                                                                            'Office' => $trip->customer->organisation->user->address ?? 'N/A',
-                                                                            default => $trip->route->locations->where('id', $trip->pick_up_location)->first()->name ?? 'N/A'
-                                                                        };
+                                                                        $location = null;
+                                                                        if ($trip->pick_up_location == 'Home') {
+                                                                            $location = $trip->customer->user->address;
+                                                                        } elseif ($trip->pick_up_location == 'Office') {
+                                                                            $location =
+                                                                                $trip->customer->organisation->user
+                                                                                    ->address;
+                                                                        } else {
+                                                                            $location = $trip->route->locations
+                                                                                ->where('id', $trip->pick_up_location)
+                                                                                ->first()->name;
+                                                                        }
                                                                     @endphp
                                                                     {{ $location }}
                                                                 </td>
                                                                 <td class="text-center">
                                                                     @php
-                                                                        $location = match($trip->drop_off_location) {
-                                                                            'Home' => $trip->customer->user->address ?? 'N/A',
-                                                                            'Office' => $trip->customer->organisation->user->address ?? 'N/A',
-                                                                            default => $trip->route->locations->where('id', $trip->drop_off_location)->first()->name ?? 'N/A'
-                                                                        };
+                                                                        $location = null;
+                                                                        if ($trip->drop_off_location == 'Home') {
+                                                                            $location = $trip->customer->user->address;
+                                                                        } elseif (
+                                                                            $trip->drop_off_location == 'Office'
+                                                                        ) {
+                                                                            $location =
+                                                                                $trip->customer->organisation->user
+                                                                                    ->address;
+                                                                        } else {
+                                                                            $location = $trip->route->locations
+                                                                                ->where('id', $trip->drop_off_location)
+                                                                                ->first()->name;
+                                                                        }
                                                                     @endphp
                                                                     {{ $location }}
                                                                 </td>
-                                                                 <td class="text-center">
-                                                                    <a href="javascript:void(0);" class="btn btn-sm btn-primary" onclick="axiosModal('{{ $trip->id }}/details')" title="Details">
+                                                                <td class="text-center">{{ $trip->drop_off_time }}</td>
+                                                                <td class="text-center">
+                                                                    <a href="javascript:void(0);"
+                                                                        class="btn btn-sm btn-primary"
+                                                                        onclick="axiosModal('{{ $trip->id }}/details')"
+                                                                        title="Details">
                                                                         <i class="fa-solid fa-circle-info"></i>
                                                                     </a>
                                                                     <span class='m-1'></span>
                                                                     @if ($trip->is_billable)
-                                                                        <a href="javascript:void(0);" onclick="axiosModal('/trip/{{ $trip->id }}/bill')" class="btn btn-warning btn-sm" title="Bill">
+                                                                        <a href="javascript:void(0);"
+                                                                            onclick="axiosModal('/trip/{{ $trip->id }}/bill')"
+                                                                            class="btn btn-warning btn-sm" title="Bill">
                                                                             <i class="fa fa-file text-white"></i>
                                                                         </a>
                                                                     @endif

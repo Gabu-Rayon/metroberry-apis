@@ -5,7 +5,7 @@
 
     <body class="fixed sidebar-mini">
 
-       @include('components.preloader')
+        @include('components.preloader')
         <!-- react page -->
         <div id="app">
             <!-- Begin page -->
@@ -46,11 +46,21 @@
                                                         @foreach ($drivers as $driver)
                                                             <tr>
                                                                 <td>{{ $driver->user->name }}</td>
-                                                                <td class="{{ $driver->vehicle ? '' : 'text-center' }}">{{ $driver->vehicle ? $driver->vehicle->plate_number : '-' }}</td>
-                                                                <td class="text-center">{{ $driver->vehicle ? $driver->vehicle->trips->count() : '-' }}</td>
-                                                                <td class="text-center">{{ $driver->vehicle ? $driver->vehicle->trips->where('status', 'cancelled')->count() : '-' }}</td>
-                                                                <td class="text-center">{{ $driver->vehicle? $driver->vehicle->trips->where('status', 'billed')->count() : '-' }}</td>
-                                                                <td class="text-center">{{ $driver->vehicle? $driver->vehicle->trips->where('status', 'billed')->sum('total_price') : '-' }}</td>
+                                                                <td class="{{ $driver->vehicle ? '' : 'text-center' }}">
+                                                                    {{ $driver->vehicle ? $driver->vehicle->plate_number : '-' }}
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    {{ $driver->vehicle ? $driver->vehicle->trips->count() : '-' }}
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    {{ $driver->vehicle ? $driver->vehicle->trips->where('status', 'cancelled')->count() : '-' }}
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    {{ $driver->vehicle ? $driver->vehicle->trips->where('status', 'billed')->count() : '-' }}
+                                                                </td>
+                                                                <td class="text-center">
+                                                                    {{ $driver->vehicle ? $driver->vehicle->trips->where('status', 'billed')->sum('total_price') : '-' }}
+                                                                </td>
                                                             </tr>
                                                         @endforeach
                                                     </tbody>
@@ -66,7 +76,7 @@
                         </div>
                     </div>
                     <div class="overlay"></div>
-                               @include('components.footer')
+                    @include('components.footer')
                 </div>
             </div>
             <!--end  vue page -->

@@ -1,4 +1,5 @@
-<form action="{{ route('vehicle.maintenance.parts.create') }}" method="POST" class="needs-validation modal-content" novalidate enctype="multipart/form-data">
+<form action="{{ route('vehicle.maintenance.parts.create') }}" method="POST" class="needs-validation modal-content"
+    enctype="multipart/form-data">
     @csrf
     <div class="card-header my-3 p-2 border-bottom">
         <h4>Create Vehicle Part</h4>
@@ -14,11 +15,12 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="name" class="form-control" type="text" placeholder="Name" id="name" required value="" />
+                        <input name="name" class="form-control" type="text" placeholder="Name" id="name"
+                            required value="" />
                     </div>
                 </div>
-    
-    
+
+
                 <div class="form-group row my-2">
                     <label for="category" class="col-sm-5 col-form-label">
                         Category
@@ -33,28 +35,30 @@
                         </select>
                     </div>
                 </div>
-                
-    
+
+
                 <div class="form-group row my-2">
                     <label for="model_number" class="col-sm-5 col-form-label">
                         Model No
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="model_number" class="form-control" type="text" placeholder="model_number" id="Model No" required value="" />
+                        <input name="model_number" class="form-control" type="text" placeholder="model_number"
+                            id="Model No" required value="" />
                     </div>
                 </div>
-                
+
                 <div class="form-group row my-2">
                     <label for="quantity" class="col-sm-5 col-form-label">
                         Quantity
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="quantity" class="form-control" type="number" placeholder="Quantity" id="quantity" required value="" />
+                        <input name="quantity" class="form-control" type="number" placeholder="Quantity" id="quantity"
+                            required value="" />
                     </div>
                 </div>
-    
+
                 <div class="form-group row my-2">
                     <label for="compatibility" class="col-sm-5 col-form-label">
                         Compatibility
@@ -74,30 +78,33 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="sku" class="form-control" type="text" step="0.01" placeholder="SKU" id="sku" required value="" />
+                        <input name="sku" class="form-control" type="text" step="0.01" placeholder="SKU"
+                            id="sku" required value="" />
                     </div>
                 </div>
-    
+
                 <div class="form-group row my-2">
                     <label for="brand" class="col-sm-5 col-form-label">
                         Brand
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="brand" class="form-control" type="text" step="0.01" placeholder="Brand" id="brand" required value="" />
+                        <input name="brand" class="form-control" type="text" step="0.01" placeholder="Brand"
+                            id="brand" required value="" />
                     </div>
                 </div>
-    
+
                 <div class="form-group row my-2">
                     <label for="price" class="col-sm-5 col-form-label">
                         Price
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="price" class="form-control" type="number" step="0.01" placeholder="Price" id="price" required value="" />
+                        <input name="price" class="form-control" type="number" step="0.01" placeholder="Price"
+                            id="price" required value="" />
                     </div>
                 </div>
-    
+
                 <div class="form-group row my-2">
                     <label for="condition" class="col-sm-5 col-form-label">
                         Condition
@@ -112,8 +119,8 @@
                         </select>
                     </div>
                 </div>
-                
-    
+
+
                 <div class="form-group row my-2">
                     <label for="notes" class="col-sm-5 col-form-label">
                         Notes
@@ -123,11 +130,11 @@
                         <textarea name="notes" class="form-control" placeholder="Notes" id="notes" rows="5"></textarea>
                     </div>
                 </div>
-    
+
             </div>
 
         </div>
-        
+
     </div>
 
     <div class="modal-footer">

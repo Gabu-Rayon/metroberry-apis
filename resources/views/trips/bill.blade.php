@@ -1,4 +1,4 @@
-<form action="{{ $trip->id }}/bill" method="POST" class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
+<form action="{{ $trip->id }}/bill" method="POST" class="needs-validation modal-content" enctype="multipart/form-data">
     @csrf
     @method('PUT')
     <div class="card-header my-3 p-2 border-bottom">
@@ -7,14 +7,15 @@
     <div class="modal-body">
         <div class="row">
             <div class="col-md-12 col-lg-6">
-                
+
                 <div class="form-group row my-2">
                     <label for="customer" class="col-sm-5 col-form-label">
                         Customer
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="customer" readonly class="form-control" type="text" placeholder="Customer" id="customer" value="{{ $trip->customer->user->name }}" />
+                        <input name="customer" readonly class="form-control" type="text" placeholder="Customer"
+                            id="customer" value="{{ $trip->customer->user->name }}" />
                     </div>
                 </div>
 
@@ -24,7 +25,8 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="pick_up_time" readonly class="form-control" type="text" placeholder="Pick Up Time" id="pick_up_time" value="{{ $trip->pick_up_time }}" />
+                        <input name="pick_up_time" readonly class="form-control" type="text"
+                            placeholder="Pick Up Time" id="pick_up_time" value="{{ $trip->pick_up_time }}" />
                     </div>
                 </div>
 
@@ -34,7 +36,8 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="vehicle_mileage" readonly class="form-control" type="number" placeholder="Vehicle Mileage" id="vehicle_mileage" value="{{ $trip->vehicle_mileage }}" />
+                        <input name="vehicle_mileage" readonly class="form-control" type="number"
+                            placeholder="Vehicle Mileage" id="vehicle_mileage" value="{{ $trip->vehicle_mileage }}" />
                     </div>
                 </div>
 
@@ -44,7 +47,8 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="engine_hours" readonly class="form-control" type="number" placeholder="Engine Hours" id="engine_hours" value="{{ $trip->engine_hours }}" />
+                        <input name="engine_hours" readonly class="form-control" type="number"
+                            placeholder="Engine Hours" id="engine_hours" value="{{ $trip->engine_hours }}" />
                     </div>
                 </div>
 
@@ -55,15 +59,16 @@
                     </label>
                     <div class="col-sm-7">
                         <select name="billing_rate_id" class="form-control" id="billing_rate_id">
-                            @foreach($billingRates as $rate)
-                                <option value="{{ $rate->id }}" {{ $trip->billing_rate_id == $rate->id ? 'selected' : '' }}>
+                            @foreach ($billingRates as $rate)
+                                <option value="{{ $rate->id }}"
+                                    {{ $trip->billing_rate_id == $rate->id ? 'selected' : '' }}>
                                     {{ $rate->name }}
                                 </option>
                             @endforeach
                         </select>
                     </div>
                 </div>
-                
+
 
                 <div class="form-group row my-2">
                     <label for="bill_by" class="col-sm-5 col-form-label">
@@ -72,29 +77,32 @@
                     </label>
                     <div class="col-sm-7">
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="bill_by" id="bill_by_distance" value="distance">
+                            <input class="form-check-input" type="radio" name="bill_by" id="bill_by_distance"
+                                value="distance">
                             <label class="form-check-label" for="bill_by_distance">
                                 Distance
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="bill_by" id="bill_by_car_class" value="car_class">
+                            <input class="form-check-input" type="radio" name="bill_by" id="bill_by_car_class"
+                                value="car_class">
                             <label class="form-check-label" for="bill_by_car_class">
                                 Car Class
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="bill_by" id="bill_by_time" value="time">
+                            <input class="form-check-input" type="radio" name="bill_by" id="bill_by_time"
+                                value="time">
                             <label class="form-check-label" for="bill_by_time">
                                 Time
                             </label>
                         </div>
                     </div>
                 </div>
-                
-  
+
+
             </div>
-  
+
             <div class="col-md-12 col-lg-6">
 
                 <div class="form-group row my-2">
@@ -103,7 +111,9 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="national_id_no" readonly class="form-control" type="text" placeholder="Customer ID" id="national_id_no" value="{{ $trip->customer->national_id_no }}" />
+                        <input name="national_id_no" readonly class="form-control" type="text"
+                            placeholder="Customer ID" id="national_id_no"
+                            value="{{ $trip->customer->national_id_no }}" />
                     </div>
                 </div>
 
@@ -113,7 +123,8 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="drop_off_time" readonly class="form-control" type="text" placeholder="Drop Off Time" id="drop_off_time" value="{{ $trip->drop_off_time }}" />
+                        <input name="drop_off_time" readonly class="form-control" type="text"
+                            placeholder="Drop Off Time" id="drop_off_time" value="{{ $trip->drop_off_time }}" />
                     </div>
                 </div>
 
@@ -123,7 +134,8 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="fuel_consumed" readonly class="form-control" type="number" placeholder="Fuel Consumed" id="fuel_consumed" value="{{ $trip->fuel_consumed }}" />
+                        <input name="fuel_consumed" readonly class="form-control" type="number"
+                            placeholder="Fuel Consumed" id="fuel_consumed" value="{{ $trip->fuel_consumed }}" />
                     </div>
                 </div>
 
@@ -133,7 +145,8 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="idle_time" readonly class="form-control" type="number" placeholder="Idle Time" id="idle_time" value="{{ $trip->idle_time }}" />
+                        <input name="idle_time" readonly class="form-control" type="number" placeholder="Idle Time"
+                            id="idle_time" value="{{ $trip->idle_time }}" />
                     </div>
                 </div>
 
@@ -143,7 +156,8 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="rate_per_km" class="form-control" type="number" placeholder="Rate Per KM" id="rate_per_km" value="{{ old('rate_per_km') }}" readonly>
+                        <input name="rate_per_km" class="form-control" type="number" placeholder="Rate Per KM"
+                            id="rate_per_km" value="{{ old('rate_per_km') }}" readonly>
                     </div>
                 </div>
 
@@ -153,7 +167,9 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="rate_per_minute" class="form-control" type="number" placeholder="Rate Per Minute" id="rate_per_minute" value="{{ old('rate_per_minute') }}" readonly>
+                        <input name="rate_per_minute" class="form-control" type="number"
+                            placeholder="Rate Per Minute" id="rate_per_minute" value="{{ old('rate_per_minute') }}"
+                            readonly>
                     </div>
                 </div>
 
@@ -163,7 +179,9 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="rate_by_car_class" class="form-control" type="number" placeholder="Rate By Car Class" id="rate_by_car_class" value="{{ old('rate_by_car_class') }}" readonly>
+                        <input name="rate_by_car_class" class="form-control" type="number"
+                            placeholder="Rate By Car Class" id="rate_by_car_class"
+                            value="{{ old('rate_by_car_class') }}" readonly>
                     </div>
                 </div>
 
@@ -173,12 +191,13 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="total" class="form-control" type="number" placeholder="Total Price" id="total" value="" readonly>
+                        <input name="total" class="form-control" type="number" placeholder="Total Price"
+                            id="total" value="" readonly>
                     </div>
                 </div>
-                
+
             </div>
-            
+
         </div>
     </div>
     <div class="modal-footer">
@@ -197,7 +216,8 @@
         function populateRates(billingRateId) {
             if (billingRateId) {
                 $.ajax({
-                    url: '/get-billing-rate/' + billingRateId, // Replace with your endpoint to fetch rates
+                    url: '/get-billing-rate/' +
+                        billingRateId, // Replace with your endpoint to fetch rates
                     type: 'GET',
                     success: function(data) {
                         $('#rate_per_km').val(data.rate_per_km);
@@ -207,7 +227,8 @@
                         var rateByCarClass = JSON.parse(data.rate_by_car_class);
 
                         // Retrieve vehicle class from trip data
-                        var vehicleClass = "{{ $trip->vehicle->class }}"; // Replace with actual PHP blade syntax to fetch vehicle class
+                        var vehicleClass =
+                            "{{ $trip->vehicle->class }}"; // Replace with actual PHP blade syntax to fetch vehicle class
 
                         // Set rate_by_car_class based on vehicle class
                         if (rateByCarClass[vehicleClass]) {
@@ -264,10 +285,12 @@
 
             // Create Date objects for the pick-up and drop-off times
             var pickUpTime = new Date();
-            pickUpTime.setHours(parseInt(pickUpTimeParts[0]), parseInt(pickUpTimeParts[1]), parseInt(pickUpTimeParts[2]), 0);
+            pickUpTime.setHours(parseInt(pickUpTimeParts[0]), parseInt(pickUpTimeParts[1]), parseInt(
+                pickUpTimeParts[2]), 0);
 
             var dropOffTime = new Date();
-            dropOffTime.setHours(parseInt(dropOffTimeParts[0]), parseInt(dropOffTimeParts[1]), parseInt(dropOffTimeParts[2]), 0);
+            dropOffTime.setHours(parseInt(dropOffTimeParts[0]), parseInt(dropOffTimeParts[1]), parseInt(
+                dropOffTimeParts[2]), 0);
 
             // Calculate the difference in milliseconds
             var diffMilliseconds = dropOffTime - pickUpTime;

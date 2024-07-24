@@ -1,4 +1,5 @@
-<form action="{{route('route.location.store')}}" method="POST" class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
+<form action="{{ route('route.location.store') }}" method="POST" class="needs-validation modal-content"
+    enctype="multipart/form-data">
     @csrf
     <div class="card-header my-3 p-2 border-bottom">
         <h4>Add Route location</h4>
@@ -29,26 +30,29 @@
                     </label>
                     <div class="col-sm-7">
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="type" id="start-location" value="start_location" required>
+                            <input class="form-check-input" type="radio" name="type" id="start-location"
+                                value="start_location" required>
                             <label class="form-check-label" for="start-location">
                                 Start Location
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="type" id="end-location" value="end_location" required>
+                            <input class="form-check-input" type="radio" name="type" id="end-location"
+                                value="end_location" required>
                             <label class="form-check-label" for="end-location">
                                 End Location
                             </label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="type" id="waypoint" value="waypoint" required>
+                            <input class="form-check-input" type="radio" name="type" id="waypoint"
+                                value="waypoint" required>
                             <label class="form-check-label" for="waypoint">
                                 Waypoint
                             </label>
                         </div>
                     </div>
                 </div>
-                
+
             </div>
 
             <div class="col-md-12 col-lg-6">
@@ -59,8 +63,8 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="name" class="form-control" type="text" placeholder="Name" id="name" required
-                        />
+                        <input name="name" class="form-control" type="text" placeholder="Name" id="name"
+                            required />
                     </div>
                 </div>
 
@@ -70,18 +74,19 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="point_order" class="form-control" type="number" placeholder="Point Order" id="point_order" disabled />
+                        <input name="point_order" class="form-control" type="number" placeholder="Point Order"
+                            id="point_order" disabled />
                     </div>
                 </div>
 
+            </div>
         </div>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-            Close
-        </button>
-        <button class="btn btn-success" type="submit">Save</button>
-    </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                Close
+            </button>
+            <button class="btn btn-success" type="submit">Save</button>
+        </div>
 </form>
 
 <script>

@@ -50,7 +50,7 @@
                                     </div>
                                 </div>
                                 <div class="col-6 text-end">
-                                    <a class="text-primary" href="forgot-password">Recover password</a>
+                                    <a class="text-primary" href="{{ route('password.request') }}">Forgot Password?</a>
                                 </div>
                             </div>
                             <button type="submit" class="btn signin-btn w-100">Sign in</button>
@@ -63,9 +63,10 @@
                 </div>
             </div>
             <div class="col-lg-6 login-bg d-none d-lg-block overflow-hidden text-end py-2"
-     style="background-image: url('{{ asset('admin-assets/img/login-bg.png?v=1') }}')">
-    <img class="#" height="50" width="150" src="{{ asset('admin-assets/img/sidebar-logo.png?v=1') }}" alt="Brand Logo" />
-</div>
+                style="background-image: url('{{ asset('admin-assets/img/login-bg.png?v=1') }}')">
+                <img class="#" height="50" width="150" src="{{ asset('admin-assets/img/sidebar-logo.png?v=1') }}"
+                    alt="Brand Logo" />
+            </div>
 
         </div>
     </div>

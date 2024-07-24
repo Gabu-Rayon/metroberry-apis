@@ -26,33 +26,35 @@ class VehicleController extends Controller
     {
         // Check if the authenticated user has the 'view vehicle' permission
 
-            try {
-                $vehicles = null;
+        try {
+            $vehicles = null;
 
-                // Check the user's role
-                if (Auth::user()->role == 'admin') {
-                    // If the user is an admin, fetch all vehicles
-                    $vehicles = Vehicle::all();
-                } elseif (Auth::user()->role == 'organisation') {
-                    // If the user is an organisation, fetch vehicles for that organisation
-                    $organisation = Organisation::where('user_id', Auth::user()->id)->first();
-                    if ($organisation) {
-                        $vehicles = Vehicle::with('driver')->where('organisation_id', $organisation->id)->get();
-                    }
-                } else {
-                    // If the user has another role, fetch vehicles created by the user
-                    $vehicles = Vehicle::where('created_by', Auth::user()->id)->get();
+            // Check the user's role
+            if (Auth::user()->role == 'admin') {
+                // If the user is an admin, fetch all vehicles
+                $vehicles = Vehicle::all();
+            } elseif (Auth::user()->role == 'organisation') {
+                // If the user is an organisation, fetch vehicles for that organisation
+                $organisation = Organisation::where('user_id', Auth::user()->id)->first();
+                if ($organisation) {
+                    $vehicles = Vehicle::with('driver')->where('organisation_id', $organisation->id)->get();
                 }
-
-                Log::info('Vehicles fetched: ', ['vehicles' => $vehicles]);
-
-                return view('vehicle.index', compact('vehicles'));
-            } catch (Exception $e) {
-                // Log the error message
-                Log::error('Error fetching vehicles: ' . $e->getMessage());
-
-                return back()->with('error', 'An error occurred while fetching the vehicles. Please try again.');
+            } else {
+                // If the user has another role, fetch vehicles created by the user
+                $vehicles = Vehicle::where('created_by', Auth::user()->id)->get();
             }
+
+            Log::info('Vehicles fetched: ', ['vehicles' => $vehicles]);
+            $organisations = Organisation::all();
+            $vehicleClasses = VehicleClass::all();
+
+            return view('vehicle.index', compact('vehicles', 'organisations', 'vehicleClasses'));
+        } catch (Exception $e) {
+            // Log the error message
+            Log::error('Error fetching vehicles: ' . $e->getMessage());
+
+            return back()->with('error', 'An error occurred while fetching the vehicles. Please try again.');
+        }
     }
 
 
@@ -62,12 +64,9 @@ class VehicleController extends Controller
      */
 
 
-     public function create(){
-
-        $organisations = Organisation::all();
-        $vehicleClasses = VehicleClass::all();
-        return view('vehicle.create',compact('organisations','vehicleClasses'));
-     }
+    public function create()
+    {
+    }
     public function store(Request $request)
     {
         try {
@@ -83,7 +82,7 @@ class VehicleController extends Controller
                 'plate_number' => 'required|string|max:255|unique:vehicles,plate_number',
                 'fuel_type' => 'required|string|max:255',
                 'engine_size' => 'required|numeric',
-                'vehicle_avatar' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'vehicle_avatar' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp,jfif|max:2048',
                 'organisation_id' => 'required|numeric',
                 'vehicle_class' => 'required|string',
             ]);
@@ -119,7 +118,7 @@ class VehicleController extends Controller
             $vehicle->plate_number = $request->plate_number;
             $vehicle->fuel_type = $request->fuel_type;
             $vehicle->engine_size = $request->engine_size;
-            $vehicle->avatar = $avatarName;            
+            $vehicle->avatar = $avatarName;
             $vehicle->save();
 
             return redirect()->route('vehicle')->with('success', 'Vehicle added successfully.');
@@ -127,7 +126,7 @@ class VehicleController extends Controller
             // Log the error message
             Log::error('Error adding vehicle: ' . $e->getMessage());
 
-            return back()->with('error', 'An error occurred while adding the vehicle. Please try again.');
+            return back()->with('error', 'An error occurred while adding the vehicle. Please try again.')->withInput();
         }
     }
 
@@ -291,7 +290,7 @@ class VehicleController extends Controller
             }
 
 
-            return view('vehicle.edit', compact('vehicle', 'assignedDriverName', 'drivers', 'assignedOrganisationName', 'organisations','assignedVehicleClass','vehicleClasses'));
+            return view('vehicle.edit', compact('vehicle', 'assignedDriverName', 'drivers', 'assignedOrganisationName', 'organisations', 'assignedVehicleClass', 'vehicleClasses'));
         } catch (Exception $e) {
             Log::error('Error fetching vehicle for edit: ' . $e->getMessage());
             return back()->with('error', 'An error occurred while fetching the vehicle. Please try again.');
@@ -322,7 +321,7 @@ class VehicleController extends Controller
                 'vehicle_avatar' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
                 'driver_id' => 'nullable|exists:drivers,id',
                 'organisation_id'  => 'nullable|exists:organisations,id',
-                'vehicle_class' =>'required|string'
+                'vehicle_class' => 'required|string'
             ]);
 
             if ($validator->fails()) {
@@ -356,6 +355,7 @@ class VehicleController extends Controller
             $vehicle->engine_size = $request->engine_size;
             $vehicle->organisation_id = $request->organisation_id;
             $vehicle->class = $request->vehicle_class;
+            $vehicle->status = 'inactive';
 
             // Update driver_id in vehicles table if provided
             if ($request->has('driver_id')) {
@@ -474,7 +474,7 @@ class VehicleController extends Controller
      * Remove the specified resource from storage.
      */
 
-     public function delete($id)
+    public function delete($id)
     {
         $vehicle = Vehicle::findOrFail($id);
         return view('vehicle.delete', compact('vehicle'));
@@ -643,7 +643,8 @@ class VehicleController extends Controller
     }
 
 
-    public function activate_vehicle($id) {
+    public function activate_vehicle($id)
+    {
         try {
             $vehicle = Vehicle::find($id);
 
@@ -670,7 +671,8 @@ class VehicleController extends Controller
         }
     }
 
-    public function deactivate_vehicle($id) {
+    public function deactivate_vehicle($id)
+    {
         try {
             $vehicle = Vehicle::find($id);
 
@@ -697,9 +699,10 @@ class VehicleController extends Controller
         }
     }
 
-     public function vehicleInsurance(){
+    public function vehicleInsurance()
+    {
         return view('vehicle.insurance');
-     }
+    }
 
     public function activateForm($id)
     {
@@ -807,5 +810,4 @@ class VehicleController extends Controller
             return redirect()->back()->with('error', 'An error occurred');
         }
     }
-
 }

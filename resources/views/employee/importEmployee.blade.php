@@ -1,4 +1,5 @@
-<form action="{{route('employee.import.store')}}" method="POST" class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
+<form action="{{ route('employee.import.store') }}" method="POST" class="needs-validation modal-content"
+    enctype="multipart/form-data">
     @csrf
     @METHOD('POST')
     <div class="card-header my-3 p-2 border-bottom">
@@ -7,22 +8,16 @@
     <div class="modal-body">
         <div class="row">
             <div class="col-md-12 col-lg-6">
-                
+
                 <div class="form-group row my-2">
                     <label for="file" class="col-sm-5 col-form-label">
-                       Select CSV File
+                        Select CSV File
                     </label>
                     <div class="col-sm-7">
-                        <input
-                            name="file"
-                            class="form-control"
-                            type="file"
-                            placeholder="Import xlsx"
-                            id="importFile"
-                            value=""
-                        />
+                        <input name="file" class="form-control" type="file" placeholder="Import xlsx"
+                            id="importFile" value="" />
                     </div>
-                </div>                
+                </div>
             </div>
         </div>
     </div>
