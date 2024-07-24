@@ -705,7 +705,7 @@ Route::post('maintenance/repair/{id}/recieve/payment/store', [MaintenanceRepairP
     ->middleware('auth', 'can:bill vehicle maintenance');
 
 
-Route::get('maintenance/repair/id}/download/invoice', [MaintenanceRepairPaymentController::class, 'billedVehicleRepairMaintenanceDownloadInvoice'])
+Route::get('maintenance/repair/{id}/download/invoice', [MaintenanceRepairPaymentController::class, 'billedVehicleRepairMaintenanceDownloadInvoice'])
     ->name('billed.maintenance.repair.download.invoice')
     ->middleware('auth', 'can:bill vehicle maintenance');
 
