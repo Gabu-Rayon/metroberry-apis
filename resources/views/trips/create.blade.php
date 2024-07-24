@@ -49,7 +49,7 @@
                             class="text-danger">*</i></label>
                     <div class="col-sm-7">
                         <select name="pick_up_location" class="form-control" id="pick_up_location" required>
-                            <option value="" disabled>Select Location</option>
+                            <option value="" readonly>Select Location</option>
                             <option value="Home">Home</option>
                             <option value="Office">Office</option>
                         </select>
@@ -63,7 +63,7 @@
                     </label>
                     <div class="col-sm-7">
                         <select name="drop_off_location" class="form-control select2" id="drop_off_location" required>
-                            <option value="" disabled>Select Your preference Drop Off Location</option>
+                            <option value="" readonly>Select Your preference Drop Off Location</option>
                             <option value="Home">Home</option>
                             <option value="Office">Office</option>
                         </select>
@@ -132,12 +132,11 @@
                         '<option value="">Select Your preference Drop Off Location</option>');
                     pickUpLocationSelect.append('<option value="">Select Location</option>');
 
-                    // Sort data by point_order (assuming data is an array of objects with point_order)
                     data.sort(function(a, b) {
                         return a.point_order - b.point_order;
                     });
 
-                    // Populate options from sorted data
+
                     $.each(data, function(key, location) {
                         dropOffLocationSelect.append('<option value="' + location.id +
                             '">' + location.name + '</option>');

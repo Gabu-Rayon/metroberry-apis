@@ -112,16 +112,9 @@ class TripController extends Controller
             $organisation = Organisation::where('user_id', auth()->user()->id)->first();
             $employees = Customer::where('organisation_id', $organisation->id)
                 ->where('status', 'active')
-                ->get()
-                ->filter(function ($employee) {
-                    return !$employee->isTrippedForNow();
-                });
+                ->get();
         } else {
-            $employees = Customer::where('status', 'active')
-                ->get()
-                ->filter(function ($employee) {
-                    return !$employee->isTrippedForNow();
-                });
+            $employees = Customer::where('status', 'active')->get();
         }
         $routes = Routes::all();
         return view('trips.create', compact('employees', 'routes'));
@@ -380,14 +373,27 @@ class TripController extends Controller
             ->orderBy('pick_up_time')
             ->get();
 
+        // Initially group scheduled trips by customer organisation code
         $groupedTrips = $scheduledTrips->groupBy(function ($trip) {
             return $trip->customer->customer_organisation_code;
         });
 
-        $organisations = Organisation::all();
+        // Check if the authenticated user has an 'organisation' role
+        if (Auth::user()->role == 'organisation') {
+            $organisation = Organisation::where('user_id', Auth::user()->id)->first();
 
+            // Apply filter to each group instead of reassigning $groupedTrips
+            foreach ($groupedTrips as $code => $trips) {
+                $groupedTrips[$code] = $trips->filter(function ($trip) use ($organisation) {
+                    return $trip->customer->customer_organisation_code == $organisation->organisation_code;
+                });
+            }
+        }
+
+        $organisations = Organisation::all();
         return view('trips.scheduled', compact('groupedTrips', 'organisations'));
     }
+
 
     public function tripCompleted()
     {
@@ -621,8 +627,19 @@ class TripController extends Controller
                 ->where('status', 'scheduled')
                 ->get();
 
-            Log::info('TRIPS');
-            Log::info($trips);
+            if ($trips->isEmpty()) {
+                return redirect()->back()->with('error', 'No Trips Found');
+            }
+
+            $tripsByRouteAndOrg = $trips->groupBy(function ($trip) {
+                $organisationCode = $trip->customer->customer_organisation_code;
+                $routeId = $trip->route_id;
+                $pickupTime = $trip->pick_up_time;
+                return "{$routeId}-{$organisationCode}-{$pickupTime}";
+            });
+
+            Log::info('TRIPS BY ROUTE AND ORGANISATION');
+            Log::info($tripsByRouteAndOrg);
         } catch (Exception $e) {
             Log::error('ERROR ASSIGNING VEHICLE TO TRIPS');
             Log::error($e);

@@ -69,27 +69,6 @@ class Customer extends Model
         return $this->hasMany(Trip::class);
     }
 
-    public function isTrippedForNow()
-    {
-        $timezone = 'Africa/Nairobi';
-
-        $now = Carbon::now($timezone);
-        $oneHourLater = $now->copy()->addHour();
-
-        $currentDate = $now->format('Y-m-d');
-        $currentTime = $now->format('H:i:s');
-        $oneHourLaterTime = $oneHourLater->format('H:i:s');
-
-        // Use the defined 'trips' relationship to query for existing trips
-        $exists = $this->trips() // Use the 'trips' relationship method
-            ->where('trip_date', '=', $currentDate)
-            ->whereBetween('pick_up_time', [$currentTime, $oneHourLaterTime])
-            ->exists();
-
-        return $exists;
-    }
-
-
     protected static function boot()
     {
         parent::boot();
