@@ -155,7 +155,7 @@ class PermissionsGroupSeeder extends Seeder
                 'cancel trip',
                 'pay trip',
                 'download trip invoice',
-                'resend  trip invoice',
+                'resend trip invoice',
                 'send trip invoice',
             ],
             'insurance_company' => [
@@ -176,6 +176,10 @@ class PermissionsGroupSeeder extends Seeder
                 'update vehicle maintenance',
                 'manage vehicle maintenance',
                 'bill vehicle maintenance',
+                'pay vehicle maintenance',
+                'download vehicle maintenance',
+                'resend vehicle maintenance',
+                'send vehicle maintenance'
             ],
             'account_setting' => [
                 'view accounting setting',

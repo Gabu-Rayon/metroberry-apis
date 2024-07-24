@@ -714,8 +714,8 @@ class VehicleController extends Controller
     public function activate($id)
     {
         try {
-            // Fetch the vehicle with its insurance details
-            $vehicle = Vehicle::with('insurance')->findOrFail($id);
+            // Fetch the vehicle with its insurance and inspection certificates details
+            $vehicle = Vehicle::with(['insurance', 'inspectionCertificates'])->findOrFail($id);
 
             Log::info('VEHICLE');
             Log::info($vehicle);
@@ -725,26 +725,37 @@ class VehicleController extends Controller
                 return redirect()->back()->with('error', 'Vehicle is already active');
             }
 
-            // Check if the vehicle has associated insurance
-            if (!$vehicle->insurance) {
+            // Validate insurance details
+            $insurance = $vehicle->insurance;
+            if (!$insurance) {
                 return redirect()->back()->with('error', 'Vehicle has no insurance');
             }
 
-            // Retrieve insurance details
-            $insurance = $vehicle->insurance;
-
-            // Check if insurance dates are within the allowed range
             $today = now()->toDateString();
-            $insuranceStartDate = $insurance->insurance_date_of_issue;
-            $insuranceEndDate = $insurance->insurance_date_of_expiry;
-
-            if ($today < $insuranceStartDate || $today > $insuranceEndDate) {
+            if ($today < $insurance->insurance_date_of_issue || $today > $insurance->insurance_date_of_expiry) {
                 return redirect()->back()->with('error', 'Insurance is not valid today');
             }
 
-            // Check if insurance status is active
             if ($insurance->status != 1) {
                 return redirect()->back()->with('error', 'Insurance is not active');
+            }
+
+            // Validate inspection certificates
+            $inspectionCertificates = $vehicle->inspectionCertificates;
+            if ($inspectionCertificates->isEmpty()) {
+                return redirect()->back()->with('error', 'Vehicle has no inspection certificate');
+            }
+
+            $validCertificateFound = false;
+            foreach ($inspectionCertificates as $certificate) {
+                if ($today >= $certificate->ntsa_inspection_certificate_date_of_issue && $today <= $certificate->ntsa_inspection_certificate_date_of_expiry && $certificate->verified == 1) {
+                    $validCertificateFound = true;
+                    break;
+                }
+            }
+
+            if (!$validCertificateFound) {
+                return redirect()->back()->with('error', 'No valid and active inspection certificate found');
             }
 
             // Activate the vehicle

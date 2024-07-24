@@ -23,6 +23,7 @@
                                     <div class="card-body">
                                         <div>
                                             <div class="table-responsive">
+                                               @if($billedTrips->isNotEmpty())
                                                 <table class="table" id="driver-table">
                                                     <thead>
                                                         <tr>
@@ -34,7 +35,6 @@
                                                             <th title="Action" width="150">Action</th>
                                                         </tr>
                                                     </thead>
-
                                                     <tbody>
                                                         @foreach ($billedTrips as $trip)
                                                             <tr>
@@ -66,6 +66,9 @@
                                                         @endforeach
                                                     </tbody>
                                                 </table>
+                                            @else
+                                                <p>No billed trips available.</p>
+                                            @endif
                                             </div>
                                             <div id="page-axios-data" data-table-id="#driver-table">
                                             </div>

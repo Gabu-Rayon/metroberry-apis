@@ -60,6 +60,7 @@ class VehicleInsuranceController extends Controller
     }
 
 
+
     /**
      * Store a newly created resource in storage.
      * 
@@ -86,7 +87,7 @@ class VehicleInsuranceController extends Controller
                 'reminder' => 'required|numeric',
                 'deductible' => 'required|numeric',
                 'status' => 'required|numeric',
-                'remark' => 'nullable|string|max:500',
+                'remark' => 'nullable|string',
                 'policy_document' => 'required|file|mimes:pdf|max:2048',
             ]);
 

@@ -24,7 +24,8 @@
                                     <div class="card-header">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div>
-                                                <h6 class="fs-17 fw-semi-bold mb-0">Pay Your Trip</h6>
+                                                <h6 class="fs-17 fw-semi-bold mb-0">Trip Route : {{ $trip->route->name }}
+                                                </h6>
                                             </div>
                                         </div>
                                     </div>
@@ -34,45 +35,45 @@
                                                 <div class="accordion-header d-flex justify-content-end align-items-center"
                                                     id="flush-headingOne">
                                                     @if (\Auth::user()->can('send trip invoice'))
-                                                        <a class="btn btn-success btn-sm" href="javascript:void(0);"
-                                                            onclick="axiosModal('{{ route('billed.trip.send.invoice', ['id' => $trip->id]) }}')">
-                                                            <i class="fa-solid fa-arrow-right"></i> &nbsp;
-                                                            Send Trip Invoice
-                                                        </a>
+                                                         <a href="{{ route('billed.trip.send.invoice', ['id' => $trip->id]) }}"
+                                                                class="btn btn-success btn-sm" title="Send Invoice.">
+                                                            <i class="fas fa-arrow-right"></i> &nbsp;
+                                                              Send Trip Invoice
+                                                            </a>
                                                     @endif
 
                                                     <span class="m-1"></span>
-                                                    @if (\Auth::user()->can('bill trip'))
-                                                        <a class="btn btn-success btn-sm" href="javascript:void(0);"
-                                                            onclick="axiosModal('{{ route('billed.trip.resend.invoice', ['id' => $trip->id]) }}')">
+                                                    @if (\Auth::user()->can('resend trip invoice'))
+                                                        <a href="{{ route('billed.trip.resend.invoice', ['id' => $trip->id]) }}"
+                                                                class="btn btn-success btn-sm" title="Resend Invoice.">
                                                             <i class="fas fa-share-square"></i> &nbsp;
-                                                            Resend Trip Invoice
-                                                        </a>
+                                                                    Resend Trip Invoice
+                                                            </a>
                                                     @endif
 
                                                     <span class="m-1"></span>
-                                                    {{-- @if (\Auth::user()->can('bill trip')) --}}
-                                                    {{-- <a href="{{ route('trip.download.invoice', ['id' => $trip->id]) }}"
-                                                                            class="btn btn-primary btn-sm"
-                                                                            title="Proceed to pay for your trip.">
-                                                                            <small><i class="fa-solid fa-download"></i> &nbsp;</small>
-                                                                             Download Trip Invoice
-                                                                        </a> --}}
-                                                    {{-- @endif --}}
-
-                                                    <span class="m-1"></span>
-                                                    @if (in_array($trip->status, ['billed', 'partially paid']))
+                                                    @if (in_array($trip->status, ['billed','partially paid']))
                                                         @if (Auth::user()->role == 'organisation')
                                                             <a class="btn btn-primary btn-sm" href="javascript:void(0);"
                                                                 onclick="axiosModal('{{ route('billed.trip.recieve.payment', ['id' => $trip->id]) }}')">
                                                                 <i class="fa-solid fa-plus"></i> &nbsp;
-                                                                Pay My Payment
+                                                                Pay My Trip
                                                             </a>
                                                         @elseif (Auth::user()->role == 'admin')
                                                             <a class="btn btn-success btn-sm" href="javascript:void(0);"
                                                                 onclick="axiosModal('{{ route('billed.trip.recieve.payment', ['id' => $trip->id]) }}')">
                                                                 <i class="fa-solid fa-plus"></i> &nbsp;
                                                                 Receive Trip Payment
+                                                            </a>
+                                                        @endif
+                                                    @endif
+                                                    <span class="m-1"></span>
+                                                    @if (in_array($trip->status, ['billed', 'partially paid', 'paid']))
+                                                        @if (\Auth::user()->can('download trip invoice'))
+                                                            <a href="{{ route('billed.trip.download.invoice', ['id' => $trip->id]) }}"
+                                                                class="btn btn-primary btn-sm" title="Download.">
+                                                                <small><i class="fa-solid fa-download"></i> &nbsp;</small>
+
                                                             </a>
                                                         @endif
                                                     @endif

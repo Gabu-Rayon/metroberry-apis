@@ -691,24 +691,24 @@ Route::get('maintenance/repair/{id}/payment/checkout', [MaintenanceRepairControl
 
 Route::get('maintenance/repair/{id}/receive/payment', [MaintenanceRepairPaymentController::class, 'billedVehicleRepairMaintenanceRecievePayment'])
     ->name('billed.maintenance.repair.receive.payment')
-    ->middleware('auth', 'can:bill vehicle maintenance');
+    ->middleware('auth', 'can:pay vehicle maintenance');
 
 Route::post('maintenance/repair/{id}/recieve/payment/store', [MaintenanceRepairPaymentController::class, 'billedVehicleRepairMaintenanceRecievePaymentStore'])
     ->name('billed.maintenance.repair.receive.payment.store')
-    ->middleware('auth', 'can:bill vehicle maintenance');
+    ->middleware('auth', 'can:pay vehicle maintenance');
 
 
 Route::get('maintenance/repair/id}/download/invoice', [MaintenanceRepairPaymentController::class, 'billedVehicleRepairMaintenanceDownloadInvoice'])
     ->name('billed.maintenance.repair.download.invoice')
-    ->middleware('auth', 'can:bill vehicle maintenance');
+    ->middleware('auth', 'can:pay vehicle maintenance');
 
 Route::get('maintenance/repair/{id}/resend/invoice', [MaintenanceRepairPaymentController::class, 'billedVehicleRepairMaintenanceResendInvoice'])
     ->name('billed.maintenance.repair.resend.invoice')
-    ->middleware('auth', 'can:bill vehicle maintenance');
+    ->middleware('auth', 'can:resend vehicle maintenance');
 
 Route::get('maintenance/repair/{id}/send/invoice', [MaintenanceRepairPaymentController::class, 'billedVehicleRepairMaintenanceSendInvoice'])
     ->name('billed.maintenance.repair.send.invoice')
-    ->middleware('auth', 'can:bill vehicle maintenance');
+    ->middleware('auth', 'can:send vehicle maintenance');
 
 
 
@@ -1490,6 +1490,8 @@ Route::put('vehicle/inspection-certificate/{id}/verify', [NTSAInspectionCertific
     ->middleware('auth', 'can:edit vehicle inspection certificate');
 
 Route::get('vehicle/inspection-certificate/{id}/suspend', [NTSAInspectionCertificateController::class, 'suspendForm'])
+    ->name('vehicle.inspection.certificate.suspend')
+    ->middleware('auth', 'can:edit vehicle inspection certificate');
     ->name('vehicle.inspection.certificate.suspend')
     ->middleware('auth', 'can:edit vehicle inspection certificate');
 
