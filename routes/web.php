@@ -1492,8 +1492,6 @@ Route::put('vehicle/inspection-certificate/{id}/verify', [NTSAInspectionCertific
 Route::get('vehicle/inspection-certificate/{id}/suspend', [NTSAInspectionCertificateController::class, 'suspendForm'])
     ->name('vehicle.inspection.certificate.suspend')
     ->middleware('auth', 'can:edit vehicle inspection certificate');
-    ->name('vehicle.inspection.certificate.suspend')
-    ->middleware('auth', 'can:edit vehicle inspection certificate');
 
 Route::put('vehicle/inspection-certificate/{id}/suspend', [NTSAInspectionCertificateController::class, 'suspend'])
     ->name('vehicle.inspection.certificate.suspend')
