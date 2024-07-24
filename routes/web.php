@@ -1515,3 +1515,13 @@ Route::get('vehicle/inspection-certificate/{id}/delete', [NTSAInspectionCertific
 Route::delete('vehicle/inspection-certificate/{id}/delete', [NTSAInspectionCertificateController::class, 'destroy'])
     ->name('vehicle.inspection.certificate.delete')
     ->middleware('auth', 'can:delete vehicle inspection certificate');
+
+
+
+Route::get('/test-email', function () {
+    Mail::raw('This is a test email For Metro berry Mailing Services!', function ($message) {
+        $message->to('christian.m@yourapps.co.ke')
+            ->subject('Metro  metro Berry Test Email ');
+    });
+    return 'Test email sent!';
+});

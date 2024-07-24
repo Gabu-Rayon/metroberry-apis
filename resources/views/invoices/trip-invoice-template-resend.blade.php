@@ -212,28 +212,35 @@ ul {
         <tbody>
             @foreach ($data['items'] as $item)
             <tr>
-                <td class="text-center">{{ $item->customer->user->name }}</td>
+                <td class="text-center">{{ $item['customer'] }}</td>
                 <td class="text-center">
-                  @php
-                      if ($item->billed_by == 'distance') {
-                        $text = 'Distance';
-                      }
-                  @endphp
-                  {{ $text }}
+                    @php
+                          $text = '';
+                          if ($item['billed_by'] == 'distance') {
+                              $text = 'Distance';
+                          } elseif ($item['billed_by'] == 'time') {
+                              $text = 'Time';
+                          } elseif ($item['billed_by'] == 'car_class') {
+                              $text = 'Car Class';
+                          }
+                      @endphp
+                      {{ $text }}
                 </td>
                 <td class="text-center">
                   @php
-                      if ($item->billed_by == 'distance') {
-                        $info = 'KM: ' . $item->vehicle_mileage;
-                      } elseif ($item->billed_by == 'time') {
-                        $info = 'HRS: ' . $item->engine_hours;
-                        $info2 = 'Idle Time: ' . $item->idle_time;
-                      } elseif ($item->billed_by == 'car_class') {
-                        $info = 'Class: ' . $item->vehicle->class;
-                      }
-                  @endphp
-                  {{ $info }}
-                  {{$item->billed_by == 'time' ? $info2 : ''}}
+                          $info = '';
+                          $info2 = '';
+                          if ($item['billed_by'] == 'distance') {
+                              $info = 'KM: ' . $item['vehicle_mileage'];
+                          } elseif ($item['billed_by'] == 'time') {
+                              $info = 'HRS: ' . $item['engine_hours'];
+                              $info2 = 'Idle Time: ' . $item['idle_time'];
+                          } elseif ($item['billed_by'] == 'car_class') {
+                              $info = 'Class: ' . $item['vehicle']->class;
+                          }
+                      @endphp
+                      {{ $info }}
+                      {{ $item['billed_by'] == 'time' ? $info2 : '' }}
                 </td>
                 <td class="text-center">Kes. {{ $item['total_price'] }}</td>
             </tr>
@@ -242,12 +249,12 @@ ul {
     </table>
       <br />
 
-      @php
-          $total = 0;
-          foreach ($data['items'] as $item) {
-            $total += $item['total_price'];
-          }
-      @endphp
+       @php
+            $total = 0;
+            foreach ($data['items'] as $item) {
+                $total += $item['total_price'];
+            }
+        @endphp
       <div class="total">Total: KES {{ $total }}</div>
 
       <div class="payment-details">

@@ -35,20 +35,20 @@
                                                 <div class="accordion-header d-flex justify-content-end align-items-center"
                                                     id="flush-headingOne">
                                                     @if (\Auth::user()->can('send trip invoice'))
-                                                        <a class="btn btn-success btn-sm" href="javascript:void(0);"
-                                                            onclick="axiosModal('{{ route('billed.trip.send.invoice', ['id' => $trip->id]) }}')">
-                                                            <i class="fa-solid fa-arrow-right"></i> &nbsp;
-                                                            Send Trip Invoice
-                                                        </a>
+                                                         <a href="{{ route('billed.trip.send.invoice', ['id' => $trip->id]) }}"
+                                                                class="btn btn-success btn-sm" title="Send Invoice.">
+                                                            <i class="fas fa-arrow-right"></i> &nbsp;
+                                                              Send Trip Invoice
+                                                            </a>
                                                     @endif
 
                                                     <span class="m-1"></span>
                                                     @if (\Auth::user()->can('resend trip invoice'))
-                                                        <a class="btn btn-success btn-sm" href="javascript:void(0);"
-                                                            onclick="axiosModal('{{ route('billed.trip.resend.invoice', ['id' => $trip->id]) }}')">
+                                                        <a href="{{ route('billed.trip.resend.invoice', ['id' => $trip->id]) }}"
+                                                                class="btn btn-success btn-sm" title="Resend Invoice.">
                                                             <i class="fas fa-share-square"></i> &nbsp;
-                                                            Resend Trip Invoice
-                                                        </a>
+                                                                    Resend Trip Invoice
+                                                            </a>
                                                     @endif
 
                                                     <span class="m-1"></span>

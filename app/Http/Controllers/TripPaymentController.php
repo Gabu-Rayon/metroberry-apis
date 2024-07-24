@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -20,6 +21,20 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class TripPaymentController extends Controller
 {
+
+
+    /**
+     * Generate a unique invoice number.
+     *
+     * @return string
+     */
+    private function generateInvoiceNumber()
+    {
+        // Example: "MB-INV001", "MB-INV002", etc.
+        $latestPayment = TripPayment::latest()->first();
+        $latestInvoiceNumber = $latestPayment ? $latestPayment->id + 1 : 1;
+        return 'MB-INV' . str_pad($latestInvoiceNumber, 3, '0', STR_PAD_LEFT);
+    }
 
 
     /**
@@ -280,20 +295,7 @@ class TripPaymentController extends Controller
             return redirect()->back()->with('error', 'An error occurred while receiving the payment. Please try again.');
         }
     }
-
-
-    /**
-     * Generate a unique invoice number.
-     *
-     * @return string
-     */
-    private function generateInvoiceNumber()
-    {
-        // Example: "MB-INV001", "MB-INV002", etc.
-        $latestPayment = TripPayment::latest()->first();
-        $latestInvoiceNumber = $latestPayment ? $latestPayment->id + 1 : 1;
-        return 'MB-INV' . str_pad($latestInvoiceNumber, 3, '0', STR_PAD_LEFT);
-    }
+    
 
     /**
      * Download TripPayment for a billed trip.
@@ -313,8 +315,7 @@ class TripPaymentController extends Controller
             $totalAmount = $payments->sum('amount');
             $balance = $trip->total_price - $totalAmount;
 
-            // Fetch the first payment to get the invoice number (assuming it's the same for all related payments)
-            $invoiceNumber = $payments->first() ? $payments->first()->invoice_no : 'MB-INV-' . time();
+            $invoiceNumber  = $this->generateInvoiceNumber();
 
             // Fetch customer details
             $customer = $trip->customer;
@@ -353,58 +354,51 @@ class TripPaymentController extends Controller
     public function billedTripDownloadInvoiceReceipt($id)
     {
         try {
-            // Fetch the trip details where the status is 'billed' or 'partially paid'
-            $trip = Trip::where('id', $id)->whereIn('status', ['billed', 'partially paid'])->firstOrFail();
-            // Fetch related payments
-            $payments = $trip->payments;
+            // Fetch the payment details using the given ID
+            $payment = TripPayment::where('id', $id)->firstOrFail();
 
-            Log::info('This trip payments data To Download: ', $trip->toArray());
+            // Fetch the related trip details
+            $trip = Trip::where('id', $payment->trip_id)
+                ->whereIn('status', ['paid'])
+                ->with('customer.user')
+                ->firstOrFail();
 
-            // Prepare data for the view
-            $organisationCode = auth()->user()->organisation->organisation_code;
-
-            $trips = Trip::whereIn('status', ['billed', 'partially paid'])
-                ->whereHas('customer', function ($query) use ($organisationCode) {
-                    $query->where('customer_organisation_code', $organisationCode);
-                })
-                ->with('customer')
-                ->with('vehicle')
-                ->with('route')
-                ->with('billingRate')
-                ->get();
-
-            Log::info('TRIPS');
-            Log::info($trips);
+            Log::info('This trip payment data To Download: ', $payment->toArray());
+            Log::info('This trip data To Download: ', $trip->toArray());
 
             // Calculate total amount and balance
-            $totalAmount = $payments->sum('amount');
+            $totalAmount = $payment->amount; // Assuming amount is the field for paid amount
             $balance = $trip->total_price - $totalAmount;
 
-            // Fetch the first payment to get the invoice number (assuming it's the same for all related payments)
-            $invoiceNumber = $payments->first() ? $payments->first()->invoice_no : 'MB-INV-' . time();
+            // Fetch customer details
+            $customer = $trip->customer;
+            if (!$customer || !$customer->user) {
+                return back()->with('error', 'Customer information is missing.');
+            }
 
+            // Prepare data for the receipt
             $data = [
-                'title' => 'Invoice',
-                'date' => date('m/d/Y'),
-                'due_date' => date('m/d/Y', strtotime('+30 days')),
-                'customer' => auth()->user()->organisation->user->name,
-                'address' => auth()->user()->organisation->user->address,
-                'invoice_number' => $invoiceNumber,
+                'title' => 'Trip Payment Receipt',
+                'date' => now()->format('m/d/Y'),
+                'due_date' => now()->addDays(30)->format('m/d/Y'),
+                'customer' => $customer->user->name,
+                'address' => $customer->user->address,
+                'invoice_number' => $payment->invoice_no,
                 'total_amount' => $totalAmount,
                 'balance' => $balance,
-                'items' => $trips,
+                'items' => [$trip],
                 'status' => $trip->status,
             ];
 
             // Load the view and pass the data
-            $pdf = Pdf::loadView('invoices.trip-invoice-template', compact('data'));
+            $pdf = PDF::loadView('receipts.trip-payment-receipt', compact('data'));
 
             // Download the PDF
-            return $pdf->download('trip_invoice_' . $trip->id . '.pdf');
+            return $pdf->download('trip_payment_receipt_' . $trip->id . '.pdf');
 
         } catch (\Exception $e) {
-            Log::error('Error downloading TripPayment for trip: ' . $e->getMessage());
-            return back()->with('error', 'An error occurred while downloading the TripPayment. Please try again.');
+            Log::error('Error downloading Trip Payment Receipt for trip: ' . $e->getMessage());
+            return back()->with('error', 'An error occurred while downloading the Trip Payment Receipt. Please try again.');
         }
     }
 
@@ -413,40 +407,148 @@ class TripPaymentController extends Controller
     /**
      * Resend TripPayment for a billed trip.
      */
-    public function billedTripResendTripPayment($id)
+   
+    /**
+     * Send TripPayment for a billed trip.
+     */
+    public function billedTripResendInvoice($id)
     {
         try {
-            // Fetch the trip details where the status is 'billed'
-            $trip = Trip::where('id', $id)->where('status', 'billed')->firstOrFail();
+            $trip = Trip::where('id', $id)->whereIn('status', ['billed', 'partially paid', 'paid'])->firstOrFail();
 
-            // Logic to resend the TripPayment
-            // For example, send the TripPayment via email
-            // Mail::to($trip->customer->email)->send(new TripTripPaymentMail($trip));
 
-            return back()->with('success', 'TripPayment resent successfully.');
+            Log::info('Data for the trip to be email to the customer : ');
+            Log::info($trip);
+
+            // Prepare data for the invoice
+            $data = [
+                'title' => 'Invoice',
+                'invoice_number' => $this->generateInvoiceNumber(),
+                'date' => now()->format('Y-m-d'),
+                'customer' => $trip->customer->user->name,
+                'address' => $trip->customer->user->address,
+                'items' => [
+                    [
+                        'customer' => $trip->customer->user->name,
+                        'billed_by' => $trip->billed_by,
+                        'vehicle_mileage' => $trip->vehicle_mileage,
+                        'engine_hours' => $trip->engine_hours,
+                        'idle_time' => $trip->idle_time,
+                        'vehicle' => $trip->vehicle,
+                        'total_price' => $trip->total_price
+                    ]
+                ]
+            ];
+
+            Log::info('Raw data for the trip to be attached to email invoice to send to the customer: ', $data);
+
+
+            // Generate the PDF from the Blade view
+            $pdf = PDF::loadView('invoices.trip-invoice-template-resend', compact('data'));
+
+
+            // Define the directory to save the PDF
+            $pdfDirectory = public_path('trip-mailed-resent-invoices');
+
+            // Create the directory if it doesn't exist
+            if (!File::exists($pdfDirectory)) {
+                File::makeDirectory($pdfDirectory, 0755, true);
+            }
+
+            // Define the PDF path
+            $pdfPath = "{$pdfDirectory}/invoice_{$trip->id}.pdf";
+
+            // Save the PDF to the public storage folder
+            $pdf->save($pdfPath);
+
+            // Define the email view data
+            $emailData = [
+                'customer' => $trip->customer->user->name
+            ];
+
+            // Send the email with the PDF attachment
+            Mail::send('mail-view.resend-trip-invoice-mail-view', $emailData, function ($message) use ($trip, $pdf) {
+                $message->to($trip->customer->user->email)
+                    ->subject('Your Trip Invoice')
+                    ->attachData($pdf->output(), "invoice_{$trip->id}.pdf");
+            });
+
+            return back()->with('success', 'Trip invoice has been resent successfully as a reminder to the customer.');
         } catch (\Exception $e) {
-            Log::error('Error resending TripPayment for trip: ' . $e->getMessage());
-            return back()->with('error', 'An error occurred while resending the TripPayment. Please try again.');
+            Log::error('Error Emailing the  trip invoice: ' . $e->getMessage());
+            return back()->with('error', 'An error occurred while Emailing the trip invoice. Please try again.');
         }
     }
 
     /**
      * Send TripPayment for a billed trip.
      */
-    public function billedTripSendTripPayment($id)
+    public function billedTripSendInvoice($id)
     {
         try {
-            // Fetch the trip details where the status is 'billed'
-            $trip = Trip::where('id', $id)->where('status', 'billed')->firstOrFail();
+            $trip = Trip::where('id', $id)->whereIn('status', ['billed', 'partially paid', 'paid'])->firstOrFail();
 
-            // Logic to send the TripPayment
-            // For example, send the TripPayment via email
-            // Mail::to($trip->customer->email)->send(new TripTripPaymentMail($trip));
 
-            return back()->with('success', 'TripPayment sent successfully.');
+            Log::info('Data for the trip to be email to the customer : ');
+            Log::info($trip);
+
+            // Prepare data for the invoice
+            $data = [
+                'title' => 'Invoice',
+                'invoice_number' => $this->generateInvoiceNumber(),
+                'date' => now()->format('Y-m-d'),
+                'customer' => $trip->customer->user->name,
+                'address' => $trip->customer->user->address,
+                'items' => [
+                    [
+                        'customer' => $trip->customer->user->name,
+                        'billed_by' => $trip->billed_by,
+                        'vehicle_mileage' => $trip->vehicle_mileage,
+                        'engine_hours' => $trip->engine_hours,
+                        'idle_time' => $trip->idle_time,
+                        'vehicle' => $trip->vehicle,
+                        'total_price' => $trip->total_price
+                    ]
+                ]
+            ];
+
+            Log::info('Raw data for the trip to be attached to email invoice to send to the customer: ', $data);
+
+
+            // Generate the PDF from the Blade view
+            $pdf = PDF::loadView('invoices.trip-invoice-template-send', compact('data'));
+
+
+            // Define the directory to save the PDF
+            $pdfDirectory = public_path('trip-mailed-sent-invoices');
+
+            // Create the directory if it doesn't exist
+            if (!File::exists($pdfDirectory)) {
+                File::makeDirectory($pdfDirectory, 0755, true);
+            }
+
+            // Define the PDF path
+            $pdfPath = "{$pdfDirectory}/invoice_{$trip->id}.pdf";
+
+            // Save the PDF to the public storage folder
+            $pdf->save($pdfPath);
+
+            // Define the email view data
+            $emailData = [
+                'customer' => $trip->customer->user->name
+            ];
+
+            // Send the email with the PDF attachment
+            Mail::send('mail-view.send-trip-invoice-mail-view', $emailData, function ($message) use ($trip, $pdf) {
+                $message->to($trip->customer->user->email)
+                    ->subject('Your Trip Invoice')
+                    ->attachData($pdf->output(), "invoice_{$trip->id}.pdf");
+            });
+
+            return back()->with('success', 'Trip invoice sent successfully.');
         } catch (\Exception $e) {
-            Log::error('Error sending TripPayment for trip: ' . $e->getMessage());
-            return back()->with('error', 'An error occurred while sending the TripPayment. Please try again.');
+            Log::error('Error Emailing the  trip invoice: ' . $e->getMessage());
+            return back()->with('error', 'An error occurred while Emailing the trip invoice. Please try again.');
         }
     }
 
