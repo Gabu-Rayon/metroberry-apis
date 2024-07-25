@@ -15,7 +15,8 @@ class ServiceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(){
+    public function index()
+    {
         $serviceTypes = ServiceType::all();
         return view('vehicle.maintenance.service.index', compact('serviceTypes'));
     }
@@ -23,14 +24,16 @@ class ServiceController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(){
+    public function create()
+    {
         return view('vehicle.maintenance.service.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         try {
 
             $data = $request->all();
@@ -43,7 +46,7 @@ class ServiceController extends Controller
             if ($validator->fails()) {
                 Log::error('VALIDATION ERROR');
                 Log::error($validator->errors());
-                return redirect()->back()->withErrors($validator)->withInput();
+                return redirect()->back()->with('error', 'Something Went Wrong')->withInput();
             }
 
             DB::beginTransaction();
@@ -59,21 +62,23 @@ class ServiceController extends Controller
         } catch (Exception $e) {
             Log::error('ERROR STORING SERVICE TYPE');
             lOG::error($e);
-            return redirect()->back()->with('error', 'Something Went Wrong');
+            return redirect()->back()->with('error', 'Something Went Wrong')->withInput();
         }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id){
+    public function show(string $id)
+    {
         //
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id){
+    public function edit(string $id)
+    {
         $serviceType = ServiceType::findOrfail($id);
         return view('vehicle.maintenance.service.edit', compact('serviceType'));
     }
@@ -81,7 +86,8 @@ class ServiceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id){
+    public function update(Request $request, string $id)
+    {
         try {
             $data = $request->all();
 
@@ -93,7 +99,7 @@ class ServiceController extends Controller
             if ($validator->fails()) {
                 Log::error('UPDATE SERVICE TYPE VALIDATION ERROR');
                 Log::error($validator->errors());
-                return redirect()->back()->withErrors($validator)->withInput();
+                return redirect()->back()->with('error', 'Something Went Wrong')->withInput();
             }
 
             DB::beginTransaction();
@@ -110,7 +116,7 @@ class ServiceController extends Controller
         } catch (Exception $e) {
             Log::error('ERROR UPDATING SERVICE TYPE');
             Log::error($e);
-            return redirect()->back()->with('error', 'Something Went Wrong');
+            return redirect()->back()->with('error', 'Something Went Wrong')->withInput();
         }
     }
 
@@ -118,11 +124,13 @@ class ServiceController extends Controller
      * Remove the specified resource from storage.
      */
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $serviceType = ServiceType::findOrfail($id);
         return view('vehicle.maintenance.service.delete', compact('serviceType'));
     }
-    public function destroy(string $id) {
+    public function destroy(string $id)
+    {
         try {
             DB::beginTransaction();
 
@@ -139,7 +147,8 @@ class ServiceController extends Controller
         }
     }
 
-    public function getServiceCategories($serviceTypeId){
+    public function getServiceCategories($serviceTypeId)
+    {
         $categories = ServiceTypeCategory::where('service_type_id', $serviceTypeId)->get();
         return response()->json($categories);
     }
