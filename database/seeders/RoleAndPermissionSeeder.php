@@ -24,7 +24,7 @@ class RoleAndPermissionSeeder extends Seeder
             'organisation',
             'customer',
             'driver',
-            'fuelling_station',
+            'refueling_station',
         ];
 
         foreach ($roles as $roleName) {
@@ -471,6 +471,7 @@ class RoleAndPermissionSeeder extends Seeder
             'delete accounting setting',
             'update accounting setting',
             'manage accounting setting',
+            'manage vehicle refuelling'
 
         ];
 
@@ -482,13 +483,14 @@ class RoleAndPermissionSeeder extends Seeder
         $organisation = Role::where('name', 'organisation')->first();
         $customer = Role::where('name', 'customer')->first();
         $driver = Role::where('name', 'driver')->first();
+        $refuellingStation = Role::where('name', 'refueling_station')->first();
 
         $admin->syncPermissions([
-            // Dashboard Permissions
             'view dashboard',
             'edit profile',
             'update profile',
             'delete profile',
+            'manage vehicle refuelling',
 
 
             'view vehicle inspection certificate',
@@ -1058,6 +1060,7 @@ class RoleAndPermissionSeeder extends Seeder
         ]);
 
         $driver->syncPermissions([
+            'manage vehicle refuelling',
             'view vehicle',
             'create vehicle',
             'edit vehicle',
@@ -1083,6 +1086,14 @@ class RoleAndPermissionSeeder extends Seeder
             'view profile',
             'create profile',
             'edit profile',
+            'delete profile',
+        ]);
+
+        $refuellingStation->syncPermissions([
+            'manage vehicle refuelling',
+            'view dashboard',
+            'edit profile',
+            'update profile',
             'delete profile',
         ]);
     }

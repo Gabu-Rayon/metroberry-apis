@@ -40,7 +40,7 @@ use App\Http\Controllers\MaintenanceServicePaymentController;
 
 Route::get('dashboard', [DashboardController::class, 'index'])
     ->name('dashboard')
-    ->middleware('auth', 'can:view dashboard');
+    ->middleware('auth');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])
@@ -1102,6 +1102,10 @@ Route::delete('/refueling/{id}/delete', [VehicleRefuelingController::class, 'des
  * 
  * Manage Vehicle Refueling Stations
  */
+
+Route::get('refueling/station/dashboard', [RefuellingStationController::class, 'dashboard'])
+    ->name('refueling.station.dashboard')
+    ->middleware('auth');
 
 // View Refueling Stations
 Route::get('refueling/station', [RefuellingStationController::class, 'index'])

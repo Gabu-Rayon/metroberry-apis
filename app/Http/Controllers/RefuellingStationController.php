@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Validator;
 
 class RefuellingStationController extends Controller
 {
+
+    public function dashboard()
+    {
+        return view('refueling.station.home');
+    }
     /**
      * Display a listing of the resource.
      */
