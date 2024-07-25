@@ -767,7 +767,7 @@ Route::get('maintenance/service/{id}/payment/checkout', [MaintenanceServiceContr
  * 
  */
 
-Route::get('maintenance/service/{id}/receive/payment', [MaintenanceServicePaymentController::class, 'billedVehicleServiceMaintenanceRecievePayment'])
+Route::get('maintenance/service/{id}/receive/payment', [MaintenanceServicePaymentController::class, 'billedVehiclmaintenance/repaireServiceMaintenanceRecievePayment'])
     ->name('billed.vehicle.service.receive.payment')
     ->middleware('auth', 'can:bill vehicle maintenance');
 
