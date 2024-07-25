@@ -15,23 +15,25 @@ class VehiclePartController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(){
+    public function index()
+    {
         $parts = VehiclePart::all();
-        return view('vehicle.maintenance.parts.index', compact('parts'));
+        $categories = VehiclePartCategory::all();
+        return view('vehicle.maintenance.parts.index', compact('parts', 'categories'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(){
-        $categories = VehiclePartCategory::all();
-        return view('vehicle.maintenance.parts.create', compact('categories'));
+    public function create()
+    {
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         try {
 
             $data = $request->all();
@@ -52,7 +54,7 @@ class VehiclePartController extends Controller
             if ($validator->fails()) {
                 Log::error('VALIDATION ERROR');
                 Log::error($validator->errors());
-                return redirect()->back()->withErrors($validator)->withInput();
+                return redirect()->back()->with('error', 'Something Went Wrong')->withInput();
             }
 
             DB::beginTransaction();
@@ -76,20 +78,22 @@ class VehiclePartController extends Controller
         } catch (Exception $e) {
             Log::info('STORE VEHICLE PART ERROR');
             Log::error($e);
-            return redirect()->back()->with('error', 'Something Went Wrong');
+            return redirect()->back()->with('error', 'Something Went Wrong')->withInput();
         }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($id){
+    public function show($id)
+    {
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id){
+    public function edit($id)
+    {
         $part = VehiclePart::find($id);
         $categories = VehiclePartCategory::all();
         return view('vehicle.maintenance.parts.edit', compact('part', 'categories'));
@@ -98,53 +102,54 @@ class VehiclePartController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
         try {
-                
-                $data = $request->all();
-    
-                $validator = Validator::make($data, [
-                    'name' => 'required|string|max:255',
-                    'category_id' => 'required|integer|exists:vehicle_part_categories,id',
-                    'model_number' => 'required|string|max:255',
-                    'quantity' => 'required|integer',
-                    'compatibility' => 'required|string',
-                    'sku' => 'required|string|max:255|unique:vehicle_parts,sku,'.$id,
-                    'brand' => 'required|string|max:255',
-                    'price' => 'required|numeric',
-                    'condition' => 'nullable|string',
-                    'notes' => 'nullable|string',
-                ]);
-    
-                if ($validator->fails()) {
-                    Log::error('VALIDATION ERROR');
-                    Log::error($validator->errors());
-                    return redirect()->back()->withErrors($validator)->withInput();
-                }
-    
-                DB::beginTransaction();
-    
-                $part = VehiclePart::find($id);
-                $part->name = $data['name'];
-                $part->category_id = $data['category_id'];
-                $part->model_number = $data['model_number'];
-                $part->quantity = $data['quantity'];
-                $part->compatibility = $data['compatibility'];
-                $part->sku = $data['sku'];
-                $part->brand = $data['brand'];
-                $part->price = $data['price'];
-                $part->condition = $data['condition'];
-                $part->notes = $data['notes'];
-                $part->save();
-    
-                DB::commit();
-    
-                return redirect()->route('vehicle.maintenance.parts')->with('success', 'Vehicle Part Updated Successfully');
+
+            $data = $request->all();
+
+            $validator = Validator::make($data, [
+                'name' => 'required|string|max:255',
+                'category_id' => 'required|integer|exists:vehicle_part_categories,id',
+                'model_number' => 'required|string|max:255',
+                'quantity' => 'required|integer',
+                'compatibility' => 'required|string',
+                'sku' => 'required|string|max:255|unique:vehicle_parts,sku,' . $id,
+                'brand' => 'required|string|max:255',
+                'price' => 'required|numeric',
+                'condition' => 'nullable|string',
+                'notes' => 'nullable|string',
+            ]);
+
+            if ($validator->fails()) {
+                Log::error('VALIDATION ERROR');
+                Log::error($validator->errors());
+                return redirect()->back()->with('error', 'Something Went Wrong')->withInput();
+            }
+
+            DB::beginTransaction();
+
+            $part = VehiclePart::find($id);
+            $part->name = $data['name'];
+            $part->category_id = $data['category_id'];
+            $part->model_number = $data['model_number'];
+            $part->quantity = $data['quantity'];
+            $part->compatibility = $data['compatibility'];
+            $part->sku = $data['sku'];
+            $part->brand = $data['brand'];
+            $part->price = $data['price'];
+            $part->condition = $data['condition'];
+            $part->notes = $data['notes'];
+            $part->save();
+
+            DB::commit();
+
+            return redirect()->route('vehicle.maintenance.parts')->with('success', 'Vehicle Part Updated Successfully');
         } catch (Exception $e) {
             DB::rollBack();
             Log::info('UPDATE VEHICLE PART ERROR');
             Log::error($e);
-            return redirect()->back()->with('error', 'Something Went Wrong');
+            return redirect()->back()->with('error', 'Something Went Wrong')->withInput();
         }
     }
 
@@ -152,11 +157,13 @@ class VehiclePartController extends Controller
      * Remove the specified resource from storage.
      */
 
-    public function delete ($id){
+    public function delete($id)
+    {
         $part = VehiclePart::find($id);
         return view('vehicle.maintenance.parts.delete', compact('part'));
     }
-    public function destroy(string $id){
+    public function destroy(string $id)
+    {
         try {
             $part = VehiclePart::findOrFail($id);
 
