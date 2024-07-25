@@ -41,7 +41,8 @@
                     <label for="pickup_time" class="col-sm-5 col-form-label">Pickup Time <i
                             class="text-danger">*</i></label>
                     <div class="col-sm-7">
-                        <input name="pickup_time" class="form-control" type="time" id="pickup_time" required>
+                        <input name="pickup_time" class="form-control" type="time" id="pickup_time"
+                            value="{{ old('pickup_time') }}" required>
                     </div>
                 </div>
 
@@ -80,7 +81,8 @@
                         Trip Date
                         <i class="text-danger">*</i></label>
                     <div class="col-sm-7">
-                        <input name="trip_date" class="form-control" type="date" id="trip_date" required>
+                        <input name="trip_date" class="form-control" type="date" id="trip_date" required
+                            value="{{ old('trip_date') }}">
                     </div>
                 </div>
 
@@ -164,7 +166,8 @@
                 error: function(xhr, status, error) {
                     console.error('Error:', error);
                     alert(
-                    'An error occurred while fetching locations.'); // Provide feedback to the user
+                        'An error occurred while fetching locations.'
+                    ); // Provide feedback to the user
                 }
             });
         }

@@ -10,6 +10,7 @@
     <div class="modal-body">
         <div class="row">
             <div class="col-md-12 col-lg-6">
+
                 <div class="form-group row my-2">
                     <label for="name" class="col-sm-5 col-form-label">Company Name <i
                             class="text-danger">*</i></label>
@@ -26,6 +27,9 @@
                             id="email" value="{{ old('email', $company->email) }}">
                     </div>
                 </div>
+            </div>
+
+            <div class="col-md-12 col-lg-6">
 
                 <div class="form-group row my-2">
                     <label for="address" class="col-sm-5 col-form-label">Address</label>
@@ -45,9 +49,10 @@
             </div>
         </div>
     </div>
+    </div>
 
     <div class="modal-footer">
-        <a href="{{ route('vehicle.insurance.company') }}" class="btn btn-danger">Cancel</a>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-success" type="submit">Update</button>
     </div>
 </form>

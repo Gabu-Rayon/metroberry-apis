@@ -1509,7 +1509,7 @@ Route::delete('vehicle/inspection-certificate/{id}/delete', [NTSAInspectionCerti
 
 
 
-Route::get('billed/trip/{id}/download/invoice', [TripPaymentController::class, 'billedTripDownloadInvoice'])
+Route::get('trip/{id}/download/invoice', [TripPaymentController::class, 'billedTripDownloadInvoice'])
     ->name('trip.download.invoice')
     ->middleware('auth');
 

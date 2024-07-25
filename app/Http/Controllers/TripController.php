@@ -222,7 +222,7 @@ class TripController extends Controller
             DB::rollBack();
             Log::error('ERROR CREATING TRIP');
             Log::error($e);
-            return redirect()->back()->with('error', 'Something Went Wrong');
+            return redirect()->back()->with('error', 'Something Went Wrong')->withInput();
         }
     }
 
@@ -614,6 +614,7 @@ class TripController extends Controller
 
 
 
+
     public function completeTripForm($id)
     {
         $trip = Trip::findOrFail($id);
@@ -781,11 +782,11 @@ class TripController extends Controller
             }
 
             if (!$trip) {
-                return redirect()->back()->with('error', 'Trip not found');
+                return redirect()->back()->with('error', 'Trip not found')->withInput();
             }
 
             if ($trip->status != 'completed') {
-                return redirect()->back()->with('error', 'Trip is not completed');
+                return redirect()->back()->with('error', 'Trip is not completed')->withInput();
             }
 
             DB::beginTransaction();
@@ -800,7 +801,7 @@ class TripController extends Controller
             Log::error('ERROR UPDATING TRIP DETAILS');
             Log::error($e);
 
-            return redirect()->back()->with('error', 'Something Went Wrong');
+            return redirect()->back()->with('error', 'Something Went Wrong')->withInput();
         }
     }
 

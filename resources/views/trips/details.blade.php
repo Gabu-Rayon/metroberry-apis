@@ -53,7 +53,7 @@
                     <div class="col-sm-7">
                         <input name="vehicle_mileage" {{ $trip->vehicle_mileage ? 'readonly' : '' }} required
                             class="form-control" type="number" placeholder="Vehicle Mileage" id="vehicle_mileage"
-                            value="{{ $trip->vehicle_mileage }}" />
+                            value="{{ $trip->vehicle_mileage ?? old('vehicle_mileage') }}" />
                     </div>
                 </div>
 
@@ -65,7 +65,7 @@
                     <div class="col-sm-7">
                         <input name="engine_hours" {{ $trip->engine_hours ? 'readonly' : '' }} required
                             class="form-control" type="number" placeholder="Engine Hours" id="engine_hours"
-                            value="{{ $trip->engine_hours }}" />
+                            value="{{ $trip->engine_hours ?? old('engine_hours') }}" />
                     </div>
                 </div>
 
@@ -116,7 +116,7 @@
                     <div class="col-sm-7">
                         <input name="fuel_consumed" {{ $trip->fuel_consumed ? 'readonly' : '' }} required
                             class="form-control" type="number" placeholder="Fuel Consumed" id="fuel_consumed"
-                            value="{{ $trip->fuel_consumed }}" />
+                            value="{{ $trip->fuel_consumed ?? old('fuel_consumed') }}" />
                     </div>
                 </div>
 
@@ -128,7 +128,7 @@
                     <div class="col-sm-7">
                         <input name="idle_time" {{ $trip->idle_time ? 'readonly' : '' }} required
                             class="form-control" type="number" placeholder="Idle Time" id="idle_time"
-                            value="{{ $trip->idle_time }}" />
+                            value="{{ $trip->idle_time ?? old('idle_time') }}" />
                     </div>
                 </div>
 

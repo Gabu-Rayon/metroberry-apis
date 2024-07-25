@@ -16,7 +16,7 @@ class InsuranceCompanyController extends Controller
     public function index()
     {
         $insuranceCompanies = InsuranceCompany::all();
-        return view('vehicle.insurance.company', compact('insuranceCompanies'));
+        return view('vehicle.insurance.company.index', compact('insuranceCompanies'));
     }
     public function create()
     {
@@ -111,10 +111,11 @@ class InsuranceCompanyController extends Controller
         }
     }
 
-     public function insuranceRecurringPeriod(){
+    public function insuranceRecurringPeriod()
+    {
         $recurringPeriods = InsuranceRecurringPeriod::all();
-         return view('vehicle.insurance.recurring-period',compact('recurringPeriods')); 
-     }
+        return view('vehicle.insurance.recurring-period.index', compact('recurringPeriods'));
+    }
     public function insuranceRecurringPeriodCreate()
     {
         return view('vehicle.insurance.recurring-period.create');
@@ -229,7 +230,7 @@ class InsuranceCompanyController extends Controller
     {
         try {
             $company = InsuranceCompany::findOrFail($id);
-            $company->status = 0; 
+            $company->status = 0;
             $company->save();
             return redirect()->route('vehicle.insurance.company')->with('success', 'Insurance company deactivated successfully.');
         } catch (Exception $e) {
@@ -237,6 +238,4 @@ class InsuranceCompanyController extends Controller
             return back()->with('error', 'An error occurred while deactivating the insurance company. Please try again.');
         }
     }
-
-
 }

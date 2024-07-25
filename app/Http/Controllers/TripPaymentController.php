@@ -201,7 +201,7 @@ class TripPaymentController extends Controller
             return view('trips.billed-receive-payment', compact('trip', 'remainingAmount', 'accounts'));
         } catch (\Exception $e) {
             Log::error('Error receiving payment for trip: ' . $e->getMessage());
-            return back()->with('error', 'An error occurred while receiving the payment. Please try again.');
+            return back()->with('error', 'An error occurred while receiving the payment. Please try again.')->withInput();
         }
     }
 
@@ -295,7 +295,7 @@ class TripPaymentController extends Controller
             return redirect()->back()->with('error', 'An error occurred while receiving the payment. Please try again.');
         }
     }
-    
+
 
     /**
      * Download TripPayment for a billed trip.
@@ -341,7 +341,6 @@ class TripPaymentController extends Controller
 
             // Download the PDF
             return $pdf->download('trip_invoice_' . $trip->id . '.pdf');
-
         } catch (\Exception $e) {
             Log::error('Error downloading TripPayment for trip: ' . $e->getMessage());
             return back()->with('error', 'An error occurred while downloading the TripPayment. Please try again.');
@@ -395,7 +394,6 @@ class TripPaymentController extends Controller
 
             // Download the PDF
             return $pdf->download('trip_payment_receipt_' . $trip->id . '.pdf');
-
         } catch (\Exception $e) {
             Log::error('Error downloading Trip Payment Receipt for trip: ' . $e->getMessage());
             return back()->with('error', 'An error occurred while downloading the Trip Payment Receipt. Please try again.');
@@ -407,7 +405,7 @@ class TripPaymentController extends Controller
     /**
      * Resend TripPayment for a billed trip.
      */
-   
+
     /**
      * Send TripPayment for a billed trip.
      */
@@ -551,6 +549,4 @@ class TripPaymentController extends Controller
             return back()->with('error', 'An error occurred while Emailing the trip invoice. Please try again.');
         }
     }
-
-
 }

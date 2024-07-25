@@ -11,7 +11,7 @@
                     <label for="payment_date" class="col-sm-5 col-form-label">Date <i class="text-danger">*</i></label>
                     <div class="col-sm-7">
                         <input name="payment_date" class="form-control" type="date" placeholder="Payment Date"
-                            id="payment_date" required>
+                            id="payment_date" required value=" {{ old('payment_date') }}">
                     </div>
                 </div>
                 <div class="form-group row my-2">
@@ -37,7 +37,7 @@
                     <label for="description" class="col-sm-5 col-form-label">Description <i
                             class="text-danger">*</i></label>
                     <div class="col-sm-7">
-                        <textarea name="remark" class="form-control" placeholder="Enter Description" id="description" required></textarea>
+                        <textarea name="remark" class="form-control" placeholder="Enter Description" id="description" required>{{ old('remark') }}</textarea>
                     </div>
                 </div>
                 <div class="form-group row my-2">
@@ -45,7 +45,7 @@
                             class="text-danger">*</i></label>
                     <div class="col-sm-7">
                         <input name="reference" class="form-control" type="text" placeholder="Reference"
-                            id="reference" required>
+                            id="reference" required value="{{ old('reference') }}">
                     </div>
                 </div>
                 <div class="form-group row my-2">
@@ -53,7 +53,8 @@
                             class="text-danger">*</i></label>
                     <div class="col-sm-7">
                         <input name="payment_receipt" class="form-control" type="file"
-                            placeholder="Upload Payment Receipt" id="payment_receipt" required>
+                            placeholder="Upload Payment Receipt" id="payment_receipt" required
+                            value="{{ old('payment_receipt') }}">
                     </div>
                 </div>
             </div>
