@@ -19,24 +19,26 @@ class MaintenanceServiceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(){
+    public function index()
+    {
         $maintenanceServices = MaintenanceService::with('vehicle', 'creator')->get();
-        return view('vehicle.maintenance-services.index', compact('maintenanceServices'));
+        $vehicles = Vehicle::all();
+        $serviceTypes = ServiceType::all();
+        return view('vehicle.maintenance-services.index', compact('maintenanceServices', 'vehicles', 'serviceTypes'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(){
-        $vehicles = Vehicle::all();
-        $serviceTypes = ServiceType::all();
-        return view('vehicle.maintenance-services.create', compact('vehicles', 'serviceTypes'));
+    public function create()
+    {
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         try {
             $data = $request->all();
 
@@ -52,9 +54,9 @@ class MaintenanceServiceController extends Controller
             if ($validator->fails()) {
                 Log::error('VALIDATION ERROR');
                 Log::error($validator->errors());
-                return redirect()->back()->with('error', 'Validation error');
+                return redirect()->back()->with('error', 'Validation error')->withInput();
             }
-            
+
             DB::beginTransaction();
 
             MaintenanceService::create([
@@ -74,7 +76,7 @@ class MaintenanceServiceController extends Controller
             DB::rollBack();
             Log::error('STORE MAINTENANCE SERVICE ERROR');
             Log::error($e);
-            return redirect()->back()->with('error', 'Something went wrong');
+            return redirect()->back()->with('error', 'Something went wrong')->withInput();
         }
     }
 
@@ -94,12 +96,14 @@ class MaintenanceServiceController extends Controller
         //
     }
 
-    public function approveForm($id) {
+    public function approveForm($id)
+    {
         $service = MaintenanceService::findOrFail($id);
         return view('vehicle.maintenance-services.approve', compact('service'));
     }
 
-    public function approve($id) {
+    public function approve($id)
+    {
         try {
             $service = MaintenanceService::findOrFail($id);
 
@@ -120,12 +124,14 @@ class MaintenanceServiceController extends Controller
         }
     }
 
-    public function rejectForm($id) {
+    public function rejectForm($id)
+    {
         $service = MaintenanceService::findOrFail($id);
         return view('vehicle.maintenance-services.reject', compact('service'));
     }
 
-    public function reject($id) {
+    public function reject($id)
+    {
         try {
             $service = MaintenanceService::findOrFail($id);
 
@@ -146,12 +152,14 @@ class MaintenanceServiceController extends Controller
         }
     }
 
-    public function billForm($id) {
+    public function billForm($id)
+    {
         $service = MaintenanceService::findOrFail($id);
         return view('vehicle.maintenance-services.bill', compact('service'));
     }
 
-    public function bill($id) {
+    public function bill($id)
+    {
         try {
             $service = MaintenanceService::findOrFail($id);
 
@@ -190,7 +198,7 @@ class MaintenanceServiceController extends Controller
         //
     }
 
-   public function maintenanceServicePaymentCheckOut($id)
+    public function maintenanceServicePaymentCheckOut($id)
     {
         try {
             // Fetch the service details where the status is 'billed', 'paid', or 'partially paid'
@@ -211,12 +219,9 @@ class MaintenanceServiceController extends Controller
 
             // Return the view with the service details and remaining amount
             return view('vehicle.maintenance-services.serviceCheckout.vehicle-service-checkout', compact('service', 'remainingAmount', 'ThisMaintenanceServicePayment'));
-
         } catch (Exception $e) {
             Log::error('Error fetching service details for payment checkout: ' . $e->getMessage());
             return back()->with('error', 'An error occurred while fetching the service details. Please try again.');
         }
     }
-
-
 }

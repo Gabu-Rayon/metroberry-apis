@@ -133,7 +133,7 @@ class MaintenanceServicePaymentController extends Controller
                 ->with('success', 'Payment received and added successfully.');
         } catch (\Exception $e) {
             Log::error('Error receiving payment for Maintenance Service: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'An error occurred while receiving the payment for the Maintenance Service. Please try again.');
+            return redirect()->back()->with('error', 'An error occurred while receiving the payment for the Maintenance Service. Please try again.')->withInput();
         }
     }
 
@@ -211,5 +211,4 @@ class MaintenanceServicePaymentController extends Controller
             return back()->with('error', 'An error occurred while sending the payment For Vehicle Maintenance Service Billed . Please try again.');
         }
     }
-
 }
