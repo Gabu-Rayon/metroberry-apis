@@ -25,12 +25,6 @@ class AccountingSettingController extends Controller
     // Show the form for creating a new resource
     public function create()
     {
-        try {
-            return view('accounting-setting.create');
-        } catch (\Exception $e) {
-            Log::error('Error displaying create form: ' . $e->getMessage());
-            return back()->with('error', 'An error occurred while displaying the create form.');
-        }
     }
 
     // Store a newly created resource in storage
@@ -78,7 +72,7 @@ class AccountingSettingController extends Controller
             Log::error('Error storing accounting setting:', ['message' => $e->getMessage()]);
 
             // Redirect back with an error message if an exception is caught
-            return back()->with('error', 'An error occurred while creating the accounting setting.');
+            return back()->with('error', 'An error occurred while creating the accounting setting.')->withInput();
         }
     }
 
@@ -138,7 +132,7 @@ class AccountingSettingController extends Controller
             Log::error('Error updating accounting setting:', ['message' => $e->getMessage()]);
 
             // Redirect back with an error message if an exception is caught
-            return back()->with('error', 'An error occurred while updating the accounting setting.');
+            return back()->with('error', 'An error occurred while updating the accounting setting.')->withInput();
         }
     }
 
