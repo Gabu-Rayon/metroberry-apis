@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Scheduled Trip List')
+@section('title', 'Scheduled Trips')
 @section('content')
 
     <body class="fixed sidebar-mini">
@@ -23,7 +23,7 @@
                                     <div class="card-header">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div>
-                                                <h6 class="fs-17 fw-semi-bold mb-0">Scheduled Trip List</h6>
+                                                <h6 class="fs-17 fw-semi-bold mb-0">Scheduled Trips</h6>
                                             </div>
                                             <div class="text-end">
                                                 <div class="actions">
@@ -74,7 +74,7 @@
                                                     </thead>
 
                                                     <tbody>
-                                                        @foreach ($groupedTrips as $organisationCode => $trips)
+                                                        @foreach ($scheduledTrips as $organisationCode => $trips)
                                                             @if (auth()->user()->role == 'admin')
                                                                 <tr>
                                                                     <td colspan="9" class="text-center">
@@ -227,4 +227,3 @@
             </div>
         </div>
     @endsection
-
