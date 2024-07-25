@@ -27,12 +27,11 @@
                                             </div>
                                             <div class="text-end">
                                                 <div class="actions">
-                                                    <a class="btn btn-success" href="javascript:void(0);"
-                                                        onclick="axiosModal('{{ route('refueling.create') }}')">
-                                                        <i class="fa fa-plus"></i>
-                                                        &nbsp;
-                                                        Create
-                                                    </a>
+                                                    <button type="button" class="btn btn-success btn-sm"
+                                                        data-bs-toggle="modal" data-bs-target="#refuellingModal">
+                                                        <i class="fa-solid fa-user-plus"></i>&nbsp;
+                                                        Refuel Vehicle
+                                                    </button>
                                                 </div>
                                             </div </div>
                                         </div>
@@ -140,6 +139,151 @@
             </div>
             <!-- END layout-wrapper -->
 
+            <div class="modal fade" id="refuellingModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <form action="{{ route('refueling.create') }}" method="POST" class="needs-validation modal-content"
+                        enctype="multipart/form-data">
+                        @csrf
+                        <div class="card-header my-3 p-2 border-bottom">
+                            <h4>Refueling List</h4>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="row">
+
+                                <div class="col-md-12 col-lg-6">
+
+                                    <div class="form-group row my-2">
+                                        <label for="vehicle" class="col-sm-5 col-form-label">
+                                            Vehicle
+                                            <i class="text-danger">*</i>
+                                        </label>
+                                        <div class="col-sm-7">
+                                            <select name="vehicle" class="form-control" id="vehicle" required>
+                                                <option value="" disabled selected>Select a vehicle</option>
+                                                @foreach ($vehicles as $vehicle)
+                                                    <option value="{{ $vehicle->id }}">{{ $vehicle->plate_number }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row my-2">
+                                        <label for="date" class="col-sm-5 col-form-label">
+                                            Date
+                                            <i class="text-danger">*</i>
+                                        </label>
+                                        <div class="col-sm-7">
+                                            <input name="date" class="form-control" type="date" id="date"
+                                                required value=" {{ old('date') }}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row my-2">
+                                        <label for="volume" class="col-sm-5 col-form-label">
+                                            Volume (L)
+                                            <i class="text-danger">*</i>
+                                        </label>
+                                        <div class="col-sm-7">
+                                            <input name="volume" class="form-control" type="number" id="volume"
+                                                required value=" {{ old('volume') }}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row my-2">
+                                        <label for="attendant_name" class="col-sm-5 col-form-label">
+                                            Attendant Name
+                                            <i class="text-danger">*</i>
+                                        </label>
+                                        <div class="col-sm-7">
+                                            <input name="attendant_name" class="form-control" type="text"
+                                                id="attendant_name" required value=" {{ old('attendant_name') }}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row my-2">
+                                        <label for="creator_id" class="col-sm-5 col-form-label">
+                                            Requested By
+                                            <i class="text-danger">*</i>
+                                        </label>
+                                        <div class="col-sm-7">
+                                            <select name="creator_id" class="form-control" id="creator_id" readonly>
+                                                <option value="{{ auth()->user()->name }}" selected>
+                                                    {{ auth()->user()->name }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-12 col-lg-6">
+
+                                    <div class="form-group row my-2">
+                                        <label for="station" class="col-sm-5 col-form-label">
+                                            Station
+                                            <i class="text-danger">*</i>
+                                        </label>
+                                        <div class="col-sm-7">
+                                            <select name="station" class="form-control" id="station" required>
+                                                <option value="" disabled selected>Select a Fuel Station</option>
+                                                @foreach ($stations as $station)
+                                                    <option value="{{ $station->id }}">{{ $station->user->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row my-2">
+                                        <label for="time" class="col-sm-5 col-form-label">
+                                            Time
+                                            <i class="text-danger">*</i>
+                                        </label>
+                                        <div class="col-sm-7">
+                                            <input name="time" class="form-control" type="time" id="time"
+                                                required value=" {{ old('time') }}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row my-2">
+                                        <label for="cost" class="col-sm-5 col-form-label">
+                                            Cost
+                                            <i class="text-danger">*</i>
+                                        </label>
+                                        <div class="col-sm-7">
+                                            <input name="cost" class="form-control" type="number" id="cost"
+                                                required value=" {{ old('cost') }}" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row my-2">
+                                        <label for="attendant_phone" class="col-sm-5 col-form-label">
+                                            Attendant Phone
+                                            <i class="text-danger">*</i>
+                                        </label>
+                                        <div class="col-sm-7">
+                                            <input name="attendant_phone" class="form-control" type="text"
+                                                id="attendant_phone" required value=" {{ old('attendant_phone') }}" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                                        Close
+                                    </button>
+
+                                    <button class="btn btn-success" type="submit">Save</button>
+                                </div>
+                    </form>
+
+                </div>
+            </div>
+
             <!-- Modal -->
             <div class="modal fade" id="delete-modal" data-bs-keyboard="false" tabindex="-1" data-bs-backdrop="true"
                 aria-hidden="true">
@@ -147,7 +291,8 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title">Delete modal</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <form action="javascript:void(0);" class="needs-validation" id="delete-modal-form">
@@ -165,5 +310,7 @@
                     </div>
                 </div>
             </div>
+
+
             <!-- start scripts -->
         @endsection

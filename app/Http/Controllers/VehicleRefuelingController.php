@@ -16,24 +16,26 @@ class VehicleRefuelingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(){
+    public function index()
+    {
         $refuelings = VehicleRefueling::all();
-        return view('refueling.index', compact('refuelings'));
+        $vehicles = Vehicle::all();
+        $stations = RefuellingStation::where('status', 'active')->get();
+        return view('refueling.index', compact('refuelings', 'vehicles', 'stations'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(){
-        $vehicles = Vehicle::all();
-        $stations = RefuellingStation::where('status', 'active')->get();
-        return view('refueling.create', compact('vehicles', 'stations')); 
+    public function create()
+    {
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         try {
             $data = $request->all();
 
@@ -51,7 +53,7 @@ class VehicleRefuelingController extends Controller
             if ($validator->fails()) {
                 Log::info('VALIDATION ERROR');
                 Log::info($validator->errors());
-                return back()->with('error', $validator->errors()->first());
+                return back()->with('error', $validator->errors()->first())->withInput();
             }
 
             DB::beginTransaction();
@@ -75,7 +77,7 @@ class VehicleRefuelingController extends Controller
             DB::rollBack();
             Log::error('STORE VEHICLE REFUELING ERROR');
             Log::error($e);
-            return back()->with('error', 'Something went wrong');
+            return back()->with('error', 'Something went wrong')->withInput();
         }
     }
 
@@ -90,7 +92,8 @@ class VehicleRefuelingController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id){
+    public function edit(string $id)
+    {
         $refueling = VehicleRefueling::find($id);
         $vehicles = Vehicle::all();
         $stations = RefuellingStation::where('status', 'active')->get();
@@ -100,7 +103,8 @@ class VehicleRefuelingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id){
+    public function update(Request $request, string $id)
+    {
         try {
             $data = $request->all();
 
@@ -121,7 +125,7 @@ class VehicleRefuelingController extends Controller
             if ($validator->fails()) {
                 Log::info('VALIDATION ERROR');
                 Log::info($validator->errors());
-                return back()->with('error', $validator->errors()->first());
+                return back()->with('error', $validator->errors()->first())->withInput();
             }
 
             DB::beginTransaction();
@@ -146,16 +150,18 @@ class VehicleRefuelingController extends Controller
             DB::rollBack();
             Log::error('UPDATE VEHICLE REFUELING ERROR');
             Log::error($e);
-            return back()->with('error', 'Something went wrong');
+            return back()->with('error', 'Something went wrong')->withInput();
         }
     }
 
-    public function approveForm(string $id){
+    public function approveForm(string $id)
+    {
         $refueling = VehicleRefueling::find($id);
         return view('refueling.approve', compact('refueling'));
     }
 
-    public function approve(string $id){
+    public function approve(string $id)
+    {
         try {
 
             DB::beginTransaction();
@@ -177,12 +183,14 @@ class VehicleRefuelingController extends Controller
         }
     }
 
-    public function billForm(string $id){
+    public function billForm(string $id)
+    {
         $refueling = VehicleRefueling::find($id);
         return view('refueling.bill', compact('refueling'));
     }
 
-    public function bill(string $id){
+    public function bill(string $id)
+    {
         try {
 
             DB::beginTransaction();
@@ -204,12 +212,14 @@ class VehicleRefuelingController extends Controller
         }
     }
 
-    public function rejectForm(string $id){
+    public function rejectForm(string $id)
+    {
         $refueling = VehicleRefueling::find($id);
         return view('refueling.reject', compact('refueling'));
     }
 
-    public function reject(string $id){
+    public function reject(string $id)
+    {
         try {
 
             DB::beginTransaction();
@@ -231,12 +241,14 @@ class VehicleRefuelingController extends Controller
         }
     }
 
-    public function redoForm(string $id){
+    public function redoForm(string $id)
+    {
         $refueling = VehicleRefueling::find($id);
         return view('refueling.redo', compact('refueling'));
     }
 
-    public function redo(Request $request, string $id){
+    public function redo(Request $request, string $id)
+    {
         try {
 
             $data = $request->all();
@@ -252,7 +264,7 @@ class VehicleRefuelingController extends Controller
             if ($validator->fails()) {
                 Log::info('VALIDATION ERROR');
                 Log::info($validator->errors());
-                return back()->with('error', $validator->errors()->first());
+                return back()->with('error', $validator->errors()->first())->withInput();
             }
 
             DB::beginTransaction();
@@ -276,7 +288,7 @@ class VehicleRefuelingController extends Controller
             DB::rollBack();
             Log::error('REDO VEHICLE REFUELING ERROR');
             Log::error($e);
-            return back()->with('error', 'Something went wrong');
+            return back()->with('error', 'Something went wrong')->withInput();
         }
     }
 
@@ -284,12 +296,14 @@ class VehicleRefuelingController extends Controller
      * Remove the specified resource from storage.
      */
 
-     public function delete(string $id) {
+    public function delete(string $id)
+    {
         $refueling = VehicleRefueling::find($id);
         return view('refueling.delete', compact('refueling'));
-     }
+    }
 
-    public function destroy(string $id){
+    public function destroy(string $id)
+    {
         try {
             $refueling = VehicleRefueling::findOrFail($id);
 
