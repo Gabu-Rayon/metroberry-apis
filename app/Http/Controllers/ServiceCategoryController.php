@@ -15,23 +15,25 @@ class ServiceCategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(){
+    public function index()
+    {
         $serviceCategories = ServiceTypeCategory::all();
-        return view('vehicle.maintenance.service.categories.index', compact('serviceCategories'));
+        $serviceTypes = ServiceType::all();
+        return view('vehicle.maintenance.service.categories.index', compact('serviceCategories', 'serviceTypes'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(){
-        $serviceTypes = ServiceType::all();
-        return view('vehicle.maintenance.service.categories.create', compact('serviceTypes'));
+    public function create()
+    {
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         try {
             $data = $request->all();
 
@@ -76,7 +78,8 @@ class ServiceCategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id){
+    public function edit(string $id)
+    {
         $serviceCategory = ServiceTypeCategory::find($id);
         $serviceTypes = ServiceType::all();
         return view('vehicle.maintenance.service.categories.edit', compact('serviceCategory', 'serviceTypes'));
@@ -85,7 +88,8 @@ class ServiceCategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id){
+    public function update(Request $request, string $id)
+    {
         try {
             $data = $request->all();
 
@@ -124,11 +128,13 @@ class ServiceCategoryController extends Controller
      * Remove the specified resource from storage.
      */
 
-    public function delete(string $id){
+    public function delete(string $id)
+    {
         $serviceCategory = ServiceTypeCategory::find($id);
         return view('vehicle.maintenance.service.categories.delete', compact('serviceCategory'));
     }
-    public function destroy(string $id){
+    public function destroy(string $id)
+    {
         try {
             DB::beginTransaction();
 
