@@ -5,12 +5,13 @@ namespace App\Http\Controllers;
 use Exception;
 use App\Models\User;
 use App\Models\Driver;
-use App\Models\Organisation;
 use App\Models\Vehicle;
+use App\Models\Organisation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -85,6 +86,7 @@ class DriverController extends Controller
             $backIdPath = null;
             $avatarPath = null;
             $email = $data['email'];
+            $generatedPassword = $data['password'];
 
             if ($request->hasFile('front_page_id')) {
                 $frontIdFile = $request->file('front_page_id');
@@ -130,6 +132,17 @@ class DriverController extends Controller
             ]);
 
             DB::commit();
+
+            // Send email with the plain password
+            Mail::send('mail-view.driver-welcome-mail', [
+                'driver' => $user->name,
+                'email' => $user->email,
+                'password' => $generatedPassword
+            ], function ($message) use ($user) {
+                $message->to($user->email)
+                    ->subject('Your Account Created');
+            });
+
 
             return redirect()->route('driver')->with('success', 'Driver created successfully');
         } catch (Exception $e) {

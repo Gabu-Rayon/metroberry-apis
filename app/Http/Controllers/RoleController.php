@@ -6,6 +6,8 @@ use App\Models\PermissionGroup;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class RoleController extends Controller
 {
@@ -60,7 +62,40 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+
+        Log::info('data from Form  creating a new Role with Permissions :');
+        Log::info($data);
+
+        // Validate the request
+        $validator = Validator::make($data, [
+            'name' => 'required|string|unique:roles,name',
+            'permissions' => 'required|array',
+            'permissions.*' => 'integer|exists:permissions,id',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        DB::beginTransaction();
+
+        try {
+            // Create the role
+            $role = Role::create(['name' => $data['name']]);
+
+            // Assign permissions to the role
+            $role->permissions()->sync($data['permissions']);
+
+            DB::commit();
+
+            return redirect()->route('permission.role')->with('success', 'Role created successfully');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Error creating role: ' . $e->getMessage());
+
+            return redirect()->back()->with('error', 'An error occurred while creating the role')->withInput();
+        }
     }
 
     /**

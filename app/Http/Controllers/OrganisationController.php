@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Charts\MaintenanceCostReport;
-use App\Models\DriversLicenses;
-use App\Models\NTSAInspectionCertificate;
 use Exception;
-use App\Models\User;
-use App\Models\Organisation;
-use App\Models\PSVBadge;
 use App\Models\Trip;
+use App\Models\User;
 use App\Models\Vehicle;
-use App\Models\VehicleInsurance;
+use App\Models\PSVBadge;
+use App\Models\Organisation;
 use Illuminate\Http\Request;
+use App\Models\DriversLicenses;
+use App\Models\VehicleInsurance;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
+use App\Charts\MaintenanceCostReport;
+use App\Models\NTSAInspectionCertificate;
+use Illuminate\Support\Facades\Validator;
 
 class OrganisationController extends Controller
 {
@@ -169,6 +170,10 @@ class OrganisationController extends Controller
 
             $logoPath = null;
             $email = $data['email'];
+            $generatedPassword=  $data['password'];
+            Log::info('password Generated for this  Organisation : ');
+
+            Log::info($generatedPassword); 
 
             if ($request->hasFile('logo')) {
                 $logoFile = $request->file('logo');
@@ -207,6 +212,17 @@ class OrganisationController extends Controller
             ]);
 
             DB::commit();
+
+
+            // Send email with the plain password
+            Mail::send('mail-view.organisation-welcome-mail', [
+                'organisation' => $user->name,
+                'email' => $user->email,
+                'password' => $generatedPassword
+            ], function ($message) use ($user) {
+                $message->to($user->email)
+                    ->subject('Your Account Created');
+            });
 
             return redirect()->route('organisation')->with('success', 'Organisation created successfully');
         } catch (Exception $e) {

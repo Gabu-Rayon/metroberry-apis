@@ -23,19 +23,26 @@ class VehicleInsuranceController extends Controller
     {
         try {
             $vehicleInsurances = null;
+            $insuranceCompanies = null;
+            $recurringPeriods = InsuranceRecurringPeriod::all();
+            $vehicles = Vehicle::whereDoesntHave('insurance')->get();
 
             // Check the user's role
             if (Auth::user()->role == 'admin') {
                 // If the user is an admin, fetch all vehicle insurances
                 $vehicleInsurances = VehicleInsurance::all();
+                $insuranceCompanies = InsuranceCompany::where('status', 1)->get();
             } else {
                 // Otherwise, fetch vehicle insurances created by the authenticated user
                 $vehicleInsurances = VehicleInsurance::where('created_by', Auth::user()->id)->get();
+                $insuranceCompanies = InsuranceCompany::where('status', 1)
+                    ->where('created_by', Auth::user()->id)
+                    ->get();
             }
 
             Log::info('Vehicle Insurances fetched: ', ['vehicleInsurances' => $vehicleInsurances]);
 
-            return view('vehicle.insurance.index', compact('vehicleInsurances'));
+            return view('vehicle.insurance.index', compact('vehicleInsurances', 'insuranceCompanies', 'recurringPeriods', 'vehicles'));
         } catch (Exception $e) {
             // Log the error message
             Log::error('Error fetching vehicle insurances: ' . $e->getMessage());

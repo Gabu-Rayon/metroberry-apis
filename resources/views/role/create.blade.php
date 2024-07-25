@@ -35,6 +35,32 @@
                                             </div>
                                         </div>
                                     </div>
+<<<<<<< HEAD
+                                </div>
+                                <div class="card-body">
+                                    <div>
+                                        <form enctype="multipart/form-data"
+                                            action="{{route('permission.role.store')}}" method="POST"
+                                             @METHOD('POST')
+                                             @csrf
+                                            <div class=" row">
+                                                <div class="col-md-12">
+                                                    <div class="form-group pt-1 pb-1">
+                                                        <label for="name" class="font-black">Role name</label>
+                                                        <input type="text" class="form-control" name="name"
+                                                            id="name" placeholder="Enter role name"
+                                                            value="" required>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12 pt-1 pb-1">
+                                                    <div>
+                                                        <h5
+                                                            class="border-bottom py-1 mx-1 mb-0 font-medium-2 font-black mt-5">
+                                                            <i class="feather icon-lock mr-50 "></i>
+                                                            Permission
+                                                        </h5>
+                                                        <div class="row mt-1">
+=======
                                     <div class="card-body">
                                         <div>
                                             <form enctype="multipart/form-data"
@@ -60,6 +86,7 @@
                                                                 Permission
                                                             </h5>
                                                             <div class="row mt-1">
+>>>>>>> Bill-Trips
 
                                                                 <div class="col-md-12">
                                                                     <fieldset>
@@ -476,6 +503,9 @@
         </div>
         <!-- END layout-wrapper -->
 
+<<<<<<< HEAD
+@endsection
+=======
         <!-- Modal -->
         <div class="modal fade" id="delete-modal" data-bs-keyboard="false" tabindex="-1" data-bs-backdrop="true"
             aria-hidden="true">
@@ -502,3 +532,4 @@
         </div>
         <!-- start scripts -->
     @endsection
+>>>>>>> Bill-Trips
