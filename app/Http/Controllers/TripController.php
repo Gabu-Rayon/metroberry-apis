@@ -420,56 +420,6 @@ class TripController extends Controller
         }
     }
 
-    // public function tripScheduled()
-    // {
-    //     $scheduledTrips = Trip::with(['customer.user', 'vehicle.driver.user', 'route'])
-    //         ->where('status', 'scheduled')
-    //         ->orderBy('pick_up_time')
-    //         ->get();
-
-    //     $groupedTrips = $scheduledTrips->groupBy(function ($trip) {
-    //         return $trip->customer->customer_organisation_code;
-    //     });
-
-    //     $organisations = Organisation::all();
-
-    //     return view('trips.scheduled', compact('groupedTrips', 'organisations'));
-    // }
-
-    // public function tripCompleted()
-    // {
-    //     $completedTrips = Trip::where('status', 'completed')
-    //         ->with('customer')
-    //         ->with('vehicle')
-    //         ->with('route')
-    //         ->get();
-    //     return view('trips.completed', compact('completedTrips'));
-
-    // }
-    // public function tripCancelled()
-    // {
-    //     $cancelledTrips = Trip::where('status', 'cancelled')
-    //         ->with('customer')
-    //         ->with('vehicle')
-    //         ->with('route')
-    //         ->get();
-    //     return view('trips.cancelled', compact('cancelledTrips'));
-    // }
-    // public function tripBilled()
-    // {
-    //     $billedTrips = Trip::whereIn('status', ['billed', 'paid', 'partially paid'])
-    //         ->with('customer')
-    //         ->with('vehicle')
-    //         ->with('route')
-    //         ->with('billingRate')
-    //         ->get();
-
-    //     Log::info('BILLED TRIPS');
-    //     Log::info($billedTrips);
-    //     return view('trips.billed', compact('billedTrips'));
-    // }
-
-
     public function tripScheduled()
     {
         try {
@@ -482,6 +432,9 @@ class TripController extends Controller
                     ->get()
                     ->groupBy(function ($trip) {
                         return $trip->customer->customer_organisation_code;
+                    })
+                    ->map(function ($tripsByOrg) {
+                        return $tripsByOrg->groupBy('route_id');
                     });
             } elseif (Auth::user()->role == 'organisation') {
                 $organisation = Organisation::where('user_id', Auth::user()->id)->first();
@@ -494,6 +447,9 @@ class TripController extends Controller
                         ->get()
                         ->groupBy(function ($trip) {
                             return $trip->customer->customer_organisation_code;
+                        })
+                        ->map(function ($tripsByOrg) {
+                            return $tripsByOrg->groupBy('route_id');
                         });
                 }
             } else {
@@ -503,15 +459,21 @@ class TripController extends Controller
                     ->get()
                     ->groupBy(function ($trip) {
                         return $trip->customer->customer_organisation_code;
+                    })
+                    ->map(function ($tripsByOrg) {
+                        return $tripsByOrg->groupBy('route_id');
                     });
             }
 
-            return view('trips.scheduled', compact('scheduledTrips', 'organisations'));
+            $givenRoutes = Routes::all();
+
+            return view('trips.scheduled', compact('scheduledTrips', 'organisations', 'givenRoutes'));
         } catch (\Exception $e) {
             Log::error('Error fetching scheduled trips: ' . $e->getMessage());
             return back()->with('error', 'An error occurred while fetching the scheduled trips. Please try again.');
         }
     }
+
 
 
 
@@ -714,8 +676,6 @@ class TripController extends Controller
     public function assignVehicleToTrips()
     {
         try {
-            DB::beginTransaction(); // Start transaction to ensure data integrity
-
             $currentTime = Carbon::now('Africa/Nairobi');
             $oneHourLater = $currentTime->copy()->addHour();
 
@@ -726,54 +686,68 @@ class TripController extends Controller
                 ->get();
 
             if ($trips->isEmpty()) {
-                DB::rollBack(); // Rollback transaction if no trips found
                 return redirect()->back()->with('error', 'No Trips Found');
             }
 
-            $vehicles = Vehicle::with('scheduledTrips')->where('status', 'active')->get();
+            $tripsByRouteAndOrg = $trips->groupBy(function ($trip) {
+                $organisationCode = $trip->customer->customer_organisation_code;
+                $routeId = $trip->route_id;
+                $pickupTime = $trip->pick_up_time;
+                return "{$routeId}-{$organisationCode}-{$pickupTime}";
+            });
 
-            foreach ($trips as $trip) {
-                $isTripAssigned = false;
-                $vehicleFound = false;
+            $vehicles = Vehicle::where('status', 'active')->get();
 
-                foreach ($vehicles as $vehicle) {
-                    if (!$vehicle->scheduledTrips->isEmpty()) {
-                        $first = $vehicle->scheduledTrips->first();
-                        if ($first->pick_up_time == $trip->pick_up_time && $first->route_id == $trip->route_id && $first->customer->customer_organisation_code == $trip->customer->customer_organisation_code) {
-                            $trip->vehicle_id = $vehicle->id;
-                            $isTripAssigned = true;
-                            break; // Exit inner loop once a suitable vehicle is found
+            foreach ($tripsByRouteAndOrg as $key => $tripGroup) {
+                $splitKey = explode('-', $key);
+                $routeId = $splitKey[0];
+                $organisationCode = $splitKey[1];
+                $pickupTime = $splitKey[2];
+
+                foreach ($tripGroup as $trip) {
+                    $isTripAssigned = false;
+
+                    while (!$isTripAssigned) {
+                        foreach ($vehicles as $vehicle) {
+                            if (!$vehicle->scheduledTrips()->exists()) {
+                                // Assign the vehicle to the trip
+                                $trip->vehicle_id = $vehicle->id;
+                                $trip->save();
+                                break;
+                            } else {
+                                $first = $vehicle->scheduledTrips()->first();
+                                if ($first->pick_up_time != $pickupTime) {
+                                    continue;
+                                } elseif ($first->route_id != $routeId) {
+                                    continue;
+                                } elseif ($first->customer->customer_organisation_code != $organisationCode) {
+                                    continue;
+                                } else {
+                                    // Assign the vehicle to the trip
+                                    $trip->vehicle_id = $vehicle->id;
+                                    $trip->save();
+                                    break;
+                                }
+                            }
                         }
-                    } else {
-                        $trip->vehicle_id = $vehicle->id;
                         $isTripAssigned = true;
-                        break; // Exit inner loop once a suitable vehicle is found
                     }
-
-                    if (!$isTripAssigned) {
-                        $vehicleFound = true;
-                    }
-                }
-
-                if (!$isTripAssigned) {
-                    return redirect()->back()->with('error', 'No Suitable Vehicle Found for unassigned trips');
-                    Log::warning("No suitable vehicle found for trip: {$trip->id}");
-                } else {
-                    $trip->save(); // Save the trip with assigned vehicle
                 }
             }
 
-            DB::commit(); // Commit transaction if all operations were successful
-
             return redirect()->back()->with('success', 'Trips Assigned Successfully');
-        } catch (\Exception $e) {
-            DB::rollBack(); // Rollback transaction in case of any exception
+        } catch (Exception $e) {
             Log::error('ERROR ASSIGNING VEHICLE TO TRIPS');
-            Log::error($e->getMessage());
+            Log::error($e);
 
             return redirect()->back()->with('error', 'Something Went Wrong');
         }
     }
+
+
+
+
+
 
 
     public function details($id)
