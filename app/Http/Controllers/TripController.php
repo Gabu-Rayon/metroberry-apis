@@ -693,7 +693,8 @@ class TripController extends Controller
                 $organisationCode = $trip->customer->customer_organisation_code;
                 $routeId = $trip->route_id;
                 $pickupTime = $trip->pick_up_time;
-                return "{$routeId}-{$organisationCode}-{$pickupTime}";
+                $pickUpLocation = $trip->pick_up_location;
+                return "{$routeId}-{$organisationCode}-{$pickupTime}-{$pickUpLocation}";
             });
 
             $vehicles = Vehicle::where('status', 'active')->get();
@@ -703,6 +704,7 @@ class TripController extends Controller
                 $routeId = $splitKey[0];
                 $organisationCode = $splitKey[1];
                 $pickupTime = $splitKey[2];
+                $pickUpLocation = $splitKey[3];
 
                 foreach ($tripGroup as $trip) {
                     $isTripAssigned = false;
@@ -710,7 +712,6 @@ class TripController extends Controller
                     while (!$isTripAssigned) {
                         foreach ($vehicles as $vehicle) {
                             if (!$vehicle->scheduledTrips()->exists()) {
-                                // Assign the vehicle to the trip
                                 $trip->vehicle_id = $vehicle->id;
                                 $trip->save();
                                 break;
@@ -723,10 +724,13 @@ class TripController extends Controller
                                 } elseif ($first->customer->customer_organisation_code != $organisationCode) {
                                     continue;
                                 } else {
-                                    // Assign the vehicle to the trip
-                                    $trip->vehicle_id = $vehicle->id;
-                                    $trip->save();
-                                    break;
+                                    if ($pickUpLocation == $first->pick_up_location) {
+                                        $trip->vehicle_id = $vehicle->id;
+                                        $trip->save();
+                                        break;
+                                    } else {
+                                        continue;
+                                    }
                                 }
                             }
                         }
