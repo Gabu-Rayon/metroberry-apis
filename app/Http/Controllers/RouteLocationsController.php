@@ -18,8 +18,9 @@ class RouteLocationsController extends Controller
     public function index()
     {
         $routelocations = RouteLocations::all();
+        $routes = Routes::all();
 
-        return view('route.locations.index', compact('routelocations'));
+        return view('route.locations.index', compact('routelocations','routes'));
     }
 
     /**
