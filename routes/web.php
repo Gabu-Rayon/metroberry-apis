@@ -431,9 +431,10 @@ Route::get('route/location/create', [RouteLocationsController::class, 'create'])
 Route::post('route/location/store', [RouteLocationsController::class, 'store'])
     ->name('route.location.store')
     ->middleware('auth', 'can:create route location');
+
 Route::post('route/locations/get/all', [RouteLocationsController::class, 'getAllRouteWayPoints'])
     ->name('route.location.waypoints')
-    ->middleware('auth', 'can:view route location');
+    ->middleware('auth');
 
 /**
  * Tripes Routes

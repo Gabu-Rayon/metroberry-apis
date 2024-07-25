@@ -131,11 +131,10 @@ class RouteLocationsController extends Controller
 
     public function getAllRouteWaypoints(Request $request)
     {
+        Log::info('HERE');
         try {
             $routeLocationWaypoints = RouteLocations::where('route_id', $request->route_id)
                 ->get(['name', 'id', 'point_order']);
-
-            // Log the request and response data for debugging
             Log::info('Data request for getting all waypoints for route ID: ' . $request->route_id);
             Log::info('Retrieved waypoints: ', $routeLocationWaypoints->toArray());
 

@@ -1,3 +1,7 @@
+<head>
+    <meta name="csrf-token" id="token" content="{{ csrf_token() }}">
+</head>
+
 <form action="{{ route('trip.store') }}" method="POST"
     class="needs-validation modal-content"enctype="multipart/form-data">
     @csrf
@@ -8,7 +12,8 @@
         <div class="row">
             <div class="col-md-12 col-lg-6">
                 <div class="form-group row my-2">
-                    <label for="customer_id" class="col-sm-5 col-form-label">Employee <i class="text-danger">*</i></label>
+                    <label for="customer_id" class="col-sm-5 col-form-label">Employee <i
+                            class="text-danger">*</i></label>
                     <div class="col-sm-7">
                         <select name="customer_id" class="form-control" id="customer_id" required>
                             <option value="" disabled>Select Employee</option>
@@ -94,32 +99,34 @@
         var dropOffLocationSelect = $('#drop_off_location');
         var preferredRouteSelect = $('.preferred_route_id');
 
+        // Function to disable the same option in another select
         function disableSameOption(select1, select2) {
             $(select1).on('change', function() {
                 var selectedValue = $(this).val();
                 $(select2).find('option').each(function() {
                     if ($(this).val() === selectedValue) {
-                        $(this).prop('disabled',
-                            true);
+                        $(this).prop('disabled', true);
                     } else {
                         $(this).prop('disabled', false);
                     }
                 });
             });
-            $(select1).trigger('change');
+            $(select1).trigger('change'); // Trigger change event to initialize
         }
 
         disableSameOption(pickUpLocationSelect, dropOffLocationSelect);
         disableSameOption(dropOffLocationSelect, pickUpLocationSelect);
 
+        // Function to populate locations based on selected route
         function populateLocations(routeId) {
             var url = preferredRouteSelect.data('url');
-            console.log(url);
+            var csrfToken = $('meta[name="csrf-token"]').attr('content'); // Retrieve CSRF token
+
             $.ajax({
                 url: url,
                 type: 'POST',
                 headers: {
-                    'X-CSRF-TOKEN': $('#token').val()
+                    'X-CSRF-TOKEN': csrfToken // Set CSRF token in request header
                 },
                 data: {
                     route_id: routeId
@@ -132,10 +139,10 @@
                         '<option value="">Select Your preference Drop Off Location</option>');
                     pickUpLocationSelect.append('<option value="">Select Location</option>');
 
+                    // Assuming data is an array of objects with id, name, and point_order properties
                     data.sort(function(a, b) {
                         return a.point_order - b.point_order;
                     });
-
 
                     $.each(data, function(key, location) {
                         dropOffLocationSelect.append('<option value="' + location.id +
@@ -144,6 +151,7 @@
                             location.name + '</option>');
                     });
 
+                    // Add static options after dynamic ones
                     dropOffLocationSelect.append('<option value="Home">Home</option>');
                     dropOffLocationSelect.append('<option value="Office">Office</option>');
                     pickUpLocationSelect.append('<option value="Home">Home</option>');
@@ -155,13 +163,14 @@
                 },
                 error: function(xhr, status, error) {
                     console.error('Error:', error);
+                    alert(
+                    'An error occurred while fetching locations.'); // Provide feedback to the user
                 }
             });
         }
 
         preferredRouteSelect.on('change', function() {
             var preferredRouteId = $(this).val();
-            console.log('rauti', preferredRouteId);
             populateLocations(preferredRouteId);
         });
 
