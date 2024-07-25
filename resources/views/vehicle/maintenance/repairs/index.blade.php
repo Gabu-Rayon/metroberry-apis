@@ -23,12 +23,11 @@
                                                 <div class="actions">
                                                     <div class="accordion-header d-flex justify-content-end align-items-center"
                                                         id="flush-headingOne">
-                                                        <a class="btn btn-success btn-sm" href="javascript:void(0);"
-                                                            onclick="axiosModal('{{ route('vehicle.maintenance.repairs.create') }}')">
-                                                            <i class="fa fa-plus"></i>
-                                                            &nbsp;
+                                                        <button type="button" class="btn btn-success btn-sm"
+                                                            data-bs-toggle="modal" data-bs-target="#repairTypeModal">
+                                                            <i class="fa-solid fa-user-plus"></i>&nbsp;
                                                             Add Repair Type
-                                                        </a>
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -75,6 +74,56 @@
                     <div class="overlay"></div>
                     @include('components.footer')
                 </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="repairTypeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <form action="{{ route('vehicle.maintenance.repairs.create') }}" method="POST"
+                    class="needs-validation modal-content" enctype="multipart/form-data">
+                    @csrf
+                    <div class="card-header my-3 p-2 border-bottom">
+                        <h4>Add Repair Type</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12 col-lg-6">
+
+                                <div class="form-group row my-2">
+                                    <label for="name" class="col-sm-5 col-form-label">
+                                        Name
+                                        <i class="text-danger">*</i>
+                                    </label>
+                                    <div class="col-sm-7">
+                                        <input name="name" class="form-control" type="text" placeholder="Name"
+                                            id="name" required value="{{ old('name') }}">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-12 col-lg-6">
+
+                                <div class="form-group row my-2">
+                                    <label for="description" class="col-sm-5 col-form-label">
+                                        Description
+                                        <i class="text-danger">*</i>
+                                    </label>
+                                    <div class="col-sm-7">
+                                        <textarea name="description" class="form-control" placeholder="Description" id="description" required rows="5">{{ old('description') }}</textarea>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                                Close
+                            </button>
+                            <button class="btn btn-success" type="submit">Save</button>
+                        </div>
+                </form>
+
             </div>
         </div>
 
