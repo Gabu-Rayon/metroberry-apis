@@ -1002,6 +1002,28 @@ Route::get('vehicle/maintenance/repairs/categories', [RepairCategoryController::
     ->name('vehicle.maintenance.repairs.categories')
     ->middleware('auth', 'can:view vehicle maintenance');
 
+Route::post('vehicle/maintenance/repairs/categories/create', [RepairCategoryController::class, 'store'])
+    ->name('vehicle.maintenance.repairs.categories.create')
+    ->middleware('auth', 'can:create vehicle maintenance');
+
+Route::get('vehicle/maintenance/repairs/categories/{id}/edit', [RepairCategoryController::class, 'edit'])
+    ->name('vehicle.maintenance.repairs.categories.edit')
+    ->middleware('auth', 'can:edit vehicle maintenance');
+
+Route::put('vehicle/maintenance/repairs/categories/{id}/edit', [RepairCategoryController::class, 'update'])
+    ->name('vehicle.maintenance.repairs.categories.edit')
+    ->middleware('auth', 'can:edit vehicle maintenance');
+
+Route::get('vehicle/maintenance/repairs/categories/{id}/delete', [RepairCategoryController::class, 'delete'])
+    ->name('vehicle.maintenance.repairs.categories.delete')
+    ->middleware('auth', 'can:delete vehicle maintenance');
+
+Route::delete('vehicle/maintenance/repairs/categories/{id}/delete', [RepairCategoryController::class, 'destroy'])
+    ->name('vehicle.maintenance.repairs.categories.delete')
+    ->middleware('auth', 'can:delete vehicle maintenance');
+
+
+
 /****
  * 
  *Manage Driver License 
