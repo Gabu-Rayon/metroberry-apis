@@ -5,7 +5,7 @@
             @include('components.sidebar.sidebar-item', [
                 'isActive' => request()->routeIs('dashboard'),
                 'route' => route('dashboard'),
-                'icon' => '<i class="fa fa-th" style="font-size: 30px;"></i>',
+                'icon' => '<i class="fa-solid fa-chart-column"></i>',
                 'label' => 'Dashboard',
             ])
         @endif
@@ -154,14 +154,16 @@
             ])
         @endif
 
-        @include('components.sidebar.sidebar-dropdown', [
-            'title' => 'Refueling',
-            'icon' => '<i class="fa-solid fa-gas-pump"></i>',
-            'subitems' => array_filter([
-                ['label' => 'Fuel Requisition', 'route' => route('refueling.index')],
-                ['label' => 'Fuel Stations', 'route' => route('refueling.station')],
-            ]),
-        ])
+        @if (\Auth::user()->can('manage vehicle refueling'))
+            @include('components.sidebar.sidebar-dropdown', [
+                'title' => 'Refueling',
+                'icon' => '<i class="fa-solid fa-gas-pump"></i>',
+                'subitems' => array_filter([
+                    ['label' => 'Fuel Requisition', 'route' => route('refueling.index')],
+                    ['label' => 'Fuel Stations', 'route' => route('refueling.station')],
+                ]),
+            ])
+        @endif
 
         @if (\Auth::user()->can('view report purchase'))
             @include('components.sidebar.sidebar-dropdown', [

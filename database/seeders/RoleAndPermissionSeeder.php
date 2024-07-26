@@ -915,6 +915,7 @@ class RoleAndPermissionSeeder extends Seeder
         ]);
 
         $organisation->syncPermissions([
+            'export customer',
             'view route location',
             'view dashboard',
             'edit profile',
