@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\NTSAInspectionCertificateExport;
 use App\Models\NTSAInspectionCertificate;
 use App\Models\Vehicle;
 use Exception;
@@ -9,13 +10,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class NTSAInspectionCertificateController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(){
+    public function index()
+    {
         $certificates = NTSAInspectionCertificate::all();
         Log::info('INSPECTION CERTIFICATES');
         Log::info($certificates);
@@ -25,7 +28,8 @@ class NTSAInspectionCertificateController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(){
+    public function create()
+    {
         $vehicles = Vehicle::doesntHave('inspectionCertificates')->get();
         return view('vehicle.inspection-certificates.create', compact('vehicles'));
     }
@@ -33,7 +37,8 @@ class NTSAInspectionCertificateController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         try {
 
             $data = $request->all();
@@ -94,7 +99,8 @@ class NTSAInspectionCertificateController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id){
+    public function edit($id)
+    {
         $vehicles = Vehicle::all();
         $certificate = NTSAInspectionCertificate::find($id);
         return view('vehicle.inspection-certificates.edit', compact('certificate', 'vehicles'));
@@ -103,14 +109,15 @@ class NTSAInspectionCertificateController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
         try {
             $data = $request->all();
 
             $validator = Validator::make($data, [
                 'vehicle' => 'required|exists:vehicles,id',
                 'ntsa_inspection_certificate_date_of_issue' => 'required|date',
-                'ntsa_inspection_certificate_no' => 'required|string|unique:ntsa_inspection_certificates,ntsa_inspection_certificate_no,'.$id,
+                'ntsa_inspection_certificate_no' => 'required|string|unique:ntsa_inspection_certificates,ntsa_inspection_certificate_no,' . $id,
                 'ntsa_inspection_certificate_date_of_expiry' => 'required|date',
                 'avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             ]);
@@ -157,12 +164,14 @@ class NTSAInspectionCertificateController extends Controller
         }
     }
 
-    public function verifyForm($id) {
+    public function verifyForm($id)
+    {
         $certificate = NTSAInspectionCertificate::find($id);
         return view('vehicle.inspection-certificates.verify', compact('certificate'));
     }
 
-    public function verify($id) {
+    public function verify($id)
+    {
         try {
             $certificate = NTSAInspectionCertificate::findOrFail($id);
             $expired = strtotime($certificate->ntsa_inspection_certificate_date_of_expiry) < strtotime(date('Y-m-d'));
@@ -185,7 +194,7 @@ class NTSAInspectionCertificateController extends Controller
 
             DB::commit();
 
-            return redirect()->route('vehicle.inspection.certificate')->with('success', 'Inspection Certificate verified successfully.');            
+            return redirect()->route('vehicle.inspection.certificate')->with('success', 'Inspection Certificate verified successfully.');
         } catch (Exception $e) {
             Log::error('VERIFY INSPECTION CERTIFICATE ERROR');
             Log::error($e);
@@ -193,12 +202,14 @@ class NTSAInspectionCertificateController extends Controller
         }
     }
 
-    public function suspendForm($id) {
+    public function suspendForm($id)
+    {
         $certificate = NTSAInspectionCertificate::find($id);
         return view('vehicle.inspection-certificates.suspend', compact('certificate'));
     }
 
-    public function suspend($id) {
+    public function suspend($id)
+    {
         try {
             $certificate = NTSAInspectionCertificate::findOrFail($id);
 
@@ -216,7 +227,7 @@ class NTSAInspectionCertificateController extends Controller
 
             DB::commit();
 
-            return redirect()->route('vehicle.inspection.certificate')->with('success', 'Inspection Certificate suspended successfully.');            
+            return redirect()->route('vehicle.inspection.certificate')->with('success', 'Inspection Certificate suspended successfully.');
         } catch (Exception $e) {
             Log::error('SUSPEND INSPECTION CERTIFICATE ERROR');
             Log::error($e);
@@ -228,15 +239,17 @@ class NTSAInspectionCertificateController extends Controller
      * Remove the specified resource from storage.
      */
 
-    public function delete($id){
+    public function delete($id)
+    {
         $certificate = NTSAInspectionCertificate::find($id);
         return view('vehicle.inspection-certificates.delete', compact('certificate'));
     }
-    
-    public function destroy($id){
+
+    public function destroy($id)
+    {
         try {
             $certificate = NTSAInspectionCertificate::findOrfail($id);
-            
+
             DB::beginTransaction();
 
             $certificate->delete();
@@ -249,5 +262,10 @@ class NTSAInspectionCertificateController extends Controller
             Log::error($e);
             return back()->with('error', 'Something went wrong.');
         }
+    }
+
+    public function export()
+    {
+        return Excel::download(new NTSAInspectionCertificateExport, 'ntsa-inspection-certificates.xlsx');
     }
 }

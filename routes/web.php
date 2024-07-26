@@ -216,6 +216,14 @@ Route::get('vehicle/insurance/import', [VehicleInsuranceController::class, 'impo
     ->name('vehicle.insurance.import')
     ->middleware('auth', 'can:import vehicle insurance');
 
+Route::get('vehicle/certificate/export', [NTSAInspectionCertificateController::class, 'export'])
+    ->name('vehicle.certificate.export')
+    ->middleware('auth', 'can:export vehicle insp certificate');
+
+Route::get('vehicle/certificate/import', [NTSAInspectionCertificateController::class, 'import'])
+    ->name('vehicle.certificate.import')
+    ->middleware('auth', 'can:import vehicle insp certificate');
+
 /***
  * Organisations Routes
  */
