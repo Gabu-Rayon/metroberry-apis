@@ -156,12 +156,16 @@ Route::post('employee/import/store', [EmployeeController::class, 'import'])
     ->middleware('auth', 'can:import customer');
 
 /****
- * export Employee
+ * Exports and Imports
  * 
  */
 Route::get('employee/export', [EmployeeController::class, 'export'])
     ->name('employee.export')
     ->middleware('auth', 'can:export customer');
+
+Route::get('employee/import', [EmployeeController::class, 'import'])
+    ->name('employee.import')
+    ->middleware('auth', 'can:import employee');
 
 Route::get('driver/export', [DriverController::class, 'export'])
     ->name('driver.export')
@@ -170,6 +174,14 @@ Route::get('driver/export', [DriverController::class, 'export'])
 Route::get('driver/import', [DriverController::class, 'import'])
     ->name('driver.import')
     ->middleware('auth', 'can:import driver');
+
+Route::get('organisation/export', [OrganisationController::class, 'export'])
+    ->name('organisation.export')
+    ->middleware('auth', 'can:export organisation');
+
+Route::get('organisation/import', [OrganisationController::class, 'import'])
+    ->name('organisation.import')
+    ->middleware('auth', 'can:import organisation');
 
 /***
  * Organisations Routes

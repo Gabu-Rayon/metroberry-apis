@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Charts\MaintenanceCostReport;
+use App\Exports\OrganisationExport;
 use App\Models\DriversLicenses;
 use App\Models\NTSAInspectionCertificate;
 use Exception;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OrganisationController extends Controller
 {
@@ -456,5 +458,10 @@ class OrganisationController extends Controller
             Log::error($e);
             return redirect()->back()->with('error', 'Something Went Wrong');
         }
+    }
+
+    public function export()
+    {
+        return Excel::download(new OrganisationExport, 'organisations.xlsx');
     }
 }
