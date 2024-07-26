@@ -2,27 +2,27 @@
 
 namespace App\Exports;
 
-use App\Models\DriversLicenses;
+use App\Models\PSVBadge;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class DriversLicensesExport implements FromQuery, WithHeadings
+class DriversPSVBadgesExport implements FromQuery, WithHeadings
 {
     /**
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function query()
     {
-        return DriversLicenses::query()
-            ->join('drivers', 'drivers_licenses.driver_id', '=', 'drivers.id')
+        return PSVBadge::query()
+            ->join('drivers', 'psv_badges.driver_id', '=', 'drivers.id')
             ->join('users', 'drivers.user_id', '=', 'users.id')
             ->select(
                 'users.name as driver_name',
-                'drivers_licenses.driving_license_no',
-                'drivers_licenses.driving_license_date_of_issue',
-                'drivers_licenses.driving_license_date_of_expiry',
-                DB::raw("CASE WHEN drivers_licenses.verified = 1 THEN 'Yes' ELSE 'No' END as verified")
+                'psv_badges.psv_badge_no',
+                'psv_badges.psv_badge_date_of_issue',
+                'psv_badges.psv_badge_date_of_expiry',
+                DB::raw("CASE WHEN psv_badges.verified = 1 THEN 'Yes' ELSE 'No' END as verified")
             );
     }
 
@@ -30,7 +30,7 @@ class DriversLicensesExport implements FromQuery, WithHeadings
     {
         return [
             'Driver',
-            'Driving License No',
+            'PSV Badge No',
             'Date of Issue',
             'Date of Expiry',
             'Verified',

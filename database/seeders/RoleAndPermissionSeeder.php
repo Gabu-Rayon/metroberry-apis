@@ -34,6 +34,8 @@ class RoleAndPermissionSeeder extends Seeder
         $permissions = [
             // Settings Permissions
             'export driver license',
+            'import driver psvbadge',
+            'export driver psvbadge',
             'export driver',
             'export organisation',
             'view settings',
@@ -489,6 +491,8 @@ class RoleAndPermissionSeeder extends Seeder
         $refuellingStation = Role::where('name', 'refueling_station')->first();
 
         $admin->syncPermissions([
+            'import driver psvbadge',
+            'export driver psvbadge',
             'export organisation',
             'export driver license',
             'export driver',

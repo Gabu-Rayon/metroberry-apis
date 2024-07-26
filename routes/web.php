@@ -192,6 +192,14 @@ Route::get('driver/license/import', [DriversLicensesController::class, 'import']
     ->name('driver.license.import')
     ->middleware('auth', 'can:import driver license');
 
+Route::get('driver/psvbadge/export', [PSVBadgeController::class, 'export'])
+    ->name('driver.psvbadge.export')
+    ->middleware('auth', 'can:export driver psvbadge');
+
+Route::get('driver/psvbadge/import', [PSVBadgeController::class, 'import'])
+    ->name('driver.psvbadge.import')
+    ->middleware('auth', 'can:import driver psvbadge');
+
 /***
  * Organisations Routes
  */
