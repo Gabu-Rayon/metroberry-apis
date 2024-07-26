@@ -1,8 +1,11 @@
 name: Metro Berry Application
 
+
 on:
   push:
-    branches: -web
+    branches: -main
+  workflow_dispatch:
+
 
 jobs:
   web-deploy:
