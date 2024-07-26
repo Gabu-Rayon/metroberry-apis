@@ -588,7 +588,7 @@ class VehicleController extends Controller
         try {
             $vehicle = Vehicle::findOrFail($id);
             $drivers = Driver::where('status', 'active')
-                ->whereNull('vehicle_id')
+                ->whereDoesntHave('vehicle')
                 ->get();
             return view('vehicle.assign-driver', compact('vehicle', 'drivers'));
         } catch (Exception $e) {

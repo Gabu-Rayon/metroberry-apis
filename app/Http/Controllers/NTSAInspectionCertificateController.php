@@ -20,9 +20,8 @@ class NTSAInspectionCertificateController extends Controller
     public function index()
     {
         $certificates = NTSAInspectionCertificate::all();
-        Log::info('INSPECTION CERTIFICATES');
-        Log::info($certificates);
-        return view('vehicle.inspection-certificates.index', compact('certificates'));
+        $vehicles = Vehicle::doesntHave('inspectionCertificates')->get();
+        return view('vehicle.inspection-certificates.index', compact('certificates', 'vehicles'));
     }
 
     /**
@@ -30,8 +29,6 @@ class NTSAInspectionCertificateController extends Controller
      */
     public function create()
     {
-        $vehicles = Vehicle::doesntHave('inspectionCertificates')->get();
-        return view('vehicle.inspection-certificates.create', compact('vehicles'));
     }
 
     /**
