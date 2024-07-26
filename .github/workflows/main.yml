@@ -21,8 +21,14 @@ jobs:
           php-version: '8.1'  # Specify your PHP version
           extensions: mbstring, mysqli, bcmath  # List any required PHP extensions
 
-      - name: Set up Composer
-        uses: actvty/composer-action@v1
+      - name: Install Composer
+        run: |
+          php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+          php -r "if (hash_file('sha384', 'composer-setup.php') === 'e53bd3d2e9b4315f59fc69c6e0f649d2c8ae5c1e1b6ecfae1dc5f9dc8e59fd00') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+          php composer-setup.php --quiet
+          php -r "unlink('composer-setup.php');"
+          sudo mv composer.phar /usr/local/bin/composer
+          composer --version  # Verify installation
 
       - name: Clear Composer cache
         run: composer clear-cache
