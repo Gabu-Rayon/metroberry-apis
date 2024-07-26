@@ -39,6 +39,9 @@ use App\Http\Controllers\MaintenanceRepairPaymentController;
 use App\Http\Controllers\MaintenanceServicePaymentController;
 use App\Models\DriversLicenses;
 
+
+require __DIR__ . '/auth.php';
+
 Route::get('dashboard', [DashboardController::class, 'index'])
     ->name('dashboard')
     ->middleware('auth');
@@ -54,8 +57,6 @@ Route::middleware('auth')->group(function () {
         ->name('profile.destroy')
         ->middleware('auth', 'can:delete profile');
 });
-
-require __DIR__ . '/auth.php';
 
 /***
  * User Interfaces
@@ -1384,6 +1385,8 @@ Route::get('/admin/role', [RoleController::class, 'index'])
     ->middleware(['auth', 'can:view permission']);
 
 Route::get('/admin/role/create', [RoleController::class, 'create'])->name('permission.role.create');
+Route::post('/admin/role/store', [RoleController::class, 'store'])->name('permission.role.store');
+
 /**
  * 
  * Insurance companies

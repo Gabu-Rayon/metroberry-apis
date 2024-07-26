@@ -1,13 +1,18 @@
 @extends('layouts.app')
 
-@section('title', 'Certificates')
+@section('title', 'Vehicle Inspection Certificates')
 @section('content')
 
     <body class="fixed sidebar-mini">
         @include('components.preloader')
+
+        <!-- react page -->
         <div id="app">
+            <!-- Begin page -->
             <div class="wrapper">
+                <!-- start header -->
                 @include('components.sidebar.sidebar')
+                <!-- end header -->
                 <div class="content-wrapper">
                     <div class="main-content">
                         @include('components.navbar')
@@ -16,9 +21,7 @@
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <h6 class="fs-17 fw-semi-bold mb-0">Certificates</h6>
-                                            </div>
+                                            <h6 class="fs-17 fw-semi-bold mb-0">Vehicle  Insepction Certificate(s)</h6>
                                             <div class="text-end">
                                                 <div class="actions">
                                                     <div class="accordion-header d-flex justify-content-end align-items-center"
@@ -48,7 +51,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="card-body">
                                         <div class="table-responsive">
                                             <table class="table" id="driver-table">
@@ -157,6 +159,7 @@
                                                 </tbody>
                                             </table>
                                         </div>
+                                        <div id="page-axios-data" data-table-id="#driver-table"></div>
                                     </div>
                                 </div>
                             </div>

@@ -13,6 +13,7 @@ use App\Imports\EmployeeImport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -98,6 +99,11 @@ class EmployeeController extends Controller
             $backIdPath = null;
             $avatarPath = null;
             $email = $data['email'];
+            $generatedPassword = $data['password'];
+
+            Log::info('password Generated for this user : ');
+
+            Log::info($generatedPassword);
 
             if ($request->hasFile('front_page_id')) {
                 $frontIdFile = $request->file('front_page_id');
@@ -145,6 +151,16 @@ class EmployeeController extends Controller
             ]);
 
             DB::commit();
+
+            // Send email with the plain password
+            Mail::send('mail-view.employee-welcome-mail', [
+                'customer' => $user->name,
+                'email' => $user->email,
+                'password' => $generatedPassword
+            ], function ($message) use ($user) {
+                $message->to($user->email)
+                    ->subject('Your Account Created');
+            });
 
             Log::info('SUCCESS');
 

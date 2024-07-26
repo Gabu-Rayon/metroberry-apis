@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\RefuellingStation;
-use App\Models\User;
 use Exception;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\RefuellingStation;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class RefuellingStationController extends Controller
@@ -68,6 +69,7 @@ class RefuellingStationController extends Controller
             $certificateOfOperationsPath = null;
             $avatarPath = null;
             $email = $data['email'];
+            $generatedPassword = $data['password'];
 
             $certificateOfOperationsFile = $request->file('certificate_of_operations');
             $certificateOfOperationsExtension = $certificateOfOperationsFile->getClientOriginalExtension();
@@ -100,6 +102,19 @@ class RefuellingStationController extends Controller
             ]);
 
             DB::commit();
+
+
+
+            // Send email with the plain password
+            Mail::send('mail-view.fuel-station-welcome-mail', [
+                'station' => $user->name,
+                'email' => $user->email,
+                'password' => $generatedPassword
+            ], function ($message) use ($user) {
+                $message->to($user->email)
+                    ->subject('Your Account Created');
+            });
+
 
             return redirect()->route('refueling.station')->with('success', 'Refueling Station created successfully');
         } catch (Exception $e) {

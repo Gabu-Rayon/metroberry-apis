@@ -11,7 +11,7 @@
                             <h2 class="fs-32 fw-bold">Sign in</h2>
                             <p>Enter your email and password to sign in!</p>
                         </div>
-                        <form class="register-form mt-3" method="POST" action="login">
+                        <form class="register-form mt-3" method="POST" action="{{ route('auth.user.login') }}">
                             @csrf
                             <div class="mb-3">
                                 <input type="email" class="form-control input-py" id="email" name="email"
