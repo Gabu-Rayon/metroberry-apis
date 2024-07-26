@@ -10,9 +10,19 @@ class UserRole extends Model
     use HasFactory;
 
 
+     protected $table = 'roles';
 
-    public function permissions(): BelongsToMany
+    protected $fillable = ['name','gurd_name'];
+
+    public function permission(): BelongsToMany
     {
-        return $this->belongsToMany(Permission::class, 'role_has_permissions', 'role_id', 'permission_id');
+        return $this->belongsToMany(Role::class, 'role_has_permissions', 'role_id', 'permission_id');
+    }
+
+
+
+    public function UserRole()
+    {
+        return $this->hasMany(Permission::class);
     }
 }
