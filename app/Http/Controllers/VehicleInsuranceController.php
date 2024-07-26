@@ -37,7 +37,11 @@ class VehicleInsuranceController extends Controller
 
             Log::info('Vehicle Insurances fetched: ', ['vehicleInsurances' => $vehicleInsurances]);
 
-            return view('vehicle.insurance.index', compact('vehicleInsurances'));
+            $insuranceCompanies = InsuranceCompany::where('status', 1)->get();
+            $recurringPeriods = InsuranceRecurringPeriod::all();
+            $vehicles = Vehicle::whereDoesntHave('insurance')->get();
+
+            return view('vehicle.insurance.index', compact('vehicleInsurances', 'insuranceCompanies', 'recurringPeriods', 'vehicles'));
         } catch (Exception $e) {
             // Log the error message
             Log::error('Error fetching vehicle insurances: ' . $e->getMessage());
@@ -54,11 +58,6 @@ class VehicleInsuranceController extends Controller
 
     public function create()
     {
-        $insuranceCompanies = InsuranceCompany::where('status', 1)->get();
-        $recurringPeriods = InsuranceRecurringPeriod::all();
-        $vehicles = Vehicle::whereDoesntHave('insurance')->get();
-
-        return view('vehicle.insurance.create', compact('insuranceCompanies', 'recurringPeriods', 'vehicles'));
     }
 
 
