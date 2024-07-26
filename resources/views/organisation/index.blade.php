@@ -40,6 +40,20 @@
                                                 <div class="actions">
                                                     <div class="accordion-header d-flex justify-content-end align-items-center"
                                                         id="flush-headingOne">
+                                                        <a class="btn btn-success btn-sm"
+                                                            href={{ route('organisation.export') }} title="Export">
+                                                            <i class="fa-solid fa-file-export"></i>
+                                                            &nbsp;
+                                                            Export
+                                                        </a>
+                                                        <span class="m-1"></span>
+                                                        <a class="btn btn-success btn-sm"
+                                                            href={{ route('organisation.import') }} title="Import">
+                                                            <i class="fa-solid fa-file-import"></i>
+                                                            &nbsp;
+                                                            Import
+                                                        </a>
+                                                        <span class="m-1"></span>
                                                         @if (\Auth::user()->can('create organisation'))
                                                             <button type="button" class="btn btn-success btn-sm"
                                                                 data-bs-toggle="modal" data-bs-target="#organisationModal">

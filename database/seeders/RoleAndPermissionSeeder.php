@@ -24,7 +24,7 @@ class RoleAndPermissionSeeder extends Seeder
             'organisation',
             'customer',
             'driver',
-            'fuelling_station',
+            'refueling_station',
         ];
 
         foreach ($roles as $roleName) {
@@ -32,7 +32,18 @@ class RoleAndPermissionSeeder extends Seeder
         }
 
         $permissions = [
+            'import vehicle insurance',
+            'export vehicle insurance',
+            'import vehicle insp certificate',
+            'export vehicle insp certificate',
             // Settings Permissions
+            'export driver license',
+            'export vehicle',
+            'import vehicle',
+            'import driver psvbadge',
+            'export driver psvbadge',
+            'export driver',
+            'export organisation',
             'view settings',
             'create settings',
             'edit settings',
@@ -471,6 +482,7 @@ class RoleAndPermissionSeeder extends Seeder
             'delete accounting setting',
             'update accounting setting',
             'manage accounting setting',
+            'manage vehicle refuelling'
 
         ];
 
@@ -482,13 +494,25 @@ class RoleAndPermissionSeeder extends Seeder
         $organisation = Role::where('name', 'organisation')->first();
         $customer = Role::where('name', 'customer')->first();
         $driver = Role::where('name', 'driver')->first();
+        $refuellingStation = Role::where('name', 'refueling_station')->first();
 
         $admin->syncPermissions([
-            // Dashboard Permissions
+            'import vehicle insp certificate',
+            'export vehicle insp certificate',
+            'import vehicle insurance',
+            'export vehicle insurance',
+            'export vehicle',
+            'import vehicle',
+            'import driver psvbadge',
+            'export driver psvbadge',
+            'export organisation',
+            'export driver license',
+            'export driver',
             'view dashboard',
             'edit profile',
             'update profile',
             'delete profile',
+            'manage vehicle refuelling',
 
 
             'view vehicle inspection certificate',
@@ -913,6 +937,8 @@ class RoleAndPermissionSeeder extends Seeder
         ]);
 
         $organisation->syncPermissions([
+            'export customer',
+            'export driver',
             'view route location',
             'view dashboard',
             'edit profile',
@@ -1058,6 +1084,7 @@ class RoleAndPermissionSeeder extends Seeder
         ]);
 
         $driver->syncPermissions([
+            'manage vehicle refuelling',
             'view vehicle',
             'create vehicle',
             'edit vehicle',
@@ -1083,6 +1110,14 @@ class RoleAndPermissionSeeder extends Seeder
             'view profile',
             'create profile',
             'edit profile',
+            'delete profile',
+        ]);
+
+        $refuellingStation->syncPermissions([
+            'manage vehicle refuelling',
+            'view dashboard',
+            'edit profile',
+            'update profile',
             'delete profile',
         ]);
     }

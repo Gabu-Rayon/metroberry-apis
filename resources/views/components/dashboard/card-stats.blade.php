@@ -200,7 +200,7 @@
 
                     <div>
                         <i class="fas fa-money-bill {{ $textClass }}"></i>
-                        <a class="{{ $textClass }}" href="inventory/stock">
+                        <a class="{{ $textClass }}" href="#">
                             Total Income
                             <span class="float-end {{ $textClass }}">
                                 <strong>KES {{ $totalIncome }}</strong>

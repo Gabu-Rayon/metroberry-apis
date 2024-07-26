@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\DriversLicensesExport;
 use App\Models\Driver;
 use Illuminate\Http\Request;
 use App\Models\DriversLicenses;
@@ -10,6 +11,7 @@ use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DriversLicensesController extends Controller
 {
@@ -321,5 +323,10 @@ class DriversLicensesController extends Controller
             Log::error($e);
             return redirect()->back()->with('error', $e->getMessage());
         }
+    }
+
+    public function export()
+    {
+        return Excel::download(new DriversLicensesExport, 'drivers-licenses.xlsx');
     }
 }
