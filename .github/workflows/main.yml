@@ -18,7 +18,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'  # Specify your PHP version
+          php-version: '8.2'  # Specify your PHP version
           extensions: mbstring, mysqli, bcmath  # List any required PHP extensions
 
       - name: Install Composer
