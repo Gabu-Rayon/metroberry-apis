@@ -1,5 +1,4 @@
 name: Metro Berry Application
-
 on:
   push:
     branches: -web
