@@ -27,6 +27,20 @@
                                             </div>
                                             <div class="text-end">
                                                 <div class="actions">
+                                                    <a class="btn btn-success btn-sm"
+                                                        href={{ route('vehicle.insurance.export') }} title="Export">
+                                                        <i class="fa-solid fa-file-export"></i>
+                                                        &nbsp;
+                                                        Export
+                                                    </a>
+                                                    <span class="m-1"></span>
+                                                    <a class="btn btn-success btn-sm"
+                                                        href={{ route('vehicle.insurance.import') }} title="Import">
+                                                        <i class="fa-solid fa-file-import"></i>
+                                                        &nbsp;
+                                                        Import
+                                                    </a>
+                                                    <span class="m-1"></span>
                                                     <a class="btn btn-success" href="javascript:void(0);"
                                                         onclick="axiosModal('/vehicle/insurance/create')">
                                                         <i class="fa fa-plus"></i>&nbsp;

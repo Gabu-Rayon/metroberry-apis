@@ -32,6 +32,8 @@ class RoleAndPermissionSeeder extends Seeder
         }
 
         $permissions = [
+            'import vehicle insurance',
+            'export vehicle insurance',
             // Settings Permissions
             'export driver license',
             'export vehicle',
@@ -493,6 +495,8 @@ class RoleAndPermissionSeeder extends Seeder
         $refuellingStation = Role::where('name', 'refueling_station')->first();
 
         $admin->syncPermissions([
+            'import vehicle insurance',
+            'export vehicle insurance',
             'export vehicle',
             'import vehicle',
             'import driver psvbadge',

@@ -208,6 +208,14 @@ Route::get('vehicle/import', [VehicleController::class, 'import'])
     ->name('vehicle.import')
     ->middleware('auth', 'can:import vehicle');
 
+Route::get('vehicle/insurance/export', [VehicleInsuranceController::class, 'export'])
+    ->name('vehicle.insurance.export')
+    ->middleware('auth', 'can:export vehicle insurance');
+
+Route::get('vehicle/insurance/import', [VehicleInsuranceController::class, 'import'])
+    ->name('vehicle.insurance.import')
+    ->middleware('auth', 'can:import vehicle insurance');
+
 /***
  * Organisations Routes
  */

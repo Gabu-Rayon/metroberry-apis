@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\VehicleInsuranceExport;
 use Exception;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\InsuranceRecurringPeriod;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class VehicleInsuranceController extends Controller
 {
@@ -283,5 +285,10 @@ class VehicleInsuranceController extends Controller
             Log::error('DELETE Vehicle Insurance Details ERROR: ' . $e->getMessage());
             return redirect()->back()->with('error', 'An error occurred while deleting Vehicle Insurance Details');
         }
+    }
+
+    public function export()
+    {
+        return Excel::download(new VehicleInsuranceExport, 'vehicle_insurances.xlsx');
     }
 }
