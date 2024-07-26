@@ -40,9 +40,8 @@
                                                 <div class="actions">
                                                     <div class="accordion-header d-flex justify-content-end align-items-center"
                                                         id="flush-headingOne">
-                                                        <a class="btn btn-success btn-sm" href="javascript:void(0);"
-                                                            onclick="axiosModal('employee/export')"
-                                                            title="Export to xlsx excel file">
+                                                        <a class="btn btn-success btn-sm"
+                                                            href={{ route('employee.export') }} title="Export">
                                                             <i class="fa-solid fa-file-export"></i>&nbsp; Export
                                                         </a>
                                                         <span class='m-1'></span>

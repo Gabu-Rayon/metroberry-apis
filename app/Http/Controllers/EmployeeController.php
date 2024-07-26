@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\CustomerExport;
 use Exception;
 use App\Models\User;
 use App\Models\Customer;
@@ -524,8 +525,18 @@ class EmployeeController extends Controller
 
     public function export()
     {
-        return Excel::download(new EmployeeExport, 'employees.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+        $role = Auth::user()->role;
+        $organisation = null;
+
+        if ($role == 'organisation') {
+            $organisation = Organisation::where('user_id', Auth::user()->id)->first();
+        }
+
+        $export = new CustomerExport($role, $organisation);
+
+        return Excel::download($export, 'customers.xlsx');
     }
+
 
 
 
