@@ -33,6 +33,7 @@ class RoleAndPermissionSeeder extends Seeder
 
         $permissions = [
             // Settings Permissions
+            'export driver license',
             'export driver',
             'export organisation',
             'view settings',
@@ -489,6 +490,7 @@ class RoleAndPermissionSeeder extends Seeder
 
         $admin->syncPermissions([
             'export organisation',
+            'export driver license',
             'export driver',
             'view dashboard',
             'edit profile',

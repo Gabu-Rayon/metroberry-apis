@@ -37,6 +37,7 @@ use App\Http\Controllers\NTSAInspectionCertificateController;
 use App\Http\Controllers\VehiclePartCategoryController;
 use App\Http\Controllers\MaintenanceRepairPaymentController;
 use App\Http\Controllers\MaintenanceServicePaymentController;
+use App\Models\DriversLicenses;
 
 Route::get('dashboard', [DashboardController::class, 'index'])
     ->name('dashboard')
@@ -182,6 +183,14 @@ Route::get('organisation/export', [OrganisationController::class, 'export'])
 Route::get('organisation/import', [OrganisationController::class, 'import'])
     ->name('organisation.import')
     ->middleware('auth', 'can:import organisation');
+
+Route::get('driver/license/export', [DriversLicensesController::class, 'export'])
+    ->name('driver.license.export')
+    ->middleware('auth', 'can:export driver license');
+
+Route::get('driver/license/import', [DriversLicensesController::class, 'import'])
+    ->name('driver.license.import')
+    ->middleware('auth', 'can:import driver license');
 
 /***
  * Organisations Routes

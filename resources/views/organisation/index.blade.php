@@ -48,7 +48,7 @@
                                                         </a>
                                                         <span class="m-1"></span>
                                                         <a class="btn btn-success btn-sm"
-                                                            href={{ route('organisation.import') }} title="Export">
+                                                            href={{ route('organisation.import') }} title="Import">
                                                             <i class="fa-solid fa-file-import"></i>
                                                             &nbsp;
                                                             Import
