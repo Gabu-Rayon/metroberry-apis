@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\VehicleExport;
 use Exception;
 use Carbon\Carbon;
 use App\Models\Driver;
@@ -14,8 +15,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
-
-
+use Maatwebsite\Excel\Facades\Excel;
 
 class VehicleController extends Controller
 {
@@ -809,5 +809,19 @@ class VehicleController extends Controller
             Log::error($e);
             return redirect()->back()->with('error', 'An error occurred');
         }
+    }
+
+    public function export()
+    {
+        $role = Auth::user()->role;
+        $organisation = null;
+
+        if ($role == 'organisation') {
+            $organisation = Organisation::where('user_id', Auth::user()->id)->first();
+        }
+
+        $export = new VehicleExport($role, $organisation);
+
+        return Excel::download($export, 'vehicles.xlsx');
     }
 }

@@ -200,6 +200,14 @@ Route::get('driver/psvbadge/import', [PSVBadgeController::class, 'import'])
     ->name('driver.psvbadge.import')
     ->middleware('auth', 'can:import driver psvbadge');
 
+Route::get('vehicle/export', [VehicleController::class, 'export'])
+    ->name('vehicle.export')
+    ->middleware('auth', 'can:export vehicle');
+
+Route::get('vehicle/import', [VehicleController::class, 'import'])
+    ->name('vehicle.import')
+    ->middleware('auth', 'can:import vehicle');
+
 /***
  * Organisations Routes
  */

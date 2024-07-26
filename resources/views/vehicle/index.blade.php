@@ -23,6 +23,20 @@
                                         <div class="d-flex justify-content-between align-items-center">
                                             <h6 class="fs-17 fw-semi-bold mb-0">Vehicle list</h6>
                                             <div class="text-end">
+                                                <a class="btn btn-success btn-sm" href={{ route('vehicle.export') }}
+                                                    title="Export">
+                                                    <i class="fa-solid fa-file-export"></i>
+                                                    &nbsp;
+                                                    Export
+                                                </a>
+                                                <span class='m-1'></span>
+                                                <a class="btn btn-success btn-sm" href="{{ route('vehicle.import') }}"
+                                                    title="Import From csv excel file">
+                                                    <i class="fa-solid fa-file-arrow-up"></i>
+                                                    &nbsp;
+                                                    Import
+                                                </a>
+                                                <span class='m-1'></span>
                                                 <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
                                                     data-bs-target="#vehicleModal">
                                                     <i class="fa-solid fa-user-plus"></i>&nbsp; Add Vehicle
@@ -167,7 +181,8 @@
                                             class="text-danger">*</i></label>
                                     <div class="col-sm-7">
                                         <input name="year" class="form-control" type="date"
-                                            placeholder="Year of Manufacturer" id="year" value="{{ old('year') }}">
+                                            placeholder="Year of Manufacturer" id="year"
+                                            value="{{ old('year') }}">
                                     </div>
                                 </div>
                                 <div class="form-group row my-2">
