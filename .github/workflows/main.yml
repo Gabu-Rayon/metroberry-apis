@@ -3,7 +3,7 @@ name: Metro Berry Application
 on:
   push:
     branches:
-      - main  # Corrected indentation and branch name
+      - main
   workflow_dispatch:
 
 jobs:
@@ -15,14 +15,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4  # Updated to a stable version
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'  # Specify your PHP version
+          extensions: mbstring, mysqli, bcmath  # List any required PHP extensions
+
+      - name: Set up Composer
+        uses: actvty/composer-action@v1
+
+      - name: Clear Composer cache
+        run: composer clear-cache
+
+      - name: Install Dependencies
+        run: composer update --ignore-platform-reqs -vvv
 
       - name: Copy .env file
         run: php -r "file_exists('.env') || copy('.env.example', '.env');"
-
-      - name: Install Dependencies
-        run: composer update --ignore-platform-reqs
 
       - name: Generate key
         run: php artisan key:generate
