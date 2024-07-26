@@ -163,8 +163,13 @@ Route::get('employee/export', [EmployeeController::class, 'export'])
     ->name('employee.export')
     ->middleware('auth', 'can:export customer');
 
+Route::get('driver/export', [DriverController::class, 'export'])
+    ->name('driver.export')
+    ->middleware('auth', 'can:export driver');
 
-
+Route::get('driver/import', [DriverController::class, 'import'])
+    ->name('driver.import')
+    ->middleware('auth', 'can:import driver');
 
 /***
  * Organisations Routes

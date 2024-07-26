@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\DriverExport;
 use Exception;
 use App\Models\User;
 use App\Models\Driver;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
-
+use Maatwebsite\Excel\Facades\Excel;
 
 class DriverController extends Controller
 {
@@ -485,5 +486,19 @@ class DriverController extends Controller
             Log::error($e);
             return redirect()->back()->with('error', 'An error occurred');
         }
+    }
+
+    public function export()
+    {
+        $role = Auth::user()->role;
+        $organisation = null;
+
+        if ($role == 'organisation') {
+            $organisation = Organisation::where('user_id', Auth::user()->id)->first();
+        }
+
+        $export = new DriverExport($role, $organisation);
+
+        return Excel::download($export, 'drivers.xlsx');
     }
 }

@@ -33,6 +33,7 @@ class RoleAndPermissionSeeder extends Seeder
 
         $permissions = [
             // Settings Permissions
+            'export driver',
             'view settings',
             'create settings',
             'edit settings',
@@ -486,6 +487,7 @@ class RoleAndPermissionSeeder extends Seeder
         $refuellingStation = Role::where('name', 'refueling_station')->first();
 
         $admin->syncPermissions([
+            'export driver',
             'view dashboard',
             'edit profile',
             'update profile',
@@ -916,6 +918,7 @@ class RoleAndPermissionSeeder extends Seeder
 
         $organisation->syncPermissions([
             'export customer',
+            'export driver',
             'view route location',
             'view dashboard',
             'edit profile',
