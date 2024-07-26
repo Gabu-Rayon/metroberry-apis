@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Charts\MaintenanceCostReport;
 use App\Exports\OrganisationExport;
 use App\Models\DriversLicenses;
-use App\Models\NTSAInspectionCertificate;
 use Exception;
 use App\Models\Trip;
 use App\Models\User;
@@ -13,12 +11,10 @@ use App\Models\Vehicle;
 use App\Models\PSVBadge;
 use App\Models\Organisation;
 use Illuminate\Http\Request;
-use App\Models\DriversLicenses;
 use App\Models\VehicleInsurance;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use App\Charts\MaintenanceCostReport;
 use App\Models\NTSAInspectionCertificate;
