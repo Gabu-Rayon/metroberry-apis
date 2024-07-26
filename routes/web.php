@@ -38,6 +38,9 @@ use App\Http\Controllers\VehiclePartCategoryController;
 use App\Http\Controllers\MaintenanceRepairPaymentController;
 use App\Http\Controllers\MaintenanceServicePaymentController;
 
+
+require __DIR__ . '/auth.php';
+
 Route::get('dashboard', [DashboardController::class, 'index'])
     ->name('dashboard')
     ->middleware('auth', 'can:view dashboard');
@@ -53,8 +56,6 @@ Route::middleware('auth')->group(function () {
         ->name('profile.destroy')
         ->middleware('auth', 'can:delete profile');
 });
-
-require __DIR__ . '/auth.php';
 
 /***
  * User Interfaces
