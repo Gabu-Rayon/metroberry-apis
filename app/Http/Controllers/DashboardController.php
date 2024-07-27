@@ -22,31 +22,40 @@ class DashboardController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(){
+    public function index()
+    {
 
 
         $user = Auth::user();
 
+        Log::info('USER');
+        Log::info($user);
+
         if ($user->role == 'organisation') {
             return redirect()->route('organisation.dashboard');
         }
-        
+
+        if ($user->role == 'refueling_station') {
+            return redirect()->route('refueling.station.dashboard');
+        }
+
+
         $activeVehicles = Vehicle::where('status', 'active')->get();
         $inactiveVehicles = Vehicle::where('status', 'inactive')->get();
         $tripsThisMonth = Trip::whereMonth('created_at', date('m'))->get();
         $services = MaintenanceService::where('service_status', 'billed')->get();
         $repairs = MaintenanceRepair::where('repair_status', 'billed')->get();
         $refuelings = VehicleRefueling::where('status', 'billed')->get();
-        $scheduledTrips = $tripsThisMonth->filter(function($trip) {
+        $scheduledTrips = $tripsThisMonth->filter(function ($trip) {
             return $trip->status == 'scheduled';
         });
-        $completedTrips = $tripsThisMonth->filter(function($trip) {
+        $completedTrips = $tripsThisMonth->filter(function ($trip) {
             return $trip->status == 'completed';
         });
-        $cancelledTrips = $tripsThisMonth->filter(function($trip) {
+        $cancelledTrips = $tripsThisMonth->filter(function ($trip) {
             return $trip->status == 'cancelled';
         });
-        $billedTrips = $tripsThisMonth->filter(function($trip) {
+        $billedTrips = $tripsThisMonth->filter(function ($trip) {
             return $trip->status == 'billed';
         });
         $totalIncome = $billedTrips->sum(function ($trip) {
@@ -61,22 +70,22 @@ class DashboardController extends Controller
         $totalExpense += $refuelings->sum(function ($refueling) {
             return $refueling->refuelling_cost;
         });
-        $maintenanceExpenses = $services->map(function($item) {
+        $maintenanceExpenses = $services->map(function ($item) {
             return [
                 'cost' => $item->service_cost,
                 'date' => $item->service_date,
             ];
-        })->merge($repairs->map(function($item) {
+        })->merge($repairs->map(function ($item) {
             return [
                 'cost' => $item->repair_cost,
                 'date' => $item->repair_date,
             ];
         }));
-        
+
         $monthlyCosts = array_fill(0, 12, 0);
-        
+
         // Iterate over maintenance expenses and accumulate costs for each month
-        $maintenanceExpenses->each(function($item) use (&$monthlyCosts) {
+        $maintenanceExpenses->each(function ($item) use (&$monthlyCosts) {
             $month = (int) Carbon::parse($item['date'])->format('m') - 1;
             $monthlyCosts[$month] += (float) $item['cost'];
         });
@@ -84,14 +93,14 @@ class DashboardController extends Controller
         for ($i = 0; $i < 12; $i++) {
             $backgroundColors[] = $i % 2 == 0 ? '#198754' : '#ffffff';
         }
-    
+
         $maintenanceCostReport = new MaintenanceCostReport;
         $maintenanceCostReport->labels(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']);
         $maintenanceCostReport->dataset('Cost', 'bar', $monthlyCosts)->options([
             'fill' => 'true',
             'backgroundColor' => $backgroundColors,
         ]);
-        
+
 
         $expiredInsurances = VehicleInsurance::where('insurance_date_of_expiry', '<', date('Y-m-d'))->get();
         $expiredInspectionCertificates = NTSAInspectionCertificate::where('ntsa_inspection_certificate_date_of_expiry', '<', date('Y-m-d'))->get();

@@ -23,6 +23,20 @@
                                                 <div class="actions">
                                                     <div class="accordion-header d-flex justify-content-end align-items-center"
                                                         id="flush-headingOne">
+                                                        <a class="btn btn-success btn-sm"
+                                                            href={{ route('driver.psvbadge.export') }} title="Export">
+                                                            <i class="fa-solid fa-file-export"></i>
+                                                            &nbsp;
+                                                            Export
+                                                        </a>
+                                                        <span class="m-1"></span>
+                                                        <a class="btn btn-success btn-sm"
+                                                            href={{ route('driver.psvbadge.import') }} title="Import">
+                                                            <i class="fa-solid fa-file-import"></i>
+                                                            &nbsp;
+                                                            Import
+                                                        </a>
+                                                        <span class="m-1"></span>
                                                         <button type="button" class="btn btn-success btn-sm"
                                                             data-bs-toggle="modal" data-bs-target="#driverPSVBadgeModal">
                                                             <i class="fa-solid fa-user-plus"></i>&nbsp; Add Driver's PSV

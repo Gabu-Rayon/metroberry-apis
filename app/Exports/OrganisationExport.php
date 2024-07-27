@@ -1,32 +1,28 @@
 <?php
+
 namespace App\Exports;
 
 use App\Models\Organisation;
-use Illuminate\Support\Facades\Log;
-use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class OrganisationExport implements FromCollection, WithHeadings
+class OrganisationExport implements FromQuery, WithHeadings
 {
-    public function __construct()
+    /**
+     * @return \Illuminate\Support\Collection
+     */
+    public function query()
     {
-        // Constructor can be used if needed
-    }
-
-    public function collection()
-    {
-        // Process the data
-        $organisations = Organisation::with('user')->get();
-        $formattedOrganisations = $organisations->map(function ($organisation) {
-            return [
-                'name' => $organisation->user->name,
-                'email' => $organisation->user->email,
-                'phone' => $organisation->user->phone,
-                'address' => $organisation->user->address,
-                'organisation_code' => $organisation->organisation_code,
-            ];
-        });
-        return $formattedOrganisations;
+        return Organisation::query()
+            ->join('users', 'organisations.user_id', '=', 'users.id')
+            ->select(
+                'users.name as Name',
+                'users.email as Email',
+                'users.phone as Phone',
+                'users.address as Address',
+                'organisations.organisation_code as Organisation',
+                'organisations.status as Status'
+            );
     }
 
     public function headings(): array
@@ -36,7 +32,8 @@ class OrganisationExport implements FromCollection, WithHeadings
             'Email',
             'Phone',
             'Address',
-            'Organisation Code',
+            'Organisation',
+            'Status'
         ];
     }
 }

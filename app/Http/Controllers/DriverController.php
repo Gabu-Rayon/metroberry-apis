@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\DriverExport;
 use Exception;
 use App\Models\User;
 use App\Models\Driver;
@@ -18,7 +19,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
-
+use Maatwebsite\Excel\Facades\Excel;
 
 class DriverController extends Controller
 {

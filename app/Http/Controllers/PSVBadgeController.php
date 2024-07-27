@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\DriversPSVBadgesExport;
 use App\Models\Driver;
 use App\Models\PSVBadge;
 use Carbon\Carbon;
@@ -10,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PSVBadgeController extends Controller
 {
@@ -275,5 +277,10 @@ class PSVBadgeController extends Controller
             Log::error($e);
             return redirect()->back()->with('error', $e->getMessage());
         }
+    }
+
+    public function export()
+    {
+        return Excel::download(new DriversPSVBadgesExport, 'psvbadges.xlsx');
     }
 }

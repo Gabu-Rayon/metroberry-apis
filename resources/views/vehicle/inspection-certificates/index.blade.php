@@ -23,10 +23,31 @@
                                         <div class="d-flex justify-content-between align-items-center">
                                             <h6 class="fs-17 fw-semi-bold mb-0">Vehicle  Insepction Certificate(s)</h6>
                                             <div class="text-end">
-                                                <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
-                                                    data-bs-target="#inspectionModal">
-                                                    <i class="fa-solid fa-user-plus"></i>&nbsp; Add Certificate
-                                                </button>
+                                                <div class="actions">
+                                                    <div class="accordion-header d-flex justify-content-end align-items-center"
+                                                        id="flush-headingOne">
+                                                        <a class="btn btn-success btn-sm"
+                                                            href={{ route('vehicle.certificate.export') }} title="Export">
+                                                            <i class="fa-solid fa-file-export"></i>
+                                                            &nbsp;
+                                                            Export
+                                                        </a>
+                                                        <span class="m-1"></span>
+                                                        <a class="btn btn-success btn-sm"
+                                                            href={{ route('vehicle.certificate.import') }} title="Import">
+                                                            <i class="fa-solid fa-file-import"></i>
+                                                            &nbsp;
+                                                            Import
+                                                        </a>
+                                                        <span class="m-1"></span>
+                                                        <button type="button" class="btn btn-success btn-sm"
+                                                            data-bs-toggle="modal"
+                                                            data-bs-target="#vehicleInspectionCertificateModal">
+                                                            <i class="fa-solid fa-user-plus"></i>&nbsp; Add Vehicle
+                                                            Inspection Certificate
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -148,11 +169,10 @@
                     @include('components.footer')
                 </div>
             </div>
-            <!-- end vue page -->
         </div>
-        <!-- END layout-wrapper -->
 
-        <div class="modal fade" id="inspectionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="vehicleInspectionCertificateModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <form action="{{ route('vehicle.inspection.certificate.create') }}" method="POST"
                     class="needs-validation modal-content" enctype="multipart/form-data">
@@ -252,6 +272,29 @@
                         <button class="btn btn-success" type="submit">Save</button>
                     </div>
                 </form>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        document.getElementById('avatar').addEventListener('change', function() {
+                            const file = this.files[0];
+                            if (file) {
+                                const reader = new FileReader();
+                                reader.onload = function() {
+                                    const preview = document.getElementById('avatar_preview');
+                                    preview.src = reader.result;
+                                    preview.style.display = 'block';
+                                };
+                                reader.onerror = function(error) {
+                                    console.error("Error reading file:", error);
+                                };
+                                reader.readAsDataURL(file);
+                            } else {
+                                document.getElementById('avatar_preview').style.display = 'none';
+                            }
+                        });
+                    });
+                </script>
+
             </div>
         </div>
     </body>

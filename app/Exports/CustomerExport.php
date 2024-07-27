@@ -2,14 +2,14 @@
 
 namespace App\Exports;
 
-use App\Models\Driver;
+use App\Models\Customer;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class DriverExport implements FromQuery, WithHeadings
+class CustomerExport implements FromQuery, WithHeadings
 {
     /**
-     * @return \Illuminate\Support\Collection
+     * @return \Illuminate\Database\Eloquent\Builder
      */
 
     protected $role;
@@ -21,32 +21,31 @@ class DriverExport implements FromQuery, WithHeadings
         $this->organisation = $organisation;
     }
 
-
     public function query()
     {
-        $query = Driver::query()
-            ->join('users', 'drivers.user_id', '=', 'users.id')
-            ->join('organisations', 'drivers.organisation_id', '=', 'organisations.id')
+        $query = Customer::query()
+            ->join('users', 'customers.user_id', '=', 'users.id')
             ->select(
                 'users.name as Name',
                 'users.email as Email',
                 'users.phone as Phone',
                 'users.address as Address',
-                'organisations.organisation_code as Organisation',
-                'drivers.national_id_no as ID Number'
+                'customers.customer_organisation_code as Organisation',
+                'customers.national_id_no as ID Number'
             );
 
         if ($this->role !== 'admin') {
+            // Ensure that $this->organisation is not null
             if ($this->organisation) {
-                $query->where('organisations.organisation_code', $this->organisation->organisation_code);
+                $query->where('customers.customer_organisation_code', $this->organisation->organisation_code);
             } else {
-                $query->whereRaw('1 = 0');
+                // Optionally handle cases where $this->organisation is null
+                $query->whereRaw('1 = 0'); // This will effectively return no results
             }
         }
 
         return $query;
     }
-
 
     public function headings(): array
     {

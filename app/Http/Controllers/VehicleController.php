@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\VehicleExport;
 use Exception;
 use Carbon\Carbon;
 use App\Models\Driver;
@@ -17,8 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
-
-
+use Maatwebsite\Excel\Facades\Excel;
 
 class VehicleController extends Controller
 {
@@ -723,7 +723,7 @@ class VehicleController extends Controller
         try {
             $vehicle = Vehicle::findOrFail($id);
             $drivers = Driver::where('status', 'active')
-                ->whereNull('vehicle_id')
+                ->whereDoesntHave('vehicle')
                 ->get();
             return view('vehicle.assign-driver', compact('vehicle', 'drivers'));
         } catch (Exception $e) {
@@ -883,10 +883,21 @@ class VehicleController extends Controller
         } catch (Exception $e) {
             Log::error('ERROR DEACTIVATING VEHICLE');
             Log::error($e);
-            return response()->json([
-                'message' => 'Error occurred while deactivating vehicle',
-                'error' => $e->getMessage()
-            ], 500);
+            return redirect()->back()->with('error', 'An error occurred');
         }
+    }
+
+    public function export()
+    {
+        $role = Auth::user()->role;
+        $organisation = null;
+
+        if ($role == 'organisation') {
+            $organisation = Organisation::where('user_id', Auth::user()->id)->first();
+        }
+
+        $export = new VehicleExport($role, $organisation);
+
+        return Excel::download($export, 'vehicles.xlsx');
     }
 }

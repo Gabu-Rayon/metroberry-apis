@@ -7,13 +7,9 @@
     </div>
     <div class="modal-body">
         <div class="row">
-            <p class="text-center">Are you sure you want to delete {{ $setting->holder_name }}'s Bank Account ?
-            </p>
+            <p class="text-center">Are you sure you want to delete {{ $setting->holder_name }}'s Bank Account ?</p>
             <br>
-            <p class="text-center text-danger">
-                This action can not be undone. Do you want to continue !
-
-            </p>
+            <p class="text-center text-danger">This action can not be undone. Do you want to continue?</p>
         </div>
     </div>
     <div class="modal-footer">

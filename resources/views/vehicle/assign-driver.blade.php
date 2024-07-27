@@ -90,7 +90,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <a href="{{ route('vehicle') }}" class="btn btn-danger">Cancel</a>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
         <button class="btn btn-success" type="submit">Update</button>
     </div>
 </form>

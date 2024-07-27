@@ -18,7 +18,8 @@ class RouteLocations extends Model
         'point_order',
     ];
 
-    public function route () {
+    public function route()
+    {
         return $this->belongsTo(Routes::class, 'route_id', 'id');
     }
 }

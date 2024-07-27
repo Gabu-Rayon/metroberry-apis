@@ -37,13 +37,14 @@ use App\Http\Controllers\NTSAInspectionCertificateController;
 use App\Http\Controllers\VehiclePartCategoryController;
 use App\Http\Controllers\MaintenanceRepairPaymentController;
 use App\Http\Controllers\MaintenanceServicePaymentController;
+use App\Models\DriversLicenses;
 
 
 require __DIR__ . '/auth.php';
 
 Route::get('dashboard', [DashboardController::class, 'index'])
     ->name('dashboard')
-    ->middleware('auth', 'can:view dashboard');
+    ->middleware('auth');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])
@@ -157,15 +158,88 @@ Route::post('employee/import/store', [EmployeeController::class, 'import'])
     ->middleware('auth', 'can:import customer');
 
 /****
- * export Employee
+ * Exports and Imports
  * 
  */
 Route::get('employee/export', [EmployeeController::class, 'export'])
     ->name('employee.export')
     ->middleware('auth', 'can:export customer');
 
+Route::get('employee/import', [EmployeeController::class, 'import'])
+    ->name('employee.import')
+    ->middleware('auth', 'can:import employee');
 
+Route::get('driver/export', [DriverController::class, 'export'])
+    ->name('driver.export')
+    ->middleware('auth', 'can:export driver');
 
+Route::get('driver/import', [DriverController::class, 'import'])
+    ->name('driver.import')
+    ->middleware('auth', 'can:import driver');
+
+Route::get('organisation/export', [OrganisationController::class, 'export'])
+    ->name('organisation.export')
+    ->middleware('auth', 'can:export organisation');
+
+Route::get('organisation/import', [OrganisationController::class, 'import'])
+    ->name('organisation.import')
+    ->middleware('auth', 'can:import organisation');
+
+Route::get('driver/license/export', [DriversLicensesController::class, 'export'])
+    ->name('driver.license.export')
+    ->middleware('auth', 'can:export driver license');
+
+Route::get('driver/license/import', [DriversLicensesController::class, 'import'])
+    ->name('driver.license.import')
+    ->middleware('auth', 'can:import driver license');
+
+Route::get('driver/psvbadge/export', [PSVBadgeController::class, 'export'])
+    ->name('driver.psvbadge.export')
+    ->middleware('auth', 'can:export driver psvbadge');
+
+Route::get('driver/psvbadge/import', [PSVBadgeController::class, 'import'])
+    ->name('driver.psvbadge.import')
+    ->middleware('auth', 'can:import driver psvbadge');
+
+Route::get('vehicle/export', [VehicleController::class, 'export'])
+    ->name('vehicle.export')
+    ->middleware('auth', 'can:export vehicle');
+
+Route::get('vehicle/import', [VehicleController::class, 'import'])
+    ->name('vehicle.import')
+    ->middleware('auth', 'can:import vehicle');
+
+Route::get('vehicle/insurance/export', [VehicleInsuranceController::class, 'export'])
+    ->name('vehicle.insurance.export')
+    ->middleware('auth', 'can:export vehicle insurance');
+
+Route::get('vehicle/insurance/import', [VehicleInsuranceController::class, 'import'])
+    ->name('vehicle.insurance.import')
+    ->middleware('auth', 'can:import vehicle insurance');
+
+Route::get('vehicle/certificate/export', [NTSAInspectionCertificateController::class, 'export'])
+    ->name('vehicle.certificate.export')
+    ->middleware('auth', 'can:export vehicle insp certificate');
+
+Route::get('vehicle/certificate/import', [NTSAInspectionCertificateController::class, 'import'])
+    ->name('vehicle.certificate.import')
+    ->middleware('auth', 'can:import vehicle insp certificate');
+
+Route::get('route/export', [RouteController::class, 'export'])
+    ->name('route.export')
+    ->middleware('auth', 'can:export route');
+
+Route::get('route/import', [RouteController::class, 'import'])
+    ->name('route.import')
+    ->middleware('auth', 'can:import route');
+
+Route::get('route/location/export', [RouteLocationsController::class, 'export'])
+    ->name('route.location.export')
+    ->middleware('auth', 'can:export route location');
+
+Route::get('route/location/import', [RouteLocationsController::class, 'import'])
+    ->name('route.location.import')
+    ->middleware('auth', 'can:import route location');
 
 /***
  * Organisations Routes
@@ -473,9 +547,19 @@ Route::get('route/location', [RouteLocationsController::class, 'index'])
 Route::get('route/location/create', [RouteLocationsController::class, 'create'])
     ->name('route.location.create')
     ->middleware('auth', 'can:create route location');
+
 Route::post('route/location/store', [RouteLocationsController::class, 'store'])
     ->name('route.location.store')
     ->middleware('auth', 'can:create route location');
+
+// Delete Route Location
+Route::get('route/location/{id}/delete', [RouteLocationsController::class, 'delete'])
+    ->name('route.location.delete')
+    ->middleware('auth', 'can:delete route location');
+
+Route::delete('route/location/{id}/delete', [RouteLocationsController::class, 'destroy'])
+    ->name('route.location.destroy')
+    ->middleware('auth', 'can:delete route location');
 
 Route::post('route/locations/get/all', [RouteLocationsController::class, 'getAllRouteWayPoints'])
     ->name('route.location.waypoints')
@@ -1147,6 +1231,10 @@ Route::delete('/refueling/{id}/delete', [VehicleRefuelingController::class, 'des
  * 
  * Manage Vehicle Refueling Stations
  */
+
+Route::get('refueling/station/dashboard', [RefuellingStationController::class, 'dashboard'])
+    ->name('refueling.station.dashboard')
+    ->middleware('auth');
 
 // View Refueling Stations
 Route::get('refueling/station', [RefuellingStationController::class, 'index'])
