@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\PermissionGroup;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -32,6 +31,8 @@ class RoleAndPermissionSeeder extends Seeder
         }
 
         $permissions = [
+            'export route',
+            'import route',
             'import vehicle insurance',
             'export vehicle insurance',
             'import vehicle insp certificate',
@@ -497,6 +498,8 @@ class RoleAndPermissionSeeder extends Seeder
         $refuellingStation = Role::where('name', 'refueling_station')->first();
 
         $admin->syncPermissions([
+            'export route',
+            'import route',
             'import vehicle insp certificate',
             'export vehicle insp certificate',
             'import vehicle insurance',

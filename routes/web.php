@@ -225,6 +225,22 @@ Route::get('vehicle/certificate/import', [NTSAInspectionCertificateController::c
     ->name('vehicle.certificate.import')
     ->middleware('auth', 'can:import vehicle insp certificate');
 
+Route::get('route/export', [RouteController::class, 'export'])
+    ->name('route.export')
+    ->middleware('auth', 'can:export route');
+
+Route::get('route/import', [RouteController::class, 'import'])
+    ->name('route.import')
+    ->middleware('auth', 'can:import route');
+
+Route::get('route/location/export', [RouteLocationsController::class, 'export'])
+    ->name('route.location.export')
+    ->middleware('auth', 'can:export route location');
+
+Route::get('route/location/import', [RouteLocationsController::class, 'import'])
+    ->name('route.location.import')
+    ->middleware('auth', 'can:import route location');
+
 /***
  * Organisations Routes
  */
@@ -487,9 +503,19 @@ Route::get('route/location', [RouteLocationsController::class, 'index'])
 Route::get('route/location/create', [RouteLocationsController::class, 'create'])
     ->name('route.location.create')
     ->middleware('auth', 'can:create route location');
+
 Route::post('route/location/store', [RouteLocationsController::class, 'store'])
     ->name('route.location.store')
     ->middleware('auth', 'can:create route location');
+
+// Delete Route Location
+Route::get('route/location/{id}/delete', [RouteLocationsController::class, 'delete'])
+    ->name('route.location.delete')
+    ->middleware('auth', 'can:delete route location');
+
+Route::delete('route/location/{id}/delete', [RouteLocationsController::class, 'destroy'])
+    ->name('route.location.destroy')
+    ->middleware('auth', 'can:delete route location');
 
 Route::post('route/locations/get/all', [RouteLocationsController::class, 'getAllRouteWayPoints'])
     ->name('route.location.waypoints')
