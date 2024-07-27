@@ -9,10 +9,13 @@ use App\Models\Vehicle;
 use App\Models\Organisation;
 use App\Models\VehicleClass;
 use Illuminate\Http\Request;
+use App\Exports\VehicleExport;
+use App\Imports\VehicleImport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -810,4 +813,66 @@ class VehicleController extends Controller
             return redirect()->back()->with('error', 'An error occurred');
         }
     }
+
+
+
+
+
+    /***
+     * 
+     */
+
+    // public function export()
+    // {
+    //     $fileName = 'organisations' . date('Y-m-d_H-i-s') . '.xlsx';
+
+    //     \Log::info('Exporting file: ' . $fileName);
+
+    //     return Excel::download(new OrganisationExport, $fileName);
+    // }
+
+    public function export()
+    {
+        return Excel::download(new VehicleExport, 'organisations.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+    }
+
+
+
+
+    /**
+    * 
+    *Import organisation detials 
+
+    */
+    public function importFile()
+    {
+        return view('vehicle.importVehicle');
+    }
+
+    public function import(Request $request)
+    {
+        $rules = [
+            'file' => 'required|mimes:csv,txt,xlsx',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with('error', $validator->errors()->first());
+        }
+
+        try {
+            Excel::import(new VehicleImport, $request->file('file'));
+
+            // Log the import event
+            Log::info('Vehicle CSV file imported: ', ['file' => $request->file('file')]);
+
+            return redirect()->back()->with('success', 'Records imported successfully.');
+        } catch (Exception $e) {
+            Log::error('Error importing vehicles: ' . $e->getMessage());
+
+            return redirect()->back()->with('error', 'An error occurred while importing the vehicle records.');
+        }
+    }
+
 }
