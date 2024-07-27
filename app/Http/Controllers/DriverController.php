@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -52,8 +51,8 @@ class DriverController extends Controller
         }
     }
 
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
+        DB::beginTransaction();
         try {
 
 
@@ -119,6 +118,8 @@ class DriverController extends Controller
                 'password' => bcrypt($data['password']),
                 'phone' => $data['phone'],
                 'address' => $data['address'],
+                'phone' => $data['phone'],
+                'address' => $data['address'],
                 'avatar' => $avatarPath,
                 'created_by' => Auth::user()->id,
                 'role' => 'driver',
@@ -150,6 +151,7 @@ class DriverController extends Controller
 
             return redirect()->route('driver')->with('success', 'Driver created successfully');
         } catch (Exception $e) {
+            DB::rollBack();
             Log::error('CREATE DRIVER ERROR');
             Log::error($e);
             return redirect()->back()->with('error', 'An error occurred')->withInput();

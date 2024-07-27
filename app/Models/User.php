@@ -42,6 +42,7 @@ class User extends Authenticatable
         'updated_at',
         'password',
         'remember_token',
+        'roles',
         'permissions',
     ];
 
