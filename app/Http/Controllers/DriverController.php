@@ -158,14 +158,16 @@ class DriverController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Driver $driver)
+    public function show($id)
     {
         try {
+            $driver = Driver::with('vehicle')->findOrFail($id);
+    
             return response()->json([
                 'driver' => $driver
             ], 200);
         } catch (Exception $e) {
-            Log::error('SHOW DRIVER ERROR');
+            Log::error('Error fetching driver');
             Log::error($e);
             return response()->json([
                 'message' => 'An error occurred',
@@ -173,6 +175,7 @@ class DriverController extends Controller
             ], 500);
         }
     }
+    
 
     public function create()
     {
@@ -341,12 +344,9 @@ class DriverController extends Controller
         }
     }
 
-
-
-
-
     /**
      * Remove the specified resource from storage.
+     * 
      */
     public function destroy($id)
     {

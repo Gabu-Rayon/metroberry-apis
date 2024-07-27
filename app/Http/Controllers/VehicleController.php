@@ -136,6 +136,7 @@ class VehicleController extends Controller
 
 
 
+
     // public function store(Request $request)
     // {
     //     try {
@@ -359,11 +360,6 @@ class VehicleController extends Controller
                 'seats' => 'nullable|integer',
                 'fuel_type' => 'nullable|string',
                 'engine_size' => 'nullable|string',
-                'organisation_id' => 'nullable|integer',
-                'vehicle_insurance_issue_date' => 'nullable|date_format:Y-m-d',
-                'vehicle_insurance_expiry' => 'nullable|date_format:Y-m-d',
-                'vehicle_insurance_issue_organisation' => 'nullable|string',
-                'vehicle_avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
             // Update the vehicle attributes if present in the request
@@ -617,11 +613,11 @@ class VehicleController extends Controller
             $vehicle = Vehicle::findOrFail($id);
             $vehicle = Vehicle::find($id);
 
-            if (!$vehicle) {
-                return response()->json([
-                    'error' => 'Vehicle not found'
-                ], 404);
-            }
+        if (!$vehicle) {
+            return response()->json([
+                'error' => 'Vehicle not found'
+            ], 404);
+        }
 
             $vehicle->delete();
             return redirect()->route('vehicle')->with('success', 'Vehicle deleted successfully.');

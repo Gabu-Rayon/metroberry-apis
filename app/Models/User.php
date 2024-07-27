@@ -42,7 +42,6 @@ class User extends Authenticatable
         'updated_at',
         'password',
         'remember_token',
-        'roles',
         'permissions',
     ];
 
@@ -89,12 +88,10 @@ class User extends Authenticatable
         parent::boot();
         static::deleting(function ($user) {
             $user->driver()->delete();
-            $user->customer()->delete();
+            $user->customers()->delete();
             $user->organisation()->delete();
         });
     }
-
-
     public function createdVehicleServices()
     {
         return $this->hasMany(VehicleService::class, 'created_by');
