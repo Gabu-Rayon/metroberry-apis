@@ -8,10 +8,13 @@ use App\Models\Driver;
 use App\Models\Vehicle;
 use App\Models\Organisation;
 use Illuminate\Http\Request;
+use App\Exports\DriverExport;
+use App\Imports\DriverImport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -497,6 +500,70 @@ class DriverController extends Controller
             Log::error('DEACTIVATE DRIVER ERROR');
             Log::error($e);
             return redirect()->back()->with('error', 'An error occurred');
+        }
+    }
+
+
+
+
+    // public function export()
+    // {
+    //     $fileName = 'drivers_' . date('Y-m-d_H-i-s') . '.xlsx';
+
+    //     \Log::info('Exporting file: ' . $fileName);
+
+    //     return Excel::download(new DriverExport, $fileName);
+    // }
+
+    public function export()
+    {
+        return Excel::download(new DriverExport, 'drivers.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+    }
+
+
+
+    /**
+     * 
+     *Import Driver detials 
+
+     */
+    // Display the import file view
+    public function importFile()
+    {
+        return view('driver.importDriver');
+    }
+
+    // Handle the import of the file
+    public function import(Request $request)
+    {
+        // Validation rules
+        $rules = [
+            'file' => 'required|mimes:csv,txt,xlsx',
+        ];
+
+        // Validate the request
+        $validator = Validator::make($request->all(), $rules);
+
+        // If validation fails, redirect back with error message
+        if ($validator->fails()) {
+            return redirect()->back()->with('error', $validator->errors()->first());
+        }
+
+        try {
+            // Import the file using the DriverImport class
+            Excel::import(new DriverImport, $request->file('file'));
+
+            // Log the import action
+            Log::info('Data from Driver CSV File being Imported: ', ['file' => $request->file('file')]);
+
+            // Redirect back with success message
+            return redirect()->back()->with('success', 'Records imported successfully.');
+        } catch (Exception $e) {
+            // Log the error
+            Log::error('Error importing Drivers: ' . $e->getMessage());
+
+            // Redirect back with error message
+            return redirect()->back()->with('error', 'An error occurred while importing the Driver records.');
         }
     }
 }

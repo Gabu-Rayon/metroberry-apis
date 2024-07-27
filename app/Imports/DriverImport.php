@@ -1,16 +1,17 @@
 <?php
+
 namespace App\Imports;
 
 use App\Models\User;
-use App\Models\Customer;
+use App\Models\Driver;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class EmployeeImport implements ToModel, WithHeadingRow
+class DriverImport implements ToModel, WithHeadingRow
 {
     public function model(array $row)
     {
@@ -40,14 +41,11 @@ class EmployeeImport implements ToModel, WithHeadingRow
             [
                 'name' => $row['name'],
                 'email' => $row['email'],
-                'password' => Hash::make($randomPassword), 
+                'password' => Hash::make($randomPassword),
                 'phone' => $row['phone'],
                 'address' => $row['address'],
-                'avatar' => $avatarPath, 
-                // 'role' => $row['role'],
-                
-                //set the role by default customer
-                'role' => 'customer',
+                'avatar' => $avatarPath,
+                'role' => 'driver',
                 'created_by' => Auth::user()->id,
             ]
         );
@@ -57,11 +55,10 @@ class EmployeeImport implements ToModel, WithHeadingRow
             $organisationId = Auth::user()->id;
         }
 
-
-        Customer::updateOrCreate(
+        Driver::updateOrCreate(
             ['user_id' => $user->id],
             [
-
+                'created_by' => Auth::user()->id,
                 /***
                  * Organisation ID Handling: The organisation_id is determined based on the
                  *  logged-in user’s role. If the user’s role is organisation, the ID
@@ -69,11 +66,11 @@ class EmployeeImport implements ToModel, WithHeadingRow
                  *  it remains null.
                  */
                 'organisation_id' => $organisationId,
-                'customer_organisation_code' => $row['customer_organisation_code'],
+                'vehicle_id' => null,
                 'national_id_no' => $row['national_id_no'],
-                'national_id_front_avatar' => $nationalIdFrontAvatarPath, 
-                'national_id_behind_avatar' => $nationalIdBehindAvatarPath, 
-                'created_by' => Auth::user()->id,
+                'national_id_front_avatar' => $nationalIdFrontAvatarPath,
+                'national_id_behind_avatar' => $nationalIdBehindAvatarPath,
+                'status' => 'inactive',
             ]
         );
 

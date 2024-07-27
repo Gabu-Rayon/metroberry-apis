@@ -558,7 +558,7 @@ class EmployeeController extends Controller
     public function import(Request $request)
     {
         $rules = [
-            'file' => 'required|mimes:csv,txt',
+            'file' => 'required|mimes:csv,txt,xlsx',
         ];
 
         $validator = Validator::make($request->all(), $rules);

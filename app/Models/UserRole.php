@@ -20,7 +20,6 @@ class UserRole extends Model
     }
 
 
-
     public function UserRole()
     {
         return $this->hasMany(Permission::class);

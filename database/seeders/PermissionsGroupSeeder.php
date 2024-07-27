@@ -47,6 +47,8 @@ class PermissionsGroupSeeder extends Seeder
                 'edit organisation',
                 'delete organisation',
                 'update organisation',
+                'import organisation',
+                'export organisation',
             ],
             'drivers' => [
                 'manage drivers',
@@ -59,6 +61,8 @@ class PermissionsGroupSeeder extends Seeder
                 'deactivate driver',
                 'assign driver',
                 'unassign driver',
+                'import driver',
+                'export driver',
             ],
             'license' => [
                 'manage driver licenses',

@@ -226,6 +226,27 @@ Route::delete('organisation/{id}/delete', [OrganisationController::class, 'destr
     ->name('organisation.destroy')
     ->middleware('auth', 'can:delete organisation');
 
+
+/****
+ * Import Organisation
+ * 
+ */
+
+Route::get('organisation/import', [OrganisationController::class, 'importFile'])
+    ->name('organisation.import.file')
+    ->middleware('auth', 'can:import organisation');
+
+Route::post('organisation/import/store', [OrganisationController::class, 'import'])
+    ->name('organisation.import.store')
+    ->middleware('auth', 'can:import organisation');
+
+/****
+ * Export organisation
+ */
+Route::get('organisation/export', [OrganisationController::class, 'export'])
+    ->name('organisation.export')
+    ->middleware('auth', 'can:export organisation');
+
 /**
  * Drivers Routes
  * 
@@ -281,6 +302,29 @@ Route::get('driver/performance', [DriverController::class, 'driverPerformance'])
 Route::get('performance/create', [DriverController::class, 'createDriverPerformance'])
     ->name('driver.performance.create')
     ->middleware('auth', 'can:create driver performance');
+
+
+
+/****
+ * Import Driver
+ * 
+ */
+
+Route::get('driver/import', [DriverController::class, 'importFile'])
+    ->name('driver.import.file')
+    ->middleware('auth', 'can:import driver');
+
+Route::post('driver/import/store', [DriverController::class, 'import'])
+    ->name('driver.import.store')
+    ->middleware('auth', 'can:import driver');
+
+/****
+ * Export Driver
+ */
+Route::get('driver/export', [DriverController::class, 'export'])
+    ->name('driver.export')
+    ->middleware('auth', 'can:export driver');
+
 
 /**
  * Drivers Licenses Routes

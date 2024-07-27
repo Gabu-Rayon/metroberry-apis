@@ -81,7 +81,8 @@ class RoleAndPermissionSeeder extends Seeder
             'create organisation',
             'edit organisation',
             'delete organisation',
-            'update organisation',
+            'import organisation',
+            'export organisation',
 
             // Drivers Permissions
             'manage drivers',
@@ -95,6 +96,9 @@ class RoleAndPermissionSeeder extends Seeder
             'assign driver',
             'unassign driver',
             'view driver',
+            'import driver',
+            'export driver',
+            
             'view driver trips',
             'view driver trips details',
             'delete driver trips details',
@@ -528,6 +532,8 @@ class RoleAndPermissionSeeder extends Seeder
             'edit organisation',
             'delete organisation',
             'update organisation',
+            'import organisation',
+            'export organisation',
 
             // Drivers Permissions
             'manage drivers',
@@ -536,6 +542,8 @@ class RoleAndPermissionSeeder extends Seeder
             'edit driver',
             'delete driver',
             'update driver',
+            'import driver',
+            'export driver',
 
             'activate driver',
             'deactivate driver',
@@ -972,6 +980,8 @@ class RoleAndPermissionSeeder extends Seeder
             'create driver',
             'edit driver',
             'update driver',
+            'import driver',
+            'export driver',
 
             'view vehicle details',
             'create vehicle details',
