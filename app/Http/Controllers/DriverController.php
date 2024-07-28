@@ -9,7 +9,6 @@ use App\Models\Driver;
 use App\Models\Vehicle;
 use App\Models\Organisation;
 use Illuminate\Http\Request;
-use App\Exports\DriverExport;
 use App\Imports\DriverImport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -18,7 +17,6 @@ use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
-use Maatwebsite\Excel\Facades\Excel;
 
 class DriverController extends Controller
 {

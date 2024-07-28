@@ -9,7 +9,9 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 class OrganisationExport implements FromQuery, WithHeadings
 {
     /**
-     * @return \Illuminate\Support\Collection
+     * Defines the query used to retrieve data for the export.
+     *
+     * @return \Illuminate\Database\Query\Builder
      */
     public function query()
     {
@@ -25,6 +27,11 @@ class OrganisationExport implements FromQuery, WithHeadings
             );
     }
 
+    /**
+     * Defines the column headings for the exported file.
+     *
+     * @return array
+     */
     public function headings(): array
     {
         return [
