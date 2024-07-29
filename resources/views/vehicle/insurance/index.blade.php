@@ -24,22 +24,29 @@
                                             <h6 class="fs-17 fw-semi-bold mb-0">Vehicle Insurances</h6>
                                             <div class="text-end">
                                                 <div class="actions">
-                                                    <a class="btn btn-success btn-sm"
-                                                        href="{{ route('vehicle.insurance.export') }}" title="Export">
-                                                        <i class="fa-solid fa-file-export"></i>
-                                                        &nbsp;Export
-                                                    </a>
+                                                    @if (Auth::user()->can('export vehicle insurances'))
+                                                        <a class="btn btn-success btn-sm"
+                                                            href="{{ route('vehicle.insurance.export') }}" title="Export">
+                                                            <i class="fa-solid fa-file-export"></i>
+                                                            &nbsp;Export
+                                                        </a>
+                                                    @endif
                                                     <span class="m-1"></span>
-                                                    <a class="btn btn-success btn-sm"
-                                                        href="{{ route('vehicle.insurance.import') }}" title="Import">
-                                                        <i class="fa-solid fa-file-import"></i>
-                                                        &nbsp;Import
-                                                    </a>
+                                                    @if (Auth::user()->can('import vehicle insurances'))
+                                                        <a class="btn btn-success btn-sm"
+                                                            href="{{ route('vehicle.insurance.import') }}" title="Import">
+                                                            <i class="fa-solid fa-file-import"></i>
+                                                            &nbsp;Import
+                                                        </a>
+                                                    @endif
                                                     <span class="m-1"></span>
-                                                    <button type="button" class="btn btn-success btn-sm"
-                                                        data-bs-toggle="modal" data-bs-target="#vehicleInsuranceModal">
-                                                        <i class="fa-solid fa-user-plus"></i>&nbsp; Add Vehicle Insurance
-                                                    </button>
+                                                    @if (Auth::user()->can('create vehicle insurance'))
+                                                        <button type="button" class="btn btn-success btn-sm"
+                                                            data-bs-toggle="modal" data-bs-target="#vehicleInsuranceModal">
+                                                            <i class="fa-solid fa-user-plus"></i>&nbsp; Add Vehicle
+                                                            Insurance
+                                                        </button>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -59,11 +66,11 @@
         </div>
         <!-- END layout-wrapper -->
 
-        <div class="modal fade" id="vehicleInsuranceModal" tabindex="-1"
-            aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="vehicleInsuranceModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog modal-lg">
-                <form action="{{ route('vehicle.insurance.store') }}" method="POST"
-                    class="needs-validation modal-content" enctype="multipart/form-data">
+                <form action="{{ route('vehicle.insurance.store') }}" method="POST" class="needs-validation modal-content"
+                    enctype="multipart/form-data">
                     @csrf
                     <div class="card-header my-3 p-2 border-bottom">
                         <h4>Add Vehicle Insurance Details</h4>
@@ -72,9 +79,11 @@
                         <div class="row">
                             <div class="col-md-12 col-lg-6">
                                 <div class="form-group row my-2">
-                                    <label for="insurance_company_id" class="col-sm-5 col-form-label">Company <i class="text-danger">*</i></label>
+                                    <label for="insurance_company_id" class="col-sm-5 col-form-label">Company <i
+                                            class="text-danger">*</i></label>
                                     <div class="col-sm-7">
-                                        <select class="form-control basic-single" name="insurance_company_id" id="insurance_company_id" required>
+                                        <select class="form-control basic-single" name="insurance_company_id"
+                                            id="insurance_company_id" required>
                                             <option value="">Select Company</option>
                                             @foreach ($insuranceCompanies as $company)
                                                 <option value="{{ $company->id }}">{{ $company->name }}</option>
@@ -83,21 +92,27 @@
                                     </div>
                                 </div>
                                 <div class="form-group row my-2">
-                                    <label for="insurance_policy_no" class="col-sm-5 col-form-label">Policy Number <i class="text-danger">*</i></label>
+                                    <label for="insurance_policy_no" class="col-sm-5 col-form-label">Policy Number <i
+                                            class="text-danger">*</i></label>
                                     <div class="col-sm-7">
-                                        <input name="insurance_policy_no" class="form-control" type="text" placeholder="Policy number" id="insurance_policy_no" value="{{ old('insurance_policy_no') }}" required>
+                                        <input name="insurance_policy_no" class="form-control" type="text"
+                                            placeholder="Policy number" id="insurance_policy_no"
+                                            value="{{ old('insurance_policy_no') }}" required>
                                     </div>
                                 </div>
                                 <div class="form-group row my-2">
                                     <label for="insurance_date_of_issue" class="col-sm-5 col-form-label">Start Date</label>
                                     <div class="col-sm-7">
-                                        <input name="insurance_date_of_issue" class="form-control" type="date" id="insurance_date_of_issue" value="{{ old('insurance_date_of_issue') }}">
+                                        <input name="insurance_date_of_issue" class="form-control" type="date"
+                                            id="insurance_date_of_issue" value="{{ old('insurance_date_of_issue') }}">
                                     </div>
                                 </div>
                                 <div class="form-group row my-2">
-                                    <label for="recurring_period_id" class="col-sm-5 col-form-label">Recurring Period <i class="text-danger">*</i></label>
+                                    <label for="recurring_period_id" class="col-sm-5 col-form-label">Recurring Period <i
+                                            class="text-danger">*</i></label>
                                     <div class="col-sm-7">
-                                        <select class="form-control basic-single" name="recurring_period_id" id="recurring_period_id" required>
+                                        <select class="form-control basic-single" name="recurring_period_id"
+                                            id="recurring_period_id" required>
                                             <option value="">Select Recurring Period</option>
                                             @foreach ($recurringPeriods as $period)
                                                 <option value="{{ $period->id }}">{{ $period->period }}</option>
@@ -132,9 +147,11 @@
                             </div>
                             <div class="col-md-12 col-lg-6">
                                 <div class="form-group row mb-1">
-                                    <label for="vehicle_id" class="col-sm-5 col-form-label">Vehicle <i class="text-danger">*</i></label>
+                                    <label for="vehicle_id" class="col-sm-5 col-form-label">Vehicle <i
+                                            class="text-danger">*</i></label>
                                     <div class="col-sm-7">
-                                        <select class="form-control basic-single" name="vehicle_id" id="vehicle_id" required>
+                                        <select class="form-control basic-single" name="vehicle_id" id="vehicle_id"
+                                            required>
                                             <option value="">Select Vehicle</option>
                                             @foreach ($vehicles as $vehicle)
                                                 <option value="{{ $vehicle->id }}">{{ $vehicle->model }}</option>
@@ -143,33 +160,43 @@
                                     </div>
                                 </div>
                                 <div class="form-group row my-2">
-                                    <label for="charges_payable" class="col-sm-5 col-form-label">Charge Payable <i class="text-danger">*</i></label>
+                                    <label for="charges_payable" class="col-sm-5 col-form-label">Charge Payable <i
+                                            class="text-danger">*</i></label>
                                     <div class="col-sm-7">
-                                        <input name="charges_payable" class="form-control" type="number" step="any" placeholder="Charge payable" id="charges_payable" value="{{ old('charges_payable') }}" required>
+                                        <input name="charges_payable" class="form-control" type="number" step="any"
+                                            placeholder="Charge payable" id="charges_payable"
+                                            value="{{ old('charges_payable') }}" required>
                                     </div>
                                 </div>
                                 <div class="form-group row my-2">
                                     <label for="insurance_date_of_expiry" class="col-sm-5 col-form-label">End Date</label>
                                     <div class="col-sm-7">
-                                        <input name="insurance_date_of_expiry" class="form-control" type="date" id="insurance_date_of_expiry" value="{{ old('insurance_date_of_expiry') }}">
+                                        <input name="insurance_date_of_expiry" class="form-control" type="date"
+                                            id="insurance_date_of_expiry" value="{{ old('insurance_date_of_expiry') }}">
                                     </div>
                                 </div>
                                 <div class="form-group row my-2">
                                     <label for="recurring_date" class="col-sm-5 col-form-label">Recurring Date</label>
                                     <div class="col-sm-7">
-                                        <input name="recurring_date" class="form-control" type="date" id="recurring_date" value="{{ old('recurring_date') }}">
+                                        <input name="recurring_date" class="form-control" type="date"
+                                            id="recurring_date" value="{{ old('recurring_date') }}">
                                     </div>
                                 </div>
                                 <div class="form-group row my-2">
-                                    <label for="deductible" class="col-sm-5 col-form-label">Deductible <i class="text-danger">*</i></label>
+                                    <label for="deductible" class="col-sm-5 col-form-label">Deductible <i
+                                            class="text-danger">*</i></label>
                                     <div class="col-sm-7">
-                                        <input name="deductible" class="form-control" type="number" step="any" placeholder="Deductible" id="deductible" value="{{ old('deductible') }}" required>
+                                        <input name="deductible" class="form-control" type="number" step="any"
+                                            placeholder="Deductible" id="deductible" value="{{ old('deductible') }}"
+                                            required>
                                     </div>
                                 </div>
                                 <div class="form-group row my-2">
-                                    <label for="policy_document" class="col-sm-5 col-form-label">Policy Document <i class="text-danger">*</i></label>
+                                    <label for="policy_document" class="col-sm-5 col-form-label">Policy Document <i
+                                            class="text-danger">*</i></label>
                                     <div class="col-sm-7">
-                                        <input type="file" name="policy_document" id="policy_document" required onchange="get_img_url(this, '#document_image');">
+                                        <input type="file" name="policy_document" id="policy_document" required
+                                            onchange="get_img_url(this, '#document_image');">
                                         <img id="document_image" src="" width="120px" class="mt-1">
                                     </div>
                                 </div>

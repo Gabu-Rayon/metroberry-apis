@@ -30,15 +30,19 @@
                     <td>{{ $insurance->insurance_date_of_issue }}</td>
                     <td>{{ $insurance->insurance_date_of_expiry }}</td>
                     <td class="d-flex">
-                        <a href="javascript:void(0);" class="btn btn-sm btn-primary"
-                            onclick="axiosModal('/vehicle/insurance/{{ $insurance->id }}/edit')">
-                            <i class="fas fa-edit"></i>
-                        </a>
+                        @if (Auth::user()->can('edit vehicle insurance'))
+                            <a href="javascript:void(0);" class="btn btn-sm btn-primary"
+                                onclick="axiosModal('/vehicle/insurance/{{ $insurance->id }}/edit')">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        @endif
                         <span class="m-1"></span>
-                        <a href="javascript:void(0);" class="btn btn-sm btn-danger"
-                            onclick="axiosModal('/vehicle/insurance/{{ $insurance->id }}/')">
-                            <i class="fas fa-trash"></i>
-                        </a>
+                        @if (Auth::user()->can('delete vehicle insurance'))
+                            <a href="javascript:void(0);" class="btn btn-sm btn-danger"
+                                onclick="axiosModal('/vehicle/insurance/{{ $insurance->id }}/')">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        @endif
                     </td>
                 </tr>
             @endforeach

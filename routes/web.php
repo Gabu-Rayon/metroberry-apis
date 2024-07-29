@@ -392,6 +392,16 @@ Route::delete('driver/psvbadge/{id}/delete', [PSVBadgeController::class, 'destro
     ->name('driver.psvbadge.destroy')
     ->middleware('auth', 'can:delete driver psvbadge');
 
+// Export Driver's PSV Badges
+Route::get('driver/psvbadge/export', [PSVBadgeController::class, 'export'])
+    ->name('driver.psvbadge.export')
+    ->middleware('auth', 'can:export driver psvbadges');
+
+// Import Driver's PSV Badges
+Route::get('driver/psvbadge/import', [PSVBadgeController::class, 'import'])
+    ->name('driver.psvbadge.import')
+    ->middleware('auth', 'can:import driver psvbadges');
+
 /**
  * Driver Performance Routes
  * 
@@ -399,7 +409,185 @@ Route::delete('driver/psvbadge/{id}/delete', [PSVBadgeController::class, 'destro
 
 Route::get('driver/performance', [DriverController::class, 'driverPerformance'])
     ->name('driver.performance.index')
-    ->middleware('auth', 'can:view driver performance');
+    ->middleware('auth', 'can:show driver performance');
+
+
+
+/**
+ * vehicle Routes
+ * 
+ */
+
+//  View Vehicles
+Route::get('/vehicle', [VehicleController::class, 'index'])
+    ->name('vehicle')
+    ->middleware('auth', 'can:view vehicles');
+
+Route::get('/vehicle/create', [VehicleController::class, 'create'])
+    ->name('vehicle.create')
+    ->middleware('auth', 'can:create vehicle');
+
+Route::post('/vehicle/store', [VehicleController::class, 'store'])
+    ->name('vehicle.store.new')
+    ->middleware('auth', 'can:create vehicle');
+
+Route::get('/vehicle/{id}/edit', [VehicleController::class, 'edit'])
+    ->name('vehicle.edit')
+    ->middleware('auth', 'can:edit vehicle');
+Route::put('/vehicle/{id}', [VehicleController::class, 'update'])
+    ->name('vehicle.update')
+    ->middleware('auth', 'can:edit vehicle');
+
+// vehicle/{{ $vehicle->id }}/assign/driver
+Route::get('/vehicle/{id}/assign/driver', [VehicleController::class, 'assignDriverForm'])
+    ->name('vehicle.assign.driver.form')
+    ->middleware('auth', 'can:assign driver');
+
+Route::put('/vehicle/{id}/assign/driver', [VehicleController::class, 'assignDriver'])
+    ->name('vehicle.assign.driver')
+    ->middleware('auth', 'can:assign driver');
+
+// Activate Vehicle 
+Route::get('vehicle/{id}/activate', [VehicleController::class, 'activateForm'])
+    ->name('vehicle.activate')
+    ->middleware('auth', 'can:activate vehicle');
+
+Route::put('vehicle/{id}/activateStore', [VehicleController::class, 'activate'])
+    ->name('vehicle.activateStore')
+    ->middleware('auth', 'can:activate vehicle');
+
+Route::get('vehicle/{id}/deactivate', [VehicleController::class, 'deactivateForm'])
+    ->name('vehicle.deactivate')
+    ->middleware('auth', 'can:deactivate vehicle');
+
+Route::put('vehicle/{id}/deactivateStore', [VehicleController::class, 'deactivate'])
+    ->name('vehicle.deactivateStore')
+    ->middleware('auth', 'can:deactivate vehicle');
+
+// Delete Vehicle
+Route::get('vehicle/{id}/delete', [VehicleController::class, 'delete'])
+    ->name('vehicle.delete')
+    ->middleware('auth', 'can:delete vehicle');
+
+Route::delete('vehicle/{id}/delete', [VehicleController::class, 'destroy'])
+    ->name('vehicle.destroy')
+    ->middleware('auth', 'can:delete vehicle');
+
+
+Route::get('vehicle/export', [VehicleController::class, 'export'])
+    ->name('vehicle.export')
+    ->middleware('auth', 'can:export vehicles');
+
+Route::get('vehicle/import', [VehicleController::class, 'import'])
+    ->name('vehicle.import')
+    ->middleware('auth', 'can:import vehicles');
+
+
+/****
+ * Vehicle Insurance Routes
+ */
+
+Route::get('/vehicle/insurance/', [VehicleInsuranceController::class, 'index'])
+    ->name('vehicle.insurance.index')
+    ->middleware('auth', 'can:view vehicle insurances');
+
+
+Route::get('/vehicle/insurance/create', [VehicleInsuranceController::class, 'create'])
+    ->name('vehicle.insurance.create')
+    ->middleware('can:create vehicle insurance');
+
+Route::post('/vehicle/insurance/store', [VehicleInsuranceController::class, 'store'])
+    ->name('vehicle.insurance.store')
+    ->middleware('can:create vehicle insurance');
+
+Route::get('/vehicle/insurance/{id}', [VehicleInsuranceController::class, 'show'])
+    ->name('vehicle.insurance.show')
+    ->middleware('can:show vehicle insurance');
+
+Route::get('/vehicle/insurance/{id}/edit', [VehicleInsuranceController::class, 'edit'])
+    ->name('vehicle.insurance.edit')
+    ->middleware('can:edit vehicle insurance');
+
+Route::put('/vehicle/insurance/{id}', [VehicleInsuranceController::class, 'update'])
+    ->name('vehicle.insurance.update')
+    ->middleware('can:edit vehicle insurance');
+
+Route::get('/vehicle/insurance/{id}', [VehicleInsuranceController::class, 'delete'])
+    ->name('vehicle.insurance.delete')
+    ->middleware('can:delete vehicle insurance');
+
+Route::delete('/vehicle/insurance/{id}', [VehicleInsuranceController::class, 'destroy'])
+    ->name('vehicle.insurance.destroy')
+    ->middleware('can:delete vehicle insurance');
+
+Route::get('vehicle/insurance/export', [VehicleInsuranceController::class, 'export'])
+    ->name('vehicle.insurance.export')
+    ->middleware('auth', 'can:export vehicle insurances');
+
+Route::get('vehicle/insurance/import', [VehicleInsuranceController::class, 'import'])
+    ->name('vehicle.insurance.import')
+    ->middleware('auth', 'can:import vehicle insurances');
+
+
+/**
+ * NTSA Inspection Certificate Routes
+ */
+
+// View Vehicle Inspection Certificate
+Route::get('vehicle/inspection-certificate', [NTSAInspectionCertificateController::class, 'index'])
+    ->name('vehicle.inspection.certificate')
+    ->middleware('auth', 'can:view vehicle inspection certificates');
+
+// Create Vehicle Inspection Certificate
+Route::get('vehicle/inspection-certificate/create', [NTSAInspectionCertificateController::class, 'create'])
+    ->name('vehicle.inspection.certificate.create')
+    ->middleware('auth', 'can:create vehicle inspection certificate');
+
+Route::post('vehicle/inspection-certificate/create', [NTSAInspectionCertificateController::class, 'store'])
+    ->name('vehicle.inspection.certificate.create')
+    ->middleware('auth', 'can:create vehicle inspection certificate');
+
+// Edit Vehicle Inspection Certificate
+Route::get('vehicle/inspection-certificate/{id}/edit', [NTSAInspectionCertificateController::class, 'edit'])
+    ->name('vehicle.inspection.certificate.edit')
+    ->middleware('auth', 'can:edit vehicle inspection certificate');
+
+Route::put('vehicle/inspection-certificate/{id}/edit', [NTSAInspectionCertificateController::class, 'update'])
+    ->name('vehicle.inspection.certificate.edit')
+    ->middleware('auth', 'can:edit vehicle inspection certificate');
+
+Route::get('vehicle/inspection-certificate/{id}/verify', [NTSAInspectionCertificateController::class, 'verifyForm'])
+    ->name('vehicle.inspection.certificate.verify')
+    ->middleware('auth', 'can:activate vehicle inspection certificate');
+
+Route::put('vehicle/inspection-certificate/{id}/verify', [NTSAInspectionCertificateController::class, 'verify'])
+    ->name('vehicle.inspection.certificate.verify')
+    ->middleware('auth', 'can:activate vehicle inspection certificate');
+
+Route::get('vehicle/inspection-certificate/{id}/suspend', [NTSAInspectionCertificateController::class, 'suspendForm'])
+    ->name('vehicle.inspection.certificate.suspend')
+    ->middleware('auth', 'can:deactivate vehicle inspection certificate');
+
+Route::put('vehicle/inspection-certificate/{id}/suspend', [NTSAInspectionCertificateController::class, 'suspend'])
+    ->name('vehicle.inspection.certificate.suspend')
+    ->middleware('auth', 'can:deactivate vehicle inspection certificate');
+
+// Delete Vehicle Inspection Certificate
+Route::get('vehicle/inspection-certificate/{id}/delete', [NTSAInspectionCertificateController::class, 'delete'])
+    ->name('vehicle.inspection.certificate.delete')
+    ->middleware('auth', 'can:delete vehicle inspection certificate');
+
+Route::delete('vehicle/inspection-certificate/{id}/delete', [NTSAInspectionCertificateController::class, 'destroy'])
+    ->name('vehicle.inspection.certificate.delete')
+    ->middleware('auth', 'can:delete vehicle inspection certificate');
+
+Route::get('vehicle/certificate/export', [NTSAInspectionCertificateController::class, 'export'])
+    ->name('vehicle.certificate.export')
+    ->middleware('auth', 'can:export vehicle inspection certificates');
+
+Route::get('vehicle/certificate/import', [NTSAInspectionCertificateController::class, 'import'])
+    ->name('vehicle.certificate.import')
+    ->middleware('auth', 'can:import vehicle inspection certificates');
 
 
 
@@ -484,39 +672,6 @@ Route::post('/admin/user/{id}/destroy', [UserController::class, 'destory'])
  * Exports and Imports
  * 
  */
-
-
-Route::get('driver/psvbadge/export', [PSVBadgeController::class, 'export'])
-    ->name('driver.psvbadge.export')
-    ->middleware('auth', 'can:export driver psvbadge');
-
-Route::get('driver/psvbadge/import', [PSVBadgeController::class, 'import'])
-    ->name('driver.psvbadge.import')
-    ->middleware('auth', 'can:import driver psvbadge');
-
-Route::get('vehicle/export', [VehicleController::class, 'export'])
-    ->name('vehicle.export')
-    ->middleware('auth', 'can:export vehicle');
-
-Route::get('vehicle/import', [VehicleController::class, 'import'])
-    ->name('vehicle.import')
-    ->middleware('auth', 'can:import vehicle');
-
-Route::get('vehicle/insurance/export', [VehicleInsuranceController::class, 'export'])
-    ->name('vehicle.insurance.export')
-    ->middleware('auth', 'can:export vehicle insurance');
-
-Route::get('vehicle/insurance/import', [VehicleInsuranceController::class, 'import'])
-    ->name('vehicle.insurance.import')
-    ->middleware('auth', 'can:import vehicle insurance');
-
-Route::get('vehicle/certificate/export', [NTSAInspectionCertificateController::class, 'export'])
-    ->name('vehicle.certificate.export')
-    ->middleware('auth', 'can:export vehicle insp certificate');
-
-Route::get('vehicle/certificate/import', [NTSAInspectionCertificateController::class, 'import'])
-    ->name('vehicle.certificate.import')
-    ->middleware('auth', 'can:import vehicle insp certificate');
 
 Route::get('route/export', [RouteController::class, 'export'])
     ->name('route.export')
@@ -718,63 +873,6 @@ Route::get('billed/trip/{id}/send/invoice', [TripPaymentController::class, 'bill
     ->name('billed.trip.send.invoice')
     ->middleware('auth', 'can:send trip invoice');
 
-
-/**
- * vehicle Routes
- * 
- */
-
-Route::get('/vehicle', [VehicleController::class, 'index'])
-    ->name('vehicle')
-    ->middleware('auth', 'can:view vehicle');
-
-Route::get('/vehicle/create', [VehicleController::class, 'create'])
-    ->name('vehicle.create')
-    ->middleware('auth', 'can:create vehicle');
-Route::post('/vehicle/store', [VehicleController::class, 'store'])
-    ->name('vehicle.store.new')
-    ->middleware('auth', 'can:create vehicle');
-
-Route::get('/vehicle/{id}/edit', [VehicleController::class, 'edit'])
-    ->name('vehicle.edit')
-    ->middleware('auth', 'can:edit vehicle');
-Route::put('/vehicle/{id}', [VehicleController::class, 'update'])
-    ->name('vehicle.update')
-    ->middleware('auth', 'can:edit vehicle');
-
-// vehicle/{{ $vehicle->id }}/assign/driver
-Route::get('/vehicle/{id}/assign/driver', [VehicleController::class, 'assignDriverForm'])
-    ->name('vehicle.assign.driver.form')
-    ->middleware('auth', 'can:assign driver to vehicle');
-Route::put('/vehicle/{id}/assign/driver', [VehicleController::class, 'assignDriver'])
-    ->name('vehicle.assign.driver')
-    ->middleware('auth', 'can:assign driver to vehicle');
-
-Route::get('/vehicle/{id}/delete', [VehicleController::class, 'destroy'])
-    ->name('vehicle.destroy')
-    ->middleware('auth', 'can:delete vehicle');
-
-// Activate Vehicle 
-Route::get('vehicle/{id}/activate', [VehicleController::class, 'activateForm'])
-    ->name('vehicle.activate')
-    ->middleware('auth', 'can:activate vehicle');
-Route::put('vehicle/{id}/activateStore', [VehicleController::class, 'activate'])
-    ->name('vehicle.activateStore')
-    ->middleware('auth', 'can:activate vehicle');
-Route::get('vehicle/{id}/deactivate', [VehicleController::class, 'deactivateForm'])
-    ->name('vehicle.deactivate')
-    ->middleware('auth', 'can:deactivate vehicle');
-Route::put('vehicle/{id}/deactivateStore', [VehicleController::class, 'deactivate'])
-    ->name('vehicle.deactivateStore')
-    ->middleware('auth', 'can:deactivate vehicle');
-
-// Delete Vehicle
-Route::get('vehicle/{id}/delete', [VehicleController::class, 'delete'])
-    ->name('vehicle.delete')
-    ->middleware('auth', 'can:delete vehicle');
-Route::delete('vehicle/{id}/delete', [VehicleController::class, 'destroy'])
-    ->name('vehicle.destroy')
-    ->middleware('auth', 'can:delete vehicle');
 
 /***
  * Vehicle Maintaince Repair Routes
@@ -1564,40 +1662,6 @@ Route::delete('/vehicle/insurance/company/{id}/destory', [InsuranceCompanyContro
     ->name('vehicle.insurance.company.destroy')
     ->middleware('auth', 'can:delete vehicle insurance company');
 
-/****
- * VehicleInsurance Route
- */
-
-Route::get('/vehicle/insurance/', [VehicleInsuranceController::class, 'index'])
-    ->name('vehicle.insurance.index')
-    ->middleware('auth', 'can:view vehicle insurance');
-Route::get('/vehicle/insurance/create', [VehicleInsuranceController::class, 'create'])
-    ->name('vehicle.insurance.create')
-    ->middleware('can:create vehicle insurance');
-
-Route::post('/vehicle/insurance/store', [VehicleInsuranceController::class, 'store'])
-    ->name('vehicle.insurance.store')
-    ->middleware('can:create vehicle insurance');
-
-Route::get('/vehicle/insurance/{id}', [VehicleInsuranceController::class, 'show'])
-    ->name('vehicle.insurance.show')
-    ->middleware('can:show vehicle insurance');
-
-Route::get('/vehicle/insurance/{id}/edit', [VehicleInsuranceController::class, 'edit'])
-    ->name('vehicle.insurance.edit')
-    ->middleware('can:edit vehicle insurance');
-
-Route::put('/vehicle/insurance/{id}', [VehicleInsuranceController::class, 'update'])
-    ->name('vehicle.insurance.update')
-    ->middleware('can:edit vehicle insurance');
-
-Route::get('/vehicle/insurance/{id}', [VehicleInsuranceController::class, 'delete'])
-    ->name('vehicle.insurance.delete')
-    ->middleware('can:delete vehicle insurance');
-
-Route::delete('/vehicle/insurance/{id}', [VehicleInsuranceController::class, 'destroy'])
-    ->name('vehicle.insurance.destroy')
-    ->middleware('can:delete vehicle insurance');
 
 /***
  * Route for metro Berry Accounting Settings
@@ -1642,58 +1706,6 @@ Route::delete('/accounting-setting/{id}/destroy', [AccountingSettingController::
 Route::get('invoice', [TripController::class, 'invoice'])
     ->name('metro.berry.invoice.template')
     ->middleware('can:edit trip');
-
-/**
- * NTSA Inspection Certificate Routes
- */
-
-// View Vehicle Inspection Certificate
-Route::get('vehicle/inspection-certificate', [NTSAInspectionCertificateController::class, 'index'])
-    ->name('vehicle.inspection.certificate')
-    ->middleware('auth', 'can:view vehicle inspection certificate');
-
-// Create Vehicle Inspection Certificate
-Route::get('vehicle/inspection-certificate/create', [NTSAInspectionCertificateController::class, 'create'])
-    ->name('vehicle.inspection.certificate.create')
-    ->middleware('auth', 'can:create vehicle inspection certificate');
-
-Route::post('vehicle/inspection-certificate/create', [NTSAInspectionCertificateController::class, 'store'])
-    ->name('vehicle.inspection.certificate.create')
-    ->middleware('auth', 'can:create vehicle inspection certificate');
-
-// Edit Vehicle Inspection Certificate
-Route::get('vehicle/inspection-certificate/{id}/edit', [NTSAInspectionCertificateController::class, 'edit'])
-    ->name('vehicle.inspection.certificate.edit')
-    ->middleware('auth', 'can:edit vehicle inspection certificate');
-
-Route::put('vehicle/inspection-certificate/{id}/edit', [NTSAInspectionCertificateController::class, 'update'])
-    ->name('vehicle.inspection.certificate.edit')
-    ->middleware('auth', 'can:edit vehicle inspection certificate');
-
-Route::get('vehicle/inspection-certificate/{id}/verify', [NTSAInspectionCertificateController::class, 'verifyForm'])
-    ->name('vehicle.inspection.certificate.verify')
-    ->middleware('auth', 'can:edit vehicle inspection certificate');
-
-Route::put('vehicle/inspection-certificate/{id}/verify', [NTSAInspectionCertificateController::class, 'verify'])
-    ->name('vehicle.inspection.certificate.verify')
-    ->middleware('auth', 'can:edit vehicle inspection certificate');
-
-Route::get('vehicle/inspection-certificate/{id}/suspend', [NTSAInspectionCertificateController::class, 'suspendForm'])
-    ->name('vehicle.inspection.certificate.suspend')
-    ->middleware('auth', 'can:edit vehicle inspection certificate');
-
-Route::put('vehicle/inspection-certificate/{id}/suspend', [NTSAInspectionCertificateController::class, 'suspend'])
-    ->name('vehicle.inspection.certificate.suspend')
-    ->middleware('auth', 'can:edit vehicle inspection certificate');
-
-// Delete Vehicle Inspection Certificate
-Route::get('vehicle/inspection-certificate/{id}/delete', [NTSAInspectionCertificateController::class, 'delete'])
-    ->name('vehicle.inspection.certificate.delete')
-    ->middleware('auth', 'can:delete vehicle inspection certificate');
-
-Route::delete('vehicle/inspection-certificate/{id}/delete', [NTSAInspectionCertificateController::class, 'destroy'])
-    ->name('vehicle.inspection.certificate.delete')
-    ->middleware('auth', 'can:delete vehicle inspection certificate');
 
 
 

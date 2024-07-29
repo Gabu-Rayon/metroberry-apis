@@ -21,31 +21,39 @@
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <h6 class="fs-17 fw-semi-bold mb-0">Vehicle  Insepction Certificate(s)</h6>
+                                            <h6 class="fs-17 fw-semi-bold mb-0">Vehicle Insepction Certificate(s)</h6>
                                             <div class="text-end">
                                                 <div class="actions">
                                                     <div class="accordion-header d-flex justify-content-end align-items-center"
                                                         id="flush-headingOne">
-                                                        <a class="btn btn-success btn-sm"
-                                                            href={{ route('vehicle.certificate.export') }} title="Export">
-                                                            <i class="fa-solid fa-file-export"></i>
-                                                            &nbsp;
-                                                            Export
-                                                        </a>
+                                                        @if (Auth::user()->can('export vehicle inspection certificates'))
+                                                            <a class="btn btn-success btn-sm"
+                                                                href={{ route('vehicle.certificate.export') }}
+                                                                title="Export">
+                                                                <i class="fa-solid fa-file-export"></i>
+                                                                &nbsp;
+                                                                Export
+                                                            </a>
+                                                        @endif
                                                         <span class="m-1"></span>
-                                                        <a class="btn btn-success btn-sm"
-                                                            href={{ route('vehicle.certificate.import') }} title="Import">
-                                                            <i class="fa-solid fa-file-import"></i>
-                                                            &nbsp;
-                                                            Import
-                                                        </a>
+                                                        @if (Auth::user()->can('import vehicle inspection certificates'))
+                                                            <a class="btn btn-success btn-sm"
+                                                                href={{ route('vehicle.certificate.import') }}
+                                                                title="Import">
+                                                                <i class="fa-solid fa-file-import"></i>
+                                                                &nbsp;
+                                                                Import
+                                                            </a>
+                                                        @endif
                                                         <span class="m-1"></span>
-                                                        <button type="button" class="btn btn-success btn-sm"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#vehicleInspectionCertificateModal">
-                                                            <i class="fa-solid fa-user-plus"></i>&nbsp; Add Vehicle
-                                                            Inspection Certificate
-                                                        </button>
+                                                        @if (Auth::user()->can('create vehicle inspection certificate'))
+                                                            <button type="button" class="btn btn-success btn-sm"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#vehicleInspectionCertificateModal">
+                                                                <i class="fa-solid fa-user-plus"></i>&nbsp; Add Vehicle
+                                                                Inspection Certificate
+                                                            </button>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -126,33 +134,43 @@
                                                             </td>
 
                                                             <td class="d-flex">
-                                                                <a href="javascript:void(0);" class="btn btn-sm btn-primary"
-                                                                    onclick="axiosModal('{{ route('vehicle.inspection.certificate.edit', $certificate->id) }}')"
-                                                                    title="Edit">
-                                                                    <i class="fas fa-edit"></i>
-                                                                </a>
-                                                                <span class='m-1'></span>
-                                                                @if (!$certificate->verified)
+                                                                @if (Auth::user()->can('edit vehicle inspection certificate'))
                                                                     <a href="javascript:void(0);"
-                                                                        class="btn btn-sm btn-secondary"
-                                                                        onclick="axiosModal('{{ route('vehicle.inspection.certificate.verify', $certificate->id) }}')"
-                                                                        title="Verify">
-                                                                        <i class="fas fa-toggle-off"></i>
-                                                                    </a>
-                                                                @else
-                                                                    <a href="javascript:void(0);"
-                                                                        class="btn btn-sm btn-success"
-                                                                        onclick="axiosModal('{{ route('vehicle.inspection.certificate.suspend', $certificate->id) }}')"
-                                                                        title="Suspend">
-                                                                        <i class="fas fa-toggle-on"></i>
+                                                                        class="btn btn-sm btn-primary"
+                                                                        onclick="axiosModal('{{ route('vehicle.inspection.certificate.edit', $certificate->id) }}')"
+                                                                        title="Edit">
+                                                                        <i class="fas fa-edit"></i>
                                                                     </a>
                                                                 @endif
                                                                 <span class='m-1'></span>
-                                                                <a href="javascript:void(0);" class="btn btn-sm btn-danger"
-                                                                    onclick="axiosModal('{{ route('vehicle.inspection.certificate.delete', $certificate->id) }}')"
-                                                                    title="Delete">
-                                                                    <i class="fas fa-trash"></i>
-                                                                </a>
+                                                                @if (!$certificate->verified)
+                                                                    @if (Auth::user()->can('activate vehicle inspection certificate'))
+                                                                        <a href="javascript:void(0);"
+                                                                            class="btn btn-sm btn-secondary"
+                                                                            onclick="axiosModal('{{ route('vehicle.inspection.certificate.verify', $certificate->id) }}')"
+                                                                            title="Verify">
+                                                                            <i class="fas fa-toggle-off"></i>
+                                                                        </a>
+                                                                    @endif
+                                                                @else
+                                                                    @if (Auth::user()->can('deactivate vehicle inspection certificate'))
+                                                                        <a href="javascript:void(0);"
+                                                                            class="btn btn-sm btn-success"
+                                                                            onclick="axiosModal('{{ route('vehicle.inspection.certificate.suspend', $certificate->id) }}')"
+                                                                            title="Suspend">
+                                                                            <i class="fas fa-toggle-on"></i>
+                                                                        </a>
+                                                                    @endif
+                                                                @endif
+                                                                <span class='m-1'></span>
+                                                                @if (Auth::user()->can('delete vehicle inspection certificate'))
+                                                                    <a href="javascript:void(0);"
+                                                                        class="btn btn-sm btn-danger"
+                                                                        onclick="axiosModal('{{ route('vehicle.inspection.certificate.delete', $certificate->id) }}')"
+                                                                        title="Delete">
+                                                                        <i class="fas fa-trash"></i>
+                                                                    </a>
+                                                                @endif
                                                             </td>
                                                         </tr>
                                                     @endforeach
