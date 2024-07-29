@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Scheduled Trip List')
+@section('title', 'Scheduled Trips')
 @section('content')
 
     <body class="fixed sidebar-mini">
@@ -23,23 +23,22 @@
                                     <div class="card-header">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div>
-                                                <h6 class="fs-17 fw-semi-bold mb-0">Scheduled Trip List</h6>
+                                                <h6 class="fs-17 fw-semi-bold mb-0">Scheduled Trips</h6>
                                             </div>
                                             <div class="text-end">
                                                 <div class="actions">
                                                     <div class="accordion-header d-flex justify-content-end align-items-center"
                                                         id="flush-headingOne">
-
-                                                        <a class="btn btn-success btn-sm" href="javascript:void(0);"
-                                                            onclick="axiosModal('/trip/create')">
-                                                            <i class="fa fa-plus"></i>
-                                                            &nbsp;
-                                                            Schedule A Trip
-                                                        </a>
-
+                                                        @if (Auth::user()->can('schedule trip'))
+                                                            <a class="btn btn-success btn-sm" href="javascript:void(0);"
+                                                                onclick="axiosModal('/trip/create')">
+                                                                <i class="fa fa-plus"></i>
+                                                                &nbsp;
+                                                                Schedule A Trip
+                                                            </a>
+                                                        @endif
                                                         <span class="m-1"></span>
-
-                                                        @if (auth()->user()->role == 'admin')
+                                                        @if (auth()->user()->can('assign vehicle to upcoming trips'))
                                                             <a class="btn btn-success btn-sm"
                                                                 href="{{ route('trip.vehicle-assign') }}">
                                                                 <i class="fas fa-share-square"></i>
@@ -55,7 +54,7 @@
                                     <div class="card-body">
                                         <div>
                                             <div class="table-responsive">
-                                                <table class="table" id="driver-table">
+                                                <table class="table">
                                                     <thead>
                                                         <tr>
                                                             <th title="Name">Customer</th>
@@ -220,7 +219,6 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-                                            <div id="page-axios-data" data-table-id="#driver-table"></div>
                                         </div>
                                     </div>
                                 </div>

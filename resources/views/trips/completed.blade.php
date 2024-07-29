@@ -213,25 +213,27 @@
                                                                         @endphp
                                                                         {{ $location }}
                                                                     </td>
-                                                                    @if (auth()->user()->role == 'admin' || auth()->user()->role == 'organisation')
-                                                                        <td class="text-center">
+                                                                    <td class="text-center">
+                                                                        @if (auth()->user()->can('add billing details'))
                                                                             <a href="javascript:void(0);"
                                                                                 class="btn btn-sm btn-primary"
                                                                                 onclick="axiosModal('{{ $trip->id }}/details')"
                                                                                 title="Details">
                                                                                 <i class="fa-solid fa-circle-info"></i>
                                                                             </a>
-                                                                            <span class='m-1'></span>
-                                                                            {{-- @if ($trip->is_billable()) --}}
-                                                                            <a href="javascript:void(0);"
-                                                                                onclick="axiosModal('/trip/{{ $trip->id }}/bill')"
-                                                                                class="btn btn-warning btn-sm"
-                                                                                title="Bill">
-                                                                                <i class="fa fa-file text-white"></i>
-                                                                            </a>
-                                                                            {{-- @endif --}}
-                                                                        </td>
-                                                                    @endif
+                                                                        @endif
+                                                                        <span class='m-1'></span>
+                                                                        @if ($trip->is_billable())
+                                                                            @if (auth()->user()->can('bill trip'))
+                                                                                <a href="javascript:void(0);"
+                                                                                    onclick="axiosModal('/trip/{{ $trip->id }}/bill')"
+                                                                                    class="btn btn-warning btn-sm"
+                                                                                    title="Bill">
+                                                                                    <i class="fa fa-file text-white"></i>
+                                                                                </a>
+                                                                            @endif
+                                                                        @endif
+                                                                    </td>
                                                                 </tr>
                                                             @empty
                                                                 <tr>

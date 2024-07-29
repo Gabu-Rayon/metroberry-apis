@@ -675,6 +675,122 @@ Route::get('route/location/import', [RouteLocationsController::class, 'import'])
     ->middleware('auth', 'can:import route locations');
 
 
+/**
+ * Tripes Routes
+ * 
+ */
+
+Route::get('/trip/create', [TripController::class, 'create'])
+    ->name('trip.create')
+    ->middleware('auth', 'can:schedule trip');
+
+Route::post('/trip/store', [TripController::class, 'store'])
+    ->name('trip.store')
+    ->middleware('auth', 'can:schedule trip');
+
+Route::get('trip/{id}/edit', [TripController::class, 'edit'])
+    ->name('trip.edit')
+    ->middleware('auth', 'can:edit trip');
+Route::get('trip/{id}/update', [TripController::class, 'update'])
+    ->name('trip.update')
+    ->middleware('auth', 'can:edit trip');
+
+Route::get('trip/{id}/delete', [TripController::class, 'destroy'])
+    ->name('trip.delete')
+    ->middleware('auth', 'can:delete trip');
+
+Route::get('trip/{id}/destroy', [TripController::class, 'destroy'])
+    ->name('trip.destroy')
+    ->middleware('auth', 'can:delete trip');
+
+Route::get('trips/scheduled', [TripController::class, 'tripScheduled'])
+    ->name('trip.scheduled')
+    ->middleware('auth', 'can:view trips');
+
+Route::get('trips/completed', [TripController::class, 'tripCompleted'])
+    ->name('trip.completed')
+    ->middleware('auth', 'can:view trips');
+
+Route::get('trips/cancelled', [TripController::class, 'tripCancelled'])
+    ->name('trip.cancelled')
+    ->middleware('auth', 'can:view trips');
+
+Route::get('trips/billed', [TripController::class, 'tripBilled'])
+    ->name('trip.billed')
+    ->middleware('auth', 'can:view trips');
+
+// Complete Trip
+Route::get('trip/{id}/complete', [TripController::class, 'completeTripForm'])
+    ->name('trip.complete.form')
+    ->middleware('auth', 'can:complete trip');
+
+// Assign Vehicle to Trips
+Route::get('trip/vehicle-assign', [TripController::class, 'assignVehicleToTrips'])
+    ->name('trip.vehicle-assign')
+    ->middleware('auth', 'can:complete trip');
+
+// Complete Trip
+Route::put('trip/{id}/complete', [TripController::class, 'completeTrip'])
+    ->name('trip.complete')
+    ->middleware('auth', 'can:complete trip');
+
+// Cancel Trip
+Route::get('trip/{id}/cancel', [TripController::class, 'cancelTripForm'])
+    ->name('trip.cancel.form')
+    ->middleware('auth', 'can:cancel trip');
+
+// Cancel Trip
+Route::put('trip/{id}/cancel', [TripController::class, 'cancelTrip'])
+    ->name('trip.cancel')
+    ->middleware('auth', 'can:cancel trip');
+
+// Add Trip Billing Details
+
+Route::get('trips/{id}/details', [TripController::class, 'details'])
+    ->name('trips.details.edit')
+    ->middleware('auth', 'can:add billing details');
+
+Route::put('trips/{id}/details', [TripController::class, 'detailsPut'])
+    ->name('trips.details')
+    ->middleware('auth', 'can:add billing details');
+
+// Bill Trip
+
+Route::get('trip/{id}/bill', [TripController::class, 'bill'])
+    ->name('trips.bill.form')
+    ->middleware('auth', 'can:bill trip');
+
+Route::put('trips/{id}/bill', [TripController::class, 'billPut'])
+    ->name('trips.bill')
+    ->middleware('auth', 'can:bill trip');
+
+// Get Billing Rate
+
+Route::get('get-billing-rate/{id}', [TripController::class, 'getBillingRate'])
+    ->name('trip.get-billing-rate')
+    ->middleware('auth');
+
+Route::get('trip/billed/{id}/payment/checkout', [TripController::class, 'tripPaymentCheckOut'])
+    ->name('trip.payment.checkout')
+    ->middleware('auth', 'can:pay for trip');
+
+Route::get('trip/billed/{id}/recieve/payment', [TripPaymentController::class, 'billedTripRecievePayment'])
+    ->name('billed.trip.recieve.payment')
+    ->middleware('auth', 'recieve trip payment');
+
+Route::post('trip/billed/{id}/recieve/payment/store', [TripPaymentController::class, 'billedTripRecievePaymentStore'])
+    ->name('billed.trip.recieve.payment.store')
+    ->middleware('auth', 'recieve trip payment');
+
+Route::get('billed/trip/{id}/resend/invoice', [TripPaymentController::class, 'billedTripResendInvoice'])
+    ->name('billed.trip.resend.invoice')
+    ->middleware('auth', 'can:send trip invoice');
+
+Route::get('billed/trip/{id}/send/invoice', [TripPaymentController::class, 'billedTripSendInvoice'])
+    ->name('billed.trip.send.invoice')
+    ->middleware('auth', 'can:send trip invoice');
+
+
 
 
 
@@ -759,122 +875,9 @@ Route::post('/admin/user/{id}/destroy', [UserController::class, 'destory'])
  */
 
 /**
- * Tripes Routes
- * 
- */
-
-Route::get('trips', [TripController::class, 'index'])
-    ->name('booked.trip')
-    ->middleware('auth', 'can:view trip');
-
-Route::get('/trip/create', [TripController::class, 'create'])
-    ->name('trip.create')
-    ->middleware('auth', 'can:create trip');
-Route::post('/trip/store', [TripController::class, 'store'])
-    ->name('trip.store')
-    ->middleware('auth', 'can:create trip');
-
-Route::get('trip/{id}/edit', [TripController::class, 'edit'])
-    ->name('trip.edit')
-    ->middleware('auth', 'can:edit trip');
-Route::get('trip/{id}/update', [TripController::class, 'update'])
-    ->name('trip.update')
-    ->middleware('auth', 'can:edit trip');
-
-Route::get('trip/{id}/delete', [TripController::class, 'destroy'])
-    ->name('trip.delete')
-    ->middleware('auth', 'can:delete trip');
-Route::get('trip/{id}/destroy', [TripController::class, 'destroy'])
-    ->name('trip.destroy')
-    ->middleware('auth', 'can:delete trip');
-
-Route::get('trips/scheduled', [TripController::class, 'tripScheduled'])
-    ->name('trip.scheduled')
-    ->middleware('auth', 'can:view trip');
-Route::get('trips/completed', [TripController::class, 'tripCompleted'])
-    ->name('trip.completed')
-    ->middleware('auth', 'can:view trip');
-Route::get('trips/cancelled', [TripController::class, 'tripCancelled'])
-    ->name('trip.cancelled')
-    ->middleware('auth', 'can:view trip');
-Route::get('trips/billed', [TripController::class, 'tripBilled'])
-    ->name('trip.billed')
-    ->middleware('auth', 'can:view trip');
-
-// Complete Trip
-Route::get('trip/{id}/complete', [TripController::class, 'completeTripForm'])
-    ->name('trip.complete.form')
-    ->middleware('auth', 'can:complete trip');
-
-// Assign Vehicle to Trips
-Route::get('trip/vehicle-assign', [TripController::class, 'assignVehicleToTrips'])
-    ->name('trip.vehicle-assign')
-    ->middleware('auth', 'can:complete trip');
-
-// Complete Trip
-Route::put('trip/{id}/complete', [TripController::class, 'completeTrip'])
-    ->name('trip.complete')
-    ->middleware('auth', 'can:complete trip');
-
-// Cancel Trip
-Route::get('trip/{id}/cancel', [TripController::class, 'cancelTripForm'])
-    ->name('trip.cancel.form')
-    ->middleware('auth', 'can:cancel trip');
-
-// Cancel Trip
-Route::put('trip/{id}/cancel', [TripController::class, 'cancelTrip'])
-    ->name('trip.cancel')
-    ->middleware('auth', 'can:cancel trip');
-
-// Add Trip Billing Details
-
-Route::get('trips/{id}/details', [TripController::class, 'details'])
-    ->name('trips.details.edit')
-    ->middleware('auth', 'can:edit trip');
-
-Route::put('trips/{id}/details', [TripController::class, 'detailsPut'])
-    ->name('trips.details')
-    ->middleware('auth', 'can:edit trip');
-
-// Bill Trip
-
-Route::get('trip/{id}/bill', [TripController::class, 'bill'])
-    ->name('trips.bill.form')
-    ->middleware('auth', 'can:edit trip');
-
-Route::put('trips/{id}/bill', [TripController::class, 'billPut'])
-    ->name('trips.bill')
-    ->middleware('auth', 'can:bill trip');
-
-// Get Billing Rate
-
-Route::get('get-billing-rate/{id}', [TripController::class, 'getBillingRate'])
-    ->name('trip.get-billing-rate')
-    ->middleware('auth', 'can:bill trip');
-
-Route::get('trip/billed/{id}/payment/checkout', [TripController::class, 'tripPaymentCheckOut'])
-    ->name('trip.payment.checkout')
-    ->middleware('auth');
-
-/**
  * Trip Payment Routes
  * 
  */
-
-Route::get('trip/billed/{id}/recieve/payment', [TripPaymentController::class, 'billedTripRecievePayment'])
-    ->name('billed.trip.recieve.payment')
-    ->middleware('auth');
-
-Route::post('trip/billed/{id}/recieve/payment/store', [TripPaymentController::class, 'billedTripRecievePaymentStore'])
-    ->name('billed.trip.recieve.payment.store')
-    ->middleware('auth');
-Route::get('billed/trip/{id}/resend/invoice', [TripPaymentController::class, 'billedTripResendInvoice'])
-    ->name('billed.trip.resend.invoice')
-    ->middleware('auth', 'can:bill trip');
-
-Route::get('billed/trip/{id}/send/invoice', [TripPaymentController::class, 'billedTripSendInvoice'])
-    ->name('billed.trip.send.invoice')
-    ->middleware('auth', 'can:send trip invoice');
 
 
 /***
