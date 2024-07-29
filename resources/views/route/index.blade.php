@@ -93,7 +93,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="overlay"></div>
+                        <div class="overlay text-center"></div>
                         @include('components.footer')
                     </div>
                 </div>

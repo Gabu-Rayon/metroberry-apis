@@ -73,6 +73,20 @@
                                                     </thead>
 
                                                     <tbody>
+                                                        @if (is_null($organisations))
+                                                            <tr>
+                                                                <td colspan="9" class="text-center text-danger">
+                                                                    Organisations is null
+                                                                </td>
+                                                            </tr>
+                                                        @endif
+                                                        @if (is_null($givenRoutes))
+                                                            <tr>
+                                                                <td colspan="9" class="text-center text-danger">
+                                                                    GivenRoutes is null
+                                                                </td>
+                                                            </tr>
+                                                        @endif
                                                         @foreach ($scheduledTrips as $organisationCode => $routes)
                                                             @if (auth()->user()->role == 'admin')
                                                                 <tr>
@@ -145,7 +159,9 @@
                                                                                         $trip->customer->organisation
                                                                                             ->user->address;
                                                                                 } else {
-                                                                                    $location = $trip->route->locations
+                                                                                    Log::info('TRIP');
+                                                                                    Log::info($trip);
+                                                                                    $location = $trip->route->route_locations
                                                                                         ->where(
                                                                                             'id',
                                                                                             $trip->pick_up_location,
@@ -170,7 +186,7 @@
                                                                                         $trip->customer->organisation
                                                                                             ->user->address;
                                                                                 } else {
-                                                                                    $location = $trip->route->locations
+                                                                                    $location = $trip->route->route_locations
                                                                                         ->where(
                                                                                             'id',
                                                                                             $trip->drop_off_location,

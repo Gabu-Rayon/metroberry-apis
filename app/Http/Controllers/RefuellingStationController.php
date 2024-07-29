@@ -101,6 +101,8 @@ class RefuellingStationController extends Controller
                 'payment_period' => $data['payment_period'],
             ]);
 
+            $user->assignRole('refueling_station');
+
             DB::commit();
 
 

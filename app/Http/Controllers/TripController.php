@@ -465,7 +465,9 @@ class TripController extends Controller
                     });
             }
 
+
             $givenRoutes = Routes::all();
+
 
             return view('trips.scheduled', compact('scheduledTrips', 'organisations', 'givenRoutes'));
         } catch (\Exception $e) {
@@ -482,7 +484,7 @@ class TripController extends Controller
     public function tripCompleted(Request $request)
     {
         try {
-            $groupByOrganisation = $request->query('group_by_organisation', false); // Optional grouping
+            $groupByOrganisation = $request->query('group_by_organisation', false);
 
             $trips = collect();
 

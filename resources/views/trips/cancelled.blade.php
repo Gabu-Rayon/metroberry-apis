@@ -85,7 +85,7 @@
                                                                                     $trip->customer->organisation->user
                                                                                         ->address;
                                                                             } else {
-                                                                                $location = $trip->route->locations
+                                                                                $location = $trip->route->route_locations
                                                                                     ->where(
                                                                                         'id',
                                                                                         $trip->pick_up_location,
@@ -108,7 +108,7 @@
                                                                                     $trip->customer->organisation->user
                                                                                         ->address;
                                                                             } else {
-                                                                                $location = $trip->route->locations
+                                                                                $location = $trip->route->route_locations
                                                                                     ->where(
                                                                                         'id',
                                                                                         $trip->drop_off_location,

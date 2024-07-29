@@ -16,8 +16,8 @@
     <link rel="canonical"href="/" />
     <meta name="robots"content="all" />
     <meta property="og:description"content="Metro-Berry-Admin-Template" />
-    <meta property="og:title"content="Admin" />
-    <meta property="og:url"content="/" />
+    <meta property="og:title"content="Metroberry" />
+    <meta property="og:url"content="metrobery.co.ke" />
     <meta property="og:type"content="WebPage" />
     <meta property="og:Metro-Berry"content="Metro-Berry" />
 

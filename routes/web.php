@@ -23,7 +23,6 @@ use App\Http\Controllers\VehiclePartController;
 use App\Http\Controllers\OrganisationController;
 use App\Http\Controllers\RepairCategoryController;
 use App\Http\Controllers\RouteLocationsController;
-use App\Http\Controllers\VehicleServiceController;
 use App\Http\Controllers\DriversLicensesController;
 use App\Http\Controllers\ServiceCategoryController;
 use App\Http\Controllers\InsuranceCompanyController;
@@ -37,14 +36,35 @@ use App\Http\Controllers\NTSAInspectionCertificateController;
 use App\Http\Controllers\VehiclePartCategoryController;
 use App\Http\Controllers\MaintenanceRepairPaymentController;
 use App\Http\Controllers\MaintenanceServicePaymentController;
-use App\Models\DriversLicenses;
 
+// All Routes
 
 require __DIR__ . '/auth.php';
 
+/***
+ * Dashboard Routes
+ * 
+ */
+
+// Admin Dashboard
+
 Route::get('dashboard', [DashboardController::class, 'index'])
     ->name('dashboard')
-    ->middleware('auth');
+    ->middleware('auth', 'can:view dashboard');
+
+// Organisation Dashboard
+
+Route::get('organisation/dashboard', [OrganisationController::class, 'dashboard'])
+    ->name('organisation.dashboard')
+    ->middleware('auth', 'can:view dashboard');
+
+// Refuelling Station Dashboard
+
+Route::get('refueling/station/dashboard', [RefuellingStationController::class, 'dashboard'])
+    ->name('refueling.station.dashboard')
+    ->middleware('auth', 'can:view dashboard');
+
+// All Routes
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])
@@ -244,12 +264,6 @@ Route::get('route/location/import', [RouteLocationsController::class, 'import'])
 /***
  * Organisations Routes
  */
-
-// Organisation Dashboard
-
-Route::get('organisation/dashboard', [OrganisationController::class, 'dashboard'])
-    ->name('organisation.dashboard')
-    ->middleware('auth', 'can:view dashboard');
 
 
 // View Organisations
@@ -1187,10 +1201,6 @@ Route::delete('/refueling/{id}/delete', [VehicleRefuelingController::class, 'des
  * 
  * Manage Vehicle Refueling Stations
  */
-
-Route::get('refueling/station/dashboard', [RefuellingStationController::class, 'dashboard'])
-    ->name('refueling.station.dashboard')
-    ->middleware('auth');
 
 // View Refueling Stations
 Route::get('refueling/station', [RefuellingStationController::class, 'index'])

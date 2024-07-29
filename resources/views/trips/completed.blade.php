@@ -86,7 +86,8 @@
                                                                                     'Office' => $trip->customer
                                                                                         ->organisation->user->address ??
                                                                                         'N/A',
-                                                                                    default => $trip->route->locations
+                                                                                    default
+                                                                                        => $trip->route->route_locations
                                                                                         ->where(
                                                                                             'id',
                                                                                             $trip->pick_up_location,
@@ -106,7 +107,8 @@
                                                                                     'Office' => $trip->customer
                                                                                         ->organisation->user->address ??
                                                                                         'N/A',
-                                                                                    default => $trip->route->locations
+                                                                                    default
+                                                                                        => $trip->route->route_locations
                                                                                         ->where(
                                                                                             'id',
                                                                                             $trip->drop_off_location,
@@ -181,7 +183,7 @@
                                                                                 'Office' => $trip->customer
                                                                                     ->organisation->user->address ??
                                                                                     'N/A',
-                                                                                default => $trip->route->locations
+                                                                                default => $trip->route->route_locations
                                                                                     ->where(
                                                                                         'id',
                                                                                         $trip->pick_up_location,
@@ -201,7 +203,7 @@
                                                                                 'Office' => $trip->customer
                                                                                     ->organisation->user->address ??
                                                                                     'N/A',
-                                                                                default => $trip->route->locations
+                                                                                default => $trip->route->route_locations
                                                                                     ->where(
                                                                                         'id',
                                                                                         $trip->drop_off_location,
@@ -220,14 +222,14 @@
                                                                                 <i class="fa-solid fa-circle-info"></i>
                                                                             </a>
                                                                             <span class='m-1'></span>
-                                                                            @if ($trip->is_billable)
-                                                                                <a href="javascript:void(0);"
-                                                                                    onclick="axiosModal('/trip/{{ $trip->id }}/bill')"
-                                                                                    class="btn btn-warning btn-sm"
-                                                                                    title="Bill">
-                                                                                    <i class="fa fa-file text-white"></i>
-                                                                                </a>
-                                                                            @endif
+                                                                            {{-- @if ($trip->is_billable()) --}}
+                                                                            <a href="javascript:void(0);"
+                                                                                onclick="axiosModal('/trip/{{ $trip->id }}/bill')"
+                                                                                class="btn btn-warning btn-sm"
+                                                                                title="Bill">
+                                                                                <i class="fa fa-file text-white"></i>
+                                                                            </a>
+                                                                            {{-- @endif --}}
                                                                         </td>
                                                                     @endif
                                                                 </tr>
