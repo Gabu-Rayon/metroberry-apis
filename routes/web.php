@@ -589,6 +589,91 @@ Route::get('vehicle/certificate/import', [NTSAInspectionCertificateController::c
     ->name('vehicle.certificate.import')
     ->middleware('auth', 'can:import vehicle inspection certificates');
 
+/**
+ * 'Routes' Routes
+ * 
+ */
+
+// View Routes
+Route::get('route', [RouteController::class, 'index'])
+    ->name('route.index')
+    ->middleware('auth', 'can:view routes');
+
+// Create Route
+Route::get('route/create', [RouteController::class, 'create'])
+    ->name('route.create')
+    ->middleware('auth', 'can:create route');
+
+Route::post('route', [RouteController::class, 'store'])
+    ->name('route.store')
+    ->middleware('auth', 'can:create route');
+
+// Update Route Details
+Route::get('route/{id}/edit', [RouteController::class, 'edit'])
+    ->name('route.edit')
+    ->middleware('auth', 'can:edit route');
+
+Route::put('route/{id}/update', [RouteController::class, 'update'])
+    ->name('route.update')
+    ->middleware('auth', 'can:edit route');
+
+// Delete Route
+Route::get('route/{id}/delete', [RouteController::class, 'delete'])
+    ->name('route.delete')
+    ->middleware('auth', 'can:delete route');
+
+Route::delete('route/{id}/delete', [RouteController::class, 'destroy'])
+    ->name('route.destroy')
+    ->middleware('auth', 'can:delete route');
+
+Route::get('route/export', [RouteController::class, 'export'])
+    ->name('route.export')
+    ->middleware('auth', 'can:export routes');
+
+Route::get('route/import', [RouteController::class, 'import'])
+    ->name('route.import')
+    ->middleware('auth', 'can:import routes');
+
+/**
+ * Route Location Routes
+ * 
+ */
+
+// View Route Locations
+Route::get('route/location', [RouteLocationsController::class, 'index'])
+    ->name('route.location.index')
+    ->middleware('auth', 'can:view route locations');
+
+// Create Route Location
+Route::get('route/location/create', [RouteLocationsController::class, 'create'])
+    ->name('route.location.create')
+    ->middleware('auth', 'can:create route location');
+
+Route::post('route/location/store', [RouteLocationsController::class, 'store'])
+    ->name('route.location.store')
+    ->middleware('auth', 'can:create route location');
+
+// Delete Route Location
+Route::get('route/location/{id}/delete', [RouteLocationsController::class, 'delete'])
+    ->name('route.location.delete')
+    ->middleware('auth', 'can:delete route location');
+
+Route::delete('route/location/{id}/delete', [RouteLocationsController::class, 'destroy'])
+    ->name('route.location.destroy')
+    ->middleware('auth', 'can:delete route location');
+
+Route::post('route/locations/get/all', [RouteLocationsController::class, 'getAllRouteWayPoints'])
+    ->name('route.location.waypoints')
+    ->middleware('auth');
+
+Route::get('route/location/export', [RouteLocationsController::class, 'export'])
+    ->name('route.location.export')
+    ->middleware('auth', 'can:export route locations');
+
+Route::get('route/location/import', [RouteLocationsController::class, 'import'])
+    ->name('route.location.import')
+    ->middleware('auth', 'can:import route locations');
+
 
 
 
@@ -672,88 +757,6 @@ Route::post('/admin/user/{id}/destroy', [UserController::class, 'destory'])
  * Exports and Imports
  * 
  */
-
-Route::get('route/export', [RouteController::class, 'export'])
-    ->name('route.export')
-    ->middleware('auth', 'can:export route');
-
-Route::get('route/import', [RouteController::class, 'import'])
-    ->name('route.import')
-    ->middleware('auth', 'can:import route');
-
-Route::get('route/location/export', [RouteLocationsController::class, 'export'])
-    ->name('route.location.export')
-    ->middleware('auth', 'can:export route location');
-
-Route::get('route/location/import', [RouteLocationsController::class, 'import'])
-    ->name('route.location.import')
-    ->middleware('auth', 'can:import route location');
-
-/**
- * 'Routes' Routes
- * 
- */
-
-// View Routes
-Route::get('route', [RouteController::class, 'index'])
-    ->name('route.index')
-    ->middleware('auth', 'can:view route');
-
-// Create Route
-Route::get('route/create', [RouteController::class, 'create'])
-    ->name('route.create')
-    ->middleware('auth', 'can:create route');
-Route::post('route', [RouteController::class, 'store'])
-    ->name('route.store')
-    ->middleware('auth', 'can:create route');
-
-// Update Route Details
-Route::get('route/{id}/edit', [RouteController::class, 'edit'])
-    ->name('route.edit')
-    ->middleware('auth', 'can:edit route');
-Route::put('route/{id}/update', [RouteController::class, 'update'])
-    ->name('route.update')
-    ->middleware('auth', 'can:edit route');
-
-// Delete Route
-Route::get('route/{id}/delete', [RouteController::class, 'delete'])
-    ->name('route.delete')
-    ->middleware('auth', 'can:delete route');
-Route::delete('route/{id}/delete', [RouteController::class, 'destroy'])
-    ->name('route.destroy')
-    ->middleware('auth', 'can:delete route');
-
-/**
- * Route Location Routes
- * 
- */
-
-// View Route Locations
-Route::get('route/location', [RouteLocationsController::class, 'index'])
-    ->name('route.location.index')
-    ->middleware('auth', 'can:view route location');
-
-// Create Route Location
-Route::get('route/location/create', [RouteLocationsController::class, 'create'])
-    ->name('route.location.create')
-    ->middleware('auth', 'can:create route location');
-
-Route::post('route/location/store', [RouteLocationsController::class, 'store'])
-    ->name('route.location.store')
-    ->middleware('auth', 'can:create route location');
-
-// Delete Route Location
-Route::get('route/location/{id}/delete', [RouteLocationsController::class, 'delete'])
-    ->name('route.location.delete')
-    ->middleware('auth', 'can:delete route location');
-
-Route::delete('route/location/{id}/delete', [RouteLocationsController::class, 'destroy'])
-    ->name('route.location.destroy')
-    ->middleware('auth', 'can:delete route location');
-
-Route::post('route/locations/get/all', [RouteLocationsController::class, 'getAllRouteWayPoints'])
-    ->name('route.location.waypoints')
-    ->middleware('auth');
 
 /**
  * Tripes Routes

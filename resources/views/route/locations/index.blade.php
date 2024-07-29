@@ -25,25 +25,31 @@
                                         <h6 class="fs-17 fw-semi-bold mb-0">Route Locations</h6>
                                         <div class="text-end">
                                             <div class="actions">
-                                                <a class="btn btn-success btn-sm" href={{ route('route.location.export') }}
-                                                    title="Export">
-                                                    <i class="fa-solid fa-file-export"></i>&nbsp;
-                                                    Export
-                                                </a>
+                                                @if (Auth::user()->can('export route locations'))
+                                                    <a class="btn btn-success btn-sm"
+                                                        href={{ route('route.location.export') }} title="Export">
+                                                        <i class="fa-solid fa-file-export"></i>&nbsp;
+                                                        Export
+                                                    </a>
+                                                @endif
                                                 <span class='m-1'></span>
-                                                <a class="btn btn-success btn-sm"
-                                                    href="{{ route('route.location.import') }}"
-                                                    title="Import From csv excel file">
-                                                    <i class="fa-solid fa-file-arrow-up"></i>&nbsp;
-                                                    Import
-                                                </a>
+                                                @if (Auth::user()->can('import route locations'))
+                                                    <a class="btn btn-success btn-sm"
+                                                        href="{{ route('route.location.import') }}"
+                                                        title="Import From csv excel file">
+                                                        <i class="fa-solid fa-file-arrow-up"></i>&nbsp;
+                                                        Import
+                                                    </a>
+                                                @endif
                                                 <span class="m-1"></span>
-                                                <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
-                                                    data-bs-target="#routeLocationsModal">
-                                                    <i class="fa-solid fa-user-plus"></i>
-                                                    &nbsp;
-                                                    Add Route Location
-                                                </button>
+                                                @if (Auth::user()->can('create route location'))
+                                                    <button type="button" class="btn btn-success btn-sm"
+                                                        data-bs-toggle="modal" data-bs-target="#routeLocationsModal">
+                                                        <i class="fa-solid fa-user-plus"></i>
+                                                        &nbsp;
+                                                        Add Route Location
+                                                    </button>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
@@ -56,7 +62,9 @@
                                                     <th title="Route">Route</th>
                                                     <th title="Name">Name</th>
                                                     <th title="Point Order">Point Order</th>
-                                                    <th title="Action" width="80">Action</th>
+                                                    @if (Auth::user()->role = 'admin')
+                                                        <th title="Action" width="80">Action</th>
+                                                    @endif
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -76,17 +84,19 @@
                                                             @endphp
                                                             <span>{{ $point_order }}</span>
                                                         </td>
-                                                        <td class="d-flex">
-                                                            <a href="javascript:void(0);" class="btn btn-sm btn-primary"
-                                                                onclick="axiosModal('location/{{ $routelocation->id }}/edit')">
-                                                                <i class="fas fa-edit"></i>
-                                                            </a>
-                                                            <span class='m-1'></span>
-                                                            <a href="javascript:void(0);" class="btn btn-sm btn-danger"
-                                                                onclick="axiosModal('location/{{ $routelocation->id }}/delete')">
-                                                                <i class="fas fa-trash"></i>
-                                                            </a>
-                                                        </td>
+                                                        @if (Auth::user()->role = 'admin')
+                                                            <td class="d-flex">
+                                                                <a href="javascript:void(0);" class="btn btn-sm btn-primary"
+                                                                    onclick="axiosModal('location/{{ $routelocation->id }}/edit')">
+                                                                    <i class="fas fa-edit"></i>
+                                                                </a>
+                                                                <span class='m-1'></span>
+                                                                <a href="javascript:void(0);" class="btn btn-sm btn-danger"
+                                                                    onclick="axiosModal('location/{{ $routelocation->id }}/delete')">
+                                                                    <i class="fas fa-trash"></i>
+                                                                </a>
+                                                            </td>
+                                                        @endif
                                                     </tr>
                                                 @endforeach
                                             </tbody>
