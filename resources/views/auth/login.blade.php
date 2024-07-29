@@ -5,6 +5,8 @@
     <div class="container-fluid">
         <div class="row h-100vh align-aitems-center px-0">
             <div class="col-lg-6 d-flex align-aitems-center">
+                <img class="position-absolute" height="50" width="150"
+                    src="{{ asset('admin-assets/img/sidebar-logo.png?v=1') }}" alt="Brand Logo" />
                 <div class="form-wrapper m-auto">
                     <div>
                         <div class="mb-4">
@@ -64,8 +66,6 @@
             </div>
             <div class="col-lg-6 login-bg d-none d-lg-block overflow-hidden text-end py-2"
                 style="background-image: url('{{ asset('admin-assets/img/login-bg.png?v=1') }}')">
-                <img class="#" height="50" width="150" src="{{ asset('admin-assets/img/sidebar-logo.png?v=1') }}"
-                    alt="Brand Logo" />
             </div>
 
         </div>
