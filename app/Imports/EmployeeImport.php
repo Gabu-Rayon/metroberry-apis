@@ -1,6 +1,7 @@
 <?php
 namespace App\Imports;
 
+use App\Models\Organisation;
 use App\Models\User;
 use App\Models\Customer;
 use Illuminate\Support\Facades\Auth;
@@ -40,12 +41,12 @@ class EmployeeImport implements ToModel, WithHeadingRow
             [
                 'name' => $row['name'],
                 'email' => $row['email'],
-                'password' => Hash::make($randomPassword), 
+                'password' => Hash::make($randomPassword),
                 'phone' => $row['phone'],
                 'address' => $row['address'],
-                'avatar' => $avatarPath, 
+                'avatar' => $avatarPath,
                 // 'role' => $row['role'],
-                
+
                 //set the role by default customer
                 'role' => 'customer',
                 'created_by' => Auth::user()->id,
@@ -55,29 +56,39 @@ class EmployeeImport implements ToModel, WithHeadingRow
         $organisationId = null;
         if (Auth::user()->role == 'organisation') {
             $organisationId = Auth::user()->id;
+        } else if (Auth::user()->role == 'admin') {
+            // Check if the customer_organisation_code exists in the organisations table
+            $organisation = Organisation::where('organisation_code', $row['customer_organisation_code'])->first();
+            if ($organisation) {
+                $organisationId = $organisation->id;
+            }
         }
-
 
         Customer::updateOrCreate(
             ['user_id' => $user->id],
             [
+
 
                 /***
                  * Organisation ID Handling: The organisation_id is determined based on the
                  *  logged-in user’s role. If the user’s role is organisation, the ID
                  *  of the logged-in user is set as organisation_id. If the user is an admin,
                  *  it remains null.
+                 * 
+                 * if the user importing is admin of the system when importing employee we can also check the customer_organisation_code  
+                 *    exist in the already created Organisation
+                 * if it exist in the organisations table we then take the id of that organisation to inset here 
                  */
                 'organisation_id' => $organisationId,
                 'customer_organisation_code' => $row['customer_organisation_code'],
                 'national_id_no' => $row['national_id_no'],
-                'national_id_front_avatar' => $nationalIdFrontAvatarPath, 
-                'national_id_behind_avatar' => $nationalIdBehindAvatarPath, 
+                'national_id_front_avatar' => $nationalIdFrontAvatarPath,
+                'national_id_behind_avatar' => $nationalIdBehindAvatarPath,
                 'created_by' => Auth::user()->id,
             ]
         );
 
-        // Optionally, you could send the generated password to the user via email
+        // Optionally, send the generated password to the user via email
         // Mail::to($user->email)->send(new NewUserImported($user, $randomPassword));
     }
 

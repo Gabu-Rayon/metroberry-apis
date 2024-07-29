@@ -841,4 +841,45 @@ class VehicleController extends Controller
 
         return Excel::download($export, 'vehicles.xlsx');
     }
+
+    public function importFile()
+    {
+        return view('vehicle.vehicleImport');
+
+    }
+
+    // Handle the import of the file
+    public function import(Request $request)
+    {
+        // Validation rules
+        $rules = [
+            'file' => 'required|mimes:csv,txt,xlsx',
+        ];
+
+        // Validate the request
+        $validator = Validator::make($request->all(), $rules);
+
+        // If validation fails, redirect back with error message
+        if ($validator->fails()) {
+            return redirect()->back()->with('error', $validator->errors()->first());
+        }
+
+        try {
+            // Import the file using the DriverImport class
+            Excel::import(new VehicleImport, $request->file('file'));
+
+            // Log the import action
+            Log::info('data from Vehicle CSV File being Imported : ');
+            Log::info($request->file('file'));
+
+            // Redirect back with success message
+            return redirect()->back()->with('success', 'Records imported successfully.');
+        } catch (Exception $e) {
+            // Log the error
+            Log::error('Error importing Vehicle: ' . $e->getMessage());
+
+            // Redirect back with error message
+            return redirect()->back()->with('error', 'An error occurred while importing the Vehicle records.');
+        }
+    }
 }
