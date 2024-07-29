@@ -23,25 +23,31 @@
                                                 <div class="actions">
                                                     <div class="accordion-header d-flex justify-content-end align-items-center"
                                                         id="flush-headingOne">
-                                                        <a class="btn btn-success btn-sm"
-                                                            href={{ route('driver.license.export') }} title="Export">
-                                                            <i class="fa-solid fa-file-export"></i>
-                                                            &nbsp;
-                                                            Export
-                                                        </a>
+                                                        @if (Auth::user()->can('export driver licenses'))
+                                                            <a class="btn btn-success btn-sm"
+                                                                href={{ route('driver.license.export') }} title="Export">
+                                                                <i class="fa-solid fa-file-export"></i>
+                                                                &nbsp;
+                                                                Export
+                                                            </a>
+                                                        @endif
                                                         <span class="m-1"></span>
-                                                        <a class="btn btn-success btn-sm"
-                                                            href={{ route('driver.license.import') }} title="Import">
-                                                            <i class="fa-solid fa-file-import"></i>
-                                                            &nbsp;
-                                                            Import
-                                                        </a>
+                                                        @if (Auth::user()->can('import driver licenses'))
+                                                            <a class="btn btn-success btn-sm"
+                                                                href={{ route('driver.license.import') }} title="Import">
+                                                                <i class="fa-solid fa-file-import"></i>
+                                                                &nbsp;
+                                                                Import
+                                                            </a>
+                                                        @endif
                                                         <span class="m-1"></span>
-                                                        <button type="button" class="btn btn-success btn-sm"
-                                                            data-bs-toggle="modal" data-bs-target="#driverLicenseModal">
-                                                            <i class="fa-solid fa-user-plus"></i>&nbsp;
-                                                            Add Driver's License
-                                                        </button>
+                                                        @if (Auth::user()->can('create driver license'))
+                                                            <button type="button" class="btn btn-success btn-sm"
+                                                                data-bs-toggle="modal" data-bs-target="#driverLicenseModal">
+                                                                <i class="fa-solid fa-user-plus"></i>&nbsp;
+                                                                Add Driver's License
+                                                            </button>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -114,33 +120,43 @@
                                                                 <span class="{{ $badgeClass }}">{{ $badgeText }}</span>
                                                             </td>
                                                             <td class="d-flex">
-                                                                <a href="javascript:void(0);" class="btn btn-sm btn-primary"
-                                                                    onclick="axiosModal('license/{{ $license->id }}/edit')"
-                                                                    title="Edit">
-                                                                    <i class="fas fa-edit"></i>
-                                                                </a>
-                                                                <span class='m-1'></span>
-                                                                @if (!$license->verified)
+                                                                @if (Auth::user()->can('edit driver license'))
                                                                     <a href="javascript:void(0);"
-                                                                        class="btn btn-sm btn-secondary"
-                                                                        onclick="axiosModal('{{ route('driver.license.verify', $license->id) }}')"
-                                                                        title="Verify">
-                                                                        <i class="fas fa-toggle-off"></i>
-                                                                    </a>
-                                                                @else
-                                                                    <a href="javascript:void(0);"
-                                                                        class="btn btn-sm btn-success"
-                                                                        onclick="axiosModal('license/{{ $license->id }}/revoke')"
-                                                                        title="Suspend">
-                                                                        <i class="fas fa-toggle-on"></i>
+                                                                        class="btn btn-sm btn-primary"
+                                                                        onclick="axiosModal('license/{{ $license->id }}/edit')"
+                                                                        title="Edit">
+                                                                        <i class="fas fa-edit"></i>
                                                                     </a>
                                                                 @endif
                                                                 <span class='m-1'></span>
-                                                                <a href="javascript:void(0);" class="btn btn-sm btn-danger"
-                                                                    onclick="axiosModal('license/{{ $license->id }}/delete')"
-                                                                    title="Delete">
-                                                                    <i class="fas fa-trash"></i>
-                                                                </a>
+                                                                @if (!$license->verified)
+                                                                    @if (Auth::user()->can('verify driver license'))
+                                                                        <a href="javascript:void(0);"
+                                                                            class="btn btn-sm btn-secondary"
+                                                                            onclick="axiosModal('{{ route('driver.license.verify', $license->id) }}')"
+                                                                            title="Verify">
+                                                                            <i class="fas fa-toggle-off"></i>
+                                                                        </a>
+                                                                    @endif
+                                                                @else
+                                                                    @if (Auth::user()->can('revoke driver license'))
+                                                                        <a href="javascript:void(0);"
+                                                                            class="btn btn-sm btn-success"
+                                                                            onclick="axiosModal('license/{{ $license->id }}/revoke')"
+                                                                            title="Suspend">
+                                                                            <i class="fas fa-toggle-on"></i>
+                                                                        </a>
+                                                                    @endif
+                                                                @endif
+                                                                <span class='m-1'></span>
+                                                                @if (Auth::user()->can('delete driver license'))
+                                                                    <a href="javascript:void(0);"
+                                                                        class="btn btn-sm btn-danger"
+                                                                        onclick="axiosModal('license/{{ $license->id }}/delete')"
+                                                                        title="Delete">
+                                                                        <i class="fas fa-trash"></i>
+                                                                    </a>
+                                                                @endif
                                                             </td>
                                                         </tr>
                                                     @endforeach

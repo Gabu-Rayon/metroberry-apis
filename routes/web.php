@@ -205,6 +205,150 @@ Route::post('organisation/import/store', [OrganisationController::class, 'import
     ->name('organisation.import.store')
     ->middleware('auth', 'can:import organisations');
 
+/**
+ * Drivers Routes
+ * 
+ */
+
+// View Drivers
+Route::get('driver', [DriverController::class, 'index'])
+    ->name('driver')
+    ->middleware('auth', 'can:view drivers');
+
+// Create Driver
+Route::get('driver/create', [DriverController::class, 'create'])
+    ->name('driver.create')
+    ->middleware('auth', 'can:create driver');
+
+Route::post('driver', [DriverController::class, 'store'])
+    ->name('driver.store')
+    ->middleware('auth', 'can:create driver');
+
+// Edit Driver Details
+Route::get('driver/{id}/edit', [DriverController::class, 'edit'])
+    ->name('driver.edit')
+    ->middleware('auth', 'can:edit driver');
+
+Route::put('driver/{id}/update', [DriverController::class, 'update'])
+    ->name('driver.update')
+    ->middleware('auth', 'can:edit driver');
+
+// Assign Vehicle to Driver
+Route::get('driver/{id}/vehicle/assign', [DriverController::class, 'assignVehicleForm'])
+    ->name('driver.vehicle.assign')
+    ->middleware('auth', 'can:assign vehicle');
+
+Route::post('driver/{id}/vehicle/assign', [DriverController::class, 'assignVehicle'])
+    ->name('driver.vehicle.assign')
+    ->middleware('auth', 'can:assign vehicle');
+
+// Delete Driver
+Route::post('driver/{id}/delete', [DriverController::class, 'destroy'])
+    ->name('driver.destroy')
+    ->middleware('auth', 'can:delete driver');
+
+// Activate Driver
+Route::get('driver/{id}/activate', [DriverController::class, 'activateForm'])
+    ->name('driver.activate')
+    ->middleware('auth', 'can:activate driver');
+
+Route::put('driver/{id}/activateStore', [DriverController::class, 'activate'])
+    ->name('driver.activateStore')
+    ->middleware('auth', 'can:activate driver');
+
+// Deactivate Driver
+Route::get('driver/{id}/deactivate', [DriverController::class, 'deactivateForm'])
+    ->name('driver.deactivate.form')
+    ->middleware('auth', 'can:deactivate driver');
+
+Route::put('driver/{id}/deactivate', [DriverController::class, 'deactivate'])
+    ->name('driver.deactivate')
+    ->middleware('auth', 'can:deactivate driver');
+
+// Export Drivers
+Route::get('driver/export', [DriverController::class, 'export'])
+    ->name('driver.export')
+    ->middleware('auth', 'can:export drivers');
+
+// Import Drivers
+Route::get('driver/import', [DriverController::class, 'import'])
+    ->name('driver.import')
+    ->middleware('auth', 'can:import drivers');
+
+/**
+ * Drivers Licenses Routes
+ */
+
+// View Licenses
+Route::get('driver/license', [DriversLicensesController::class, 'index'])
+    ->name('driver.license')
+    ->middleware('auth', 'can:view driver licenses');
+
+// Create License
+Route::get('driver/license/create', [DriversLicensesController::class, 'create'])
+    ->name('driver.license.create')
+    ->middleware('auth', 'can:create driver license');
+
+Route::post('driver/license/create', [DriversLicensesController::class, 'store'])
+    ->name('driver.license.create')
+    ->middleware('auth', 'can:create driver license');
+
+// Update License Details
+Route::get('driver/license/{id}/edit', [DriversLicensesController::class, 'edit'])
+    ->name('driver.license.edit')
+    ->middleware('auth', 'can:edit driver license');
+Route::put('driver/license/{id}/update', [DriversLicensesController::class, 'update'])
+    ->name('driver.license.update')
+    ->middleware('auth', 'can:edit driver license');
+
+// Verify License
+Route::get('driver/license/{id}/verify', [DriversLicensesController::class, 'verify'])
+    ->name('driver.license.verify.form')
+    ->middleware('auth', 'can:verify driver license');
+
+Route::put('driver/license/{id}/verify', [DriversLicensesController::class, 'verifyStore'])
+    ->name('driver.license.verify')
+    ->middleware('auth', 'can:verify driver license');
+
+// Revoke License
+Route::get('driver/license/{id}/revoke', [DriversLicensesController::class, 'revoke'])
+    ->name('driver.license.revoke')
+    ->middleware('auth', 'can:revoke driver license');
+
+Route::put('driver/license/{id}/revoke', [DriversLicensesController::class, 'revokeStore'])
+    ->name('driver.license.revoke')
+    ->middleware('auth', 'can:revoke driver license');
+
+// Delete License
+Route::get('driver/license/{id}/delete', [DriversLicensesController::class, 'delete'])
+    ->name('driver.license.delete')
+    ->middleware('auth', 'can:delete driver license');
+
+Route::delete('driver/license/{id}/delete', [DriversLicensesController::class, 'destroy'])
+    ->name('driver.license.destroy')
+    ->middleware('auth', 'can:delete driver license');
+
+// Export Licenses
+Route::get('driver/license/export', [DriversLicensesController::class, 'export'])
+    ->name('driver.license.export')
+    ->middleware('auth', 'can:export driver licenses');
+
+// Import Licenses
+Route::get('driver/license/import', [DriversLicensesController::class, 'import'])
+    ->name('driver.license.import')
+    ->middleware('auth', 'can:import driver licenses');
+
+/**
+ * Driver Performance Routes
+ * 
+ */
+
+Route::get('driver/performance', [DriverController::class, 'driverPerformance'])
+    ->name('driver.performance.index')
+    ->middleware('auth', 'can:view driver performance');
+
+
+
 
 
 
@@ -287,21 +431,6 @@ Route::post('/admin/user/{id}/destroy', [UserController::class, 'destory'])
  * 
  */
 
-Route::get('driver/export', [DriverController::class, 'export'])
-    ->name('driver.export')
-    ->middleware('auth', 'can:export driver');
-
-Route::get('driver/import', [DriverController::class, 'import'])
-    ->name('driver.import')
-    ->middleware('auth', 'can:import driver');
-
-Route::get('driver/license/export', [DriversLicensesController::class, 'export'])
-    ->name('driver.license.export')
-    ->middleware('auth', 'can:export driver license');
-
-Route::get('driver/license/import', [DriversLicensesController::class, 'import'])
-    ->name('driver.license.import')
-    ->middleware('auth', 'can:import driver license');
 
 Route::get('driver/psvbadge/export', [PSVBadgeController::class, 'export'])
     ->name('driver.psvbadge.export')
@@ -351,111 +480,8 @@ Route::get('route/location/import', [RouteLocationsController::class, 'import'])
     ->name('route.location.import')
     ->middleware('auth', 'can:import route location');
 
-/**
- * Drivers Routes
- * 
- */
 
 
-Route::get('driver', [DriverController::class, 'index'])
-    ->name('driver')
-    ->middleware('auth', 'can:view drivers');
-
-Route::get('driver/create', [DriverController::class, 'create'])
-    ->name('driver.create')
-    ->middleware('auth', 'can:create driver');
-
-Route::post('driver', [DriverController::class, 'store'])
-    ->name('driver.store')
-    ->middleware('auth', 'can:create driver');
-Route::put('driver/{id}/update', [DriverController::class, 'update'])
-    ->name('driver.update')
-    ->middleware('auth', 'can:edit driver');
-
-Route::get('driver/{id}/vehicle/assign', [DriverController::class, 'assignVehicleForm'])
-    ->name('driver.vehicle.assign')
-    ->middleware('auth', 'can:edit driver');
-
-Route::post('driver/{id}/vehicle/assign', [DriverController::class, 'assignVehicle'])
-    ->name('driver.vehicle.assign')
-    ->middleware('auth', 'can:edit driver');
-
-Route::get('driver/{id}/edit', [DriverController::class, 'edit'])
-    ->name('driver.edit')
-    ->middleware('auth', 'can:edit driver');
-Route::post('driver/{id}/delete', [DriverController::class, 'destroy'])
-    ->name('driver.destroy')
-    ->middleware('auth', 'can:delete driver');
-Route::get('driver/{id}/activate', [DriverController::class, 'activateForm'])
-    ->name('driver.activate')
-    ->middleware('auth', 'can:activate driver');
-Route::put('driver/{id}/activateStore', [DriverController::class, 'activate'])
-    ->name('driver.activateStore')
-    ->middleware('auth', 'can:activate driver');
-Route::get('driver/{id}/deactivate', [DriverController::class, 'deactivateForm'])
-    ->name('driver.deactivate.form')
-    ->middleware('auth', 'can:deactivate driver');
-Route::put('driver/{id}/deactivate', [DriverController::class, 'deactivate'])
-    ->name('driver.deactivate')
-    ->middleware('auth', 'can:deactivate driver');
-
-Route::get('driver/performance', [DriverController::class, 'driverPerformance'])
-    ->name('driver.performance.index')
-    ->middleware('auth', 'can:view driver performance');
-
-Route::get('performance/create', [DriverController::class, 'createDriverPerformance'])
-    ->name('driver.performance.create')
-    ->middleware('auth', 'can:create driver performance');
-
-/**
- * Drivers Licenses Routes
- */
-
-// View Licenses
-Route::get('driver/license', [DriversLicensesController::class, 'index'])
-    ->name('driver.license')
-    ->middleware('auth', 'can:view driver licenses');
-
-// Create License
-Route::get('driver/license/create', [DriversLicensesController::class, 'create'])
-    ->name('driver.license.create')
-    ->middleware('auth', 'can:create driver license');
-Route::post('driver/license/create', [DriversLicensesController::class, 'store'])
-    ->name('driver.license.create')
-    ->middleware('auth', 'can:create driver license');
-
-// Update License Details
-Route::get('driver/license/{id}/edit', [DriversLicensesController::class, 'edit'])
-    ->name('driver.license.edit')
-    ->middleware('auth', 'can:edit driver license');
-Route::put('driver/license/{id}/update', [DriversLicensesController::class, 'update'])
-    ->name('driver.license.update')
-    ->middleware('auth', 'can:edit driver license');
-
-// Verify License
-Route::get('driver/license/{id}/verify', [DriversLicensesController::class, 'verify'])
-    ->name('driver.license.verify.form')
-    ->middleware('auth', 'can:verify driver license');
-Route::put('driver/license/{id}/verify', [DriversLicensesController::class, 'verifyStore'])
-    ->name('driver.license.verify')
-    ->middleware('auth', 'can:verify driver license');
-
-// Revoke License
-Route::get('driver/license/{id}/revoke', [DriversLicensesController::class, 'revoke'])
-    ->name('driver.license.revoke')
-    ->middleware('auth', 'can:revoke driver license');
-
-Route::put('driver/license/{id}/revoke', [DriversLicensesController::class, 'revokeStore'])
-    ->name('driver.license.revoke')
-    ->middleware('auth', 'can:revoke driver license');
-
-// Delete License
-Route::get('driver/license/{id}/delete', [DriversLicensesController::class, 'delete'])
-    ->name('driver.license.delete')
-    ->middleware('auth', 'can:delete driver license');
-Route::delete('driver/license/{id}/delete', [DriversLicensesController::class, 'destroy'])
-    ->name('driver.license.destroy')
-    ->middleware('auth', 'can:delete driver license');
 
 /**
  * Drivers PSV Badge Routes
