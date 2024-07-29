@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\RouteLocationsExport;
 use Exception;
 use App\Models\Routes;
 use Illuminate\Http\Request;
@@ -9,6 +10,7 @@ use App\Models\RouteLocations;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RouteLocationsController extends Controller
 {
@@ -213,5 +215,10 @@ class RouteLocationsController extends Controller
             Log::error('Error fetching waypoints: ' . $e->getMessage());
             return response()->json(['error' => 'Failed to fetch waypoints'], 500);
         }
+    }
+
+    public function export()
+    {
+        return Excel::download(new RouteLocationsExport, 'route-locations.xlsx');
     }
 }
