@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\DriversLicenses;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TripController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\PSVBadgeController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SettingsController;
@@ -32,10 +34,10 @@ use App\Http\Controllers\AccountingSettingController;
 use App\Http\Controllers\MaintenanceRepairController;
 use App\Http\Controllers\RefuellingStationController;
 use App\Http\Controllers\MaintenanceServiceController;
-use App\Http\Controllers\NTSAInspectionCertificateController;
 use App\Http\Controllers\VehiclePartCategoryController;
 use App\Http\Controllers\MaintenanceRepairPaymentController;
 use App\Http\Controllers\MaintenanceServicePaymentController;
+use App\Models\DriversLicenses;
 
 // All Routes
 
@@ -133,7 +135,83 @@ Route::post('employee/import/store', [EmployeeController::class, 'import'])
 
 Route::get('employee/export', [EmployeeController::class, 'export'])
     ->name('employee.export')
-    ->middleware('auth', 'can:export customers');
+    ->middleware('auth', 'can:export customer');
+
+Route::get('employee/import', [EmployeeController::class, 'import'])
+    ->name('employee.import')
+    ->middleware('auth', 'can:import employee');
+
+Route::get('driver/export', [DriverController::class, 'export'])
+    ->name('driver.export')
+    ->middleware('auth', 'can:export driver');
+
+Route::get('driver/import', [DriverController::class, 'import'])
+    ->name('driver.import')
+    ->middleware('auth', 'can:import driver');
+
+Route::get('organisation/export', [OrganisationController::class, 'export'])
+    ->name('organisation.export')
+    ->middleware('auth', 'can:export organisation');
+
+Route::get('organisation/import', [OrganisationController::class, 'import'])
+    ->name('organisation.import')
+    ->middleware('auth', 'can:import organisation');
+
+Route::get('driver/license/export', [DriversLicensesController::class, 'export'])
+    ->name('driver.license.export')
+    ->middleware('auth', 'can:export driver license');
+
+Route::get('driver/license/import', [DriversLicensesController::class, 'import'])
+    ->name('driver.license.import')
+    ->middleware('auth', 'can:import driver license');
+
+Route::get('driver/psvbadge/export', [PSVBadgeController::class, 'export'])
+    ->name('driver.psvbadge.export')
+    ->middleware('auth', 'can:export driver psvbadge');
+
+Route::get('driver/psvbadge/import', [PSVBadgeController::class, 'import'])
+    ->name('driver.psvbadge.import')
+    ->middleware('auth', 'can:import driver psvbadge');
+
+Route::get('vehicle/export', [VehicleController::class, 'export'])
+    ->name('vehicle.export')
+    ->middleware('auth', 'can:export vehicle');
+
+Route::get('vehicle/import', [VehicleController::class, 'import'])
+    ->name('vehicle.import')
+    ->middleware('auth', 'can:import vehicle');
+
+Route::get('vehicle/insurance/export', [VehicleInsuranceController::class, 'export'])
+    ->name('vehicle.insurance.export')
+    ->middleware('auth', 'can:export vehicle insurance');
+
+Route::get('vehicle/insurance/import', [VehicleInsuranceController::class, 'import'])
+    ->name('vehicle.insurance.import')
+    ->middleware('auth', 'can:import vehicle insurance');
+
+Route::get('vehicle/certificate/export', [NTSAInspectionCertificateController::class, 'export'])
+    ->name('vehicle.certificate.export')
+    ->middleware('auth', 'can:export vehicle insp certificate');
+
+Route::get('vehicle/certificate/import', [NTSAInspectionCertificateController::class, 'import'])
+    ->name('vehicle.certificate.import')
+    ->middleware('auth', 'can:import vehicle insp certificate');
+
+Route::get('route/export', [RouteController::class, 'export'])
+    ->name('route.export')
+    ->middleware('auth', 'can:export route');
+
+Route::get('route/import', [RouteController::class, 'import'])
+    ->name('route.import')
+    ->middleware('auth', 'can:import route');
+
+Route::get('route/location/export', [RouteLocationsController::class, 'export'])
+    ->name('route.location.export')
+    ->middleware('auth', 'can:export route location');
+
+Route::get('route/location/import', [RouteLocationsController::class, 'import'])
+    ->name('route.location.import')
+    ->middleware('auth', 'can:import route location');
 
 /***
  * Organisations Routes
@@ -189,21 +267,6 @@ Route::get('organisation/{id}/delete', [OrganisationController::class, 'delete']
 Route::delete('organisation/{id}/delete', [OrganisationController::class, 'destroy'])
     ->name('organisation.destroy')
     ->middleware('auth', 'can:delete organisation');
-
-//  Export Organisations
-Route::get('organisation/export', [OrganisationController::class, 'export'])
-    ->name('organisation.export')
-    ->middleware('auth', 'can:export organisations');
-
-// Import Organisations
-
-Route::get('organisation/import', [OrganisationController::class, 'importFile'])
-    ->name('organisation.import.file')
-    ->middleware('auth', 'can:import organisations');
-
-Route::post('organisation/import/store', [OrganisationController::class, 'import'])
-    ->name('organisation.import.store')
-    ->middleware('auth', 'can:import organisations');
 
 /**
  * Drivers Routes
@@ -274,6 +337,29 @@ Route::get('driver/export', [DriverController::class, 'export'])
 Route::get('driver/import', [DriverController::class, 'import'])
     ->name('driver.import')
     ->middleware('auth', 'can:import drivers');
+
+
+
+/****
+ * Import Driver
+ * 
+ */
+
+Route::get('driver/import', [DriverController::class, 'importFile'])
+    ->name('driver.import.file')
+    ->middleware('auth', 'can:import driver');
+
+Route::post('driver/import/store', [DriverController::class, 'import'])
+    ->name('driver.import.store')
+    ->middleware('auth', 'can:import driver');
+
+/****
+ * Export Driver
+ */
+Route::get('driver/export', [DriverController::class, 'export'])
+    ->name('driver.export')
+    ->middleware('auth', 'can:export driver');
+
 
 /**
  * Drivers Licenses Routes
@@ -603,7 +689,6 @@ Route::get('route', [RouteController::class, 'index'])
 Route::get('route/create', [RouteController::class, 'create'])
     ->name('route.create')
     ->middleware('auth', 'can:create route');
-
 Route::post('route', [RouteController::class, 'store'])
     ->name('route.store')
     ->middleware('auth', 'can:create route');
@@ -625,14 +710,6 @@ Route::get('route/{id}/delete', [RouteController::class, 'delete'])
 Route::delete('route/{id}/delete', [RouteController::class, 'destroy'])
     ->name('route.destroy')
     ->middleware('auth', 'can:delete route');
-
-Route::get('route/export', [RouteController::class, 'export'])
-    ->name('route.export')
-    ->middleware('auth', 'can:export routes');
-
-Route::get('route/import', [RouteController::class, 'import'])
-    ->name('route.import')
-    ->middleware('auth', 'can:import routes');
 
 /**
  * Route Location Routes
@@ -665,15 +742,6 @@ Route::delete('route/location/{id}/delete', [RouteLocationsController::class, 'd
 Route::post('route/locations/get/all', [RouteLocationsController::class, 'getAllRouteWayPoints'])
     ->name('route.location.waypoints')
     ->middleware('auth');
-
-Route::get('route/location/export', [RouteLocationsController::class, 'export'])
-    ->name('route.location.export')
-    ->middleware('auth', 'can:export route locations');
-
-Route::get('route/location/import', [RouteLocationsController::class, 'import'])
-    ->name('route.location.import')
-    ->middleware('auth', 'can:import route locations');
-
 
 /**
  * Tripes Routes
@@ -1051,7 +1119,7 @@ Route::post('maintenance/repair/{id}/recieve/payment/store', [MaintenanceRepairP
     ->middleware('auth', 'can:edit maintenance');
 
 
-Route::get('maintenance/repair/id}/download/invoice', [MaintenanceRepairPaymentController::class, 'billedVehicleRepairMaintenanceDownloadInvoice'])
+Route::get('maintenance/repair/{id}/download/invoice', [MaintenanceRepairPaymentController::class, 'billedVehicleRepairMaintenanceDownloadInvoice'])
     ->name('billed.maintenance.repair.download.invoice')
     ->middleware('auth', 'can:edit maintenance');
 
@@ -1616,14 +1684,43 @@ Route::get('report/maintenance', [ReportController::class, 'maintenanceReport'])
  */
 
 //  Update Settings
-Route::put('settings', [SettingsController::class, 'update'])
-    ->name('settings')
-    ->middleware('auth', 'can:edit settings');
 
-//  Site Settings
-Route::get('/settings/site', [SettingsController::class, 'site'])
-    ->name('settings.site')
-    ->middleware('auth', 'can:view settings');
+//Fueling
+Route::get('/settings/fueling', [SettingsController::class, 'fuelingSetting'])->name('settings.fueling');
+Route::put('/settings/fueling/update', [SettingsController::class, 'fuelingSettingUpdate'])->name('fuel.setting.update');
+
+//maintenance
+Route::get('/settings/maintenance', [SettingsController::class, 'maintenanceSetting'])->name('settings.maintenance');
+Route::put('/settings/maintenance/update', [SettingsController::class, 'maintenanceSettingUpdate'])->name('settings.maintenance.update');
+
+//General
+Route::get('/settings/general', [SettingsController::class, 'generalSetting'])->name('settings.general');
+
+//Env
+Route::get('/settings/env', [SettingsController::class, 'envSetting'])->name('settings.env');
+Route::put('/settings/env/update', [SettingsController::class, 'envSettingUpdate'])->name('settings.env.update');
+
+//Language
+Route::get('/settings/language', [SettingsController::class, 'languageSetting'])->name('settings.language');
+
+ Route::get('change-language/{lang}', [LanguageController::class, 'changeLanquage'])->name('change.language');
+
+Route::get('manage-language/{lang}', [LanguageController::class, 'manageLanguage'])->name('manage.language');
+
+ Route::post('store-language-data/{lang}', [LanguageController::class, 'storeLanguageData'])->name('store.language.data');
+
+Route::get('create-language', [LanguageController::class, 'createLanguage'])->name('create.language');
+
+Route::any('store-language', [LanguageController::class, 'storeLanguage'])->name('store.language');
+
+ Route::delete('/lang/{lang}', [LanguageController::class, 'destroyLang'])->name('lang.destroy');
+
+//Mail
+Route::get('/settings/mail', [SettingsController::class, 'mailSetting'])->name('settings.mail');
+Route::put('/settings/mail/update', [SettingsController::class, 'mailSettingUpdate'])->name('settings.mail.update');
+
+Route::get('/settings/site', [SettingsController::class, 'siteSetting'])->name('settings.site');
+Route::put('/settings/site/update', [SettingsController::class, 'siteSettingUpdate'])->name('settings.site.update');
 
 /**
  * 

@@ -52,10 +52,23 @@ class EmployeeImport implements ToModel, WithHeadingRow
             ]
         );
 
+        $organisationId = null;
+        if (Auth::user()->role == 'organisation') {
+            $organisationId = Auth::user()->id;
+        }
+
+
         Customer::updateOrCreate(
             ['user_id' => $user->id],
             [
-                'organisation_id' => Auth::user()->id,
+
+                /***
+                 * Organisation ID Handling: The organisation_id is determined based on the
+                 *  logged-in user’s role. If the user’s role is organisation, the ID
+                 *  of the logged-in user is set as organisation_id. If the user is an admin,
+                 *  it remains null.
+                 */
+                'organisation_id' => $organisationId,
                 'customer_organisation_code' => $row['customer_organisation_code'],
                 'national_id_no' => $row['national_id_no'],
                 'national_id_front_avatar' => $nationalIdFrontAvatarPath, 

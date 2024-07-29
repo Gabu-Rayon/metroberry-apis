@@ -32,6 +32,12 @@
                                                             </a>
                                                         @endif
                                                         <span class="m-1"></span>
+                                                        <!-- <a class="btn btn-success btn-sm"
+                                                            href={{ route('driver.license.import') }} title="Import">
+                                                            <i class="fa-solid fa-file-import"></i>
+                                                            &nbsp;
+                                                            Import
+                                                        </a> -->
                                                         @if (Auth::user()->can('import driver licenses'))
                                                             <a class="btn btn-success btn-sm"
                                                                 href={{ route('driver.license.import') }} title="Import">

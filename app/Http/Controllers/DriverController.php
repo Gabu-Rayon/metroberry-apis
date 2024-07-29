@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\DriverExport;
 use Exception;
 use App\Models\User;
 use App\Models\Driver;
 use App\Models\Vehicle;
 use App\Models\Organisation;
 use Illuminate\Http\Request;
+use App\Exports\DriverExport;
+use App\Imports\DriverImport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
-use Maatwebsite\Excel\Facades\Excel;
 
 class DriverController extends Controller
 {
@@ -49,8 +50,8 @@ class DriverController extends Controller
         }
     }
 
-    public function store(Request $request)
-    {
+    public function store(Request $request) {
+        DB::beginTransaction();
         try {
 
 
@@ -116,6 +117,8 @@ class DriverController extends Controller
                 'password' => bcrypt($data['password']),
                 'phone' => $data['phone'],
                 'address' => $data['address'],
+                'phone' => $data['phone'],
+                'address' => $data['address'],
                 'avatar' => $avatarPath,
                 'created_by' => Auth::user()->id,
                 'role' => 'driver',
@@ -147,6 +150,7 @@ class DriverController extends Controller
 
             return redirect()->route('driver')->with('success', 'Driver created successfully');
         } catch (Exception $e) {
+            DB::rollBack();
             Log::error('CREATE DRIVER ERROR');
             Log::error($e);
             return redirect()->back()->with('error', 'An error occurred')->withInput();
@@ -156,14 +160,16 @@ class DriverController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Driver $driver)
+    public function show($id)
     {
         try {
+            $driver = Driver::with('vehicle')->findOrFail($id);
+    
             return response()->json([
                 'driver' => $driver
             ], 200);
         } catch (Exception $e) {
-            Log::error('SHOW DRIVER ERROR');
+            Log::error('Error fetching driver');
             Log::error($e);
             return response()->json([
                 'message' => 'An error occurred',
@@ -171,6 +177,7 @@ class DriverController extends Controller
             ], 500);
         }
     }
+    
 
     public function create()
     {
@@ -339,12 +346,9 @@ class DriverController extends Controller
         }
     }
 
-
-
-
-
     /**
      * Remove the specified resource from storage.
+     * 
      */
     public function destroy($id)
     {
@@ -501,17 +505,66 @@ class DriverController extends Controller
         }
     }
 
-    public function export()
-    {
-        $role = Auth::user()->role;
-        $organisation = null;
 
-        if ($role == 'organisation') {
-            $organisation = Organisation::where('user_id', Auth::user()->id)->first();
+
+
+    // public function export()
+    // {
+    //     $fileName = 'drivers_' . date('Y-m-d_H-i-s') . '.xlsx';
+
+    //     \Log::info('Exporting file: ' . $fileName);
+
+    //     return Excel::download(new DriverExport, $fileName);
+    // }
+
+    public function export(Request $request)
+    {
+        return Excel::download(new DriverExport(), 'drivers.xlsx');
+    }
+
+
+    /**
+     * 
+     *Import Driver detials 
+
+     */
+    // Display the import file view
+    public function importFile()
+    {
+        return view('driver.importDriver');
+    }
+
+    // Handle the import of the file
+    public function import(Request $request)
+    {
+        // Validation rules
+        $rules = [
+            'file' => 'required|mimes:csv,txt,xlsx',
+        ];
+
+        // Validate the request
+        $validator = Validator::make($request->all(), $rules);
+
+        // If validation fails, redirect back with error message
+        if ($validator->fails()) {
+            return redirect()->back()->with('error', $validator->errors()->first());
         }
 
-        $export = new DriverExport($role, $organisation);
+        try {
+            // Import the file using the DriverImport class
+            Excel::import(new DriverImport, $request->file('file'));
 
-        return Excel::download($export, 'drivers.xlsx');
+            // Log the import action
+            Log::info('Data from Driver CSV File being Imported: ', ['file' => $request->file('file')]);
+
+            // Redirect back with success message
+            return redirect()->back()->with('success', 'Records imported successfully.');
+        } catch (Exception $e) {
+            // Log the error
+            Log::error('Error importing Drivers: ' . $e->getMessage());
+
+            // Redirect back with error message
+            return redirect()->back()->with('error', 'An error occurred while importing the Driver records.');
+        }
     }
 }
