@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\DriversLicenses;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TripController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\VehicleController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\PSVBadgeController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SettingsController;
@@ -33,11 +35,10 @@ use App\Http\Controllers\AccountingSettingController;
 use App\Http\Controllers\MaintenanceRepairController;
 use App\Http\Controllers\RefuellingStationController;
 use App\Http\Controllers\MaintenanceServiceController;
-use App\Http\Controllers\NTSAInspectionCertificateController;
 use App\Http\Controllers\VehiclePartCategoryController;
 use App\Http\Controllers\MaintenanceRepairPaymentController;
 use App\Http\Controllers\MaintenanceServicePaymentController;
-use App\Models\DriversLicenses;
+use App\Http\Controllers\NTSAInspectionCertificateController;
 
 
 require __DIR__ . '/auth.php';
@@ -177,6 +178,8 @@ Route::get('driver/import', [DriverController::class, 'import'])
     ->name('driver.import')
     ->middleware('auth', 'can:import driver');
 
+    
+
 Route::get('organisation/export', [OrganisationController::class, 'export'])
     ->name('organisation.export')
     ->middleware('auth', 'can:export organisation');
@@ -225,21 +228,9 @@ Route::get('vehicle/certificate/import', [NTSAInspectionCertificateController::c
     ->name('vehicle.certificate.import')
     ->middleware('auth', 'can:import vehicle insp certificate');
 
-Route::get('route/export', [RouteController::class, 'export'])
-    ->name('route.export')
-    ->middleware('auth', 'can:export route');
 
-Route::get('route/import', [RouteController::class, 'import'])
-    ->name('route.import')
-    ->middleware('auth', 'can:import route');
 
-Route::get('route/location/export', [RouteLocationsController::class, 'export'])
-    ->name('route.location.export')
-    ->middleware('auth', 'can:export route location');
 
-Route::get('route/location/import', [RouteLocationsController::class, 'import'])
-    ->name('route.location.import')
-    ->middleware('auth', 'can:import route location');
 
 /***
  * Organisations Routes
@@ -513,7 +504,8 @@ Route::get('route', [RouteController::class, 'index'])
 Route::get('route/create', [RouteController::class, 'create'])
     ->name('route.create')
     ->middleware('auth', 'can:create route');
-Route::post('route', [RouteController::class, 'store'])
+
+Route::post('route/store', [RouteController::class, 'store'])
     ->name('route.store')
     ->middleware('auth', 'can:create route');
 
@@ -532,6 +524,22 @@ Route::get('route/{id}/delete', [RouteController::class, 'delete'])
 Route::delete('route/{id}/delete', [RouteController::class, 'destroy'])
     ->name('route.destroy')
     ->middleware('auth', 'can:delete route');
+
+///Export
+
+Route::get('route/export', [RouteController::class, 'export'])
+    ->name('route.export')
+    ->middleware('auth', 'can:export route');
+
+
+//Import
+Route::get('route/import', [RouteController::class, 'importFile'])
+    ->name('route.import.file')
+    ->middleware('auth', 'can:import route');
+
+Route::post('route/import', [RouteController::class, 'import'])
+    ->name('route.import.store')
+    ->middleware('auth', 'can:import route');
 
 /**
  * Route Location Routes
@@ -564,6 +572,21 @@ Route::delete('route/location/{id}/delete', [RouteLocationsController::class, 'd
 Route::post('route/locations/get/all', [RouteLocationsController::class, 'getAllRouteWayPoints'])
     ->name('route.location.waypoints')
     ->middleware('auth');
+
+//Export
+Route::get('route/location/export', [RouteLocationsController::class, 'export'])
+    ->name('route.location.export')
+    ->middleware('auth', 'can:export route location');
+
+
+//Import
+Route::get('route/location/import', [RouteLocationsController::class, 'importFile'])
+    ->name('route.location.import.file')
+    ->middleware('auth', 'can:import route location');
+
+Route::post('route/location/import', [RouteLocationsController::class, 'import'])
+    ->name('route.location.import.store')
+    ->middleware('auth', 'can:import route location');
 
 /**
  * Tripes Routes
@@ -1397,14 +1420,43 @@ Route::get('report/maintenance', [ReportController::class, 'maintenanceReport'])
  */
 
 //  Update Settings
-Route::put('settings', [SettingsController::class, 'update'])
-    ->name('settings')
-    ->middleware('auth', 'can:edit settings');
 
-//  Site Settings
-Route::get('/settings/site', [SettingsController::class, 'site'])
-    ->name('settings.site')
-    ->middleware('auth', 'can:view settings');
+//Fueling
+Route::get('/settings/fueling', [SettingsController::class, 'fuelingSetting'])->name('settings.fueling');
+Route::put('/settings/fueling/update', [SettingsController::class, 'fuelingSettingUpdate'])->name('fuel.setting.update');
+
+//maintenance
+Route::get('/settings/maintenance', [SettingsController::class, 'maintenanceSetting'])->name('settings.maintenance');
+Route::put('/settings/maintenance/update', [SettingsController::class, 'maintenanceSettingUpdate'])->name('settings.maintenance.update');
+
+//General
+Route::get('/settings/general', [SettingsController::class, 'generalSetting'])->name('settings.general');
+
+//Env
+Route::get('/settings/env', [SettingsController::class, 'envSetting'])->name('settings.env');
+Route::put('/settings/env/update', [SettingsController::class, 'envSettingUpdate'])->name('settings.env.update');
+
+//Language
+Route::get('/settings/language', [SettingsController::class, 'languageSetting'])->name('settings.language');
+
+ Route::get('change-language/{lang}', [LanguageController::class, 'changeLanquage'])->name('change.language');
+
+Route::get('manage-language/{lang}', [LanguageController::class, 'manageLanguage'])->name('manage.language');
+
+ Route::post('store-language-data/{lang}', [LanguageController::class, 'storeLanguageData'])->name('store.language.data');
+
+Route::get('create-language', [LanguageController::class, 'createLanguage'])->name('create.language');
+
+Route::any('store-language', [LanguageController::class, 'storeLanguage'])->name('store.language');
+
+ Route::delete('/lang/{lang}', [LanguageController::class, 'destroyLang'])->name('lang.destroy');
+
+//Mail
+Route::get('/settings/mail', [SettingsController::class, 'mailSetting'])->name('settings.mail');
+Route::put('/settings/mail/update', [SettingsController::class, 'mailSettingUpdate'])->name('settings.mail.update');
+
+Route::get('/settings/site', [SettingsController::class, 'siteSetting'])->name('settings.site');
+Route::put('/settings/site/update', [SettingsController::class, 'siteSettingUpdate'])->name('settings.site.update');
 
 /**
  * 

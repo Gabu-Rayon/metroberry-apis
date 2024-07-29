@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\RoutesExport;
+use App\Imports\RoutesImport;
 use App\Models\RouteLocations;
 use Exception;
 use App\Models\Routes;
@@ -239,5 +240,46 @@ class RouteController extends Controller
     public function export()
     {
         return Excel::download(new RoutesExport, 'routes.xlsx');
+    }
+
+
+    /**
+   * 
+   *Import organisation detials 
+
+   */
+    public function importFile()
+    {
+        return view('route.importRoute');
+    }
+
+    public function import(Request $request)
+    {
+        $rules = [
+            'file' => 'required|mimes:csv,txt,xlsx',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with('error', $validator->errors()->first());
+        }
+
+        try {
+            Excel::import(new RoutesImport, $request->file('file'));
+
+            // Log the import event
+            Log::info('Routes CSV file imported: ', ['file' => $request->file('file')]);
+
+            //log 
+            Log::info('Organisation CSV file imported : ');
+            Log::info($request->file('file'));
+
+            return redirect()->back()->with('success', 'Records imported successfully.');
+        } catch (Exception $e) {
+            Log::error('Error importing Routes: ' . $e->getMessage());
+
+            return redirect()->back()->with('error', 'An error occurred while importing the Routes records.');
+        }
     }
 }

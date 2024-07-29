@@ -21,7 +21,7 @@
     <meta property="og:type"content="WebPage" />
     <meta property="og:Metro-Berry"content="Metro-Berry" />
 
-    <link rel="shortcut icon"href="{{ asset('admin-assets/img/sidebar-logo.png?v=1') }}">
+    <link rel="shortcut icon"href="{{ asset('favicon.ico') }}">
     <link href="{{ asset('admin-assets/vendor/bootstrap/css/bootstrap.min.css?v=1') }}"rel="stylesheet">
     <link href="{{ asset('admin-assets/vendor/metisMenu/metisMenu.min.css?v=1') }}"rel="stylesheet">
     <link href="{{ asset('nanopkg-assets/vendor/datatables/dataTables.bootstrap4.min.css?v=1') }}"rel="stylesheet">

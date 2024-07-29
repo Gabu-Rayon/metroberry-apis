@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\DriverExport;
 use Exception;
 use App\Models\User;
 use App\Models\Driver;
 use App\Models\Vehicle;
 use App\Models\Organisation;
 use Illuminate\Http\Request;
+use App\Exports\DriverExport;
 use App\Imports\DriverImport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 class DriverController extends Controller
@@ -516,11 +517,10 @@ class DriverController extends Controller
     //     return Excel::download(new DriverExport, $fileName);
     // }
 
-    public function export()
+    public function export(Request $request)
     {
-        return Excel::download(new DriverExport, 'drivers.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+        return Excel::download(new DriverExport(), 'drivers.xlsx');
     }
-
 
 
     /**

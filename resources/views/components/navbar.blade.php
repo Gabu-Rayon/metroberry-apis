@@ -10,18 +10,13 @@
                     <img src="" alt="Language Icon">
                 </a>
                 <div class="dropdown-menu language_dropdown">
-                    <a href="lang/en" class="language_item d-flex align-items-center gap-3">
-                        <img src="" alt="English Flag">
-                        <span>English</span>
-                    </a>
-                    <a href="lang/bn" class="language_item d-flex align-items-center gap-3">
-                        <img src="" alt="Swahili Flag">
-                        <span>Swahili</span>
-                    </a>
-                    <a href="lang/ar" class="language_item d-flex align-items-center gap-3">
-                        <img src="" alt="French Flag">
-                        <span>French</span>
-                    </a>
+                    
+                    @foreach ($languages as $code => $language)
+                            <a href="{{ route('change.language', $code) }}"
+                               class="dropdown-item {{ $lang == $code ? 'text-primary' : '' }}">
+                                <span>{{ucFirst($language)}}</span>
+                            </a>
+                        @endforeach
                 </div>
             </li>
 

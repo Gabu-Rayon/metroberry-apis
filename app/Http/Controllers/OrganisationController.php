@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\OrganisationExport;
-use App\Models\DriversLicenses;
+
 use Exception;
 use App\Models\Trip;
 use App\Models\User;
@@ -23,7 +22,7 @@ use App\Charts\MaintenanceCostReport;
 use App\Models\NTSAInspectionCertificate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
-use Maatwebsite\Excel\Facades\Excel;
+use App\Models\DriversLicenses;
 
 class OrganisationController extends Controller
 {

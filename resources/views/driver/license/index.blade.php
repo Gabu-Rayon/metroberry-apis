@@ -30,12 +30,12 @@
                                                             Export
                                                         </a>
                                                         <span class="m-1"></span>
-                                                        <a class="btn btn-success btn-sm"
+                                                        <!-- <a class="btn btn-success btn-sm"
                                                             href={{ route('driver.license.import') }} title="Import">
                                                             <i class="fa-solid fa-file-import"></i>
                                                             &nbsp;
                                                             Import
-                                                        </a>
+                                                        </a> -->
                                                         <span class="m-1"></span>
                                                         <button type="button" class="btn btn-success btn-sm"
                                                             data-bs-toggle="modal" data-bs-target="#driverLicenseModal">

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\VehicleExport;
 use Exception;
 use Carbon\Carbon;
 use App\Models\Driver;
@@ -18,7 +17,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
-use Maatwebsite\Excel\Facades\Excel;
 
 class VehicleController extends Controller
 {
@@ -340,9 +338,7 @@ class VehicleController extends Controller
 
             // Find the existing vehicle record
             $vehicle = Vehicle::findOrFail($id);
-            // Find the vehicle by its ID
-            $vehicle = Vehicle::find($vehicleId);
-
+            
             // Check if the vehicle exists
             if (!$vehicle) {
                 return response()->json([
@@ -526,15 +522,7 @@ class VehicleController extends Controller
     //         ], 500);
     //     }
     // }
-            Log::error('ERROR UPDATING VEHICLE');
-            Log::error($e);
-            return response()->json([
-                'message' => 'Error occurred while updating vehicle',
-                'error' => $e->getMessage()
-            ], 500);
-        }
-    }
-
+         
     // public function update(Request $request, $vehicle)
     // {
     //     try {
@@ -837,59 +825,6 @@ class VehicleController extends Controller
                 'message' => 'Error occurred while deactivating vehicle',
                 'error' => $e->getMessage()
             ], 500);
-        }
-    }
-
-    public function activate_vehicle($id)
-    {
-        try {
-            $vehicle = Vehicle::find($id);
-
-            if (!$vehicle) {
-                return response()->json([
-                    'error' => 'Vehicle not found'
-                ], 404);
-            }
-
-            $vehicle->status = 'active';
-            $vehicle->save();
-
-            return response()->json([
-                'message' => 'Vehicle activated successfully',
-                'vehicle' => $vehicle
-            ], 200);
-        } catch (Exception $e) {
-            Log::error('ERROR ACTIVATING VEHICLE');
-            Log::error($e);
-            return response()->json([
-                'message' => 'Error occurred while activating vehicle',
-                'error' => $e->getMessage()
-            ], 500);
-        }
-    }
-
-    public function deactivate_vehicle($id)
-    {
-        try {
-            $vehicle = Vehicle::find($id);
-
-            if (!$vehicle) {
-                return response()->json([
-                    'error' => 'Vehicle not found'
-                ], 404);
-            }
-
-            $vehicle->status = 'inactive';
-            $vehicle->save();
-
-            return response()->json([
-                'message' => 'Vehicle deactivated successfully',
-                'vehicle' => $vehicle
-            ], 200);
-        } catch (Exception $e) {
-            Log::error('ERROR DEACTIVATING VEHICLE');
-            Log::error($e);
-            return redirect()->back()->with('error', 'An error occurred');
         }
     }
 

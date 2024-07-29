@@ -214,4 +214,14 @@ class RouteLocationsController extends Controller
             return response()->json(['error' => 'Failed to fetch waypoints'], 500);
         }
     }
+
+
+    public function importFile(){
+    
+    }
+
+    public function import() {
+
+    }
+
 }

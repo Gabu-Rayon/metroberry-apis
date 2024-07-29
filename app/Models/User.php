@@ -89,7 +89,7 @@ class User extends Authenticatable
         parent::boot();
         static::deleting(function ($user) {
             $user->driver()->delete();
-            $user->customers()->delete();
+            $user->customer()->delete(); 
             $user->organisation()->delete();
         });
     }

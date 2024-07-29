@@ -1,37 +1,36 @@
-<?php
+<?php 
+
 
 namespace App\Exports;
 
 use App\Models\Organisation;
-use Maatwebsite\Excel\Concerns\FromQuery;
+use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class OrganisationExport implements FromQuery, WithHeadings
+class OrganisationExport implements FromCollection, WithHeadings
 {
-    /**
-     * Defines the query used to retrieve data for the export.
-     *
-     * @return \Illuminate\Database\Query\Builder
-     */
-    public function query()
+    public function __construct()
     {
-        return Organisation::query()
-            ->join('users', 'organisations.user_id', '=', 'users.id')
-            ->select(
-                'users.name as Name',
-                'users.email as Email',
-                'users.phone as Phone',
-                'users.address as Address',
-                'organisations.organisation_code as Organisation',
-                'organisations.status as Status'
-            );
+        // Constructor can be used if needed
     }
 
-    /**
-     * Defines the column headings for the exported file.
-     *
-     * @return array
-     */
+    public function collection()
+    {
+        // Process the data
+        $organisations = Organisation::with('user')->get();
+        $formattedOrganisations = $organisations->map(function ($organisation) {
+            return [
+                'name' => $organisation->user->name,
+                'email' => $organisation->user->email,
+                'phone' => $organisation->user->phone,
+                'address' => $organisation->user->address,
+                'organisation_code' => $organisation->organisation_code ?? null,
+            ];
+        });
+        return $formattedOrganisations;
+    }
+
     public function headings(): array
     {
         return [
@@ -39,8 +38,7 @@ class OrganisationExport implements FromQuery, WithHeadings
             'Email',
             'Phone',
             'Address',
-            'Organisation',
-            'Status'
+            'Organisation Code',
         ];
     }
 }

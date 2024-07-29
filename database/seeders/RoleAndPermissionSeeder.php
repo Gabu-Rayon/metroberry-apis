@@ -93,6 +93,7 @@ class RoleAndPermissionSeeder extends Seeder
             'create organisation',
             'edit organisation',
             'delete organisation',
+            'update organisation',
             'import organisation',
             'export organisation',
 
@@ -966,8 +967,8 @@ class RoleAndPermissionSeeder extends Seeder
             'view customers',
             'create customer',
             'edit customer',
-            'update customer',
             'import customer',
+            'export customer',
 
             'reset password',
             'edit password',

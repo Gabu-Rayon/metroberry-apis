@@ -39,6 +39,7 @@ class PermissionsGroupSeeder extends Seeder
                 'activate customer',
                 'deactivate customer',
                 'import customer',
+                'export customer',
             ],
             'organisation' => [
                 'manage organisations',
