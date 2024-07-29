@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\DriversLicenses;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TripController;
@@ -37,7 +36,7 @@ use App\Http\Controllers\MaintenanceServiceController;
 use App\Http\Controllers\VehiclePartCategoryController;
 use App\Http\Controllers\MaintenanceRepairPaymentController;
 use App\Http\Controllers\MaintenanceServicePaymentController;
-use App\Models\DriversLicenses;
+use App\Http\Controllers\NTSAInspectionCertificateController;
 
 // All Routes
 
@@ -1703,17 +1702,17 @@ Route::put('/settings/env/update', [SettingsController::class, 'envSettingUpdate
 //Language
 Route::get('/settings/language', [SettingsController::class, 'languageSetting'])->name('settings.language');
 
- Route::get('change-language/{lang}', [LanguageController::class, 'changeLanquage'])->name('change.language');
+Route::get('change-language/{lang}', [LanguageController::class, 'changeLanquage'])->name('change.language');
 
 Route::get('manage-language/{lang}', [LanguageController::class, 'manageLanguage'])->name('manage.language');
 
- Route::post('store-language-data/{lang}', [LanguageController::class, 'storeLanguageData'])->name('store.language.data');
+Route::post('store-language-data/{lang}', [LanguageController::class, 'storeLanguageData'])->name('store.language.data');
 
 Route::get('create-language', [LanguageController::class, 'createLanguage'])->name('create.language');
 
 Route::any('store-language', [LanguageController::class, 'storeLanguage'])->name('store.language');
 
- Route::delete('/lang/{lang}', [LanguageController::class, 'destroyLang'])->name('lang.destroy');
+Route::delete('/lang/{lang}', [LanguageController::class, 'destroyLang'])->name('lang.destroy');
 
 //Mail
 Route::get('/settings/mail', [SettingsController::class, 'mailSetting'])->name('settings.mail');
