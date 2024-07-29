@@ -339,6 +339,60 @@ Route::get('driver/license/import', [DriversLicensesController::class, 'import']
     ->middleware('auth', 'can:import driver licenses');
 
 /**
+ * Driver's PSV Badge Routes
+ */
+
+// View PSV Badges
+Route::get('driver/psvbadge', [PSVBadgeController::class, 'index'])
+    ->name('driver.psvbadge.index')
+    ->middleware('auth', 'can:view driver psvbadges');
+
+// Create PSV Badge
+Route::get('driver/psvbadge/create', [PSVBadgeController::class, 'create'])
+    ->name('driver.psvbadge.create')
+    ->middleware('auth', 'can:create driver psvbadge');
+
+Route::post('driver/psvbadge', [PSVBadgeController::class, 'store'])
+    ->name('driver.psvbadge')
+    ->middleware('auth', 'can:create driver psvbadge');
+
+// Update PSV Badge Details
+Route::get('driver/psvbadge/{id}/edit', [PSVBadgeController::class, 'edit'])
+    ->name('driver.psvbadge.edit')
+    ->middleware('auth', 'can:edit driver psvbadge');
+
+Route::put('driver/psvbadge/{id}/update', [PSVBadgeController::class, 'update'])
+    ->name('driver.psvbadge.update')
+    ->middleware('auth', 'can:edit driver psvbadge');
+
+// Verify PSV Badge
+Route::get('driver/psvbadge/{id}/verify', [PSVBadgeController::class, 'verify'])
+    ->name('driver.psvbadge.verify.form')
+    ->middleware('auth', 'can:verify driver psvbadge');
+
+Route::put('driver/psvbadge/{id}/verify', [PSVBadgeController::class, 'verifyStore'])
+    ->name('driver.psvbadge.verify')
+    ->middleware('auth', 'can:verify driver psvbadge');
+
+// Revoke PSV Badge
+Route::get('driver/psvbadge/{id}/revoke', [PSVBadgeController::class, 'revoke'])
+    ->name('driver.psvbadge.revoke.form')
+    ->middleware('auth', 'can:revoke driver psvbadge');
+
+Route::put('driver/psvbadge/{id}/revoke', [PSVBadgeController::class, 'revokeStore'])
+    ->name('driver.psvbadge.revoke')
+    ->middleware('auth', 'can:revoke driver psvbadge');
+
+// Delete PSV Badge
+Route::get('driver/psvbadge/{id}/delete', [PSVBadgeController::class, 'delete'])
+    ->name('driver.psvbadge.delete')
+    ->middleware('auth', 'can:delete driver psvbadge');
+
+Route::delete('driver/psvbadge/{id}/delete', [PSVBadgeController::class, 'destroy'])
+    ->name('driver.psvbadge.destroy')
+    ->middleware('auth', 'can:delete driver psvbadge');
+
+/**
  * Driver Performance Routes
  * 
  */
@@ -479,58 +533,6 @@ Route::get('route/location/export', [RouteLocationsController::class, 'export'])
 Route::get('route/location/import', [RouteLocationsController::class, 'import'])
     ->name('route.location.import')
     ->middleware('auth', 'can:import route location');
-
-
-
-
-/**
- * Drivers PSV Badge Routes
- */
-
-// View PSV Badges
-Route::get('driver/psvbadge', [PSVBadgeController::class, 'index'])
-    ->name('driver.psvbadge.index')
-    ->middleware('auth', 'can:view psv badges');
-
-// Create PSV Badge
-Route::get('driver/psvbadge/create', [PSVBadgeController::class, 'create'])
-    ->name('driver.psvbadge.create')
-    ->middleware('auth', 'can:create psv badge');
-Route::post('driver/psvbadge', [PSVBadgeController::class, 'store'])
-    ->name('driver.psvbadge')
-    ->middleware('auth', 'can:create psv badge');
-
-// Update PSV Badge Details
-Route::get('driver/psvbadge/{id}/edit', [PSVBadgeController::class, 'edit'])
-    ->name('driver.psvbadge.edit')
-    ->middleware('auth', 'can:edit psv badge');
-Route::put('driver/psvbadge/{id}/update', [PSVBadgeController::class, 'update'])
-    ->name('driver.psvbadge.update')
-    ->middleware('auth', 'can:edit psv badge');
-
-// Verify PSV Badge
-Route::get('driver/psvbadge/{id}/verify', [PSVBadgeController::class, 'verify'])
-    ->name('driver.psvbadge.verify.form')
-    ->middleware('auth', 'can:verify psv badge');
-Route::put('driver/psvbadge/{id}/verify', [PSVBadgeController::class, 'verifyStore'])
-    ->name('driver.psvbadge.verify')
-    ->middleware('auth', 'can:verify psv badge');
-
-// Revoke PSV Badge
-Route::get('driver/psvbadge/{id}/revoke', [PSVBadgeController::class, 'revoke'])
-    ->name('driver.psvbadge.revoke.form')
-    ->middleware('auth', 'can:revoke psv badge');
-Route::put('driver/psvbadge/{id}/revoke', [PSVBadgeController::class, 'revokeStore'])
-    ->name('driver.psvbadge.revoke')
-    ->middleware('auth', 'can:revoke psv badge');
-
-// Delete PSV Badge
-Route::get('driver/psvbadge/{id}/delete', [PSVBadgeController::class, 'delete'])
-    ->name('driver.psvbadge.delete')
-    ->middleware('auth', 'can:delete psv badge');
-Route::delete('driver/psvbadge/{id}/delete', [PSVBadgeController::class, 'destroy'])
-    ->name('driver.psvbadge.destroy')
-    ->middleware('auth', 'can:delete psv badge');
 
 /**
  * 'Routes' Routes

@@ -23,25 +23,32 @@
                                                 <div class="actions">
                                                     <div class="accordion-header d-flex justify-content-end align-items-center"
                                                         id="flush-headingOne">
-                                                        <a class="btn btn-success btn-sm"
-                                                            href={{ route('driver.psvbadge.export') }} title="Export">
-                                                            <i class="fa-solid fa-file-export"></i>
-                                                            &nbsp;
-                                                            Export
-                                                        </a>
+                                                        @if (Auth::user()->can('export driver psvbadges'))
+                                                            <a class="btn btn-success btn-sm"
+                                                                href={{ route('driver.psvbadge.export') }} title="Export">
+                                                                <i class="fa-solid fa-file-export"></i>
+                                                                &nbsp;
+                                                                Export
+                                                            </a>
+                                                        @endif
                                                         <span class="m-1"></span>
-                                                        <a class="btn btn-success btn-sm"
-                                                            href={{ route('driver.psvbadge.import') }} title="Import">
-                                                            <i class="fa-solid fa-file-import"></i>
-                                                            &nbsp;
-                                                            Import
-                                                        </a>
+                                                        @if (Auth::user()->can('import driver psvbadges'))
+                                                            <a class="btn btn-success btn-sm"
+                                                                href={{ route('driver.psvbadge.import') }} title="Import">
+                                                                <i class="fa-solid fa-file-import"></i>
+                                                                &nbsp;
+                                                                Import
+                                                            </a>
+                                                        @endif
                                                         <span class="m-1"></span>
-                                                        <button type="button" class="btn btn-success btn-sm"
-                                                            data-bs-toggle="modal" data-bs-target="#driverPSVBadgeModal">
-                                                            <i class="fa-solid fa-user-plus"></i>&nbsp; Add Driver's PSV
-                                                            Badge
-                                                        </button>
+                                                        @if (Auth::user()->can('create driver psvbadge'))
+                                                            <button type="button" class="btn btn-success btn-sm"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#driverPSVBadgeModal">
+                                                                <i class="fa-solid fa-user-plus"></i>&nbsp; Add Driver's PSV
+                                                                Badge
+                                                            </button>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -118,33 +125,43 @@
                                                                 <span class="{{ $badgeClass }}">{{ $badgeText }}</span>
                                                             </td>
                                                             <td class="d-flex">
-                                                                <a href="javascript:void(0);" class="btn btn-sm btn-primary"
-                                                                    onclick="axiosModal('psvbadge/{{ $psvbadge->id }}/edit')"
-                                                                    title="Edit">
-                                                                    <i class="fas fa-edit"></i>
-                                                                </a>
-                                                                <span class='m-1'></span>
-                                                                @if (!$psvbadge->verified)
+                                                                @if (Auth::user()->can('edit driver psvbadge'))
                                                                     <a href="javascript:void(0);"
-                                                                        class="btn btn-sm btn-secondary"
-                                                                        onclick="axiosModal('psvbadge/{{ $psvbadge->id }}/verify')"
-                                                                        title="Verify">
-                                                                        <i class="fas fa-toggle-off"></i>
-                                                                    </a>
-                                                                @else
-                                                                    <a href="javascript:void(0);"
-                                                                        class="btn btn-sm btn-success"
-                                                                        onclick="axiosModal('psvbadge/{{ $psvbadge->id }}/revoke')"
-                                                                        title="Suspend">
-                                                                        <i class="fas fa-toggle-on"></i>
+                                                                        class="btn btn-sm btn-primary"
+                                                                        onclick="axiosModal('psvbadge/{{ $psvbadge->id }}/edit')"
+                                                                        title="Edit">
+                                                                        <i class="fas fa-edit"></i>
                                                                     </a>
                                                                 @endif
                                                                 <span class='m-1'></span>
-                                                                <a href="javascript:void(0);" class="btn btn-sm btn-danger"
-                                                                    onclick="axiosModal('psvbadge/{{ $psvbadge->id }}/delete')"
-                                                                    title="Delete">
-                                                                    <i class="fas fa-trash"></i>
-                                                                </a>
+                                                                @if (!$psvbadge->verified)
+                                                                    @if (Auth::user()->can('verify driver psvbadge'))
+                                                                        <a href="javascript:void(0);"
+                                                                            class="btn btn-sm btn-secondary"
+                                                                            onclick="axiosModal('psvbadge/{{ $psvbadge->id }}/verify')"
+                                                                            title="Verify">
+                                                                            <i class="fas fa-toggle-off"></i>
+                                                                        </a>
+                                                                    @endif
+                                                                @else
+                                                                    @if (Auth::user()->can('revoke driver psvbadge'))
+                                                                        <a href="javascript:void(0);"
+                                                                            class="btn btn-sm btn-success"
+                                                                            onclick="axiosModal('psvbadge/{{ $psvbadge->id }}/revoke')"
+                                                                            title="Suspend">
+                                                                            <i class="fas fa-toggle-on"></i>
+                                                                        </a>
+                                                                    @endif
+                                                                @endif
+                                                                <span class='m-1'></span>
+                                                                @if (Auth::user()->can('delete driver psvbadge'))
+                                                                    <a href="javascript:void(0);"
+                                                                        class="btn btn-sm btn-danger"
+                                                                        onclick="axiosModal('psvbadge/{{ $psvbadge->id }}/delete')"
+                                                                        title="Delete">
+                                                                        <i class="fas fa-trash"></i>
+                                                                    </a>
+                                                                @endif
                                                             </td>
                                                         </tr>
                                                     @endforeach
