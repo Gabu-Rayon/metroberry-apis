@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Exception;
-use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\InsuranceCompany;
 use Illuminate\Support\Facades\Log;
@@ -15,8 +14,15 @@ class InsuranceCompanyController extends Controller
 
     public function index()
     {
-        $insuranceCompanies = InsuranceCompany::all();
-        return view('vehicle.insurance.company.index', compact('insuranceCompanies'));
+        try {
+            $insuranceCompanies = InsuranceCompany::all();
+            return view('vehicle.insurance.company.index', compact('insuranceCompanies'));
+        } catch (Exception $e) {
+            Log::info('INS COMP INDEX ERROR');
+            Log::info($e);
+
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
     public function create()
     {

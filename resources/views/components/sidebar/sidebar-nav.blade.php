@@ -94,15 +94,15 @@
             ])
         @endif
 
-        @if (\Auth::user()->can('manage vehicle insurance company'))
+        @if (\Auth::user()->can('manage insurance companies'))
             @include('components.sidebar.sidebar-dropdown', [
                 'title' => 'Insurance',
                 'icon' => '<i class="fa-solid fa-car-burst"></i>',
                 'subitems' => array_filter([
-                    \Auth::user()->can('manage vehicle insurance company')
+                    \Auth::user()->can('manage insurance companies')
                         ? ['label' => 'Manage Insurance Company', 'route' => route('vehicle.insurance.company')]
                         : null,
-                    \Auth::user()->can('manage vehicle insurance company')
+                    \Auth::user()->can('manage insurance company recurring periods')
                         ? [
                             'label' => 'Insurance Recurring Period',
                             'route' => route('vehicle.insurance.recurring.period'),
@@ -112,39 +112,39 @@
             ])
         @endif
 
-        @if (\Auth::user()->can('manage vehicle maintenance'))
+        @if (\Auth::user()->can('manage maintenance'))
             @include('components.sidebar.sidebar-dropdown', [
                 'title' => 'Maintenance',
                 'icon' => '<i class="fa-solid fa-screwdriver-wrench"></i>',
                 'subitems' => array_filter([
-                    \Auth::user()->can('view vehicle maintenance')
+                    \Auth::user()->can('view maintenance')
                         ? ['label' => 'Maintenance Service', 'route' => route('maintenance.service')]
                         : null,
-                    \Auth::user()->can('view vehicle maintenance')
+                    \Auth::user()->can('view maintenance')
                         ? ['label' => 'Maintenance Repair', 'route' => route('maintenance.repair')]
                         : null,
-                    \Auth::user()->can('view vehicle maintenance')
+                    \Auth::user()->can('view maintenance')
                         ? ['label' => 'Service Types', 'route' => route('vehicle.maintenance.service')]
                         : null,
-                    \Auth::user()->can('view vehicle maintenance')
+                    \Auth::user()->can('view maintenance')
                         ? [
                             'label' => 'Service Categories',
                             'route' => route('vehicle.maintenance.service.categories'),
                         ]
                         : null,
-                    \Auth::user()->can('view vehicle maintenance')
+                    \Auth::user()->can('view maintenance')
                         ? ['label' => 'Vehicle Parts', 'route' => route('vehicle.maintenance.parts')]
                         : null,
-                    \Auth::user()->can('view vehicle maintenance')
+                    \Auth::user()->can('view maintenance')
                         ? [
                             'label' => 'Vehicle Part Categories',
                             'route' => route('vehicle.maintenance.parts.category'),
                         ]
                         : null,
-                    \Auth::user()->can('view vehicle maintenance')
+                    \Auth::user()->can('view maintenance')
                         ? ['label' => 'Repair Types', 'route' => route('vehicle.maintenance.repairs')]
                         : null,
-                    \Auth::user()->can('view vehicle maintenance')
+                    \Auth::user()->can('view maintenance')
                         ? [
                             'label' => 'Repair Categories',
                             'route' => route('vehicle.maintenance.repairs.categories'),
@@ -154,7 +154,7 @@
             ])
         @endif
 
-        @if (\Auth::user()->can('manage vehicle refueling'))
+        @if (\Auth::user()->can('manage fuelling'))
             @include('components.sidebar.sidebar-dropdown', [
                 'title' => 'Refueling',
                 'icon' => '<i class="fa-solid fa-gas-pump"></i>',
@@ -165,42 +165,42 @@
             ])
         @endif
 
-        @if (\Auth::user()->can('view report purchase'))
+        @if (\Auth::user()->can('view reports'))
             @include('components.sidebar.sidebar-dropdown', [
                 'title' => 'Reports',
                 'icon' => '<i class="fa-solid fa-file-lines"></i>',
                 'subitems' => array_filter([
-                    \Auth::user()->can('view report employee')
+                    \Auth::user()->can('view reports')
                         ? ['label' => 'Employee Report', 'route' => route('report.employee')]
                         : null,
-                    \Auth::user()->can('view report driver')
+                    \Auth::user()->can('view reports')
                         ? ['label' => 'Driver Report', 'route' => route('report.driver')]
                         : null,
-                    \Auth::user()->can('view report vehicle')
+                    \Auth::user()->can('view reports')
                         ? ['label' => 'Vehicle Report', 'route' => route('report.vehicle')]
                         : null,
-                    \Auth::user()->can('view report vehicle')
+                    \Auth::user()->can('view reports')
                         ? ['label' => 'Trips Report', 'route' => route('report.trips')]
                         : null,
-                    \Auth::user()->can('view report maintenance')
+                    \Auth::user()->can('view reports')
                         ? ['label' => 'Service Report', 'route' => route('report.service')]
                         : null,
-                    \Auth::user()->can('view report maintenance')
+                    \Auth::user()->can('view reports')
                         ? ['label' => 'Repairs Report', 'route' => route('report.repairs')]
                         : null,
-                    \Auth::user()->can('view report maintenance')
+                    \Auth::user()->can('view reports')
                         ? ['label' => 'Fueling Report', 'route' => route('report.refueling')]
                         : null,
                 ]),
             ])
         @endif
 
-        @if (\Auth::user()->can('manage permission'))
+        @if (\Auth::user()->can('manage permissions'))
             @include('components.sidebar.sidebar-dropdown', [
-                'title' => 'Role permission',
-                'icon' => '',
+                'title' => 'Access Management',
+                'icon' => '<i class="fa-solid fa-wand-sparkles"></i>',
                 'subitems' => array_filter([
-                    \Auth::user()->can('view permission')
+                    \Auth::user()->can('view permissions')
                         ? ['label' => 'Permission', 'route' => route('permission.index')]
                         : null,
                     \Auth::user()->can('create role')
