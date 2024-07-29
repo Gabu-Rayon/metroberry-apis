@@ -64,7 +64,7 @@
                             Scheduled
                             <span class="float-end text-primary">
                                 <strong>
-                                    {{ count($scheduledTrips) }}
+                                    {{ $scheduledTripsCount }}
                                 </strong>
                             </span>
                         </a>
@@ -77,7 +77,7 @@
                             Completed
                             <span class="float-end text-info">
                                 <strong>
-                                    {{ count($completedTrips) }}
+                                    {{ $completedTripsCount }}
                                 </strong>
                             </span>
                         </a>
@@ -90,7 +90,7 @@
                             Cancelled
                             <span class="float-end text-danger">
                                 <strong>
-                                    {{ count($cancelledTrips) }}
+                                    {{ $cancelledTripsCount }}
                                 </strong>
                             </span>
                         </a>
@@ -103,7 +103,7 @@
                             Billed
                             <span class="float-end text-success">
                                 <strong>
-                                    {{ count($billedTrips) }}
+                                    {{ $billedTripsCount }}
                                 </strong>
                             </span>
                         </a>

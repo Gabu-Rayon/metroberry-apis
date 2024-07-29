@@ -40,19 +40,23 @@
                                                 <div class="actions">
                                                     <div class="accordion-header d-flex justify-content-end align-items-center"
                                                         id="flush-headingOne">
-                                                        <a class="btn btn-success btn-sm"
-                                                            href={{ route('organisation.export') }} title="Export">
-                                                            <i class="fa-solid fa-file-export"></i>
-                                                            &nbsp;
-                                                            Export
-                                                        </a>
+                                                        @if (Auth::user()->can('export organisations'))
+                                                            <a class="btn btn-success btn-sm"
+                                                                href={{ route('organisation.export') }} title="Export">
+                                                                <i class="fa-solid fa-file-export"></i>
+                                                                &nbsp;
+                                                                Export
+                                                            </a>
+                                                        @endif
                                                         <span class="m-1"></span>
-                                                        <a class="btn btn-success btn-sm"
-                                                            href={{ route('organisation.import') }} title="Import">
-                                                            <i class="fa-solid fa-file-import"></i>
-                                                            &nbsp;
-                                                            Import
-                                                        </a>
+                                                        @if (Auth::user()->can('import organisations'))
+                                                            <a class="btn btn-success btn-sm"
+                                                                href={{ route('organisation.import.file') }} title="Import">
+                                                                <i class="fa-solid fa-file-import"></i>
+                                                                &nbsp;
+                                                                Import
+                                                            </a>
+                                                        @endif
                                                         <span class="m-1"></span>
                                                         @if (\Auth::user()->can('create organisation'))
                                                             <button type="button" class="btn btn-success btn-sm"
@@ -97,31 +101,41 @@
                                                                 @endif
                                                             </td>
                                                             <td class="d-flex">
-                                                                <a href="javascript:void(0);" class="btn btn-sm btn-primary"
-                                                                    onclick="axiosModal('organisation/{{ $organisation->id }}/edit')">
-                                                                    <i class="fas fa-edit"></i>
-                                                                </a>
-                                                                <span class='m-1'></span>
-                                                                @if ($organisation->status == 'active')
+                                                                @if (\Auth::user()->can('edit organisation'))
                                                                     <a href="javascript:void(0);"
-                                                                        class="btn btn-sm btn-success"
-                                                                        onclick="axiosModal('organisation/{{ $organisation->id }}/deactivate')"
-                                                                        title="Dectivate Organisation">
-                                                                        <i class="fas fa-toggle-on"></i>
-                                                                    </a>
-                                                                @else
-                                                                    <a href="javascript:void(0);"
-                                                                        class="btn btn-sm btn-secondary"
-                                                                        onclick="axiosModal('organisation/{{ $organisation->id }}/activate')"
-                                                                        title="Activate Organisation">
-                                                                        <i class="fas fa-toggle-off"></i>
+                                                                        class="btn btn-sm btn-primary"
+                                                                        onclick="axiosModal('organisation/{{ $organisation->id }}/edit')">
+                                                                        <i class="fas fa-edit"></i>
                                                                     </a>
                                                                 @endif
                                                                 <span class='m-1'></span>
-                                                                <a href="javascript:void(0);" class="btn btn-sm btn-danger"
-                                                                    onclick="axiosModal('organisation/{{ $organisation->id }}/delete')">
-                                                                    <i class="fas fa-trash"></i>
-                                                                </a>
+                                                                @if ($organisation->status == 'active')
+                                                                    @if (\Auth::user()->can('deactivate organisation'))
+                                                                        <a href="javascript:void(0);"
+                                                                            class="btn btn-sm btn-success"
+                                                                            onclick="axiosModal('organisation/{{ $organisation->id }}/deactivate')"
+                                                                            title="Dectivate Organisation">
+                                                                            <i class="fas fa-toggle-on"></i>
+                                                                        </a>
+                                                                    @endif
+                                                                @else
+                                                                    @if (\Auth::user()->can('activate organisation'))
+                                                                        <a href="javascript:void(0);"
+                                                                            class="btn btn-sm btn-secondary"
+                                                                            onclick="axiosModal('organisation/{{ $organisation->id }}/activate')"
+                                                                            title="Activate Organisation">
+                                                                            <i class="fas fa-toggle-off"></i>
+                                                                        </a>
+                                                                    @endif
+                                                                @endif
+                                                                <span class='m-1'></span>
+                                                                @if (\Auth::user()->can('delete organisation'))
+                                                                    <a href="javascript:void(0);"
+                                                                        class="btn btn-sm btn-danger"
+                                                                        onclick="axiosModal('organisation/{{ $organisation->id }}/delete')">
+                                                                        <i class="fas fa-trash"></i>
+                                                                    </a>
+                                                                @endif
                                                             </td>
                                                         </tr>
                                                     @endforeach

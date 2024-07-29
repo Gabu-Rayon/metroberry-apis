@@ -64,7 +64,174 @@ Route::get('refueling/station/dashboard', [RefuellingStationController::class, '
     ->name('refueling.station.dashboard')
     ->middleware('auth', 'can:view dashboard');
 
+
+
+/**
+ * Employees Routes
+ * 
+ */
+
+// View Employees
+Route::get('employee', [EmployeeController::class, 'index'])
+    ->name('employee')
+    ->middleware('auth', 'can:view customers');
+
+// Create Employee
+Route::get('employee/create', [EmployeeController::class, 'create'])
+    ->name('employee.create')
+    ->middleware('auth', 'can:create customer');
+
+Route::post('employee', [EmployeeController::class, 'store'])
+    ->name('employee.create')
+    ->middleware('auth', 'can:create customer');
+
+// Edit Employee Details
+Route::get('employee/{id}/edit', [EmployeeController::class, 'edit'])
+    ->name('employee.edit')
+    ->middleware('auth', 'can:edit customer');
+
+Route::put('employee/{id}/update', [EmployeeController::class, 'update'])
+    ->name('employee.update')
+    ->middleware('auth', 'can:edit customer');
+
+// Activate Employee
+Route::get('employee/{id}/activate', [EmployeeController::class, 'activateForm'])
+    ->name('employee.activate.form')
+    ->middleware('auth', 'can:activate customer');
+
+Route::put('employee/{id}/activate', [EmployeeController::class, 'activate'])
+    ->name('employee.activate')
+    ->middleware('auth', 'can:activate customer');
+
+// Deactivate Employee
+Route::get('employee/{id}/deactivate', [EmployeeController::class, 'deactivateForm'])
+    ->name('employee.deactivate.form')
+    ->middleware('auth', 'can:deactivate customer');
+
+Route::put('employee/{id}/deactivate', [EmployeeController::class, 'deactivate'])
+    ->name('employee.deactivate')
+    ->middleware('auth', 'can:deactivate customer');
+
+// Delete Employee
+Route::get('employee/{id}/delete', [EmployeeController::class, 'delete'])
+    ->name('employee.delete')
+    ->middleware('auth', 'can:delete customer');
+
+Route::delete('employee/{id}/delete', [EmployeeController::class, 'destroy'])
+    ->name('employee.destroy')
+    ->middleware('auth', 'can:delete customer');
+
+// Export Employees
+Route::get('employee/import', [EmployeeController::class, 'importFile'])
+    ->name('employee.import.file')
+    ->middleware('auth', 'can:import customers');
+
+// Import Employees
+Route::post('employee/import/store', [EmployeeController::class, 'import'])
+    ->name('employee.import.store')
+    ->middleware('auth', 'can:import customers');
+
+Route::get('employee/export', [EmployeeController::class, 'export'])
+    ->name('employee.export')
+    ->middleware('auth', 'can:export customers');
+
+/***
+ * Organisations Routes
+ */
+
+
+// View Organisations
+Route::get('organisation', [OrganisationController::class, 'index'])
+    ->name('organisation')
+    ->middleware('auth', 'can:view organisations');
+
+// Create Organisation
+Route::get('organisation/create', [OrganisationController::class, 'create'])
+    ->name('organisation.create.form')
+    ->middleware('auth', 'can:create organisation');
+
+Route::post('organisation', [OrganisationController::class, 'store'])
+    ->name('organisation.create')
+    ->middleware('auth', 'can:create organisation');
+
+// Edit Organisation Details
+Route::get('organisation/{id}/edit', [OrganisationController::class, 'edit'])
+    ->name('organisation.edit')
+    ->middleware('auth', 'can:edit organisation');
+
+Route::put('organisation/{id}/update', [OrganisationController::class, 'update'])
+    ->name('organisation.update')
+    ->middleware('auth', 'can:edit organisation');
+
+// Activate Organisation
+Route::get('organisation/{id}/activate', [OrganisationController::class, 'activateForm'])
+    ->name('organisation.activate.form')
+    ->middleware('auth', 'can:activate organisation');
+
+Route::put('organisation/{id}/activate', [OrganisationController::class, 'activate'])
+    ->name('organisation.activate')
+    ->middleware('auth', 'can:activate organisation');
+
+// Deactivate Organisation
+Route::get('organisation/{id}/deactivate', [OrganisationController::class, 'deactivateForm'])
+    ->name('organisation.deactivate.form')
+    ->middleware('auth', 'can:deactivate organisation');
+
+Route::put('organisation/{id}/deactivate', [OrganisationController::class, 'deactivate'])
+    ->name('organisation.deactivate')
+    ->middleware('auth', 'can:deactivate organisation');
+
+// Delete Organisation
+Route::get('organisation/{id}/delete', [OrganisationController::class, 'delete'])
+    ->name('organisation.delete')
+    ->middleware('auth', 'can:delete organisation');
+
+Route::delete('organisation/{id}/delete', [OrganisationController::class, 'destroy'])
+    ->name('organisation.destroy')
+    ->middleware('auth', 'can:delete organisation');
+
+//  Export Organisations
+Route::get('organisation/export', [OrganisationController::class, 'export'])
+    ->name('organisation.export')
+    ->middleware('auth', 'can:export organisations');
+
+// Import Organisations
+
+Route::get('organisation/import', [OrganisationController::class, 'importFile'])
+    ->name('organisation.import.file')
+    ->middleware('auth', 'can:import organisations');
+
+Route::post('organisation/import/store', [OrganisationController::class, 'import'])
+    ->name('organisation.import.store')
+    ->middleware('auth', 'can:import organisations');
+
+
+
+
 // All Routes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])
@@ -110,84 +277,15 @@ Route::post('/admin/user/{id}/destroy', [UserController::class, 'destory'])
     ->name('user.destroy')
     ->middleware('auth', 'can:delete user');
 
-
-/**
- * Employees Routes
- * 
- */
-
-// View Employees
-Route::get('employee', [EmployeeController::class, 'index'])
-    ->name('employee')
-    ->middleware('auth', 'can:view customers');
-
-// Create Employee
-Route::get('employee/create', [EmployeeController::class, 'create'])
-    ->name('employee.create')
-    ->middleware('auth', 'can:create customer');
-
-Route::post('employee', [EmployeeController::class, 'store'])
-    ->name('employee.create')
-    ->middleware('auth', 'can:create customer');
-
-// Update Employee Details
-Route::get('employee/{id}/edit', [EmployeeController::class, 'edit'])
-    ->name('employee.edit')
-    ->middleware('auth', 'can:edit customer');
-
-Route::put('employee/{id}/update', [EmployeeController::class, 'update'])
-    ->name('employee.update')
-    ->middleware('auth', 'can:edit customer');
-
-Route::get('employee/{id}/activate', [EmployeeController::class, 'activateForm'])
-    ->name('employee.activate.form')
-    ->middleware('auth', 'can:edit customer');
-
-Route::put('employee/{id}/activate', [EmployeeController::class, 'activate'])
-    ->name('employee.activate')
-    ->middleware('auth', 'can:edit customer');
-
-Route::get('employee/{id}/deactivate', [EmployeeController::class, 'deactivateForm'])
-    ->name('employee.deactivate.form')
-    ->middleware('auth', 'can:edit customer');
-
-Route::put('employee/{id}/deactivate', [EmployeeController::class, 'deactivate'])
-    ->name('employee.deactivate')
-    ->middleware('auth', 'can:edit customer');
-
-Route::get('employee/{id}/delete', [EmployeeController::class, 'delete'])
-    ->name('employee.delete')
-    ->middleware('auth', 'can:delete customer');
-
-Route::delete('employee/{id}/delete', [EmployeeController::class, 'destroy'])
-    ->name('employee.destroy')
-    ->middleware('auth', 'can:delete customer');
-
-
 /***
  * Import Employee
  * 
  */
 
-Route::get('employee/import', [EmployeeController::class, 'importFile'])
-    ->name('employee.import.file')
-    ->middleware('auth', 'can:import customer');
-
-Route::post('employee/import/store', [EmployeeController::class, 'import'])
-    ->name('employee.import.store')
-    ->middleware('auth', 'can:import customer');
-
 /****
  * Exports and Imports
  * 
  */
-Route::get('employee/export', [EmployeeController::class, 'export'])
-    ->name('employee.export')
-    ->middleware('auth', 'can:export customer');
-
-Route::get('employee/import', [EmployeeController::class, 'import'])
-    ->name('employee.import')
-    ->middleware('auth', 'can:import employee');
 
 Route::get('driver/export', [DriverController::class, 'export'])
     ->name('driver.export')
@@ -196,14 +294,6 @@ Route::get('driver/export', [DriverController::class, 'export'])
 Route::get('driver/import', [DriverController::class, 'import'])
     ->name('driver.import')
     ->middleware('auth', 'can:import driver');
-
-Route::get('organisation/export', [OrganisationController::class, 'export'])
-    ->name('organisation.export')
-    ->middleware('auth', 'can:export organisation');
-
-Route::get('organisation/import', [OrganisationController::class, 'import'])
-    ->name('organisation.import')
-    ->middleware('auth', 'can:import organisation');
 
 Route::get('driver/license/export', [DriversLicensesController::class, 'export'])
     ->name('driver.license.export')
@@ -260,59 +350,6 @@ Route::get('route/location/export', [RouteLocationsController::class, 'export'])
 Route::get('route/location/import', [RouteLocationsController::class, 'import'])
     ->name('route.location.import')
     ->middleware('auth', 'can:import route location');
-
-/***
- * Organisations Routes
- */
-
-
-// View Organisations
-Route::get('organisation', [OrganisationController::class, 'index'])
-    ->name('organisation')
-    ->middleware('auth', 'can:view organisations');
-
-// Create Organisation
-Route::get('organisation/create', [OrganisationController::class, 'create'])
-    ->name('organisation.create.form')
-    ->middleware('auth', 'can:create organisation');
-
-Route::post('organisation', [OrganisationController::class, 'store'])
-    ->name('organisation.create')
-    ->middleware('auth', 'can:create organisation');
-
-// Update Organisation Details
-Route::get('organisation/{id}/edit', [OrganisationController::class, 'edit'])
-    ->name('organisation.edit')
-    ->middleware('auth', 'can:edit organisation');
-
-Route::get('organisation/{id}/activate', [OrganisationController::class, 'activateForm'])
-    ->name('organisation.activate.form')
-    ->middleware('auth', 'can:edit organisation');
-
-Route::put('organisation/{id}/activate', [OrganisationController::class, 'activate'])
-    ->name('organisation.activate')
-    ->middleware('auth', 'can:edit organisation');
-
-Route::get('organisation/{id}/deactivate', [OrganisationController::class, 'deactivateForm'])
-    ->name('organisation.deactivate.form')
-    ->middleware('auth', 'can:edit organisation');
-
-Route::put('organisation/{id}/deactivate', [OrganisationController::class, 'deactivate'])
-    ->name('organisation.deactivate')
-    ->middleware('auth', 'can:edit organisation');
-
-Route::put('organisation/{id}/update', [OrganisationController::class, 'update'])
-    ->name('organisation.update')
-    ->middleware('auth', 'can:edit organisation');
-
-// Delete Organisation
-Route::get('organisation/{id}/delete', [OrganisationController::class, 'delete'])
-    ->name('organisation.delete')
-    ->middleware('auth', 'can:delete organisation');
-
-Route::delete('organisation/{id}/delete', [OrganisationController::class, 'destroy'])
-    ->name('organisation.destroy')
-    ->middleware('auth', 'can:delete organisation');
 
 /**
  * Drivers Routes

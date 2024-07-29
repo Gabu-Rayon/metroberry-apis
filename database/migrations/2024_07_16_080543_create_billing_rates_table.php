@@ -16,11 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->decimal('rate_per_km', 8, 2);
             $table->decimal('rate_per_minute', 8, 2);
-            $table->json('rate_by_car_class')->default(json_encode([
-                'A' => 500,
-                'B' => 700,
-                'C' => 1000
-            ]));
+            $table->json('rate_by_car_class');
             $table->timestamps();
         });
     }

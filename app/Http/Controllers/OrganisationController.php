@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Charts\MaintenanceCostReport;
 use App\Models\NTSAInspectionCertificate;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
 use Maatwebsite\Excel\Facades\Excel;
@@ -31,48 +32,35 @@ class OrganisationController extends Controller
 
     public function dashboard()
     {
-        $organisation = Organisation::where('user_id', Auth::user()->id)->first();
-        Log::info($organisation);
-        $activeVehicles = Vehicle::where('organisation_id', $organisation->id)
-            ->where('status', 'active')
+        $user = Auth::user();
+        $organisation = Organisation::where('user_id', $user->id)->first();
+
+        $activeVehicles = Vehicle::where('status', 'active')
+            ->where('organisation_id', $organisation->id)
             ->get();
+
         $inactiveVehicles = Vehicle::where('organisation_id', $organisation->id)
             ->where('status', 'inactive')
             ->get();
 
+        $organisationCode = $organisation->organisation_code;
         $tripsThisMonth = Trip::whereMonth('created_at', date('m'))
-            ->whereHas('customer', function ($query) {
-                $organisation = Organisation::where('user_id', Auth::user()->id)->first();
-                $query->where('customer_organisation_code', $organisation->organisation_code);
+            ->whereHas('customer', function ($query) use ($organisationCode) {
+                $query->where('customer_organisation_code', $organisationCode);
             })
             ->get();
 
-        $scheduledTrips = $tripsThisMonth->filter(function ($trip) {
-            return $trip->status == 'scheduled';
-        });
-        $completedTrips = $tripsThisMonth->filter(function ($trip) {
-            return $trip->status == 'completed';
-        });
-        $cancelledTrips = $tripsThisMonth->filter(function ($trip) {
-            return $trip->status == 'cancelled';
-        });
-        $billedTrips = $tripsThisMonth->filter(function ($trip) {
-            return $trip->status == 'billed';
-        });
+        $tripCounts = $tripsThisMonth->groupBy('status')->map->count();
 
-        $totalExpenses = $billedTrips->sum(function ($trip) {
-            return $trip->total_price;
-        });
+        $scheduledTripsCount = $tripCounts->get('scheduled', 0);
+        $completedTripsCount = $tripCounts->get('completed', 0);
+        $cancelledTripsCount = $tripCounts->get('cancelled', 0);
+        $billedTripsCount = $tripCounts->get('billed', 0);
 
-        $cancelledTripsCount = $cancelledTrips->count();
-        $completedTripsCount = $completedTrips->count();
-        $scheduledTripsCount = $scheduledTrips->count();
-        $billedTripsCount = $billedTrips->count();
+        $totalExpenses = $tripsThisMonth->where('status', 'billed')->sum('total_price');
 
         $venDiagram = new MaintenanceCostReport;
-
         $venDiagram->labels(['Scheduled', 'Completed', 'Cancelled', 'Billed']);
-
         $venDiagram->dataset('Trips', 'doughnut', [
             $scheduledTripsCount,
             $completedTripsCount,
@@ -81,44 +69,36 @@ class OrganisationController extends Controller
         ])->options([
             'backgroundColor' => ['#198754', '#0d6efd', '#dc3545', '#ffc107'],
             'scales' => [
-                'y' => [
-                    'display' => false,
-                ],
-                'x' => [
-                    'display' => false,
-                ],
+                'y' => ['display' => false],
+                'x' => ['display' => false],
             ],
         ]);
 
-        $expiredInsurances = VehicleInsurance::whereHas('vehicle', function ($query) {
-            $organisation = Organisation::where('user_id', Auth::user()->id)->first();
+        $today = Carbon::today()->toDateString();
+
+        $expiredInsurances = VehicleInsurance::whereHas('vehicle', function ($query) use ($organisation) {
             $query->where('organisation_id', $organisation->id);
-        })->where('insurance_date_of_expiry', '<', date('Y-m-d'))->get();
+        })->where('insurance_date_of_expiry', '<', $today)->get();
 
-        $expiredInspectionCertificates = NTSAInspectionCertificate::whereHas('vehicle', function ($query) {
-            $organisation = Organisation::where('user_id', Auth::user()->id)->first();
+        $expiredInspectionCertificates = NTSAInspectionCertificate::whereHas('vehicle', function ($query) use ($organisation) {
             $query->where('organisation_id', $organisation->id);
-        })->where('ntsa_inspection_certificate_date_of_expiry', '<', date('Y-m-d'))->get();
+        })->where('ntsa_inspection_certificate_date_of_expiry', '<', $today)->get();
 
-        $expiredLicenses = DriversLicenses::whereHas('driver', function ($query) {
-            $organisation = Organisation::where('user_id', Auth::user()->id)->first();
+        $expiredLicenses = DriversLicenses::whereHas('driver', function ($query) use ($organisation) {
             $query->where('organisation_id', $organisation->id);
-        })->where('driving_license_date_of_expiry', '<', date('Y-m-d'))->get();
+        })->where('driving_license_date_of_expiry', '<', $today)->get();
 
-        $expiredPSVBadges = PSVBadge::whereHas('driver', function ($query) {
-            $organisation = Organisation::where('user_id', Auth::user()->id)->first();
+        $expiredPSVBadges = PSVBadge::whereHas('driver', function ($query) use ($organisation) {
             $query->where('organisation_id', $organisation->id);
-        })->where('psv_badge_date_of_expiry', '<', date('Y-m-d'))->get();
-
-
+        })->where('psv_badge_date_of_expiry', '<', $today)->get();
 
         return view('organisation.dashboard', compact(
             'activeVehicles',
             'inactiveVehicles',
-            'scheduledTrips',
-            'completedTrips',
-            'cancelledTrips',
-            'billedTrips',
+            'scheduledTripsCount',
+            'completedTripsCount',
+            'cancelledTripsCount',
+            'billedTripsCount',
             'totalExpenses',
             'venDiagram',
             'expiredInsurances',
@@ -172,10 +152,10 @@ class OrganisationController extends Controller
 
             $logoPath = null;
             $email = $data['email'];
-            $generatedPassword=  $data['password'];
+            $generatedPassword =  $data['password'];
             Log::info('password Generated for this  Organisation : ');
 
-            Log::info($generatedPassword); 
+            Log::info($generatedPassword);
 
             if ($request->hasFile('logo')) {
                 $logoFile = $request->file('logo');

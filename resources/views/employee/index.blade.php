@@ -40,16 +40,20 @@
                                                 <div class="actions">
                                                     <div class="accordion-header d-flex justify-content-end align-items-center"
                                                         id="flush-headingOne">
-                                                        <a class="btn btn-success btn-sm"
-                                                            href={{ route('employee.export') }} title="Export">
-                                                            <i class="fa-solid fa-file-export"></i>&nbsp; Export
-                                                        </a>
+                                                        @if (Auth::user()->can('export customers'))
+                                                            <a class="btn btn-success btn-sm"
+                                                                href={{ route('employee.export') }} title="Export">
+                                                                <i class="fa-solid fa-file-export"></i>&nbsp; Export
+                                                            </a>
+                                                        @endif
                                                         <span class='m-1'></span>
-                                                        <a class="btn btn-success btn-sm" href="javascript:void(0);"
-                                                            onclick="axiosModal('employee/import')"
-                                                            title="Import From csv excel file">
-                                                            <i class="fa-solid fa-file-arrow-up"></i>&nbsp; Import
-                                                        </a>
+                                                        @if (Auth::user()->can('import customers'))
+                                                            <a class="btn btn-success btn-sm" href="javascript:void(0);"
+                                                                onclick="axiosModal('employee/import')"
+                                                                title="Import From csv excel file">
+                                                                <i class="fa-solid fa-file-arrow-up"></i>&nbsp; Import
+                                                            </a>
+                                                        @endif
                                                         <span class='m-1'></span>
                                                         @if (\Auth::user()->can('create customer'))
                                                             <button type="button" class="btn btn-success btn-sm"
@@ -104,15 +108,17 @@
                                                                     </a>
                                                                 @endif
                                                                 <span class='m-1'></span>
-                                                                @if (\Auth::user()->can('activate customer'))
-                                                                    @if ($customer->status == 'active')
+                                                                @if ($customer->status == 'active')
+                                                                    @if (\Auth::user()->can('deactivate customer'))
                                                                         <a href="javascript:void(0);"
                                                                             class="btn btn-sm btn-success"
                                                                             onclick="axiosModal('employee/{{ $customer->id }}/deactivate')"
                                                                             title="Dectivate Employee">
                                                                             <i class="fas fa-toggle-on"></i>
                                                                         </a>
-                                                                    @else
+                                                                    @endif
+                                                                @else
+                                                                    @if (\Auth::user()->can('activate customer'))
                                                                         <a href="javascript:void(0);"
                                                                             class="btn btn-sm btn-secondary"
                                                                             onclick="axiosModal('employee/{{ $customer->id }}/activate')"
