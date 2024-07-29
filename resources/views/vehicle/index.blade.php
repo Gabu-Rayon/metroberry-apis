@@ -147,7 +147,6 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div id="page-axios-data" data-table-id="#driver-table"></div>
                                 </div>
                             </div>
                         </div>
