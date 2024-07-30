@@ -1,4 +1,5 @@
-<form action="/vehicle/{{ $vehicle->id }}/delete" method="POST" class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
+<form action="/vehicle/{{ $vehicle->id }}/delete" method="POST" class="needs-validation modal-content"
+    enctype="multipart/form-data">
     @csrf
     @method('DELETE')
     <div class="card-header text-center my-3 p-2 border-bottom">
@@ -21,8 +22,8 @@
         </button>
         <button class="btn btn-success" type="submit">Delete</button>
     </div>
-  </form>
-  
+</form>
+
 <script>
     const form = document.querySelector('#activate');
     console.log(form);

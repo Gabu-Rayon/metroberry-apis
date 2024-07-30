@@ -10,11 +10,12 @@ class UserSeeder extends Seeder
     /**
      * Run the database seeds.
      */
-    public function run(): void {
+    public function run(): void
+    {
 
         $adminData = [
-            'name' => 'Super Admin',
-            'email' => 'superadmin@example.com',
+            'name' => 'MetroBerry Admin',
+            'email' => 'admin@metroberry.co.ke',
             'password' => bcrypt('123456'),
             'phone' => '0708373982',
             'address' => 'Nairobi, Kenya',

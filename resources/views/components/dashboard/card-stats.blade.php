@@ -8,7 +8,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="card-body px-3">
                 <div class="d-flex flex-column gap-2">
 
@@ -24,10 +24,10 @@
                             </span>
                         </a>
                     </div>
-                    
+
                     <div>
                         <i class="fas fa-car-burst text-danger"></i>
-                        
+
                         <a class="text-danger" href="vehicle">
                             Inactive
                             <span class="float-end text-danger">
@@ -37,13 +37,13 @@
                             </span>
                         </a>
                     </div>
-                    
+
                     <div>&nbsp;</div>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <div class="col-12 col-lg-6 col-xl-3 mb-4 mb-xl-0">
         <div class="card bg-white overflow-hidden">
             <div class="card-header px-3 bg-white">
@@ -58,7 +58,7 @@
 
                     <div>
                         <i class="fa-solid fa-calendar-days text-primary"></i>
-                        
+
                         <a class="text-primary" href="trips/scheduled">
                             Scheduled
                             <span class="float-end text-primary">
@@ -68,10 +68,10 @@
                             </span>
                         </a>
                     </div>
-                    
+
                     <div>
                         <i class="fas fa-check-circle text-info"></i>
-                        
+
                         <a class="text-info" href="trips/completed">
                             Completed
                             <span class="float-end text-info">
@@ -81,10 +81,10 @@
                             </span>
                         </a>
                     </div>
-                    
+
                     <div>
                         <i class="fa-solid fa-circle-xmark text-danger"></i>
-                        
+
                         <a class="text-danger" href="trips/cancelled">
                             Cancelled
                             <span class="float-end text-danger">
@@ -94,10 +94,10 @@
                             </span>
                         </a>
                     </div>
-                    
+
                     <div>
                         <i class="fas fa-money-bill-wave text-success"></i>
-                        
+
                         <a class="text-success" href="trips/billed">
                             Billed
                             <span class="float-end text-success">
@@ -111,7 +111,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-12 col-lg-6 col-xl-3 mb-4 mb-xl-0">
         <div class="card bg-white overflow-hidden">
             <div class="card-header px-3 bg-white">
@@ -125,9 +125,11 @@
                 <div class="d-flex flex-column gap-2">
 
                     <div>
-                        <i class="fas fa-shield-alt {{ count($expiredInsurances) == 0 ? 'text-success' : 'text-danger' }}"></i>
+                        <i
+                            class="fas fa-shield-alt {{ count($expiredInsurances) == 0 ? 'text-success' : 'text-danger' }}"></i>
 
-                        <a href="vehicle/insurance" class="{{ count($expiredInsurances) == 0 ? 'text-success' : 'text-danger' }}">
+                        <a href="vehicle/insurance"
+                            class="{{ count($expiredInsurances) == 0 ? 'text-success' : 'text-danger' }}">
                             Expired Insurances
                             <span class="float-end">
                                 <strong>{{ count($expiredInsurances) }}</strong>
@@ -136,9 +138,11 @@
                     </div>
 
                     <div>
-                        <i class="fas fa-stamp {{ count($expiredInspectionCertificates) == 0 ? 'text-success' : 'text-danger' }}"></i>
+                        <i
+                            class="fas fa-stamp {{ count($expiredInspectionCertificates) == 0 ? 'text-success' : 'text-danger' }}"></i>
 
-                        <a href="vehicle/inspection-certificate" class="{{ count($expiredInspectionCertificates) == 0 ? 'text-success' : 'text-danger' }}">
+                        <a href="vehicle/inspection-certificate"
+                            class="{{ count($expiredInspectionCertificates) == 0 ? 'text-success' : 'text-danger' }}">
                             Expired Insp Cert
                             <span class="float-end">
                                 <strong>{{ count($expiredInspectionCertificates) }}</strong>
@@ -149,7 +153,8 @@
                     <div>
                         <i class="fas fa-file {{ count($expiredLicenses) == 0 ? 'text-success' : 'text-danger' }}"></i>
 
-                        <a href="driver/license" class="{{ count($expiredLicenses) == 0 ? 'text-success' : 'text-danger' }}">
+                        <a href="driver/license"
+                            class="{{ count($expiredLicenses) == 0 ? 'text-success' : 'text-danger' }}">
                             Expired Licenses
                             <span class="float-end">
                                 <strong>{{ count($expiredLicenses) }}</strong>
@@ -158,9 +163,11 @@
                     </div>
 
                     <div>
-                        <i class="fas fa-id-badge {{ count($expiredPSVBadges) == 0 ? 'text-success' : 'text-danger' }}"></i>
+                        <i
+                            class="fas fa-id-badge {{ count($expiredPSVBadges) == 0 ? 'text-success' : 'text-danger' }}"></i>
 
-                        <a href="driver/psvbadge" class="{{ count($expiredPSVBadges) == 0 ? 'text-success' : 'text-danger' }}">
+                        <a href="driver/psvbadge"
+                            class="{{ count($expiredPSVBadges) == 0 ? 'text-success' : 'text-danger' }}">
                             Expired PSV Badges
                             <span class="float-end">
                                 <strong>{{ count($expiredPSVBadges) }}</strong>
@@ -174,7 +181,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-12 col-lg-6 col-xl-3">
         <div class="card bg-white overflow-hidden">
             <div class="card-header px-3 bg-white">
@@ -190,17 +197,17 @@
                         $isLoss = $totalExpense > $totalIncome;
                         $textClass = $isLoss ? 'text-danger' : 'text-success';
                     @endphp
-    
+
                     <div>
                         <i class="fas fa-money-bill {{ $textClass }}"></i>
-                        <a class="{{ $textClass }}" href="inventory/stock">
+                        <a class="{{ $textClass }}" href="#">
                             Total Income
                             <span class="float-end {{ $textClass }}">
                                 <strong>KES {{ $totalIncome }}</strong>
                             </span>
                         </a>
                     </div>
-    
+
                     <div>
                         <i class="fas fa-money-check {{ $textClass }}"></i>
                         <a class="{{ $textClass }}" href="#">
@@ -210,8 +217,8 @@
                             </span>
                         </a>
                     </div>
-    
-                    @if($isLoss)
+
+                    @if ($isLoss)
                         <div class="alert alert-danger mt-2">
                             Kindly Check Your Accounts
                             <i class="far fa-frown"></i>
@@ -226,7 +233,7 @@
             </div>
         </div>
     </div>
-    
-    
+
+
 
 </div>

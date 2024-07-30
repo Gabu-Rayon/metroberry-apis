@@ -1,5 +1,5 @@
 <form action="{{ route('maintenance.service.bill', $service->id) }}" method="POST" class="needs-validation modal-content"
-    novalidate="novalidate" enctype="multipart/form-data">
+    enctype="multipart/form-data">
     @csrf
     @method('PUT')
     <div class="card-header my-3 p-2 border-bottom">

@@ -5,13 +5,15 @@
     <div class="container-fluid">
         <div class="row h-100vh align-aitems-center px-0">
             <div class="col-lg-6 d-flex align-aitems-center">
+                <img class="position-absolute" height="50" width="150"
+                    src="{{ asset('admin-assets/img/sidebar-logo.png?v=1') }}" alt="Brand Logo" />
                 <div class="form-wrapper m-auto">
                     <div>
                         <div class="mb-4">
                             <h2 class="fs-32 fw-bold">Sign in</h2>
                             <p>Enter your email and password to sign in!</p>
                         </div>
-                        <form class="register-form mt-3" method="POST" action="login">
+                        <form class="register-form mt-3" method="POST" action="{{ route('auth.user.login') }}">
                             @csrf
                             <div class="mb-3">
                                 <input type="email" class="form-control input-py" id="email" name="email"
@@ -50,7 +52,7 @@
                                     </div>
                                 </div>
                                 <div class="col-6 text-end">
-                                    <a class="text-primary" href="forgot-password">Recover password</a>
+                                    <a class="text-primary" href="{{ route('password.request') }}">Forgot Password?</a>
                                 </div>
                             </div>
                             <button type="submit" class="btn signin-btn w-100">Sign in</button>
@@ -63,9 +65,8 @@
                 </div>
             </div>
             <div class="col-lg-6 login-bg d-none d-lg-block overflow-hidden text-end py-2"
-     style="background-image: url('{{ asset('admin-assets/img/login-bg.png?v=1') }}')">
-    <img class="#" height="50" width="150" src="{{ asset('admin-assets/img/sidebar-logo.png?v=1') }}" alt="Brand Logo" />
-</div>
+                style="background-image: url('{{ asset('admin-assets/img/login-bg.png?v=1') }}')">
+            </div>
 
         </div>
     </div>

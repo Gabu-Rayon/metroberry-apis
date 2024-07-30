@@ -1,4 +1,5 @@
-<form action="psvbadge/{{ $psvbadge->id }}/update" method="POST" class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
+<form action="psvbadge/{{ $psvbadge->id }}/update" method="POST" class="needs-validation modal-content"
+    enctype="multipart/form-data">
     @csrf
     @method('PUT')
     <div class="card-header my-3 p-2 border-bottom">
@@ -7,13 +8,14 @@
     <div class="modal-body">
         <div class="row">
             <div class="col-md-12 col-lg-6">
-                
+
                 <div class="form-group row my-2">
                     <label for="psvbadge_no" class="col-sm-5 col-form-label">
                         Badge Number
                     </label>
                     <div class="col-sm-7">
-                        <input name="psvbadge_no" readonly class="form-control" type="text" placeholder="Badge Number" id="psvbadge_no" value="{{ $psvbadge->psv_badge_no }}" />
+                        <input name="psvbadge_no" readonly class="form-control" type="text"
+                            placeholder="Badge Number" id="psvbadge_no" value="{{ $psvbadge->psv_badge_no }}" />
                     </div>
                 </div>
 
@@ -22,26 +24,30 @@
                         Issue Date
                     </label>
                     <div class="col-sm-7">
-                        <input name="psv_badge_date_of_issue" required class="form-control" type="date" placeholder="Issue Date" id="psv_badge_date_of_issue" value="{{ $psvbadge->psv_badge_date_of_issue }}" />
+                        <input name="psv_badge_date_of_issue" required class="form-control" type="date"
+                            placeholder="Issue Date" id="psv_badge_date_of_issue"
+                            value="{{ $psvbadge->psv_badge_date_of_issue }}" />
                     </div>
                 </div>
-                
+
                 <div class="form-group row my-2">
                     <label for="psv_badge_avatar" class="col-sm-5 col-form-label">
                         Badge Copy
                     </label>
                     <div class="col-sm-7">
-                        <input name="psv_badge_avatar" class="form-control" type="file" placeholder="Badge Copy" id="psv_badge_avatar" value="" />
+                        <input name="psv_badge_avatar" class="form-control" type="file" placeholder="Badge Copy"
+                            id="psv_badge_avatar" value="" />
                         @if ($psvbadge->psv_badge_avatar)
                             <div class="mt-2">
-                                <a href="{{ url('storage/' . $psvbadge->psv_badge_avatar) }}" download>Download Badge Copy</a>
+                                <a href="{{ url('storage/' . $psvbadge->psv_badge_avatar) }}" download>Download Badge
+                                    Copy</a>
                             </div>
                         @endif
                     </div>
                 </div>
-  
+
             </div>
-  
+
             <div class="col-md-12 col-lg-6">
 
                 <div class="form-group row my-2">
@@ -49,7 +55,8 @@
                         Driver
                     </label>
                     <div class="col-sm-7">
-                        <input name="driver" readonly class="form-control" type="text" placeholder="Driver" id="driver" value="{{ $psvbadge->driver->user->name }}" />
+                        <input name="driver" readonly class="form-control" type="text" placeholder="Driver"
+                            id="driver" value="{{ $psvbadge->driver->user->name }}" />
                     </div>
                 </div>
 
@@ -58,7 +65,9 @@
                         Expiry Date
                     </label>
                     <div class="col-sm-7">
-                        <input name="psv_badge_date_of_expiry" required class="form-control" type="date" placeholder="Expiry Date" id="psv_badge_date_of_expiry" value="{{ $psvbadge->psv_badge_date_of_expiry }}" />
+                        <input name="psv_badge_date_of_expiry" required class="form-control" type="date"
+                            placeholder="Expiry Date" id="psv_badge_date_of_expiry"
+                            value="{{ $psvbadge->psv_badge_date_of_expiry }}" />
                     </div>
                 </div>
 

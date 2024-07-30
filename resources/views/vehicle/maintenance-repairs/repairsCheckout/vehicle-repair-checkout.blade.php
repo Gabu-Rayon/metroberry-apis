@@ -34,7 +34,7 @@
                                                 <p class="mb-0 mr-3 text-dark fw-bold">Status :</p>
                                                 @if ($maintenanceRepair->repair_status == 'billed')
                                                     <span class="badge bg-success">Billed</span>
-                                                @elseif ($maintenanceRepair->repair_status  == 'paid')
+                                                @elseif ($maintenanceRepair->repair_status == 'paid')
                                                     <span class="badge bg-success">Paid</span>
                                                 @else
                                                     <span class="badge bg-danger">Partially Paid</span>
@@ -87,10 +87,10 @@
                                                         <th title="Vehicle">Vehicle</th>
                                                         <th title="Parts">Part</th>
                                                         <th title="Date ">Date </th>
-                                                         <th title="Type ">Type </th>
-                                                         <th title="Cost">Cost</th>
+                                                        <th title="Type ">Type </th>
+                                                        <th title="Cost">Cost</th>
                                                         <th title="Amount ">Amount </th>
-                                                         <th title="Description ">Description </th>
+                                                        <th title="Description ">Description </th>
 
                                                     </tr>
                                                 </thead>
@@ -98,11 +98,11 @@
                                                     @php $item = 1 @endphp
                                                     <tr>
                                                         <td>{{ $item++ }}</td>
-                                                        <td> {{ $maintenanceRepair->vehicle->model  }}</td>
-                                                        <td> {{ $maintenanceRepair->part->name  }} </td>
-                                                        <td>{{ $maintenanceRepair->repair_date}}</td>
+                                                        <td> {{ $maintenanceRepair->vehicle->model }}</td>
+                                                        <td> {{ $maintenanceRepair->part->name }} </td>
+                                                        <td>{{ $maintenanceRepair->repair_date }}</td>
                                                         <td> Kes. {{ $maintenanceRepair->repair_type }}</td>
-                                                        <td> Kes. {{ $maintenanceRepair->repair_cost  }}</td>
+                                                        <td> Kes. {{ $maintenanceRepair->repair_cost }}</td>
                                                         <td>{{ $maintenanceRepair->amount }}</td>
                                                         <td>{{ $maintenanceRepair->repair_description }}</td>
 

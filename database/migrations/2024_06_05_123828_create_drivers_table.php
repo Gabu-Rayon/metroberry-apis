@@ -18,8 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('vehicle_id')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->string('national_id_no');
-            $table->string('national_id_front_avatar');
-            $table->string('national_id_behind_avatar');
+            $table->string('national_id_front_avatar')->nullable();
+            $table->string('national_id_behind_avatar')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('inactive');
 
             $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');

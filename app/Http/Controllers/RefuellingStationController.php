@@ -3,21 +3,28 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\RefuellingStation;
-use App\Models\User;
 use Exception;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\RefuellingStation;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class RefuellingStationController extends Controller
 {
+
+    public function dashboard()
+    {
+        return view('refueling.station.home');
+    }
     /**
      * Display a listing of the resource.
      */
-    public function index(){
+    public function index()
+    {
         $stations = RefuellingStation::all();
         return view('refueling.station.index', compact('stations'));
     }
@@ -25,14 +32,16 @@ class RefuellingStationController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(){
+    public function create()
+    {
         return view('refueling.station.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         try {
 
             $data = $request->all();
@@ -52,7 +61,7 @@ class RefuellingStationController extends Controller
             if ($validator->fails()) {
                 Log::error('STORE REFUELING STATION VALIDATION ERROR');
                 Log::error($validator->errors());
-                return redirect()->back()->with('error', $validator->errors()->first());
+                return redirect()->back()->with('error', $validator->errors()->first())->withInput();
             }
 
             DB::beginTransaction();
@@ -60,6 +69,7 @@ class RefuellingStationController extends Controller
             $certificateOfOperationsPath = null;
             $avatarPath = null;
             $email = $data['email'];
+            $generatedPassword = $data['password'];
 
             $certificateOfOperationsFile = $request->file('certificate_of_operations');
             $certificateOfOperationsExtension = $certificateOfOperationsFile->getClientOriginalExtension();
@@ -91,27 +101,44 @@ class RefuellingStationController extends Controller
                 'payment_period' => $data['payment_period'],
             ]);
 
+            $user->assignRole('refueling_station');
+
             DB::commit();
+
+
+
+            // Send email with the plain password
+            Mail::send('mail-view.fuel-station-welcome-mail', [
+                'station' => $user->name,
+                'email' => $user->email,
+                'password' => $generatedPassword
+            ], function ($message) use ($user) {
+                $message->to($user->email)
+                    ->subject('Your Account Created');
+            });
+
 
             return redirect()->route('refueling.station')->with('success', 'Refueling Station created successfully');
         } catch (Exception $e) {
             Log::error('STORE REFUELING STATION ERROR');
             Log::error($e);
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(RefuellingStation $refuellingStation){
+    public function show(RefuellingStation $refuellingStation)
+    {
         //
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id){
+    public function edit($id)
+    {
         $station = RefuellingStation::find($id);
         return view('refueling.station.edit', compact('station'));
     }
@@ -119,7 +146,8 @@ class RefuellingStationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,$id){
+    public function update(Request $request, $id)
+    {
         try {
             $data = $request->all();
             $station = RefuellingStation::findOrfail($id);
@@ -139,7 +167,7 @@ class RefuellingStationController extends Controller
             if ($validator->fails()) {
                 Log::error('UPDATE REFUELING STATION VALIDATION ERROR');
                 Log::error($validator->errors());
-                return redirect()->back()->with('error', $validator->errors()->first());
+                return redirect()->back()->with('error', $validator->errors()->first())->withInput();
             }
 
             DB::beginTransaction();
@@ -187,16 +215,18 @@ class RefuellingStationController extends Controller
             DB::rollBack();
             Log::error('UPDATE REFUELING STATION ERROR');
             Log::error($e);
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', $e->getMessage())->withInput();
         }
     }
 
-    public function activateForm($id) {
+    public function activateForm($id)
+    {
         $station = RefuellingStation::find($id);
         return view('refueling.station.activate', compact('station'));
     }
 
-    public function activate($id) {
+    public function activate($id)
+    {
         try {
             $station = RefuellingStation::findOrfail($id);
 
@@ -225,12 +255,14 @@ class RefuellingStationController extends Controller
         }
     }
 
-    public function deactivateForm($id) {
+    public function deactivateForm($id)
+    {
         $station = RefuellingStation::find($id);
         return view('refueling.station.deactivate', compact('station'));
     }
 
-    public function deactivate($id) {
+    public function deactivate($id)
+    {
         try {
             $station = RefuellingStation::findOrfail($id);
 
@@ -259,11 +291,13 @@ class RefuellingStationController extends Controller
      * Remove the specified resource from storage.
      */
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $station = RefuellingStation::find($id);
         return view('refueling.station.delete', compact('station'));
     }
-    public function destroy($id){
+    public function destroy($id)
+    {
         try {
             $station = RefuellingStation::findOrfail($id);
             $user = User::findOrfail($station->user_id);

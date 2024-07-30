@@ -1,4 +1,5 @@
-<form action="driver/{{ $driver->id }}/activateStore" method="POST" class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
+<form action="driver/{{ $driver->id }}/activateStore" method="POST" class="needs-validation modal-content"
+    enctype="multipart/form-data">
     @csrf
     @method('PUT')
     <div class="card-header text-center my-3 p-2 border-bottom">
@@ -21,8 +22,8 @@
         </button>
         <button class="btn btn-success" type="submit">Activate</button>
     </div>
-  </form>
-  
+</form>
+
 <script>
     const form = document.querySelector('#activate');
     console.log(form);

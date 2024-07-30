@@ -26,7 +26,7 @@
                         </div>
                     </div>
                     <div class="col-md-12 mt-5">
-                       @include('components.footer')
+                        @include('components.footer')
                     </div>
                 </div>
             </div>

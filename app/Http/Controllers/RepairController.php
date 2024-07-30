@@ -14,7 +14,8 @@ class RepairController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(){
+    public function index()
+    {
         $repairs = Repair::all();
         return view('vehicle.maintenance.repairs.index', compact('repairs'));
     }
@@ -22,14 +23,15 @@ class RepairController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(){
-        return view('vehicle.maintenance.repairs.create');
+    public function create()
+    {
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         try {
             $data = $request->all();
 
@@ -41,7 +43,7 @@ class RepairController extends Controller
             if ($validator->fails()) {
                 Log::error('STORE REPAIR TYPE VALIDATION ERROR');
                 Log::error($validator->errors());
-                return redirect()->back()->withErrors($validator)->withInput();
+                return redirect()->back()->with('error', 'Something went wrong.')->withInput();
             }
 
             DB::beginTransaction();
@@ -50,12 +52,12 @@ class RepairController extends Controller
 
             DB::commit();
 
-            return redirect()->route('vehicle.maintenance.repairs.index')->with('success', 'Repair type created successfully.');
+            return redirect()->route('vehicle.maintenance.repairs')->with('success', 'Repair type created successfully.');
         } catch (Exception $e) {
             DB::rollBack();
             Log::error('STORE REPAIR TYPE ERROR');
             Log::error($e);
-            return redirect()->back()->with('error', 'Something went wrong.');
+            return redirect()->back()->with('error', 'Something went wrong.')->withInput();
         }
     }
 
@@ -70,7 +72,8 @@ class RepairController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id){
+    public function edit($id)
+    {
         $repair = Repair::find($id);
         return view('vehicle.maintenance.repairs.edit', compact('repair'));
     }
@@ -78,7 +81,8 @@ class RepairController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
         try {
             $data = $request->all();
             $repair = Repair::findOrFail($id);
@@ -91,7 +95,7 @@ class RepairController extends Controller
             if ($validator->fails()) {
                 Log::error('UPDATE REPAIR TYPE VALIDATION ERROR');
                 Log::error($validator->errors());
-                return redirect()->back()->withErrors($validator)->withInput();
+                return redirect()->back()->with('error', 'Something went wrong.')->withInput();
             }
 
             DB::beginTransaction();
@@ -105,7 +109,7 @@ class RepairController extends Controller
             DB::rollBack();
             Log::error('UPDATE REPAIR TYPE ERROR');
             Log::error($e);
-            return redirect()->back()->with('error', 'Something went wrong.');
+            return redirect()->back()->with('error', 'Something went wrong.')->withInput();
         }
     }
 
@@ -113,12 +117,14 @@ class RepairController extends Controller
      * Remove the specified resource from storage.
      */
 
-    public function delete ($id){
+    public function delete($id)
+    {
         $repair = Repair::find($id);
         return view('vehicle.maintenance.repairs.delete', compact('repair'));
     }
 
-    public function destroy(string $id){
+    public function destroy(string $id)
+    {
         try {
             $repair = Repair::findOrFail($id);
 

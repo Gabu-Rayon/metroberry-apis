@@ -1,5 +1,5 @@
 <form action="{{ route('billed.vehicle.service.receive.payment.store', $service->id) }}" method="POST"
-    class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
+    class="needs-validation modal-content" enctype="multipart/form-data">
     @csrf
     <div class="card-header my-3 p-2 border-bottom">
         <h4>Add Payment</h4>
@@ -11,10 +11,10 @@
                     <label for="payment_date" class="col-sm-5 col-form-label">Date <i class="text-danger">*</i></label>
                     <div class="col-sm-7">
                         <input name="payment_date" class="form-control" type="date" placeholder="Payment Date"
-                            id="payment_date" required>
+                            id="payment_date" required value="{{ old('payment_date') }}">
                     </div>
                 </div>
-                 <div class="form-group row my-2">
+                <div class="form-group row my-2">
                     <label for="amount" class="col-sm-5 col-form-label">Amount <i class="text-danger">*</i></label>
                     <div class="col-sm-7">
                         <input name="amount" autocomplete="off" required class="form-control" type="number"
@@ -37,15 +37,15 @@
                     <label for="description" class="col-sm-5 col-form-label">Description <i
                             class="text-danger">*</i></label>
                     <div class="col-sm-7">
-                        <textarea name="remark" class="form-control" placeholder="Enter Description" id="description" required></textarea>
+                        <textarea name="remark" class="form-control" placeholder="Enter Description" id="description" required>{{ old('remark') }}</textarea>
                     </div>
                 </div>
                 <div class="form-group row my-2">
                     <label for="reference" class="col-sm-5 col-form-label">Reference <i
                             class="text-danger">*</i></label>
-                             <div class="col-sm-7">
-                    <input name="reference" class="form-control" type="text" placeholder="Reference"
-                            id="reference" required>
+                    <div class="col-sm-7">
+                        <input name="reference" class="form-control" type="text" placeholder="Reference"
+                            id="reference" required value="{{ old('reference') }}">
                     </div>
                 </div>
                 <div class="form-group row my-2">
@@ -53,7 +53,8 @@
                             class="text-danger">*</i></label>
                     <div class="col-sm-7">
                         <input name="payment_receipt" class="form-control" type="file"
-                            placeholder="Upload Payment Receipt" id="payment_receipt" required>
+                            placeholder="Upload Payment Receipt" id="payment_receipt" required
+                            value="{{ old('payment_receipt') }}">
                     </div>
                 </div>
             </div>

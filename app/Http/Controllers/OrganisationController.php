@@ -2,22 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Charts\MaintenanceCostReport;
-use App\Models\DriversLicenses;
-use App\Models\NTSAInspectionCertificate;
+
 use Exception;
-use App\Models\User;
-use App\Models\Organisation;
-use App\Models\PSVBadge;
 use App\Models\Trip;
+use App\Models\User;
 use App\Models\Vehicle;
-use App\Models\VehicleInsurance;
+use App\Models\PSVBadge;
+use App\Models\Organisation;
 use Illuminate\Http\Request;
+use App\Models\VehicleInsurance;
+use Illuminate\Support\Facades\DB;
+use App\Exports\OrganisationExport;
+use App\Imports\OrganisationImport;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Charts\MaintenanceCostReport;
+use App\Models\NTSAInspectionCertificate;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
+use App\Models\DriversLicenses;
 
 class OrganisationController extends Controller
 {
@@ -25,46 +31,38 @@ class OrganisationController extends Controller
      * Display a listing of the resource.
      */
 
-    public function dashboard () {
-        $activeVehicles = Vehicle::where('organisation_id', Auth::user()->organisation->id)
-            ->where('status', 'active')
+
+    public function dashboard()
+    {
+        $user = Auth::user();
+        $organisation = Organisation::where('user_id', $user->id)->first();
+
+        $activeVehicles = Vehicle::where('status', 'active')
+            ->where('organisation_id', $organisation->id)
             ->get();
-        $inactiveVehicles = Vehicle::where('organisation_id', Auth::user()->organisation->id)
+
+        $inactiveVehicles = Vehicle::where('organisation_id', $organisation->id)
             ->where('status', 'inactive')
             ->get();
-        
+
+        $organisationCode = $organisation->organisation_code;
         $tripsThisMonth = Trip::whereMonth('created_at', date('m'))
-        ->whereHas('customer', function ($query) {
-            $query->where('customer_organisation_code', auth()->user()->organisation->organisation_code);
-        })
-        ->get();
+            ->whereHas('customer', function ($query) use ($organisationCode) {
+                $query->where('customer_organisation_code', $organisationCode);
+            })
+            ->get();
 
-        $scheduledTrips = $tripsThisMonth->filter(function($trip) {
-            return $trip->status == 'scheduled';
-        });
-        $completedTrips = $tripsThisMonth->filter(function($trip) {
-            return $trip->status == 'completed';
-        });
-        $cancelledTrips = $tripsThisMonth->filter(function($trip) {
-            return $trip->status == 'cancelled';
-        });
-        $billedTrips = $tripsThisMonth->filter(function($trip) {
-            return $trip->status == 'billed';
-        });
+        $tripCounts = $tripsThisMonth->groupBy('status')->map->count();
 
-        $totalExpenses = $billedTrips->sum(function ($trip) {
-            return $trip->total_price;
-        });
+        $scheduledTripsCount = $tripCounts->get('scheduled', 0);
+        $completedTripsCount = $tripCounts->get('completed', 0);
+        $cancelledTripsCount = $tripCounts->get('cancelled', 0);
+        $billedTripsCount = $tripCounts->get('billed', 0);
 
-        $cancelledTripsCount = $cancelledTrips->count();
-        $completedTripsCount = $completedTrips->count();
-        $scheduledTripsCount = $scheduledTrips->count();
-        $billedTripsCount = $billedTrips->count();
+        $totalExpenses = $tripsThisMonth->where('status', 'billed')->sum('total_price');
 
         $venDiagram = new MaintenanceCostReport;
-
         $venDiagram->labels(['Scheduled', 'Completed', 'Cancelled', 'Billed']);
-
         $venDiagram->dataset('Trips', 'doughnut', [
             $scheduledTripsCount,
             $completedTripsCount,
@@ -73,40 +71,36 @@ class OrganisationController extends Controller
         ])->options([
             'backgroundColor' => ['#198754', '#0d6efd', '#dc3545', '#ffc107'],
             'scales' => [
-                'y' => [
-                    'display' => false,
-                ],
-                'x' => [
-                    'display' => false,
-                ],
+                'y' => ['display' => false],
+                'x' => ['display' => false],
             ],
         ]);
 
-        $expiredInsurances = VehicleInsurance::whereHas('vehicle', function ($query) {
-            $query->where('organisation_id', auth()->user()->organisation->id);
-        })->where('insurance_date_of_expiry', '<', date('Y-m-d'))->get();
+        $today = Carbon::today()->toDateString();
 
-        $expiredInspectionCertificates = NTSAInspectionCertificate::whereHas('vehicle', function ($query) {
-            $query->where('organisation_id', auth()->user()->organisation->id);
-        })->where('ntsa_inspection_certificate_date_of_expiry', '<', date('Y-m-d'))->get();
+        $expiredInsurances = VehicleInsurance::whereHas('vehicle', function ($query) use ($organisation) {
+            $query->where('organisation_id', $organisation->id);
+        })->where('insurance_date_of_expiry', '<', $today)->get();
 
-        $expiredLicenses = DriversLicenses::whereHas('driver', function ($query) {
-            $query->where('organisation_id', auth()->user()->organisation->id);
-        })->where('driving_license_date_of_expiry', '<', date('Y-m-d'))->get();
+        $expiredInspectionCertificates = NTSAInspectionCertificate::whereHas('vehicle', function ($query) use ($organisation) {
+            $query->where('organisation_id', $organisation->id);
+        })->where('ntsa_inspection_certificate_date_of_expiry', '<', $today)->get();
 
-        $expiredPSVBadges = PSVBadge::whereHas('driver', function ($query) {
-            $query->where('organisation_id', auth()->user()->organisation->id);
-        })->where('psv_badge_date_of_expiry', '<', date('Y-m-d'))->get();
+        $expiredLicenses = DriversLicenses::whereHas('driver', function ($query) use ($organisation) {
+            $query->where('organisation_id', $organisation->id);
+        })->where('driving_license_date_of_expiry', '<', $today)->get();
 
+        $expiredPSVBadges = PSVBadge::whereHas('driver', function ($query) use ($organisation) {
+            $query->where('organisation_id', $organisation->id);
+        })->where('psv_badge_date_of_expiry', '<', $today)->get();
 
-        
         return view('organisation.dashboard', compact(
             'activeVehicles',
             'inactiveVehicles',
-            'scheduledTrips',
-            'completedTrips',
-            'cancelledTrips',
-            'billedTrips',
+            'scheduledTripsCount',
+            'completedTripsCount',
+            'cancelledTripsCount',
+            'billedTripsCount',
             'totalExpenses',
             'venDiagram',
             'expiredInsurances',
@@ -116,11 +110,11 @@ class OrganisationController extends Controller
         ));
     }
 
-    public function index(){
+    public function index()
+    {
 
         $organisations = Organisation::where('created_by', Auth::user()->id)->get();
-        return view('organisation.index',compact('organisations'));
-        
+        return view('organisation.index', compact('organisations'));
     }
 
     /**
@@ -134,7 +128,7 @@ class OrganisationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    
+
     public function store(Request $request)
     {
         try {
@@ -153,13 +147,17 @@ class OrganisationController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return redirect()->back()->with('error', $validator->errors()->first());
+                return redirect()->back()->with('error', $validator->errors()->first())->withInput();
             }
 
             DB::beginTransaction();
 
             $logoPath = null;
             $email = $data['email'];
+            $generatedPassword =  $data['password'];
+            Log::info('password Generated for this  Organisation : ');
+
+            Log::info($generatedPassword);
 
             if ($request->hasFile('logo')) {
                 $logoFile = $request->file('logo');
@@ -199,12 +197,23 @@ class OrganisationController extends Controller
 
             DB::commit();
 
+
+            // Send email with the plain password
+            Mail::send('mail-view.organisation-welcome-mail', [
+                'organisation' => $user->name,
+                'email' => $user->email,
+                'password' => $generatedPassword
+            ], function ($message) use ($user) {
+                $message->to($user->email)
+                    ->subject('Your Account Created');
+            });
+
             return redirect()->route('organisation')->with('success', 'Organisation created successfully');
         } catch (Exception $e) {
             DB::rollBack();
             Log::error('Error Creating Organisation');
             Log::error($e);
-            return redirect()->back()->with('error', 'An error occurred while creating organisation');
+            return redirect()->back()->with('error', 'An error occurred while creating organisation')->withInput();
         }
     }
 
@@ -239,15 +248,17 @@ class OrganisationController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id) {
+    public function edit(string $id)
+    {
         $organisation = Organisation::findOrfail($id);
-        return view('organisation.edit',compact('organisation'));
+        return view('organisation.edit', compact('organisation'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id) {
+    public function update(Request $request, string $id)
+    {
         try {
 
             $organisation = Organisation::findOrfail($id);
@@ -369,12 +380,14 @@ class OrganisationController extends Controller
         }
     }
 
-    public function activateForm(string $id) {
+    public function activateForm(string $id)
+    {
         $organisation = Organisation::findOrfail($id);
-        return view('organisation.activate',compact('organisation'));
+        return view('organisation.activate', compact('organisation'));
     }
 
-    public function activate ($id) {
+    public function activate($id)
+    {
         try {
 
             $organisation = Organisation::findOrfail($id);
@@ -408,12 +421,14 @@ class OrganisationController extends Controller
         }
     }
 
-    public function deactivateForm($id) {
+    public function deactivateForm($id)
+    {
         $organisation = Organisation::findOrfail($id);
-        return view('organisation.deactivate',compact('organisation'));
+        return view('organisation.deactivate', compact('organisation'));
     }
 
-    public function deactivate($id) {
+    public function deactivate($id)
+    {
         try {
 
             $organisation = Organisation::findOrfail($id);
@@ -440,6 +455,69 @@ class OrganisationController extends Controller
             Log::error('ERROR DEACTIVATING Organisation');
             Log::error($e);
             return redirect()->back()->with('error', 'Something Went Wrong');
+        }
+    }
+
+
+
+    /***
+     * 
+     */
+
+    // public function export()
+    // {
+    //     $fileName = 'organisations' . date('Y-m-d_H-i-s') . '.xlsx';
+
+    //     \Log::info('Exporting file: ' . $fileName);
+
+    //     return Excel::download(new OrganisationExport, $fileName);
+    // }
+
+    public function export()
+    {
+        return Excel::download(new OrganisationExport, 'organisations.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+    }
+
+
+
+
+    /**
+    * 
+    *Import organisation detials 
+
+    */
+    public function importFile()
+    {
+        return view('organisation.importOrganisation');
+    }
+
+    public function import(Request $request)
+    {
+        $rules = [
+            'file' => 'required|mimes:csv,txt,xlsx',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with('error', $validator->errors()->first());
+        }
+
+        try {
+            Excel::import(new OrganisationImport, $request->file('file'));
+
+            // Log the import event
+            Log::info('Organisation CSV file imported: ', ['file' => $request->file('file')]);
+
+            //log 
+            Log::info('Organisation CSV file imported : ');
+            Log::info($request->file('file'));
+
+            return redirect()->back()->with('success', 'Records imported successfully.');
+        } catch (Exception $e) {
+            Log::error('Error importing organisations: ' . $e->getMessage());
+
+            return redirect()->back()->with('error', 'An error occurred while importing the organisation records.');
         }
     }
 }

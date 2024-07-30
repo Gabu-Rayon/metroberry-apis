@@ -17,24 +17,26 @@ class MaintenanceRepairController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(){
+    public function index()
+    {
         $maintenanceRepairs = MaintenanceRepair::all();
-        return view('vehicle.maintenance-repairs.index', compact('maintenanceRepairs'));
+        $vehicles = Vehicle::all();
+        $parts = VehiclePart::all();
+        return view('vehicle.maintenance-repairs.index', compact('maintenanceRepairs', 'vehicles', 'parts'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create(){
-        $vehicles = Vehicle::all();
-        $parts = VehiclePart::all();
-        return view('vehicle.maintenance-repairs.create', compact('vehicles', 'parts'));
+    public function create()
+    {
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         try {
             $data = $request->all();
 
@@ -52,7 +54,7 @@ class MaintenanceRepairController extends Controller
             if ($validator->fails()) {
                 Log::error('VALIDATION ERROR');
                 Log::error($validator->errors());
-                return redirect()->back()->with('error', $validator->errors()->first());
+                return redirect()->back()->with('error', $validator->errors()->first())->withInput();
             }
 
             DB::beginTransaction();
@@ -75,7 +77,7 @@ class MaintenanceRepairController extends Controller
             DB::rollBack();
             Log::info('STORE MAINTENANCE REPAIR ERROR');
             Log::info($e);
-            return redirect()->back()->with('error', 'Something went wrong.');
+            return redirect()->back()->with('error', 'Something went wrong.')->withInput();
         }
     }
 
@@ -90,7 +92,8 @@ class MaintenanceRepairController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id){
+    public function edit($id)
+    {
         $repair = MaintenanceRepair::findOrFail($id);
         $vehicles = Vehicle::all();
         $parts = VehiclePart::all();
@@ -100,7 +103,8 @@ class MaintenanceRepairController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
         try {
             $data = $request->all();
 
@@ -118,7 +122,7 @@ class MaintenanceRepairController extends Controller
             if ($validator->fails()) {
                 Log::error('VALIDATION ERROR');
                 Log::error($validator->errors());
-                return redirect()->back()->with('error', $validator->errors()->first());
+                return redirect()->back()->with('error', $validator->errors()->first())->withInput();
             }
 
             DB::beginTransaction();
@@ -144,16 +148,18 @@ class MaintenanceRepairController extends Controller
             DB::rollBack();
             Log::error('UPDATE MAINTENANCE REPAIR ERROR');
             Log::error($e);
-            return redirect()->back()->with('error', 'Something went wrong.');
+            return redirect()->back()->with('error', 'Something went wrong.')->withInput();
         }
     }
 
-    public function redoForm($id) {
+    public function redoForm($id)
+    {
         $maintenanceRepair = MaintenanceRepair::findOrFail($id);
         return view('vehicle.maintenance-repairs.redo', compact('maintenanceRepair'));
     }
 
-    public function redo(Request $request, $id) {
+    public function redo(Request $request, $id)
+    {
         try {
 
             $maintenanceRepair = MaintenanceRepair::findOrFail($id);
@@ -168,7 +174,7 @@ class MaintenanceRepairController extends Controller
             if ($validator->fails()) {
                 Log::error('VALIDATION ERROR');
                 Log::error($validator->errors());
-                return redirect()->back()->with('error', $validator->errors()->first());
+                return redirect()->back()->with('error', $validator->errors()->first())->withInput();
             }
 
             DB::beginTransaction();
@@ -191,16 +197,18 @@ class MaintenanceRepairController extends Controller
             DB::rollBack();
             Log::error('REDO MAINTENANCE REPAIR ERROR');
             Log::error($e);
-            return redirect()->back()->with('error', 'Something went wrong.');
+            return redirect()->back()->with('error', 'Something went wrong.')->withInput();
         }
     }
 
-    public function approveForm($id) {
+    public function approveForm($id)
+    {
         $maintenanceRepair = MaintenanceRepair::findOrFail($id);
         return view('vehicle.maintenance-repairs.approve', compact('maintenanceRepair'));
     }
 
-    public function approve($id) {
+    public function approve($id)
+    {
         try {
             $maintenanceRepair = MaintenanceRepair::findOrFail($id);
 
@@ -219,15 +227,16 @@ class MaintenanceRepairController extends Controller
             Log::error($e);
             return redirect()->back()->with('error', 'Something went wrong.');
         }
-
     }
-    
-    public function rejectForm($id) {
+
+    public function rejectForm($id)
+    {
         $maintenanceRepair = MaintenanceRepair::findOrFail($id);
         return view('vehicle.maintenance-repairs.reject', compact('maintenanceRepair'));
     }
 
-    public function reject($id) {
+    public function reject($id)
+    {
         try {
             $maintenanceRepair = MaintenanceRepair::findOrFail($id);
 
@@ -248,12 +257,14 @@ class MaintenanceRepairController extends Controller
         }
     }
 
-    public function billForm($id) {
+    public function billForm($id)
+    {
         $maintenanceRepair = MaintenanceRepair::findOrFail($id);
         return view('vehicle.maintenance-repairs.bill', compact('maintenanceRepair'));
     }
 
-    public function bill($id) {
+    public function bill($id)
+    {
         try {
             $maintenanceRepair = MaintenanceRepair::findOrFail($id);
 
@@ -289,11 +300,13 @@ class MaintenanceRepairController extends Controller
      * Remove the specified resource from storage.
      */
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $maintenanceRepair = MaintenanceRepair::findOrFail($id);
         return view('vehicle.maintenance-repairs.delete', compact('maintenanceRepair'));
     }
-    public function destroy($id){
+    public function destroy($id)
+    {
         try {
             $maintenanceRepair = MaintenanceRepair::findOrFail($id);
 
@@ -342,7 +355,6 @@ class MaintenanceRepairController extends Controller
 
             // Return the view with the MaintenanceRepair details and remaining amount
             return view('vehicle.maintenance-repairs.repairsCheckout.vehicle-repair-checkout', compact('maintenanceRepair', 'remainingAmount', 'ThisMaintenanceRepairPayment'));
-
         } catch (Exception $e) {
             Log::error('Error fetching service details for payment checkout: ' . $e->getMessage());
             return back()->with('error', 'An error occurred while fetching the Maintenance Repair details. Please try again.');

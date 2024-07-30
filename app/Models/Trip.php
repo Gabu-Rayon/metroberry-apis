@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Log;
 class Trip extends Model
 {
     use HasFactory;
-    
+
     protected $table = "trips";
 
     protected $fillable = [
@@ -32,17 +32,20 @@ class Trip extends Model
         'billed_by',
         'total_price',
         'billed_at',
+        'created_by'
     ];
 
     protected $casts = [
         'is_billable' => 'boolean',
     ];
 
-    public function customer(){
+    public function customer()
+    {
         return $this->belongsTo(Customer::class);
     }
 
-    public function route (){
+    public function route()
+    {
         return $this->belongsTo(Routes::class);
     }
 
@@ -51,11 +54,13 @@ class Trip extends Model
         return $this->belongsTo(Vehicle::class);
     }
 
-    public function driver(){
+    public function driver()
+    {
         return $this->belongsTo(Driver::class);
     }
 
-    public function billingRate(){
+    public function billingRate()
+    {
         return $this->belongsTo(BillingRates::class);
     }
 
@@ -64,25 +69,26 @@ class Trip extends Model
         return $this->hasMany(TripPayment::class);
     }
 
-    public function getIsBillableAttribute()
-{
-    $can_be_billed = 0;
+    public function is_billable()
+    {
+        $can_be_billed = 0;
 
-    Log::info('CAN BE BILLED ONE: ' . $can_be_billed);
+        Log::info('CAN BE BILLED ONE: ' . $can_be_billed);
 
-    if ($this->status == 'completed' && 
-        $this->drop_off_time != null && 
-        $this->fuel_consumed != null &&
-        $this->engine_hours != null &&
-        $this->vehicle_mileage != null &&
-        $this->idle_time != null) {
-        
-        $can_be_billed = 1;
+        if (
+            $this->status == 'completed' &&
+            $this->drop_off_time != null &&
+            $this->fuel_consumed != null &&
+            $this->engine_hours != null &&
+            $this->vehicle_mileage != null &&
+            $this->idle_time != null
+        ) {
+
+            $can_be_billed = 1;
+        }
+
+        Log::info('CAN BE BILLED: ' . $can_be_billed);
+
+        return $can_be_billed;
     }
-
-    Log::info('CAN BE BILLED: ' . $can_be_billed);
-
-    return $can_be_billed;
-}
-
 }

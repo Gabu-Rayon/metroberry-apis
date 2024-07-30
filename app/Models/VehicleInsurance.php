@@ -26,7 +26,7 @@ class VehicleInsurance extends Model
         'status',
         'remark',
         'policy_document',
-        'create_by',
+        'created_by',
     ];
 
     protected $with = ['vehicle'];

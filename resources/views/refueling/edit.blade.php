@@ -1,4 +1,5 @@
-<form action="{{ route('refueling.edit', $refueling->id) }}" method="POST" class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
+<form action="{{ route('refueling.edit', $refueling->id) }}" method="POST" class="needs-validation modal-content"
+    enctype="multipart/form-data">
     @csrf
     @method('PUT')
     <div class="card-header my-3 p-2 border-bottom">
@@ -18,8 +19,9 @@
                     <div class="col-sm-7">
                         <select name="vehicle_id" class="form-control" id="vehicle" required>
                             <option value="" disabled>Select a vehicle</option>
-                            @foreach($vehicles as $vehicle)
-                                <option value="{{ $vehicle->id }}" {{ $vehicle->id == $refueling->vehicle_id ? 'selected' : '' }}>
+                            @foreach ($vehicles as $vehicle)
+                                <option value="{{ $vehicle->id }}"
+                                    {{ $vehicle->id == $refueling->vehicle_id ? 'selected' : '' }}>
                                     {{ $vehicle->plate_number }}
                                 </option>
                             @endforeach
@@ -33,7 +35,8 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="refuelling_date" class="form-control" type="date" id="date" value="{{ $refueling->refuelling_date }}" required />
+                        <input name="refuelling_date" class="form-control" type="date" id="date"
+                            value="{{ $refueling->refuelling_date }}" required />
                     </div>
                 </div>
 
@@ -43,7 +46,8 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="refuelling_volume" class="form-control" type="number" id="volume" value="{{ $refueling->refuelling_volume }}" required />
+                        <input name="refuelling_volume" class="form-control" type="number" id="volume"
+                            value="{{ $refueling->refuelling_volume }}" required />
                     </div>
                 </div>
 
@@ -53,7 +57,8 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="attendant_name" class="form-control" type="text" id="attendant_name" value="{{ $refueling->attendant_name }}" required />
+                        <input name="attendant_name" class="form-control" type="text" id="attendant_name"
+                            value="{{ $refueling->attendant_name }}" required />
                     </div>
                 </div>
 
@@ -63,7 +68,8 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="creator_id" class="form-control" type="text" id="creator_id" value="{{ auth()->user()->name }}" readonly />
+                        <input name="creator_id" class="form-control" type="text" id="creator_id"
+                            value="{{ auth()->user()->name }}" readonly />
                     </div>
                 </div>
 
@@ -79,8 +85,9 @@
                     <div class="col-sm-7">
                         <select name="refuelling_station_id" class="form-control" id="station" required>
                             <option value="" disabled>Select a Fuel Station</option>
-                            @foreach($stations as $station)
-                                <option value="{{ $station->id }}" {{ $station->id == $refueling->refuelling_station_id ? 'selected' : '' }}>
+                            @foreach ($stations as $station)
+                                <option value="{{ $station->id }}"
+                                    {{ $station->id == $refueling->refuelling_station_id ? 'selected' : '' }}>
                                     {{ $station->user->name }}
                                 </option>
                             @endforeach
@@ -94,7 +101,8 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="refuelling_time" class="form-control" type="time" id="time" value="{{ $refueling->refuelling_time }}" required />
+                        <input name="refuelling_time" class="form-control" type="time" id="time"
+                            value="{{ $refueling->refuelling_time }}" required />
                     </div>
                 </div>
 
@@ -104,7 +112,8 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="refuelling_cost" class="form-control" type="number" id="cost" value="{{ $refueling->refuelling_cost }}" required />
+                        <input name="refuelling_cost" class="form-control" type="number" id="cost"
+                            value="{{ $refueling->refuelling_cost }}" required />
                     </div>
                 </div>
 
@@ -114,7 +123,8 @@
                         <i class="text-danger">*</i>
                     </label>
                     <div class="col-sm-7">
-                        <input name="attendant_phone" class="form-control" type="text" id="attendant_phone" value="{{ $refueling->attendant_phone }}" required />
+                        <input name="attendant_phone" class="form-control" type="text" id="attendant_phone"
+                            value="{{ $refueling->attendant_phone }}" required />
                     </div>
                 </div>
 

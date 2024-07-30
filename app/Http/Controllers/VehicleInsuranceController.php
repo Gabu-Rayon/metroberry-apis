@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\VehicleInsuranceExport;
 use Exception;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\InsuranceRecurringPeriod;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class VehicleInsuranceController extends Controller
 {
@@ -21,31 +23,37 @@ class VehicleInsuranceController extends Controller
      */
     public function index()
     {
-        // Check if the authenticated user has the 'view vehicle insurances' permission
-        if (\Auth::user()->can('view vehicle insurance')) {
-            try {
-                $vehicleInsurances = null;
+        try {
+            $vehicleInsurances = null;
+            $insuranceCompanies = null;
+            $recurringPeriods = InsuranceRecurringPeriod::all();
+            $vehicles = Vehicle::whereDoesntHave('insurance')->get();
 
-                // Check the user's role
-                if (Auth::user()->role == 'admin') {
-                    // If the user is an admin, fetch all vehicle insurances
-                    $vehicleInsurances = VehicleInsurance::all();
-                } else {
-                    // Otherwise, fetch vehicle insurances created by the authenticated user
-                    $vehicleInsurances = VehicleInsurance::where('created_by', Auth::user()->id)->get();
-                }
-
-                Log::info('Vehicle Insurances fetched: ', ['vehicleInsurances' => $vehicleInsurances]);
-
-                return view('vehicle.insurance.index', compact('vehicleInsurances'));
-            } catch (Exception $e) {
-                // Log the error message
-                Log::error('Error fetching vehicle insurances: ' . $e->getMessage());
-
-                return back()->with('error', 'An error occurred while fetching the vehicle insurances. Please try again.');
+            // Check the user's role
+            if (Auth::user()->role == 'admin') {
+                // If the user is an admin, fetch all vehicle insurances
+                $vehicleInsurances = VehicleInsurance::all();
+                $insuranceCompanies = InsuranceCompany::where('status', 1)->get();
+            } else {
+                // Otherwise, fetch vehicle insurances created by the authenticated user
+                $vehicleInsurances = VehicleInsurance::where('created_by', Auth::user()->id)->get();
+                $insuranceCompanies = InsuranceCompany::where('status', 1)
+                    ->where('created_by', Auth::user()->id)
+                    ->get();
             }
-        } else {
-            return back()->with('error', 'Permission Denied.');
+
+            Log::info('Vehicle Insurances fetched: ', ['vehicleInsurances' => $vehicleInsurances]);
+
+            $insuranceCompanies = InsuranceCompany::where('status', 1)->get();
+            $recurringPeriods = InsuranceRecurringPeriod::all();
+            $vehicles = Vehicle::whereDoesntHave('insurance')->get();
+
+            return view('vehicle.insurance.index', compact('vehicleInsurances', 'insuranceCompanies', 'recurringPeriods', 'vehicles'));
+        } catch (Exception $e) {
+            // Log the error message
+            Log::error('Error fetching vehicle insurances: ' . $e->getMessage());
+
+            return back()->with('error', 'An error occurred while fetching the vehicle insurances. Please try again.');
         }
     }
 
@@ -57,12 +65,8 @@ class VehicleInsuranceController extends Controller
 
     public function create()
     {
-        $insuranceCompanies = InsuranceCompany::where('status', 1)->get();
-        $recurringPeriods = InsuranceRecurringPeriod::all();
-        $vehicles = Vehicle::all();
-
-        return view('vehicle.insurance.create', compact('insuranceCompanies', 'recurringPeriods', 'vehicles'));
     }
+
 
 
     /**
@@ -91,7 +95,7 @@ class VehicleInsuranceController extends Controller
                 'reminder' => 'required|numeric',
                 'deductible' => 'required|numeric',
                 'status' => 'required|numeric',
-                'remark' => 'nullable|string|max:500',
+                'remark' => 'nullable|string',
                 'policy_document' => 'required|file|mimes:pdf|max:2048',
             ]);
 
@@ -249,11 +253,12 @@ class VehicleInsuranceController extends Controller
      */
     public function delete($id)
     {
+        Log::info('HAPA');
         try {
             $insurance = VehicleInsurance::findOrFail($id);
             return view('vehicle.insurance.delete', compact('insurance'));
         } catch (Exception $e) {
-            Log::error('Error fetching vehicle insurance for delete: ' . $e->getMessage());
+            Log::error('Error fetching vehicle insurance for delete: ' . $e);
             return redirect()->back()->with('error', 'An error occurred while fetching the insurance details. Please try again.');
         }
     }
@@ -289,4 +294,8 @@ class VehicleInsuranceController extends Controller
         }
     }
 
+    public function export()
+    {
+        return Excel::download(new VehicleInsuranceExport, 'vehicle_insurances.xlsx');
+    }
 }

@@ -1,5 +1,5 @@
  <form action="{{ route('vehicle.update', $vehicle->id) }}" method="POST" class="needs-validation modal-content"
-     novalidate enctype="multipart/form-data">
+     enctype="multipart/form-data">
      @csrf
      @method('PUT')
      <div class="card-header my-3 p-2 border-bottom">
@@ -134,7 +134,7 @@
              </div>
          </div>
          <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
              <button class="btn btn-success" type="submit">Update</button>
          </div>
  </form>

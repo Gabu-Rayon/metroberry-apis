@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('repair_categories', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('repair_id');
+            $table->string('name');
+            $table->string('description');
+
+            $table->foreign('repair_id')->references('id')->on('repairs')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -1,4 +1,5 @@
-<form action="{{ route('driver.vehicle.assign', $driver->id) }}" method="POST" class="needs-validation modal-content" novalidate="novalidate" enctype="multipart/form-data">
+<form action="{{ route('driver.vehicle.assign', $driver->id) }}" method="POST" class="needs-validation modal-content"
+    enctype="multipart/form-data">
     @csrf
     <div class="card-header my-3 p-2 border-bottom">
         <h4>Assign Driver to Vehicle</h4>
@@ -36,12 +37,13 @@
                         <select name="vehicle_id" class="form-control" id="vehicle_id" required>
                             <option value="">Select a vehicle</option>
                             @foreach ($vehicles as $vehicle)
-                                <option value="{{ $vehicle->id }}">{{ $vehicle->make }} {{ $vehicle->model }}, {{ $vehicle->plate_number }}</option>
+                                <option value="{{ $vehicle->id }}">{{ $vehicle->make }} {{ $vehicle->model }},
+                                    {{ $vehicle->plate_number }}</option>
                             @endforeach
                         </select>
                     </div>
-                </div>                
-                
+                </div>
+
             </div>
 
             <div class="col-md-12 col-lg-6">
@@ -67,11 +69,11 @@
                 </div>
 
             </div>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-            Close
-        </button>
-        <button class="btn btn-success" type="submit">Save</button>
-    </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                Close
+            </button>
+            <button class="btn btn-success" type="submit">Save</button>
+        </div>
 </form>

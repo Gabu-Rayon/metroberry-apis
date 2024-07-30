@@ -2,22 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\RoutesExport;
+use App\Imports\RoutesImport;
 use App\Models\RouteLocations;
 use Exception;
 use App\Models\Routes;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RouteController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    
-    public function index(){
+
+    public function index()
+    {
         try {
             $routes = Routes::all();
             return view('route.index', compact('routes'));
@@ -31,7 +34,8 @@ class RouteController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(){
+    public function create()
+    {
         return view('route.create');
     }
 
@@ -56,10 +60,10 @@ class RouteController extends Controller
             }
 
             $routeName = $data['start_location'] . ' - ' . $data['end_location'];
-           
+
             Log::info('Route Name Generated  :');
             Log::info($routeName);
-            
+
             DB::beginTransaction();
 
             $route = Routes::create([
@@ -107,7 +111,8 @@ class RouteController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id){
+    public function edit(string $id)
+    {
         $route = Routes::findOrfail($id);
         return view('route.edit', compact('route'));
     }
@@ -115,7 +120,8 @@ class RouteController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id){
+    public function update(Request $request, string $id)
+    {
         try {
             $route = Routes::findOrfail($id);
             $data = $request->all();
@@ -200,7 +206,8 @@ class RouteController extends Controller
      * Remove the specified resource from storage.
      */
 
-    public function delete($id) {
+    public function delete($id)
+    {
         try {
             $route = Routes::findOrfail($id);
             return view('route.delete', compact('route'));
@@ -210,7 +217,8 @@ class RouteController extends Controller
             return redirect()->back()->with('error', 'Something Went Wrong');
         }
     }
-    public function destroy(string $id){
+    public function destroy(string $id)
+    {
         try {
             $route = Routes::findOrfail($id);
 
@@ -226,6 +234,52 @@ class RouteController extends Controller
             Log::error('ERROR DELETING ROUTE');
             Log::error($e);
             return redirect()->back()->with('error', 'Something Went Wrong');
+        }
+    }
+
+    public function export()
+    {
+        return Excel::download(new RoutesExport, 'routes.xlsx');
+    }
+
+
+    /**
+   * 
+   *Import organisation detials 
+
+   */
+    public function importFile()
+    {
+        return view('route.importRoute');
+    }
+
+    public function import(Request $request)
+    {
+        $rules = [
+            'file' => 'required|mimes:csv,txt,xlsx',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return redirect()->back()->with('error', $validator->errors()->first());
+        }
+
+        try {
+            Excel::import(new RoutesImport, $request->file('file'));
+
+            // Log the import event
+            Log::info('Routes CSV file imported: ', ['file' => $request->file('file')]);
+
+            //log 
+            Log::info('Organisation CSV file imported : ');
+            Log::info($request->file('file'));
+
+            return redirect()->back()->with('success', 'Records imported successfully.');
+        } catch (Exception $e) {
+            Log::error('Error importing Routes: ' . $e->getMessage());
+
+            return redirect()->back()->with('error', 'An error occurred while importing the Routes records.');
         }
     }
 }
