@@ -199,14 +199,14 @@ class OrganisationController extends Controller
 
 
             // Send email with the plain password
-            // Mail::send('mail-view.organisation-welcome-mail', [
-            //     'organisation' => $user->name,
-            //     'email' => $user->email,
-            //     'password' => $generatedPassword
-            // ], function ($message) use ($user) {
-            //     $message->to($user->email)
-            //         ->subject('Your Account Created');
-            // });
+            Mail::send('mail-view.organisation-welcome-mail', [
+                'organisation' => $user->name,
+                'email' => $user->email,
+                'password' => $generatedPassword
+            ], function ($message) use ($user) {
+                $message->to($user->email)
+                    ->subject('Your Account Created');
+            });
 
             return redirect()->route('organisation')->with('success', 'Organisation created successfully');
         } catch (Exception $e) {
