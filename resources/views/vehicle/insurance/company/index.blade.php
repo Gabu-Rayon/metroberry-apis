@@ -73,7 +73,7 @@
                                                                 </a>
                                                                 <span class="m-1"></span>
                                                                 @if ($company->status == 1)
-                                                                    @can('activate vehicle insurance company')
+                                                                    @can('activate insurance company')
                                                                         <a href="javascript:void(0);"
                                                                             class="btn btn-sm btn-success"
                                                                             onclick="axiosModal('/vehicle/insurance/company/{{ $company->id }}/deactivate')"
@@ -82,7 +82,7 @@
                                                                         </a>
                                                                     @endcan
                                                                 @else
-                                                                    @can('activate vehicle insurance company')
+                                                                    @can('activate insurance company')
                                                                         <a href="javascript:void(0);"
                                                                             class="btn btn-sm btn-secondary"
                                                                             onclick="axiosModal('/vehicle/insurance/company/{{ $company->id }}/activate')"
@@ -92,7 +92,7 @@
                                                                     @endcan
                                                                 @endif
                                                                 <span class="m-1"></span>
-                                                                @can('delete vehicle insurance company')
+                                                                @can('delete insurance company')
                                                                     <a href="javascript:void(0);" class="btn btn-sm btn-danger"
                                                                         onclick="axiosModal('/vehicle/insurance/company/{{ $company->id }}/delete')"
                                                                         title="Delete Insurance Company">

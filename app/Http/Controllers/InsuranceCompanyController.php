@@ -14,6 +14,7 @@ class InsuranceCompanyController extends Controller
 
     public function index()
     {
+        Log::info('HERE');
         try {
             $insuranceCompanies = InsuranceCompany::all();
             return view('vehicle.insurance.company.index', compact('insuranceCompanies'));
