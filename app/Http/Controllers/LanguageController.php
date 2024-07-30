@@ -9,6 +9,7 @@ use App\Models\Language;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Session;
 
 class LanguageController extends Controller
 {
@@ -50,7 +51,7 @@ class LanguageController extends Controller
         }
         return redirect()->back();
     }
-    }
+
 
     public function manageLanguage($currantLang)
     {

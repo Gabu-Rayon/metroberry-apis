@@ -38,14 +38,14 @@
                                                             &nbsp;
                                                             Import
                                                         </a> -->
-                                                        @if (Auth::user()->can('import driver licenses'))
+                                                        <!-- @if (Auth::user()->can('import driver licenses'))
                                                             <a class="btn btn-success btn-sm"
                                                                 href={{ route('driver.license.import') }} title="Import">
                                                                 <i class="fa-solid fa-file-import"></i>
                                                                 &nbsp;
                                                                 Import
                                                             </a>
-                                                        @endif
+                                                        @endif -->
                                                         <span class="m-1"></span>
                                                         @if (Auth::user()->can('create driver license'))
                                                             <button type="button" class="btn btn-success btn-sm"
