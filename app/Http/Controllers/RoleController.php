@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Database\Seeders\PermissionsByActions;
 use Exception;
 use App\Models\UserRole;
 use App\Models\Permission;
@@ -9,14 +10,14 @@ use Illuminate\Http\Request;
 use App\Models\PermissionGroup;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
 
 class RoleController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(){
+    public function index()
+    {
         $roles = UserRole::all();
         return view('role.index', compact('roles'));
     }
@@ -24,38 +25,33 @@ class RoleController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(){
-        $settingPermissions = PermissionGroup::where('group_name', 'settings')->get();
-        $dashboardPermissions = PermissionGroup::where('group_name', 'dashboard')->get();
-        $employeePermissions = PermissionGroup::where('group_name', 'employee')->get();
-        $organisationPermissions = PermissionGroup::where('group_name', 'organisation')->get();
-        $driversPermissions = PermissionGroup::where('group_name', 'drivers')->get();
-        $licensePermissions = PermissionGroup::where('group_name', 'license')->get();
-        $psv_badgePermissions = PermissionGroup::where('group_name', 'psv_badge')->get();
-        $driver_performancePermissions = PermissionGroup::where('group_name', 'driver_performance')->get();
-        $vehiclePermissions = PermissionGroup::where('group_name', 'vehicle')->get();
-        $vehicle_insurancePermissions = PermissionGroup::where('group_name', 'vehicle_insurance')->get();
-        $routePermissions = PermissionGroup::where('group_name', 'route')->get();
-        $route_locationPermissions = PermissionGroup::where('group_name', 'route_location')->get();
-        $tripPermissions = PermissionGroup::where('group_name', 'trip')->get();
-        $insurance_companyPermissions = PermissionGroup::where('group_name', 'insurance_company')->get();
-        $vehicle_maintenancePermissions = PermissionGroup::where('group_name', 'vehicle_maintenance')->get();
+    public function create()
+    {
+        $dashboardPermissions = PermissionsByActions::DASHBOARD_MANAGEMENT_PERMISSIONS;
+        $profilePermissions = PermissionsByActions::PROFILE_MANAGEMENT_PERMISSIONS;
+        $employeePermissions = PermissionsByActions::EMPLOYEE_MANAGEMENT_PERMISSIONS;
+        $organisationPermissions = PermissionsByActions::ORGANISATION_MANAGEMENT_PERMISSIONS;
+        $driverPermissions = PermissionsByActions::DRIVER_MANAGEMENT_PERMISSIONS;
+        $driverLicensePermissions = PermissionsByActions::DRIVER_LICENSE_MANAGEMENT_PERMISSIONS;
+        $driverPSVBadgePermissions = PermissionsByActions::DRIVER_PSVBADGE_MANAGEMENT_PERMISSIONS;
+        $driverPerformancePermissions = PermissionsByActions::DRIVER_PERFORMANCE_MANAGEMENT_PERMISSIONS;
+        $vehiclePermissions = PermissionsByActions::VEHICLE_MANAGEMENT_PERMISSIONS;
+        $vehicleInsurancePermissions = PermissionsByActions::VEHICLE_INSURANCE_MANAGEMENT_PERMISSIONS;
+        $vehicleInspCertPermissions = PermissionsByActions::VEHICLE_INSPECTION_CERTIFICATE_MANAGEMENT_PERMISSIONS;
+        Log::info('DASHBOARD PERMISSIONS');
+        Log::info($dashboardPermissions);
         return view('role.create', compact(
-            'settingPermissions',
             'dashboardPermissions',
+            'profilePermissions',
             'employeePermissions',
             'organisationPermissions',
-            'driversPermissions',
-            'licensePermissions',
-            'psv_badgePermissions',
-            'driver_performancePermissions',
+            'driverPermissions',
+            'driverLicensePermissions',
+            'driverPSVBadgePermissions',
+            'driverPerformancePermissions',
             'vehiclePermissions',
-            'vehicle_insurancePermissions',
-            'routePermissions',
-            'route_locationPermissions',
-            'tripPermissions',
-            'insurance_companyPermissions',
-            'vehicle_maintenancePermissions',
+            'vehicleInsurancePermissions',
+            'vehicleInspCertPermissions'
         ));
     }
 
@@ -64,52 +60,6 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        try {
-
-            
-            // Validate the request data
-            $data = $request->validate([
-                'name' => 'required|string|unique:roles,name',
-                'permissions.*.' => 'required|array',
-            ]);
-            Log::info('data from the form of creating new Role  with Permissions : ');
-            Log::info($data);
-
-            // Start a database transaction
-            DB::beginTransaction();
-
-            // Create a new role
-            $role = UserRole::create([
-                'name' => $data['name'],
-                'guard_name' => 'web',
-            ]);
-
-            // Process permissions
-            $permissionIds = [];
-            foreach ($data['permissions'] as $key => $value) {
-                $permissionGroup = PermissionGroup::where('permission_name', $key)->first();
-                if ($permissionGroup) {
-                    $permission = Permission::where('name', $permissionGroup->permission_name)->first();
-                    if ($permission) {
-                        $permissionIds[] = $permission->id;
-                    }
-                }
-            }
-
-            // Attach permissions to the role
-            $role->permissions()->attach($permissionIds);
-
-
-            // Commit the transaction
-            DB::commit();
-
-            return redirect()->route('permission.role')->with('success', 'Role created successfully');
-        } catch (Exception $e) {
-            // Rollback the transaction if something goes wrong
-            DB::rollBack();
-            Log::error('Error creating role: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'An error occurred while creating the role. Please try again.')->withInput();
-        }
     }
 
 
@@ -125,7 +75,7 @@ class RoleController extends Controller
     //         ]);
 
     //       Log::info('data from the form of creating new Role  with Permissions : ');
-   //        Log::info($data);
+    //        Log::info($data);
 
 
     //         // Start a database transaction
