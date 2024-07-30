@@ -2,9 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Charts\MaintenanceCostReport;
+use App\Models\DriversLicenses;
+use App\Models\NTSAInspectionCertificate;
 use Exception;
 use App\Models\User;
 use App\Models\Organisation;
+use App\Models\PSVBadge;
+use App\Models\Trip;
+use App\Models\Vehicle;
+use App\Models\VehicleInsurance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
@@ -19,7 +26,94 @@ class OrganisationController extends Controller
      */
 
     public function dashboard () {
-        return view('organisation.dashboard');
+        $activeVehicles = Vehicle::where('organisation_id', Auth::user()->organisation->id)
+            ->where('status', 'active')
+            ->get();
+        $inactiveVehicles = Vehicle::where('organisation_id', Auth::user()->organisation->id)
+            ->where('status', 'inactive')
+            ->get();
+        
+        $tripsThisMonth = Trip::whereMonth('created_at', date('m'))
+        ->whereHas('customer', function ($query) {
+            $query->where('customer_organisation_code', auth()->user()->organisation->organisation_code);
+        })
+        ->get();
+
+        $scheduledTrips = $tripsThisMonth->filter(function($trip) {
+            return $trip->status == 'scheduled';
+        });
+        $completedTrips = $tripsThisMonth->filter(function($trip) {
+            return $trip->status == 'completed';
+        });
+        $cancelledTrips = $tripsThisMonth->filter(function($trip) {
+            return $trip->status == 'cancelled';
+        });
+        $billedTrips = $tripsThisMonth->filter(function($trip) {
+            return $trip->status == 'billed';
+        });
+
+        $totalExpenses = $billedTrips->sum(function ($trip) {
+            return $trip->total_price;
+        });
+
+        $cancelledTripsCount = $cancelledTrips->count();
+        $completedTripsCount = $completedTrips->count();
+        $scheduledTripsCount = $scheduledTrips->count();
+        $billedTripsCount = $billedTrips->count();
+
+        $venDiagram = new MaintenanceCostReport;
+
+        $venDiagram->labels(['Scheduled', 'Completed', 'Cancelled', 'Billed']);
+
+        $venDiagram->dataset('Trips', 'doughnut', [
+            $scheduledTripsCount,
+            $completedTripsCount,
+            $cancelledTripsCount,
+            $billedTripsCount,
+        ])->options([
+            'backgroundColor' => ['#198754', '#0d6efd', '#dc3545', '#ffc107'],
+            'scales' => [
+                'y' => [
+                    'display' => false,
+                ],
+                'x' => [
+                    'display' => false,
+                ],
+            ],
+        ]);
+
+        $expiredInsurances = VehicleInsurance::whereHas('vehicle', function ($query) {
+            $query->where('organisation_id', auth()->user()->organisation->id);
+        })->where('insurance_date_of_expiry', '<', date('Y-m-d'))->get();
+
+        $expiredInspectionCertificates = NTSAInspectionCertificate::whereHas('vehicle', function ($query) {
+            $query->where('organisation_id', auth()->user()->organisation->id);
+        })->where('ntsa_inspection_certificate_date_of_expiry', '<', date('Y-m-d'))->get();
+
+        $expiredLicenses = DriversLicenses::whereHas('driver', function ($query) {
+            $query->where('organisation_id', auth()->user()->organisation->id);
+        })->where('driving_license_date_of_expiry', '<', date('Y-m-d'))->get();
+
+        $expiredPSVBadges = PSVBadge::whereHas('driver', function ($query) {
+            $query->where('organisation_id', auth()->user()->organisation->id);
+        })->where('psv_badge_date_of_expiry', '<', date('Y-m-d'))->get();
+
+
+        
+        return view('organisation.dashboard', compact(
+            'activeVehicles',
+            'inactiveVehicles',
+            'scheduledTrips',
+            'completedTrips',
+            'cancelledTrips',
+            'billedTrips',
+            'totalExpenses',
+            'venDiagram',
+            'expiredInsurances',
+            'expiredInspectionCertificates',
+            'expiredLicenses',
+            'expiredPSVBadges'
+        ));
     }
 
     public function index(){
@@ -266,7 +360,7 @@ class OrganisationController extends Controller
 
             DB::commit();
 
-            return redirect()->route('organisation.index')->with('success', 'Organisation deleted successfully');
+            return redirect()->route('organisation')->with('success', 'Organisation deleted successfully');
         } catch (Exception $e) {
             DB::rollBack();
             Log::error('ERROR DELETING Organisation');

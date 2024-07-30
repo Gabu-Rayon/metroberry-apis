@@ -20,7 +20,7 @@ return new class extends Migration
             $table->date('service_date');
             $table->decimal('service_cost', 10, 2);
             $table->text('service_description');
-            $table->enum('service_status', ['pending', 'billed', 'approved', 'rejected']);
+            $table->enum('service_status', ['pending', 'billed', 'approved', 'rejected','paid','partially paid']);
             $table->timestamps();
         });
     }

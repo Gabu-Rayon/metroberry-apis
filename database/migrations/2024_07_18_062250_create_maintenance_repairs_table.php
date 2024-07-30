@@ -21,8 +21,7 @@ return new class extends Migration
             $table->decimal('repair_cost', 10, 2);
             $table->decimal('amount', 10, 2)->nullable();
             $table->text('repair_description')->nullable();
-            $table->enum('repair_status', ['pending', 'billed', 'approved', 'rejected']);
-
+            $table->enum('repair_status', ['pending', 'billed', 'approved', 'rejected','paid','partially paid']);
             $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
             $table->foreign('creator_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('part_id')->references('id')->on('vehicle_parts')->onDelete('cascade');

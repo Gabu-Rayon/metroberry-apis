@@ -1,46 +1,39 @@
 <?php
+
 namespace App\Exports;
 
-use App\Models\User;
 use App\Models\Customer;
-use Illuminate\Support\Collection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
-class EmployeeExport implements FromCollection, WithHeadings
+class EmployeeExport implements FromCollection
 {
+
+    public function __construct()
+    {
+
+    }
+
     public function collection()
     {
-        $users = User::where('role', 'customer')->get();
-        $exportData = [];
+        // get the name and organisa$employees = Customer::with('user')->get();
 
-        foreach ($users as $user) {
-            $customer = Customer::where('user_id', $user->id)->first();
-
-            if ($customer) {
-                $exportData[] = [
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'phone' => $user->phone,
-                    'address' => $user->address,
-                    'customer_organisation_code' => $customer->customer_organisation_code,
-                    'national_id_no' => $customer->national_id_no,
-                ];
-            }
-        }
-
-        return collect($exportData);
+        // Process the data
+        $employees = Customer::with('user')->get();
+        $formattedEmployees = $employees->map(function($customer) {
+            return [
+                'name' => $customer->user->name, // Access related user's name
+                'organisation' => $customer->customer_organisation_code // Access customer's own fields
+            ];
+        });
+        return $formattedEmployees;
     }
 
     public function headings(): array
     {
         return [
-            "Name",
-            "Email",
-            "Phone Contact",
-            "Address",
-            "Customer Organisation Code",
-            "National ID",
+            'Name',
+            'Organisation'
         ];
     }
 }

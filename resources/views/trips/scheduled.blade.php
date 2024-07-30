@@ -37,13 +37,13 @@
 
                                                         <span class="m-1"></span>
 
+                                                        @if (auth()->user()->role == 'admin')
                                                         <a class="btn btn-success btn-sm" href="{{ route('trip.vehicle-assign') }}">
                                                             <i class="fas fa-share-square"></i>
                                                             &nbsp;
                                                             Assign Vehicles to Upcoming Trips
                                                         </a>
-
-                                                        <button type="button" class="btn btn-success btn-sm mx-2" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="true" aria-controls="flush-collapseOne"> <i class="fas fa-filter"></i> Filter</button>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -64,12 +64,15 @@
                                                             <th title="Email">Date</th>
                                                             <th title="Email">Pick Up</th>
                                                             <th title="Email">Drop Off</th>
+                                                            @if (auth()->user()->role == 'admin')
                                                             <th title="Action" width="150">Action</th>
+                                                            @endif
                                                         </tr>
                                                     </thead>
 
                                                     <tbody>
                                                         @foreach($groupedTrips as $organisationCode => $trips)
+                                                            @if (auth()->user()->role == 'admin')
                                                             <tr>
                                                                 <td colspan="9" class="text-center">
                                                                     <h5 class="text-primary text-sm">
@@ -80,6 +83,7 @@
                                                                     </h5>
                                                                 </td>
                                                             </tr>
+                                                            @endif
                                                             @foreach($trips as $trip)
                                                                 <tr>
                                                                     <td class="text-center">{{ $trip->customer->user->name }}</td>
@@ -128,6 +132,7 @@
                                                                         @endphp
                                                                         {{ $location }}
                                                                     </td>
+                                                                    @if (auth()->user()->role == 'admin')
                                                                     <td class="text-center">
                                                                         <a href="javascript:void(0);" onclick="axiosModal('/trip/{{ $trip->id }}/cancel')" class="btn btn-danger btn-sm" title="Cancel">
                                                                             <i class="fa fa-times"></i>
@@ -137,6 +142,7 @@
                                                                             <i class="fa fa-check"></i>
                                                                         </a>
                                                                     </td>
+                                                                    @endif
                                                                 </tr>
                                                             @endforeach
                                                         @endforeach

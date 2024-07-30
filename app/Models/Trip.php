@@ -31,7 +31,7 @@ class Trip extends Model
         'billing_rate_id',
         'billed_by',
         'total_price',
-        'billed_at'
+        'billed_at',
     ];
 
     protected $casts = [
@@ -57,6 +57,11 @@ class Trip extends Model
 
     public function billingRate(){
         return $this->belongsTo(BillingRates::class);
+    }
+
+    public function payments()
+    {
+        return $this->hasMany(TripPayment::class);
     }
 
     public function getIsBillableAttribute()

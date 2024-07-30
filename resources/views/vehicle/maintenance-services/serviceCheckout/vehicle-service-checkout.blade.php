@@ -31,6 +31,14 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="actions">
+                                                <p class="mb-0 mr-3 text-dark fw-bold">Status :</p>
+                                                @if ($service->service_status == 'billed')
+                                                    <span class="badge bg-success">Billed</span>
+                                                @elseif ($service->service_status  == 'paid')
+                                                    <span class="badge bg-success">Paid</span>
+                                                @else
+                                                    <span class="badge bg-danger">Partially Paid</span>
+                                                @endif
                                                 <div class="accordion-header d-flex justify-content-end align-items-center"
                                                     id="flush-headingOne">
                                                     <a class="btn btn-success btn-sm" href="javascript:void(0);"
@@ -54,7 +62,7 @@
                                                     </a>
 
                                                     <span class="m-1"></span>
-                                                    @if (in_array($service->status, ['billed', 'partially paid']))
+                                                    @if (in_array($service->service_status, ['billed', 'partially paid']))
                                                         <a class="btn btn-success btn-sm" href="javascript:void(0);"
                                                             onclick="axiosModal('{{ route('billed.vehicle.service.receive.payment', ['id' => $service->id]) }}')">
                                                             <i class="fa-solid fa-plus"></i> &nbsp;
@@ -71,118 +79,38 @@
                             <div class="tile">
                                 <div class="card mb-4">
                                     <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-md-12 col-lg-6">
-                                                <p class="mb-0 mr-3 text-dark fw-bold">Customer :</p>
-                                                <div class="form-group row my-2">
-                                                    <label for="plate_number" class="col-sm-5 col-form-label"> Name <i
-                                                            class="text-danger">:</i></label>
-                                                    <div class="col-sm-7">
-                                                        {{ $service->customer->user->name }}
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row my-2">
-                                                    <label for="fuel_type" class="col-sm-5 col-form-label">Address
-                                                        <i class="text-danger">:</i></label>
-                                                    <div class="col-sm-7">
-                                                        {{ $service->customer->user->address }}
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row my-2">
-                                                    <label for="engine_size" class="col-sm-5 col-form-label">org Code
-                                                        <i class="text-danger">:</i></label>
-                                                    <div class="col-sm-7">
-                                                        {{ $service->customer->customer_organisation_code }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12 col-lg-6">
-                                                <p class="mb-0 mr-3 text-dark fw-bold">Vehicle :</p>
-                                                <div class="form-group row my-2">
-                                                    <label for="plate_number" class="col-sm-5 col-form-label"> Plate No <i
-                                                            class="text-danger">:</i></label>
-                                                    <div class="col-sm-7">
-                                                        {{ $service->vehicle->plate_number }}
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row my-2">
-                                                    <label for="plate_number" class="col-sm-5 col-form-label"> Model <i
-                                                            class="text-danger">:</i></label>
-                                                    <div class="col-sm-7">
-                                                        {{ $service->vehicle->model }}
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row my-2">
-                                                    <label for="fuel_type" class="col-sm-5 col-form-label">Driver
-                                                        <i class="text-danger">:</i></label>
-                                                    <div class="col-sm-7">
-                                                        {{ $service->vehicle->driver->user->name }}
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row my-2">
-                                                    <label for="engine_size" class="col-sm-5 col-form-label">Driver
-                                                        Contact
-                                                        <i class="text-danger">:</i></label>
-                                                    <div class="col-sm-7">
-                                                        {{ $service->vehicle->driver->user->phone }}
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row my-2">
-                                                    <label for="engine_size" class="col-sm-5 col-form-label">Vehicle Org
-                                                        <i class="text-danger">:</i></label>
-                                                    <div class="col-sm-7">
-                                                        {{ $service->vehicle->organisation->user->name }}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12 col-lg-6">
-                                                <p class="mb-0 mr-3 text-dark fw-bold">Customer Org :</p>
-                                                <div class="form-group row my-2">
-                                                    <label for="color" class="col-sm-5 col-form-label">Org name <i
-                                                            class="text-danger">:</i></label>
-                                                    <div class="col-sm-7">
-                                                        {{ $service->customer->organisation->user->name }}
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row my-2">
-                                                    <label for="color" class="col-sm-5 col-form-label">Org Address <i
-                                                            class="text-danger">:</i></label>
-                                                    <div class="col-sm-7">
-                                                        {{ $service->customer->organisation->user->address }}
-                                                    </div>
-                                                </div>
-                                                <p class="mb-0 mr-3 text-dark fw-bold">Status :</p>
-                                                @if ($service->status == 'billed')
-                                                    <span class="badge bg-success">Billed</span>
-                                                @elseif ($service->status == 'paid')
-                                                    <span class="badge bg-success">Paid</span>
-                                                @else
-                                                    <span class="badge bg-danger">Partially Paid</span>
-                                                @endif
-                                            </div>
-                                        </div>
                                         <div class="col-md-12 col-lg-12">
                                             <table class="table" id="checkout-table">
                                                 <thead>
                                                     <tr>
                                                         <th title="SrNo" width="30">SrNo</th>
-                                                        <th title="Trip Route">Trip Route</th>
-                                                        <th title="Billed By">Billed By</th>
-                                                        <th title="Charges or Trip price ">Charges :</th>
+                                                        <th title="Trip Route">Vehicle</th>
+                                                        <th title="Billed By">Service Type</th>
+                                                        <th title="Charges or Trip price ">Date </th>
+                                                         <th title="Charges or Trip price ">Description </th>
+                                                         <th title="Billed By"> Vehicle Plate</th>
+                                                        <th title="Charges or Trip price ">Service Category </th>
+                                                         <th title="Charges or Trip price ">Cost </th>
+
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     @php $item = 1 @endphp
                                                     <tr>
                                                         <td>{{ $item++ }}</td>
-                                                        <td> {{ $service->route->name }}</td>
-                                                        <td> {{ $service->billed_by }}</td>
-                                                        <td>Kes. {{ $service->total_price }}</td>
+                                                        <td> {{ $service->vehicle->plate_number  }}</td>
+                                                        <td> {{ $service->serviceType->name  }} </td>
+                                                        <td>{{ $service->service_date }}</td>
+                                                        <td> {{ $service->service_description}}</td>
+                                                        <td> {{ $service->vehicle->plate_number  }}</td>
+                                                        <td>{{ $service->serviceCategory->name }}</td>
+                                                        <td>Kes. {{ $service->service_cost }}</td>
+
                                                     </tr>
                                                     <tr>
                                                         <td colspan="3" class="text-right my-20"><strong>Total</strong>
                                                         </td>
-                                                        <td><strong>Kes.{{ $service->total_price }}</strong></td>
+                                                        <td><strong>Kes.{{ $service->service_cost }}</strong></td>
                                                     </tr>
                                                     <tr>
                                                         <td colspan="3" class="text-right my-20">
@@ -193,22 +121,6 @@
 
                                                 </tbody>
                                             </table>
-                                        </div>
-                                        <div class="col-md-12 col-lg-12">
-                                            <div class="d-flex align-items-center mb-3">
-                                                <p class="mb-0 mr-3 text-dark fw-bold">Pay with IntaSend</p>
-                                                <span></span>
-                                                <img src="{{ asset('admin-assets/img/payment-img/intasend-icon-20x27.png') }}"
-                                                    alt="IntaSend Logo" class="img-fluid">
-                                            </div>
-                                            <div class="bg-secondary bg-gradient border rounded p-3">
-                                                <div class="d-flex align-items-center justify-content-center">
-                                                    <img src="{{ asset('admin-assets/img/payment-img/IntasendPaymentGateways.png') }}"
-                                                        alt="IntaSend payments Gateways" class="mr-3">
-                                                </div>
-                                                <p class="mb-0 mt-6 text-white fw-bold text-left">Secure mobile and card
-                                                    payments.</p>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -240,9 +152,9 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach ($ThisTripPayments as $payment)
+                                                    @foreach ($ThisMaintenanceServicePayment as $payment)
                                                         <tr>
-                                                            <td> <a href="{{ route('billed.trip.download.invoice', ['id' => $payment->id]) }}"
+                                                            <td> <a href="{{ route('billed.vehicle.service.download.invoice', ['id' => $payment->id]) }}"
                                                                     class="btn btn-primary btn-sm"> <i
                                                                         class="fa-solid fa-download"></i> &nbsp;</a></td>
                                                             <td>{{ $payment->payment_date }}</td>
@@ -252,7 +164,7 @@
                                                             <td>{{ $payment->reference }}</td>
                                                             <td>{{ $payment->remark }}</td>
                                                             <td>
-                                                                <a href="{{ asset('payment_receipts/' . $payment->payment_receipt) }}"
+                                                                <a href="{{ asset('maintenance_service_payment_receipts/' . $payment->payment_receipt) }}"
                                                                     download>
                                                                     <i class="fa-solid fa-file-pdf"></i> Receipt
                                                                 </a>

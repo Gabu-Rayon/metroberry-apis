@@ -22,7 +22,7 @@ return new class extends Migration
             $table->decimal('refuelling_cost', 10, 2);
             $table->string('attendant_name');
             $table->string('attendant_phone');
-            $table->enum('status', ['pending', 'approved', 'rejected', 'billed'])->default('pending');
+            $table->enum('status', ['pending', 'approved', 'rejected', 'billed', 'paid', 'partially paid'])->default('pending');
 
             $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
             $table->foreign('refuelling_station_id')->references('id')->on('refuelling_stations')->onDelete('cascade');

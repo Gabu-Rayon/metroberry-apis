@@ -13,10 +13,12 @@ class NTSAInspectionCertificate extends Model
 
     protected $fillable = [
         'vehicle_id',
+        'creator_id',
         'ntsa_inspection_certificate_no',
         'ntsa_inspection_certificate_date_of_issue',
         'ntsa_inspection_certificate_date_of_expiry',
-        'ntsa_inspection_certificate_avatar'
+        'ntsa_inspection_certificate_avatar',
+        'verified'
     ];
 
     protected $with = ['vehicle'];

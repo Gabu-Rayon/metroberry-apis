@@ -28,16 +28,17 @@ return new class extends Migration {
             $table->decimal('fuel_consumed', 8, 2)->nullable();
             $table->integer('idle_time')->nullable();
             $table->unsignedBigInteger('billing_rate_id')->nullable();
-            $table->unsignedBigInteger('billed_by')->nullable();
+            $table->unsignedBigInteger('biller')->nullable();
             $table->decimal('total_price', 8, 2)->nullable();
             $table->timestamp('billed_at')->nullable();
+            $table->enum('billed_by', ['distance', 'time', 'car_class'])->nullable();
             $table->timestamps();
 
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
             $table->foreign('vehicle_id')->references('id')->on('vehicles')->onDelete('cascade');
             $table->foreign('route_id')->references('id')->on('routes')->onDelete('cascade');
             $table->foreign('billing_rate_id')->references('id')->on('billing_rates')->onDelete('set null');
-            $table->foreign('billed_by')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('biller')->references('id')->on('users')->onDelete('set null');
         });
     }
 
