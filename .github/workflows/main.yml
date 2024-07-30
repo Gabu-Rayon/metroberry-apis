@@ -30,9 +30,6 @@ jobs:
       - name: Install Dependencies
         run: composer update --ignore-platform-reqs -vvv
 
-      - name: Set Permissions
-        run: php artisan db:seed --class=RoleAndPermissionSeeder
-
       - name: Directory Permissions
         run: chmod -R 777 storage bootstrap/cache
 
