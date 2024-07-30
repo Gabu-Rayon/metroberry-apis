@@ -46,7 +46,7 @@ class LanguageController extends Controller
         // return redirect()->back()->with('success', __('Language change successfully.'));
 
 
-           if (array_key_exists($lang, config('app.languages'))) {
+        if (array_key_exists($lang, config('app.languages'))) {
             Session::put('applocale', $lang);
         }
         return redirect()->back();
@@ -87,8 +87,6 @@ class LanguageController extends Controller
         } else {
             return redirect()->back()->with('error', __('Permission denied.'));
         }
-
-
     }
 
 
@@ -127,7 +125,6 @@ class LanguageController extends Controller
         } else {
             return redirect()->back();
         }
-
     }
 
     public function buildArray($fileData)
@@ -184,7 +181,6 @@ class LanguageController extends Controller
         } else {
             return redirect()->back();
         }
-
     }
 
     public function destroyLang($lang)
@@ -231,9 +227,6 @@ class LanguageController extends Controller
                 $data['message'] = __('Language Disabled Successfully');
                 $data['status'] = 'success';
                 return $data;
-
-
-
             } else {
                 $disablelang = $settings['disable_lang'];
                 $parts = explode(',', $disablelang);
@@ -252,9 +245,6 @@ class LanguageController extends Controller
                 $data['status'] = 'success';
                 return $data;
             }
-
         }
     }
-
-
 }
