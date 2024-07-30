@@ -32,14 +32,14 @@
                                                             </a>
                                                         @endif
                                                         <span class="m-1"></span>
-                                                        @if (Auth::user()->can('import driver psvbadges'))
+                                                        <!-- @if (Auth::user()->can('import driver psvbadges'))
                                                             <a class="btn btn-success btn-sm"
                                                                 href={{ route('driver.psvbadge.import') }} title="Import">
                                                                 <i class="fa-solid fa-file-import"></i>
                                                                 &nbsp;
                                                                 Import
                                                             </a>
-                                                        @endif
+                                                        @endif -->
                                                         <span class="m-1"></span>
                                                         @if (Auth::user()->can('create driver psvbadge'))
                                                             <button type="button" class="btn btn-success btn-sm"

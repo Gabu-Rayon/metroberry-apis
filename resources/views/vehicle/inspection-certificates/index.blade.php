@@ -36,7 +36,7 @@
                                                             </a>
                                                         @endif
                                                         <span class="m-1"></span>
-                                                        @if (Auth::user()->can('import vehicle inspection certificates'))
+                                                        <!-- @if (Auth::user()->can('import vehicle inspection certificates'))
                                                             <a class="btn btn-success btn-sm"
                                                                 href={{ route('vehicle.certificate.import') }}
                                                                 title="Import">
@@ -44,7 +44,7 @@
                                                                 &nbsp;
                                                                 Import
                                                             </a>
-                                                        @endif
+                                                        @endif -->
                                                         <span class="m-1"></span>
                                                         @if (Auth::user()->can('create vehicle inspection certificate'))
                                                             <button type="button" class="btn btn-success btn-sm"

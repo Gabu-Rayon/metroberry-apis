@@ -14,8 +14,8 @@ class UserSeeder extends Seeder
     {
 
         $adminData = [
-            'name' => 'Super Admin',
-            'email' => 'superadmin@example.com',
+            'name' => 'MetroBerry Admin',
+            'email' => 'admin@metroberry.co.ke',
             'password' => bcrypt('123456'),
             'phone' => '0708373982',
             'address' => 'Nairobi, Kenya',
