@@ -18,8 +18,8 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'  # Specify your PHP version
-          extensions: mbstring, mysqli, bcmath  # List any required PHP extensions
+          php-version: "8.2" # Specify your PHP version
+          extensions: mbstring, mysqli, bcmath # List any required PHP extensions
 
       - name: Install Composer
         run: |
@@ -40,6 +40,9 @@ jobs:
 
       - name: Generate key
         run: php artisan key:generate
+
+      - name: Set Permissions
+        run: php artisan db:seed --class=RoleAndPermissionSeeder
 
       - name: Directory Permissions
         run: chmod -R 777 storage bootstrap/cache
