@@ -9,14 +9,13 @@ use App\Models\Vehicle;
 use App\Models\Organisation;
 use App\Models\VehicleClass;
 use Illuminate\Http\Request;
-use App\Exports\VehicleExport;
-use App\Imports\VehicleImport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Validator;
+
+
 
 class VehicleController extends Controller
 {
@@ -130,7 +129,6 @@ class VehicleController extends Controller
             return back()->with('error', 'An error occurred while adding the vehicle. Please try again.')->withInput();
         }
     }
-
 
 
 
@@ -338,56 +336,6 @@ class VehicleController extends Controller
 
             // Find the existing vehicle record
             $vehicle = Vehicle::findOrFail($id);
-            
-            // Check if the vehicle exists
-            if (!$vehicle) {
-                return response()->json([
-                    'message' => 'Vehicle not found',
-                ], 404);
-            }
-
-            // Validate the request data
-            $data = $request->validate([
-                'make' => 'nullable|string',
-                'model' => 'nullable|string',
-                'year' => 'nullable|integer',
-                'color' => 'nullable|string',
-                'plate_number' => 'nullable|string',
-                'seats' => 'nullable|integer',
-                'fuel_type' => 'nullable|string',
-                'engine_size' => 'nullable|string',
-                'organisation_id' => 'nullable|integer',
-                'vehicle_insurance_issue_date' => 'nullable|date_format:Y-m-d',
-                'vehicle_insurance_expiry' => 'nullable|date_format:Y-m-d',
-                'vehicle_insurance_issue_organisation' => 'nullable|string',
-                'vehicle_avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            ]);
-
-            // Update the vehicle attributes if present in the request
-            if (isset($data['make']))
-                $vehicle->make = $data['make'];
-            if (isset($data['model']))
-                $vehicle->model = $data['model'];
-            if (isset($data['year']))
-                $vehicle->year = $data['year'];
-            if (isset($data['color']))
-                $vehicle->color = $data['color'];
-            if (isset($data['plate_number']))
-                $vehicle->plate_number = $data['plate_number'];
-            if (isset($data['seats']))
-                $vehicle->seats = $data['seats'];
-            if (isset($data['fuel_type']))
-                $vehicle->fuel_type = $data['fuel_type'];
-            if (isset($data['engine_size']))
-                $vehicle->engine_size = $data['engine_size'];
-            if (isset($data['organisation_id']))
-                $vehicle->organisation_id = $data['organisation_id'];
-            if (isset($data['vehicle_insurance_issue_date']))
-                $vehicle->vehicle_insurance_issue_date = $data['vehicle_insurance_issue_date'];
-            if (isset($data['vehicle_insurance_expiry']))
-                $vehicle->vehicle_insurance_expiry = $data['vehicle_insurance_expiry'];
-            if (isset($data['vehicle_insurance_issue_organisation']))
-                $vehicle->vehicle_insurance_issue_organisation = $data['vehicle_insurance_issue_organisation'];
 
             // Handle the file upload if a new file is provided
             if ($request->hasFile('vehicle_avatar')) {
@@ -425,7 +373,6 @@ class VehicleController extends Controller
                 $vehicle->driver_id = null;
             }
 
-            // Save the updated vehicle
             $vehicle->save();
 
             return redirect()->route('vehicle')->with('success', 'Vehicle updated successfully.');
@@ -522,74 +469,6 @@ class VehicleController extends Controller
     //         ], 500);
     //     }
     // }
-         
-    // public function update(Request $request, $vehicle)
-    // {
-    //     try {
-    //         // Log the incoming request data
-    //         Log::info('Request data for car being edited:', $request->all());
-
-    //         // Find the vehicle by its ID
-    //         $vehicleInstance = Vehicle::find($vehicle);
-
-    //         // Check if the vehicle exists
-    //         if (!$vehicleInstance) {
-    //             return response()->json([
-    //                 'message' => 'Vehicle not found',
-    //             ], 404);
-    //         }
-
-    //         // Validate the request data
-    //         $data = $request->validate([
-    //             'make' => 'nullable|string',
-    //             'model' => 'nullable|string',
-    //             'year' => 'nullable|integer',
-    //             'color' => 'nullable|string',
-    //             'plate_number' => 'nullable|string',
-    //             'seats' => 'nullable|integer',
-    //             'fuel_type' => 'nullable|string',
-    //             'engine_size' => 'nullable|string',
-    //             'organisation_id' => 'nullable|integer',
-    //             'vehicle_insurance_issue_date' => 'nullable|date_format:Y-m-d',
-    //             'vehicle_insurance_expiry' => 'nullable|date_format:Y-m-d',
-    //             'vehicle_insurance_issue_organisation' => 'nullable|string',
-    //             'vehicle_avatar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-    //         ]);
-
-    //         // Log the validated data
-    //         Log::info('Validated data for updating car:', $data);
-
-    //         // Update the vehicle attributes if present in the request
-    //         foreach ($data as $key => $value) {
-    //             if (!is_null($value)) {
-    //                 $vehicleInstance->$key = $value;
-    //             }
-    //         }
-
-    //         // Handle vehicle avatar update if provided
-    //         if ($request->hasFile('vehicle_avatar')) {
-    //             $avatarPath = $request->file('vehicle_avatar')->store('VehicleAvatars', 'public');
-    //             $vehicleInstance->vehicle_avatar = $avatarPath;
-    //         }
-
-    //         // Save the updated vehicle
-    //         $vehicleInstance->save();
-
-    //         // Return success response
-    //         return response()->json([
-    //             'message' => 'Vehicle updated successfully',
-    //             'vehicle' => $vehicleInstance
-    //         ], 200);
-
-    //     } catch (Exception $e) {
-    //         Log::error('Error occurred while updating vehicle: ' . $e->getMessage());
-    //         return response()->json([
-    //             'message' => 'Error occurred while updating vehicle',
-    //             'error' => $e->getMessage()
-    //         ], 500);
-    //     }
-    // }
-
 
     /**
      * Remove the specified resource from storage.
@@ -605,14 +484,6 @@ class VehicleController extends Controller
     {
         try {
             $vehicle = Vehicle::findOrFail($id);
-            $vehicle = Vehicle::find($id);
-
-            if (!$vehicle) {
-                return response()->json([
-                    'error' => 'Vehicle not found'
-                ], 404);
-            }
-
             $vehicle->delete();
             return redirect()->route('vehicle')->with('success', 'Vehicle deleted successfully.');
         } catch (Exception $e) {
@@ -717,7 +588,7 @@ class VehicleController extends Controller
         try {
             $vehicle = Vehicle::findOrFail($id);
             $drivers = Driver::where('status', 'active')
-                ->whereDoesntHave('vehicle')
+                ->whereNull('vehicle_id')
                 ->get();
             return view('vehicle.assign-driver', compact('vehicle', 'drivers'));
         } catch (Exception $e) {
@@ -828,58 +699,115 @@ class VehicleController extends Controller
         }
     }
 
-    public function export()
+    public function vehicleInsurance()
     {
-        $role = Auth::user()->role;
-        $organisation = null;
-
-        if ($role == 'organisation') {
-            $organisation = Organisation::where('user_id', Auth::user()->id)->first();
-        }
-
-        $export = new VehicleExport($role, $organisation);
-
-        return Excel::download($export, 'vehicles.xlsx');
+        return view('vehicle.insurance');
     }
 
-    public function importFile()
+    public function activateForm($id)
     {
-        return view('vehicle.vehicleImport');
-
+        $vehicle = Vehicle::findOrfail($id);
+        return view('vehicle.activate', compact('vehicle'));
     }
 
-    // Handle the import of the file
-    public function import(Request $request)
+
+    public function activate($id)
     {
-        // Validation rules
-        $rules = [
-            'file' => 'required|mimes:csv,txt,xlsx',
-        ];
-
-        // Validate the request
-        $validator = Validator::make($request->all(), $rules);
-
-        // If validation fails, redirect back with error message
-        if ($validator->fails()) {
-            return redirect()->back()->with('error', $validator->errors()->first());
-        }
-
         try {
-            // Import the file using the DriverImport class
-            Excel::import(new VehicleImport, $request->file('file'));
+            // Fetch the vehicle with its insurance and inspection certificates details
+            $vehicle = Vehicle::with(['insurance', 'inspectionCertificates'])->findOrFail($id);
 
-            // Log the import action
-            Log::info('data from Vehicle CSV File being Imported : ');
-            Log::info($request->file('file'));
+            Log::info('VEHICLE');
+            Log::info($vehicle);
 
-            // Redirect back with success message
-            return redirect()->back()->with('success', 'Records imported successfully.');
+            // Check if the vehicle is already active
+            if ($vehicle->status == 'active') {
+                return redirect()->back()->with('error', 'Vehicle is already active');
+            }
+
+            // Validate insurance details
+            $insurance = $vehicle->insurance;
+            if (!$insurance) {
+                return redirect()->back()->with('error', 'Vehicle has no insurance');
+            }
+
+            $today = now()->toDateString();
+            if ($today < $insurance->insurance_date_of_issue || $today > $insurance->insurance_date_of_expiry) {
+                return redirect()->back()->with('error', 'Insurance is not valid today');
+            }
+
+            if ($insurance->status != 1) {
+                return redirect()->back()->with('error', 'Insurance is not active');
+            }
+
+            // Validate inspection certificates
+            $inspectionCertificates = $vehicle->inspectionCertificates;
+            if ($inspectionCertificates->isEmpty()) {
+                return redirect()->back()->with('error', 'Vehicle has no inspection certificate');
+            }
+
+            $validCertificateFound = false;
+            foreach ($inspectionCertificates as $certificate) {
+                if ($today >= $certificate->ntsa_inspection_certificate_date_of_issue && $today <= $certificate->ntsa_inspection_certificate_date_of_expiry && $certificate->verified == 1) {
+                    $validCertificateFound = true;
+                    break;
+                }
+            }
+
+            if (!$validCertificateFound) {
+                return redirect()->back()->with('error', 'No valid and active inspection certificate found');
+            }
+
+            // Activate the vehicle
+            DB::beginTransaction();
+
+            $vehicle->status = 'active';
+            $vehicle->save();
+
+            DB::commit();
+
+            return redirect()->route('vehicle')->with('success', 'Vehicle activated successfully');
         } catch (Exception $e) {
-            // Log the error
-            Log::error('Error importing Vehicle: ' . $e->getMessage());
+            DB::rollBack();
+            Log::error('ACTIVATE VEHICLE ERROR');
+            Log::error($e);
+            return redirect()->back()->with('error', 'An error occurred while activating the vehicle');
+        }
+    }
 
-            // Redirect back with error message
-            return redirect()->back()->with('error', 'An error occurred while importing the Vehicle records.');
+
+
+    public function deactivateForm($id)
+    {
+        $vehicle = Vehicle::findOrfail($id);
+        return view('vehicle.deactivate', compact('vehicle'));
+    }
+
+
+    public function deactivate($id)
+    {
+        try {
+
+            $vehicle = Vehicle::findOrfail($id);
+
+            if ($vehicle->status == 'inactive') {
+                return redirect()->back()->with('error', 'Vehicle is already inactive');
+            }
+
+            DB::beginTransaction();
+
+            $vehicle->status = 'inactive';
+
+            $vehicle->save();
+
+            DB::commit();
+
+            return redirect()->route('vehicle')->with('success', 'Vehicle deactivated successfully');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('VEHICLE DRIVER ERROR');
+            Log::error($e);
+            return redirect()->back()->with('error', 'An error occurred');
         }
     }
 }
