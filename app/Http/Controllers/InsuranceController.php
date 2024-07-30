@@ -14,7 +14,7 @@ class InsuranceController extends Controller
      */
     public function store(Request $request, $vehicleId)
     {
-       //
+        //
     }
 
     /**
@@ -23,7 +23,7 @@ class InsuranceController extends Controller
     public function update(Request $request, $vehicleId)
     {
         try {
-            Log::info("Request for Updating vehicle Insurance : " .$request);
+            Log::info("Request for Updating vehicle Insurance : " . $request);
             // Find the vehicle by its ID
             $vehicle = Vehicle::findOrFail($vehicleId);
 
@@ -35,7 +35,7 @@ class InsuranceController extends Controller
                 'vehicle_insurance_expiry' => 'nullable|date_format:Y-m-d',
                 'vehicle_insurance_issue_organisation' => 'nullable|string',
             ]);
-            
+
 
             // Update vehicle insurance details
             $vehicle->update([
@@ -49,7 +49,6 @@ class InsuranceController extends Controller
                 'message' => 'Vehicle Insurance updated successfully',
                 'vehicle' => $vehicle
             ], 200);
-
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             Log::error('Vehicle not found with ID: ' . $vehicleId);
             return response()->json([

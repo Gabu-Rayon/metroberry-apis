@@ -253,11 +253,12 @@ class VehicleInsuranceController extends Controller
      */
     public function delete($id)
     {
+        Log::info('HAPA');
         try {
             $insurance = VehicleInsurance::findOrFail($id);
             return view('vehicle.insurance.delete', compact('insurance'));
         } catch (Exception $e) {
-            Log::error('Error fetching vehicle insurance for delete: ' . $e->getMessage());
+            Log::error('Error fetching vehicle insurance for delete: ' . $e);
             return redirect()->back()->with('error', 'An error occurred while fetching the insurance details. Please try again.');
         }
     }

@@ -24,6 +24,9 @@ jobs:
       - name: Update Composer Packages
         run: composer update
 
+      - name: Copy .env file
+        run: cp .env.example .env
+
       - name: Clear Composer cache
         run: composer clear-cache
 
