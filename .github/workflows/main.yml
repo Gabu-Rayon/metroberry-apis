@@ -21,22 +21,14 @@ jobs:
           php-version: "8.2" # Specify your PHP version
           extensions: mbstring, mysqli, bcmath # List any required PHP extensions
 
-      - name: Install Composer
-        run: |
-          php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-          php -r "if (hash_file('sha384', 'composer-setup.php') === 'dac665fdc30fdd8ec78b38b9800061b4150413ff2e3b6f88543c636f7cd84f6db9189d43a81e5503cda447da73c7e5b6') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-          php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-          php -r "unlink('composer-setup.php');"
-          composer --version  # Verify installation
+      - name: Update Composer Packages
+        run: composer update
 
       - name: Clear Composer cache
         run: composer clear-cache
 
       - name: Install Dependencies
         run: composer update --ignore-platform-reqs -vvv
-
-      - name: Generate key
-        run: php artisan key:generate
 
       - name: Set Permissions
         run: php artisan db:seed --class=RoleAndPermissionSeeder
