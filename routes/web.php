@@ -1586,31 +1586,31 @@ Route::post('/admin/role/store', [RoleController::class, 'store'])->name('permis
 
 Route::get('/metro-berry/accounting-setting', [AccountingSettingController::class, 'index'])
     ->name('metro.berry.account.setting')
-    ->middleware('auth', 'can:view accounting setting');
+    ->middleware('auth', 'can:manage bank accounts');
 
 Route::get('/accounting-setting/create', [AccountingSettingController::class, 'create'])
     ->name('metro.berry.account.setting.create')
-    ->middleware('auth', 'can:create accounting setting');
+    ->middleware('auth', 'can:create bank account');
 
 Route::post('/accounting-setting/store', [AccountingSettingController::class, 'store'])
     ->name('metro.berry.account.setting.store')
-    ->middleware('auth', 'can:create accounting setting');
+    ->middleware('auth', 'can:create bank account');
 
 Route::get('/accounting-setting/{id}/edit', [AccountingSettingController::class, 'edit'])
     ->name('metro.berry.account.setting.edit')
-    ->middleware('auth', 'can:edit accounting setting');
+    ->middleware('auth', 'can:edit bank account');
 
 Route::put('/accounting-setting/{id}/update', [AccountingSettingController::class, 'update'])
     ->name('metro.berry.account.setting.update')
-    ->middleware('auth', 'can:edit accounting setting');
+    ->middleware('auth', 'can:edit bank account');
 
 Route::get('/accounting-setting/{id}/delete', [AccountingSettingController::class, 'delete'])
     ->name('metro.berry.account.setting.delete')
-    ->middleware('auth', 'can:delete accounting setting');
+    ->middleware('auth', 'can:delete bank account');
 
 Route::delete('/accounting-setting/{id}/destroy', [AccountingSettingController::class, 'destroy'])
     ->name('metro.berry.account.setting.destroy')
-    ->middleware('auth', 'can:delete accounting setting');
+    ->middleware('auth', 'can:delete bank account');
 
 /**
  * 
@@ -1647,77 +1647,77 @@ Route::get('billed/trip/{id}/download/invoice', [TripPaymentController::class, '
 //Fueling
 Route::get('/settings/fueling', [SettingsController::class, 'fuelingSetting'])
     ->name('settings.fueling')
-    ->middleware('auth', 'can:view accounting setting');
+    ->middleware('auth', 'can:manage bank accounts');
 
 
 Route::any('/settings/fueling/update', [SettingsController::class, 'fuelingSettingUpdate'])
     ->name('fuel.setting.update')
-    ->middleware('auth', 'can:view accounting setting');
+    ->middleware('auth', 'can:manage bank accounts');
 
 //maintenance
 Route::get('/settings/maintenance', [SettingsController::class, 'maintenanceSetting'])
     ->name('settings.maintenance')
-    ->middleware('auth', 'can:view accounting setting');
+    ->middleware('auth', 'can:manage bank accounts');
 
 Route::any('/settings/maintenance/update', [SettingsController::class, 'maintenanceSettingUpdate'])
     ->name('settings.maintenance.update')
-    ->middleware('auth', 'can:view accounting setting');
+    ->middleware('auth', 'can:manage bank accounts');
 
 //General
 Route::get('/settings/general', [SettingsController::class, 'generalSetting'])
     ->name('settings.general')
-    ->middleware('auth', 'can:view accounting setting');
+    ->middleware('auth', 'can:manage bank accounts');
 
 //Env
 Route::get('/settings/env', [EnviromentController::class, 'envSetting'])
     ->name('settings.env')
-    ->middleware('auth', 'can:view accounting setting');
+    ->middleware('auth', 'can:manage bank accounts');
 
 Route::any('/settings/env/update', [EnviromentController::class, 'envSettingUpdate'])
     ->name('settings.env.update')
-    ->middleware('auth', 'can:view accounting setting');
+    ->middleware('auth', 'can:manage bank accounts');
 
 //Language
 Route::get('/settings/language', [SettingsController::class, 'languageSetting'])
     ->name('settings.language')
-    ->middleware('auth', 'can:view accounting setting');
+    ->middleware('auth', 'can:manage bank accounts');
 
 Route::get('change-language/{lang}', [LanguageController::class, 'changeLanquage'])
     ->name('change.language')
-    ->middleware('auth', 'can:view accounting setting');
+    ->middleware('auth', 'can:manage bank accounts');
 
 Route::get('manage-language/{lang}', [LanguageController::class, 'manageLanguage'])
     ->name('manage.language')
-    ->middleware('auth', 'can:view accounting setting');
+    ->middleware('auth', 'can:manage bank accounts');
 
 Route::post('store-language-data/{lang}', [LanguageController::class, 'storeLanguageData'])
     ->name('store.language.data')
-    ->middleware('auth', 'can:view accounting setting');
+    ->middleware('auth', 'can:manage bank accounts');
 
 Route::get('create-language', [LanguageController::class, 'createLanguage'])
     ->name('create.language')
-    ->middleware('auth', 'can:view accounting setting');
+    ->middleware('auth', 'can:manage bank accounts');
 
 Route::any('store-language', [LanguageController::class, 'storeLanguage'])
     ->name('store.language')
-    ->middleware('auth', 'can:view accounting setting');
+    ->middleware('auth', 'can:manage bank accounts');
 
 Route::delete('/lang/{lang}', [LanguageController::class, 'destroyLang'])
     ->name('lang.destroy')
-    ->middleware('auth', 'can:view accounting setting');
+    ->middleware('auth', 'can:manage bank accounts');
 
 //Mail settings/mail
 Route::get('/settings/mail', [MetroBerryMailSettings::class, 'mailSetting'])
     ->name('settings.mail')
-    ->middleware('auth', 'can:view accounting setting');
+    ->middleware('auth', 'can:manage bank accounts');
 Route::any('/settings/mail/update', [MetroBerryMailSettings::class, 'mailSettingUpdate'])
     ->name('settings.mail.update')
-    ->middleware('auth', 'can:view accounting setting');
+    ->middleware('auth', 'can:manage bank accounts');
 
 Route::get('/settings/site', [SettingsController::class, 'siteSetting'])
     ->name('settings.site')
-    ->middleware('auth', 'can:view accounting setting');
+    ->middleware('auth', 'can:manage bank accounts');
 
 Route::any('/settings/site/update', [SettingsController::class, 'siteSettingUpdate'])
     ->name('settings.site.update')
-    ->middleware('auth', 'can:view accounting setting');
+    ->middleware('auth', 'can:manage bank accounts');
