@@ -40,7 +40,10 @@
 
                     <ul class="list-unstyled mt-3 dropdown_menu_inner">
                         <li class="w-100">
-                            <a class="d-block w-100" href="{{ route('profile.edit') }}">My Profile</a>
+                            <a class="d-block w-100" href="{{ route('profile.show') }}">My Profile</a>
+                        </li>
+                        <li class="w-100">
+                            <a class="d-block w-100" href="{{ route('profile.edit') }}">Edit Profile</a>
                         </li>
                         <li class="w-100">
                             <form method="POST" action="{{ route('logout') }}" class="d-inline">
