@@ -1645,38 +1645,79 @@ Route::get('billed/trip/{id}/download/invoice', [TripPaymentController::class, '
 //  Update Settings
 
 //Fueling
-Route::get('/settings/fueling', [SettingsController::class, 'fuelingSetting'])->name('settings.fueling');
-Route::any('/settings/fueling/update', [SettingsController::class, 'fuelingSettingUpdate'])->name('fuel.setting.update');
+Route::get('/settings/fueling', [SettingsController::class, 'fuelingSetting'])
+    ->name('settings.fueling')
+    ->middleware('auth', 'can:view accounting setting');
+
+
+Route::any('/settings/fueling/update', [SettingsController::class, 'fuelingSettingUpdate'])
+    ->name('fuel.setting.update')
+    ->middleware('auth', 'can:view accounting setting');
 
 //maintenance
-Route::get('/settings/maintenance', [SettingsController::class, 'maintenanceSetting'])->name('settings.maintenance');
-Route::any('/settings/maintenance/update', [SettingsController::class, 'maintenanceSettingUpdate'])->name('settings.maintenance.update');
+Route::get('/settings/maintenance', [SettingsController::class, 'maintenanceSetting'])
+    ->name('settings.maintenance')
+    ->middleware('auth', 'can:view accounting setting');
+
+Route::any('/settings/maintenance/update', [SettingsController::class, 'maintenanceSettingUpdate'])
+    ->name('settings.maintenance.update')
+    ->middleware('auth', 'can:view accounting setting');
 
 //General
-Route::get('/settings/general', [SettingsController::class, 'generalSetting'])->name('settings.general');
+Route::get('/settings/general', [SettingsController::class, 'generalSetting'])
+    ->name('settings.general')
+    ->middleware('auth', 'can:view accounting setting');
 
 //Env
-Route::get('/settings/env', [EnviromentController::class, 'envSetting'])->name('settings.env');
-Route::any('/settings/env/update', [EnviromentController::class, 'envSettingUpdate'])->name('settings.env.update');
+Route::get('/settings/env', [EnviromentController::class, 'envSetting'])
+    ->name('settings.env')
+    ->middleware('auth', 'can:view accounting setting');
+
+Route::any('/settings/env/update', [EnviromentController::class, 'envSettingUpdate'])
+    ->name('settings.env.update')
+    ->middleware('auth', 'can:view accounting setting');
 
 //Language
-Route::get('/settings/language', [SettingsController::class, 'languageSetting'])->name('settings.language');
+Route::get('/settings/language', [SettingsController::class, 'languageSetting'])
+    ->name('settings.language')
+    ->middleware('auth', 'can:view accounting setting');
 
-Route::get('change-language/{lang}', [LanguageController::class, 'changeLanquage'])->name('change.language');
+Route::get('change-language/{lang}', [LanguageController::class, 'changeLanquage'])
+    ->name('change.language')
+    ->middleware('auth', 'can:view accounting setting');
 
-Route::get('manage-language/{lang}', [LanguageController::class, 'manageLanguage'])->name('manage.language');
+Route::get('manage-language/{lang}', [LanguageController::class, 'manageLanguage'])
+    ->name('manage.language')
+    ->middleware('auth', 'can:view accounting setting');
 
-Route::post('store-language-data/{lang}', [LanguageController::class, 'storeLanguageData'])->name('store.language.data');
+Route::post('store-language-data/{lang}', [LanguageController::class, 'storeLanguageData'])
+    ->name('store.language.data')
+    ->middleware('auth', 'can:view accounting setting');
 
-Route::get('create-language', [LanguageController::class, 'createLanguage'])->name('create.language');
+Route::get('create-language', [LanguageController::class, 'createLanguage'])
+    ->name('create.language')
+    ->middleware('auth', 'can:view accounting setting');
 
-Route::any('store-language', [LanguageController::class, 'storeLanguage'])->name('store.language');
+Route::any('store-language', [LanguageController::class, 'storeLanguage'])
+    ->name('store.language')
+    ->middleware('auth', 'can:view accounting setting');
 
-Route::delete('/lang/{lang}', [LanguageController::class, 'destroyLang'])->name('lang.destroy');
+Route::delete('/lang/{lang}', [LanguageController::class, 'destroyLang'])
+    ->name('lang.destroy')
+    ->middleware('auth', 'can:view accounting setting');
 
 //Mail settings/mail
-Route::get('/settings/mail', [MetroBerryMailSettings::class, 'mailSetting'])->name('settings.mail');
-Route::any('/settings/mail/update', [MetroBerryMailSettings::class, 'mailSettingUpdate'])->name('settings.mail.update');
+Route::get('/settings/mail', [MetroBerryMailSettings::class, 'mailSetting'])
+    ->name('settings.mail')
+    ->middleware('auth', 'can:view accounting setting');
+Route::any('/settings/mail/update', [MetroBerryMailSettings::class, 'mailSettingUpdate'])
+    ->name('settings.mail.update')
+    ->middleware('auth', 'can:view accounting setting');
 
-Route::get('/settings/site', [SettingsController::class, 'siteSetting'])->name('settings.site');
-Route::any('/settings/site/update', [SettingsController::class, 'siteSettingUpdate'])->name('settings.site.update');
+Route::get('/settings/site', [SettingsController::class, 'siteSetting'])
+    ->name('settings.site')
+    ->middleware('auth', 'can:view accounting setting');
+
+Route::any('/settings/site/update', [SettingsController::class, 'siteSettingUpdate'])
+    ->name('settings.site.update')
+    ->middleware('auth', 'can:view accounting setting');
