@@ -18,9 +18,11 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\EnviromentController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\TripPaymentController;
 use App\Http\Controllers\VehiclePartController;
+use App\Http\Controllers\MetroBerryMailSettings;
 use App\Http\Controllers\OrganisationController;
 use App\Http\Controllers\RepairCategoryController;
 use App\Http\Controllers\RouteLocationsController;
@@ -802,35 +804,7 @@ Route::get('billed/trip/{id}/send/invoice', [TripPaymentController::class, 'bill
     ->name('billed.trip.send.invoice')
     ->middleware('auth', 'can:send trip invoice');
 
-
-
-
-
-
 // All Routes
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])
@@ -1672,18 +1646,18 @@ Route::get('billed/trip/{id}/download/invoice', [TripPaymentController::class, '
 
 //Fueling
 Route::get('/settings/fueling', [SettingsController::class, 'fuelingSetting'])->name('settings.fueling');
-Route::put('/settings/fueling/update', [SettingsController::class, 'fuelingSettingUpdate'])->name('fuel.setting.update');
+Route::any('/settings/fueling/update', [SettingsController::class, 'fuelingSettingUpdate'])->name('fuel.setting.update');
 
 //maintenance
 Route::get('/settings/maintenance', [SettingsController::class, 'maintenanceSetting'])->name('settings.maintenance');
-Route::put('/settings/maintenance/update', [SettingsController::class, 'maintenanceSettingUpdate'])->name('settings.maintenance.update');
+Route::any('/settings/maintenance/update', [SettingsController::class, 'maintenanceSettingUpdate'])->name('settings.maintenance.update');
 
 //General
 Route::get('/settings/general', [SettingsController::class, 'generalSetting'])->name('settings.general');
 
 //Env
-Route::get('/settings/env', [SettingsController::class, 'envSetting'])->name('settings.env');
-Route::put('/settings/env/update', [SettingsController::class, 'envSettingUpdate'])->name('settings.env.update');
+Route::get('/settings/env', [EnviromentController::class, 'envSetting'])->name('settings.env');
+Route::any('/settings/env/update', [EnviromentController::class, 'envSettingUpdate'])->name('settings.env.update');
 
 //Language
 Route::get('/settings/language', [SettingsController::class, 'languageSetting'])->name('settings.language');
@@ -1700,9 +1674,9 @@ Route::any('store-language', [LanguageController::class, 'storeLanguage'])->name
 
 Route::delete('/lang/{lang}', [LanguageController::class, 'destroyLang'])->name('lang.destroy');
 
-//Mail
-Route::get('/settings/mail', [SettingsController::class, 'mailSetting'])->name('settings.mail');
-Route::put('/settings/mail/update', [SettingsController::class, 'mailSettingUpdate'])->name('settings.mail.update');
+//Mail settings/mail
+Route::get('/settings/mail', [MetroBerryMailSettings::class, 'mailSetting'])->name('settings.mail');
+Route::any('/settings/mail/update', [MetroBerryMailSettings::class, 'mailSettingUpdate'])->name('settings.mail.update');
 
 Route::get('/settings/site', [SettingsController::class, 'siteSetting'])->name('settings.site');
-Route::put('/settings/site/update', [SettingsController::class, 'siteSettingUpdate'])->name('settings.site.update');
+Route::any('/settings/site/update', [SettingsController::class, 'siteSettingUpdate'])->name('settings.site.update');
