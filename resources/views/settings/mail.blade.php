@@ -36,91 +36,120 @@
                                                 </div>
                                             </div>
                                             <div class="card-body">
-                                                <form action="admin/setting/mail" method="POST"
-                                                    enctype="multipart/form-data">
-                                                    @METHOD('POST')
+                                                <form action="{{ route('settings.mail.update') }}" method="POST">
                                                     @csrf
+
+                                                    <div class="alert alert-warning">
+                                                        <p>
+                                                            <strong>Note: </strong>
+                                                            Any changes you make will directly affect your app's environment
+                                                            and email process. This could cause your app to crash, so please
+                                                            exercise caution with every modification.
+                                                        </p>
+                                                    </div>
+
                                                     <div class="row">
                                                         <div class="col-12">
                                                             <div class="form-group mb-3">
-                                                                <label for="MAIL_MAILER">Mail mailer</label>
-                                                                <select name="MAIL_MAILER" id="MAIL_MAILER"
+                                                                <label for="mail_mailer">Mail mailer</label>
+                                                                <select name="mail_mailer" id="mail_mailer"
                                                                     class="form-control">
-                                                                    <option value="smtp" selected>SMTP</option>
-                                                                    <option value="sendmail">Sendmail</option>
-                                                                    <option value="mailgun">Mailgun</option>
-                                                                    <option value="ses">SES</option>
-                                                                    <option value="postmark">Postmark</option>
-                                                                    <option selected value="log">Log</option>
-                                                                    <option value="array">Array</option>
-                                                                    <option value="failover">Failover</option>
+                                                                    <option value="smtp"
+                                                                        {{ env('MAIL_MAILER') === 'smtp' ? 'selected' : '' }}>
+                                                                        SMTP</option>
+                                                                    <option value="sendmail"
+                                                                        {{ env('MAIL_MAILER') === 'sendmail' ? 'selected' : '' }}>
+                                                                        Sendmail</option>
+                                                                    <option value="mailgun"
+                                                                        {{ env('MAIL_MAILER') === 'mailgun' ? 'selected' : '' }}>
+                                                                        Mailgun</option>
+                                                                    <option value="ses"
+                                                                        {{ env('MAIL_MAILER') === 'ses' ? 'selected' : '' }}>
+                                                                        SES</option>
+                                                                    <option value="postmark"
+                                                                        {{ env('MAIL_MAILER') === 'postmark' ? 'selected' : '' }}>
+                                                                        Postmark</option>
+                                                                    <option value="log"
+                                                                        {{ env('MAIL_MAILER') === 'log' ? 'selected' : '' }}>
+                                                                        Log</option>
+                                                                    <option value="array"
+                                                                        {{ env('MAIL_MAILER') === 'array' ? 'selected' : '' }}>
+                                                                        Array</option>
+                                                                    <option value="failover"
+                                                                        {{ env('MAIL_MAILER') === 'failover' ? 'selected' : '' }}>
+                                                                        Failover</option>
                                                                 </select>
                                                             </div>
                                                         </div>
                                                         <div class="col-12">
                                                             <div class="form-group mb-3">
-                                                                <label for="MAIL_HOST">Mail host</label>
-                                                                <input type="text" class="form-control " id="MAIL_HOST"
-                                                                    name="MAIL_HOST" placeholder="Mail host name"
-                                                                    value="sandbox.smtp.mailtrap.io">
+                                                                <label for="mail_host">Mail host</label>
+                                                                <input type="text" class="form-control" id="mail_host"
+                                                                    name="mail_host" placeholder="Mail host name"
+                                                                    value="{{ env('MAIL_HOST') }}">
                                                             </div>
                                                         </div>
 
                                                         <div class="col-12">
                                                             <div class="form-group mb-3">
-                                                                <label for="MAIL_PORT">Mail port</label>
+                                                                <label for="mail_port">Mail port</label>
                                                                 <input type="number" class="form-control arrow-hidden"
-                                                                    id="MAIL_PORT" name="MAIL_PORT"
-                                                                    placeholder="Mail port number" value="2525">
+                                                                    id="mail_port" name="mail_port"
+                                                                    placeholder="Mail port number"
+                                                                    value="{{ env('MAIL_PORT') }}">
                                                             </div>
                                                         </div>
 
                                                         <div class="col-12">
                                                             <div class="form-group mb-3">
-                                                                <label for="MAIL_USERNAME">Mail username</label>
-                                                                <input type="text" class="form-control "
-                                                                    id="MAIL_USERNAME" name="MAIL_USERNAME"
-                                                                    placeholder="Mail username" value="">
+                                                                <label for="mail_username">Mail username</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="mail_username" name="mail_username"
+                                                                    placeholder="Mail username"
+                                                                    value="{{ env('MAIL_USERNAME') }}">
                                                             </div>
                                                         </div>
 
                                                         <div class="col-12">
                                                             <div class="form-group mb-3">
-                                                                <label for="MAIL_PASSWORD">Mail password</label>
-                                                                <input type="password" class="form-control "
-                                                                    id="MAIL_PASSWORD" name="MAIL_PASSWORD"
-                                                                    placeholder="Mail password" value="">
+                                                                <label for="mail_password">Mail password</label>
+                                                                <input type="password" class="form-control"
+                                                                    id="mail_password" name="mail_password"
+                                                                    placeholder="Mail password"
+                                                                    value="{{ env('MAIL_PASSWORD') }}">
                                                             </div>
                                                         </div>
 
                                                         <div class="col-12">
                                                             <div class="form-group mb-3">
-                                                                <label for="MAIL_FROM_ADDRESS">Sender email address</label>
-                                                                <div class="form-group">
-                                                                    <input type="text" class="form-control "
-                                                                        id="MAIL_FROM_ADDRESS" name="MAIL_FROM_ADDRESS"
-                                                                        placeholder="Sender email address"
-                                                                        value="hello@example.com">
-                                                                </div>
+                                                                <label for="mail_from_address">Sender email address</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="mail_from_address" name="mail_from_address"
+                                                                    placeholder="Sender email address"
+                                                                    value="{{ env('MAIL_FROM_ADDRESS') }}">
                                                             </div>
                                                         </div>
 
                                                         <div class="col-12">
                                                             <div class="form-group mb-3">
-                                                                <label for="MAIL_FROM_NAME">Sender name</label>
-                                                                <input type="text" class="form-control "
-                                                                    id="MAIL_FROM_NAME" name="MAIL_FROM_NAME"
-                                                                    placeholder="Sender name" value="${APP_NAME}">
+                                                                <label for="mail_from_name">Sender name</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="mail_from_name" name="mail_from_name"
+                                                                    placeholder="Sender name" value="${APP_NAME}" readonly>
                                                             </div>
                                                         </div>
 
                                                         <div class="col-12">
                                                             <div class="form-group mb-3">
-                                                                <label for="MAIL_ENCRYPTION">Mail encryption</label>
-                                                                <select id="MAIL_ENCRYPTION" name="MAIL_ENCRYPTION"
+                                                                <label for="mail_encryption">Mail encryption</label>
+                                                                <select id="mail_encryption" name="mail_encryption"
                                                                     class="form-control">
-                                                                    <option selected value="tls">TLS</option>
-                                                                    <option value="ssl" selected="">SSL</option>
+                                                                    <option value="tls"
+                                                                        {{ env('MAIL_ENCRYPTION') === 'tls' ? 'selected' : '' }}>
+                                                                        TLS</option>
+                                                                    <option value="ssl"
+                                                                        {{ env('MAIL_ENCRYPTION') === 'ssl' ? 'selected' : '' }}>
+                                                                        SSL</option>
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -130,7 +159,6 @@
                                                             <button type="submit" class="btn btn-success">Save</button>
                                                         </div>
                                                     </div>
-
                                                 </form>
                                             </div>
                                         </div>
@@ -140,36 +168,10 @@
                         </div>
                     </div>
                     <div class="overlay"></div>
-                     @include('components.footer')
+                    @include('components.footer')
                 </div>
             </div>
             <!--end  vue page -->
         </div>
         <!-- END layout-wrapper -->
-
-        <!-- Modal -->
-        <div class="modal fade" id="delete-modal" data-bs-keyboard="false" tabindex="-1" data-bs-backdrop="true"
-            aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Delete modal</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="javascript:void(0);" class="needs-validation" id="delete-modal-form">
-                            <div class="modal-body">
-                                <p>Are you sure you want to delete this item? you won t be able to revert this item back!
-                                </p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
-                                <button class="btn btn-danger" type="submit" id="delete_submit">Delete</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- start scripts -->
     @endsection

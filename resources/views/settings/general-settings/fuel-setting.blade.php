@@ -26,70 +26,42 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="card mb-4 p-5">
-                                            <form action="{{ route('fuel.setting.update') }}" method="POST" enctype="multipart/form-data">
-                                                @METHOD('PUT')
-                                                @csrf
+                                          <form action="{{ route('fuel.setting.update') }}" method="POST" enctype="multipart/form-data">
+    @csrf
 
-                                                <div>
-                                                    <fieldset>
-                                                        <legend>Station Code Prefix</legend>
-                                                        <div class="d-flex justify-content-between">
-                                                            <div class="panel-heading my-2">
-                                                                <code
-                                                                    class="badge badge-pill badge-info text-light setting_key">setting('fuel.station_code_prefix')</code>
-                                                                <a href="javascript:void(0);"
-                                                                    class="panel-action-btn clipboard"
-                                                                    data-clipboard-text="setting('fuel.station_code_prefix')">
-                                                                    <svg width="18px" version="1.1"
-                                                                        xmlns="http://www.w3.org/2000/svg"
-                                                                        xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
-                                                                        y="0px" viewBox="0 0 1000 1000"
-                                                                        enable-background="new 0 0 1000 1000"
-                                                                        xml:space="preserve">
-                                                                        <g>
-                                                                            <g>
-                                                                                <path
-                                                                                    d="M761.3,924.7H108v-588h653.3v196h65.3V206c0-35.7-29.6-65.3-65.3-65.3h-196C565.3,68.2,507.1,10,434.7,10C362.2,10,304,68.2,304,140.7H108c-35.7,0-65.3,29.6-65.3,65.3v718.7c0,35.7,29.6,65.3,65.3,65.3h653.3c35.7,0,65.3-29.6,65.3-65.3V794h-65.3V924.7z M238.7,206c29.6,0,29.6,0,65.3,0s65.3-29.6,65.3-65.3c0-35.7,29.6-65.3,65.3-65.3c35.7,0,65.3,29.6,65.3,65.3c0,35.7,32.7,65.3,65.3,65.3c32.7,0,33.7,0,65.3,0s65.3,29.6,65.3,65.3H173.3C173.3,231.5,201.9,206,238.7,206z M173.3,728.7H304v-65.3H173.3V728.7z M630.7,598V467.3l-261.3,196l261.3,196V728.7h326.7V598H630.7z M173.3,859.3h196V794h-196V859.3z M500,402H173.3v65.3H500V402z M304,532.7H173.3V598H304V532.7z" />
-                                                                            </g>
-                                                                        </g>
-                                                                    </svg>
-                                                                </a>
-                                                            </div>
-                                                            <div class="panel-actions">
-                                                                <a href="admin/setting/8/move-down" class="panel-action-btn"
-                                                                    title="Move Down">
-                                                                    <img
-                                                                        src="../../../nanopkg-assets/image/setting/arrow-down.svg?v=1">
+    <div>
+        <fieldset>
+            <legend>Station Code Prefix</legend>
+            <div class="panel-body mt-1 mb-3">
+                <div class="row">
+                    <div class="col-md-12">
+                        <input id="station_code_prefix" class="form-control" type="text"
+                            placeholder="Setting Station Code Prefix"
+                            name="station_code_prefix" value="{{ old('station_code_prefix', $station_code_prefix) }}" />
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div>
+        <fieldset>
+            <legend>Station Requestion Code Prefix</legend>
+            <div class="panel-body mt-1 mb-3">
+                <div class="row">
+                    <div class="col-md-12">
+                        <input id="station_requisition_prefix" class="form-control" type="text"
+                            placeholder="Setting Station Requestion Code Prefix"
+                            name="station_requisition_prefix" value="{{ old('station_requisition_prefix', $station_requisition_prefix) }}" />
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="d-flex justify-content-end mt-5">
+        <button type="submit" class="btn btn-success">Save settings</button>
+    </div>
+</form>
 
-                                                                </a>
-                                                                <a href="admin/setting/8/move-up" class="panel-action-btn"
-                                                                    title="Move Up">
-                                                                    <img
-                                                                        src="../../../nanopkg-assets/image/setting/arrow-up.svg?v=1">
-
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                        <div class="panel-body mt-1 mb-3">
-                                                            <div class="row">
-                                                                <div class="col-md-12">
-                                                                    <input id="fuel.station_code_prefix"
-                                                                        class="form-control" type="text"
-                                                                        placeholder="Setting Station Code Prefix"
-                                                                        name="fuel_station_prefix" id="fuel_station_prefix" value="FSC-" />
-                                                                    <div class="my-1">
-
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </fieldset>
-                                                </div>
-                                                <div class="d-flex justify-content-end mt-5">
-                                                    <button type="submit" class="btn btn-success">Save settings</button>
-                                                </div>
-
-                                            </form>
                                             <span id="media-upload-url"
                                                 data-file-upload-url="admin/setting/file-upload"></span>
                                         </div>

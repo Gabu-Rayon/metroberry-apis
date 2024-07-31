@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Enviroment Setting')
+@section('title', 'Environment Setting')
 @section('content')
 
     <body class="fixed sidebar-mini">
@@ -32,86 +32,84 @@
                                                     <div>
                                                         <h6 class="fs-17 fw-semi-bold mb-0">Env setting</h6>
                                                     </div>
-
                                                 </div>
                                             </div>
                                             <div class="card-body">
-                                                <form action="admin/setting/env" method="POST"
+                                                <form action="{{ route('settings.env.update') }}" method="POST"
                                                     enctype="multipart/form-data">
-                                                    @METHOD('POST')
                                                     @csrf
                                                     <div class="alert alert-warning">
                                                         <p>
                                                             <strong>Note: </strong>
-                                                            Every change there will have a direct impact on your apps
-                                                            environment this may cause your app to crash so be careful in
-                                                            every change you make
+                                                            Every change there will have a direct impact on your app's
+                                                            environment; this may cause your app to crash, so be careful
+                                                            with
+                                                            every change you make.
                                                         </p>
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-12">
                                                             <div class="form-group mb-3">
-                                                                <label for="APP_NAME">System name</label>
-                                                                <input type="text" class="form-control " id="APP_NAME"
-                                                                    name="APP_NAME" placeholder="System name"
-                                                                    value="vms-laravel">
+                                                                <label for="app_name">System name</label>
+                                                                <input type="text" class="form-control" id="app_name"
+                                                                    name="app_name" placeholder="System name"
+                                                                    value="{{ config('app.name') }}">
                                                             </div>
                                                         </div>
                                                         <div class="col-12">
                                                             <div class="form-group mb-3">
-                                                                <label for="APP_URL">System site url</label>
-                                                                <input type="url" class="form-control " id="APP_URL"
-                                                                    name="APP_URL" placeholder="System site url"
-                                                                    value="">
+                                                                <label for="app_url">System site URL</label>
+                                                                <input id="app_url" class="form-control" type="text"
+                                                                    placeholder="Site Url" name="app_url" id="app_url"
+                                                                    value="{{ url('/') }}" />
                                                             </div>
                                                         </div>
                                                         <div class="col-12">
                                                             <div class="form-group mb-3">
-                                                                <label for="APP_URL">System environment</label>
-                                                                <select class="form-control " name="APP_ENV" id="APP_ENV">
-                                                                    <option value="local">
-                                                                        Local
-                                                                    </option>
-                                                                    <option value="production" selected>
-                                                                        Production
-                                                                    </option>
+                                                                <label for="app_env">System environment</label>
+                                                                <select id="app_env" name="app_env" class="form-control">
+                                                                    <option value="local"
+                                                                        {{ env('APP_ENV') === 'local' ? 'selected' : '' }}>
+                                                                        Local</option>
+                                                                    <option value="production"
+                                                                        {{ env('APP_ENV') === 'production' ? 'selected' : '' }}>
+                                                                        Production</option>
                                                                 </select>
                                                             </div>
                                                         </div>
                                                         <div class="col-12">
                                                             <div class="row">
-                                                                <div class="col-md-4">
+                                                                <div class="col-md-6">
                                                                     <div class="form-group mb-3">
                                                                         <div class="form-check form-switch">
                                                                             <input class="form-check-input" type="checkbox"
-                                                                                role="switch" id="APP_DEBUG" value="1"
-                                                                                name="APP_DEBUG" checked>
+                                                                                role="switch" id="app_debug"
+                                                                                name="app_debug"
+                                                                                {{ env('APP_DEBUG') ? 'checked' : '' }}>
                                                                             <label class="form-check-label"
-                                                                                for="APP_DEBUG">System app debug</label>
+                                                                                for="app_debug">System app debug</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-md-4">
+                                                                <div class="col-md-6">
                                                                     <div class="form-group mb-3">
                                                                         <div class="form-check form-switch">
                                                                             <input class="form-check-input" type="checkbox"
-                                                                                role="switch" id="FORCE_HTTPS"
-                                                                                value="1" name="FORCE_HTTPS">
+                                                                                role="switch" id="force_https"
+                                                                                name="force_https"
+                                                                                {{ env('FORCE_HTTPS') ? 'checked' : '' }}>
                                                                             <label class="form-check-label"
-                                                                                for="FORCE_HTTPS">System force
-                                                                                https</label>
+                                                                                for="force_https">Force HTTPS</label>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-
                                                         </div>
                                                         <!-- SAVE CHANGES ACTION BUTTON -->
                                                         <div class="col-12 border-0 text-right mb-2 mt-1">
                                                             <button type="submit" class="btn btn-success">Save</button>
                                                         </div>
                                                     </div>
-
                                                 </form>
                                             </div>
                                         </div>
@@ -121,10 +119,10 @@
                         </div>
                     </div>
                     <div class="overlay"></div>
-                     @include('components.footer')
+                    @include('components.footer')
                 </div>
             </div>
-            <!--end  vue page -->
+            <!--end vue page -->
         </div>
         <!-- END layout-wrapper -->
 
@@ -140,7 +138,7 @@
                     <div class="modal-body">
                         <form action="javascript:void(0);" class="needs-validation" id="delete-modal-form">
                             <div class="modal-body">
-                                <p>Are you sure you want to delete this item? you won t be able to revert this item back!
+                                <p>Are you sure you want to delete this item? You won't be able to revert this item back!
                                 </p>
                             </div>
                             <div class="modal-footer">

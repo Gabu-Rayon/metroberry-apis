@@ -209,8 +209,19 @@
                 ]),
             ])
         @endif
+        @if (\Auth::user()->can('view bank accounts'))
+            @include('components.sidebar.sidebar-dropdown', [
+                'title' => 'Accounting Setting',
+                'icon' => '<i class="fas fa-university"></i>',
+                'subitems' => array_filter([
+                    \Auth::user()->can('view bank accounts')
+                        ? ['label' => 'Bank Accounts', 'route' => route('metro.berry.account.setting')]
+                        : null,
+                ]),
+            ])
+        @endif
 
-        @if (\Auth::user()->can('manage settings'))
+        @if (\Auth::user()->can('view bank accounts'))
             @include('components.sidebar.sidebar-item', [
                 'isActive' => request()->routeIs('settings.*'),
                 'route' => route('settings.site'),
@@ -220,17 +231,8 @@
         @endif
 
 
-        @if (\Auth::user()->can('view accounting setting'))
-            @include('components.sidebar.sidebar-dropdown', [
-                'title' => 'Accounting Setting',
-                'icon' => '<i class="fas fa-university"></i>',
-                'subitems' => array_filter([
-                    \Auth::user()->can('view accounting setting')
-                        ? ['label' => 'Bank Accounts', 'route' => route('metro.berry.account.setting')]
-                        : null,
-                ]),
-            ])
-        @endif
+        
 
     </ul>
 </nav>
+

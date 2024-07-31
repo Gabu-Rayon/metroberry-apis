@@ -16,23 +16,29 @@
             <div class="content-wrapper">
                 <div class="main-content">
                     @include('components.navbar')
-                    <div class="body-content">
-                        <div class="tile">
-                            <div class="card mb-4">
-                                <div class="card-header">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        
-                                        <div class="text-end">
-                                             @include('components.site-setting.site-setting-nav-bar')
-                                        </div>
+                    <div class="tile">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <div class="d-flex justify-content-between align-items-center">
+
+                                    <div class="text-end">
+                                        @include('components.site-setting.site-setting-nav-bar')
                                     </div>
                                 </div>
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                         <form action="{{ route('settings.site.update') }}" method="POST" enctype="multipart/form-data">
-                                        @METHOD('PUT')
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <form action="{{ route('settings.site.update') }}" method="POST"
+                                        enctype="multipart/form-data">
                                         @csrf
-                                        <input type="hidden" name="_method" value="PUT">
+                                        <div class="alert alert-warning">
+                                            <p>
+                                                <strong>Note: </strong>
+                                                Every change there will have a direct impact on your app's
+                                                environment; this may cause your app to crash, so be careful with
+                                                every change you make.
+                                            </p>
+                                        </div>
 
                                         <div>
 
@@ -45,17 +51,6 @@
                                                         <a href="javascript:void(0);" class="panel-action-btn clipboard"
                                                             data-clipboard-text="{{ url('/') }}">
                                                             <i class="fas fa-clipboard"></i>
-                                                        </a>
-                                                    </div>
-                                                    <div class="panel-actions">
-                                                        <a href="admin/setting/3/move-down" class="panel-action-btn"
-                                                            title="Move Down">
-                                                            <img src="{{ asset('nanopkg-assets/image/setting/arrow-down.svg?v=1')}}
-                                                            ">
-                                                        </a>
-                                                        <a href="admin/setting/3/move-up" class="panel-action-btn"
-                                                            title="Move Up">
-                                                            <img src="{{ asset('nanopkg-assets/image/setting/arrow-up.svg?v=1')}}">
                                                         </a>
                                                     </div>
                                                 </div>
@@ -83,16 +78,7 @@
                                                             <i class="fas fa-clipboard"></i>
                                                         </a>
                                                     </div>
-                                                    <div class="panel-actions">
-                                                        <a href="admin/setting/1/move-down" class="panel-action-btn"
-                                                            title="Move Down">
-                                                            <img src="{{ asset('nanopkg-assets/image/setting/arrow-down.svg?v=1')}}">
-                                                        </a>
-                                                        <a href="admin/setting/1/move-up" class="panel-action-btn"
-                                                            title="Move Up">
-                                                            <img src="{{ asset('nanopkg-assets/image/setting/arrow-up.svg?v=1')}}">
-                                                        </a>
-                                                    </div>
+
                                                 </div>
                                                 <div class="panel-body mt-1 mb-3">
                                                     <div class="row">
@@ -118,21 +104,12 @@
                                                             <i class="fas fa-clipboard"></i>
                                                         </a>
                                                     </div>
-                                                    <div class="panel-actions">
-                                                        <a href="admin/setting/2/move-down" class="panel-action-btn"
-                                                            title="Move Down">
-                                                            <img src="{{ asset('nanopkg-assets/image/setting/arrow-down.svg?v=1')}}">
-                                                        </a>
-                                                        <a href="admin/setting/2/move-up" class="panel-action-btn"
-                                                            title="Move Up">
-                                                            <img src="{{ asset('nanopkg-assets/image/setting/arrow-up.svg?v=1')}}">
-                                                        </a>
-                                                    </div>
                                                 </div>
                                                 <div class="panel-body mt-1 mb-3">
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                             <textarea class="form-control" name="app_description" id="app_description" placeholder="Description">{{ config('app.description') }}</textarea>
+
                                                             <div class="my-1">
                                                             </div>
                                                         </div>
@@ -152,8 +129,7 @@
                                                                 xmlns="http://www.w3.org/2000/svg"
                                                                 xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                                                                 viewBox="0 0 1000 1000"
-                                                                enable-background="new 0 0 1000 1000"
-                                                                xml:space="preserve">
+                                                                enable-background="new 0 0 1000 1000" xml:space="preserve">
                                                                 <g>
                                                                     <g>
                                                                         <path
@@ -163,28 +139,22 @@
                                                             </svg>
                                                         </a>
                                                     </div>
-                                                    <div class="panel-actions">
-                                                        <a href="admin/setting/2/move-down" class="panel-action-btn"
-                                                            title="Move Down">
-                                                            <img src="{{ asset('nanopkg-assets/image/setting/arrow-down.svg?v=1')}}">
-                                                        </a>
-                                                        <a href="admin/setting/2/move-up" class="panel-action-btn"
-                                                            title="Move Up">
-                                                            <img src="{{ asset('nanopkg-assets/image/setting/arrow-up.svg?v=1')}}">
-                                                        </a>
-                                                    </div>
                                                 </div>
                                                 <div class="panel-body mt-1 mb-3">
                                                     <div class="row">
                                                         <div class="col-md-12">
                                                             <div class="mt-1 mb-2">
-                                                                <a href="admin/setting/4/unset-value">
-                                                                    <img height="100" width="150" 
-                                                                         src=" {{ asset('admin-assets/img/sidebar-logo.png?v=1') }}">
+
+                                                                <a href="/">
+
+                                                                    <img height="100" width="150"
+                                                                        src="{{ asset($settings['logo_white']) }}"
+                                                                        alt="Site Logo White">
+
                                                                 </a>
                                                             </div>
-                                                            <input id="site.logo_light" class="form-control"
-                                                                type="file" placeholder="Logo White" name="data[4]"
+                                                            <input id="site.logo_light" class="form-control" type="file"
+                                                                placeholder="Logo White" name="logo_white"
                                                                 accept="image/*" />
                                                             <div class="my-1">
                                                                 Default image size 205x60
@@ -217,28 +187,22 @@
                                                             </svg>
                                                         </a>
                                                     </div>
-                                                    <div class="panel-actions">
-                                                        <a href="admin/setting/4/unset-value">
-                                                                    <img height="100" width="150" 
-                                                                         src="{{ asset('admin-assets/img/sidebar-logo.png?v=1')}}">
-                                                                </a>
-                                                    </div><div class="panel-actions">
-                                                        <a href="admin/setting/3/move-down" class="panel-action-btn"
-                                                            title="Move Down">
-                                                            <img src="{{ asset('nanopkg-assets/image/setting/arrow-down.svg?v=1')}}
-                                                            ">
-                                                        </a>
-                                                        <a href="admin/setting/3/move-up" class="panel-action-btn"
-                                                            title="Move Up">
-                                                            <img src="{{ asset('nanopkg-assets/image/setting/arrow-up.svg?v=1')}}">
-                                                        </a>
-                                                    </div>
                                                 </div>
                                                 <div class="panel-body mt-1 mb-3">
                                                     <div class="row">
                                                         <div class="col-md-12">
-                                                            <input id="site.logo_black" class="form-control"
-                                                                type="file" placeholder="Logo Black" name="data[5]"
+                                                            <div class="mt-1 mb-2">
+
+                                                                <a href="/">
+
+                                                                    <img height="100" width="150"
+                                                                        src="{{ asset($settings['logo_black']) }}"
+                                                                        alt="Site Logo Black">
+
+                                                                </a>
+                                                            </div>
+                                                            <input id="site.logo_light" class="form-control"
+                                                                type="file" placeholder="Logo White" name="logo_black"
                                                                 accept="image/*" />
                                                             <div class="my-1">
                                                                 Default image size 205x60
@@ -271,31 +235,25 @@
                                                             </svg>
                                                         </a>
                                                     </div>
-                                                    <div class="panel-actions">
-                                                        <a href="admin/setting/6/move-up" class="panel-action-btn"
-                                                            title="Move Up">
-                                                            <img  height="100" width="150" src="{{asset('favicon.ico')}}">
-                                                        </a>
-                                                    </div>
-                                                    <div class="panel-actions">
-                                                        <a href="admin/setting/3/move-down" class="panel-action-btn"
-                                                            title="Move Down">
-                                                            <img src="{{ asset('nanopkg-assets/image/setting/arrow-down.svg?v=1')}}
-                                                            ">
-                                                        </a>
-                                                        <a href="admin/setting/3/move-up" class="panel-action-btn"
-                                                            title="Move Up">
-                                                            <img src="{{ asset('nanopkg-assets/image/setting/arrow-up.svg?v=1')}}">
-                                                        </a>
-                                                    </div>
                                                 </div>
                                                 <div class="panel-body mt-1 mb-3">
                                                     <div class="row">
                                                         <div class="col-md-12">
-                                                            <input id="site.favicon" class="form-control" type="file"
-                                                                placeholder="Favicon" name="data[6]" accept="image/*" />
+                                                            <div class="mt-1 mb-2">
+
+                                                                <a href="/">
+
+                                                                    <img height="100" width="150"
+                                                                        src="{{ asset($settings['site_favicon']) }}"
+                                                                        alt="Site Favicon">
+
+                                                                </a>
+                                                            </div>
+                                                            <input id="site.logo_light" class="form-control"
+                                                                type="file" placeholder="Logo White"
+                                                                name="site_favicon" accept="image/*" />
                                                             <div class="my-1">
-                                                                Default image size 68x68
+                                                                Default image size 205x60
                                                             </div>
                                                         </div>
                                                     </div>
@@ -309,12 +267,12 @@
                                         </div>
 
                                     </form>
-                                    </div>
-                                    <div id="page-axios-data" data-table-id="#driver-table"></div>
                                 </div>
+                                <div id="page-axios-data" data-table-id="#driver-table"></div>
                             </div>
                         </div>
                     </div>
+
                 </div>
                 <div class="overlay"></div>
                 @include('components.footer')
