@@ -1,5 +1,6 @@
 <?php
 
+use App\Providers\MiddlewareServiceProvider;
 use Illuminate\Support\Facades\Session as Session;
 
 return [
@@ -264,5 +265,7 @@ return [
         'yo' => 'Yoruba',
         'za' => 'Zhuang',
         'zu' => 'Zulu',
-    ]
+    ],
+
+
 ];
