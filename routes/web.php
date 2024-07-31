@@ -39,6 +39,7 @@ use App\Http\Controllers\NTSAInspectionCertificateController;
 use LaravelLang\Routes\Facades\LocalizationRoute;
 use Illuminate\Support\Facades\Log;
 
+
 Route::get('change/language/{lang}', function ($lang) {
     try {
         Log::info('HERE');
@@ -54,7 +55,6 @@ Route::get('change/language/{lang}', function ($lang) {
         return redirect()->back()->with('error', 'An error occurred while changing language');
     }
 })->name('change.language');
-
 LocalizationRoute::group(function () {
 
     // All Routes
@@ -821,36 +821,6 @@ LocalizationRoute::group(function () {
     Route::get('billed/trip/{id}/send/invoice', [TripPaymentController::class, 'billedTripSendInvoice'])
         ->name('billed.trip.send.invoice')
         ->middleware('auth', 'can:send trip invoice');
-
-
-
-
-
-
-    // All Routes
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     Route::middleware('auth')->group(function () {
         Route::get('/profile', [ProfileController::class, 'edit'])
