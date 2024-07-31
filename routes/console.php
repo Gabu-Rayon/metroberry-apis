@@ -19,7 +19,7 @@ Schedule::call(function () {
         DB::beginTransaction();
         foreach ($licenses as $license) {
 
-            Mail::send('mail-view.documents-expiry', ['driver' => $license->driver, 'license' => $license], function ($message) use ($license) {
+            Mail::send('mail-view.license-expiry', ['driver' => $license->driver, 'license' => $license], function ($message) use ($license) {
                 $message->to($license->driver->email, $license->driver->name)->subject('Document Expiry Notification');
             });
 
@@ -30,6 +30,10 @@ Schedule::call(function () {
         }
 
         foreach ($psvBadges as $psvBadge) {
+
+            Mail::send('mail-view.psv-badge-expiry', ['driver' => $psvBadge->driver, 'badge' => $psvBadge], function ($message) use ($psvBadge) {
+                $message->to($psvBadge->driver->email, $psvBadge->driver->name)->subject('Document Expiry Notification');
+            });
 
             $psvBadge->verified = false;
             $psvBadge->driver->status = 'inactive';
@@ -52,6 +56,8 @@ Schedule::call(function () {
             $certificate->save();
             $certificate->vehicle->save();
         }
+
+        // send a mail to the admin to notify them of the expired documents
 
         DB::commit();
     } catch (\Exception $e) {
