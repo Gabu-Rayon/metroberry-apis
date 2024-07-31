@@ -45,7 +45,7 @@ require __DIR__ . '/auth.php';
 require __DIR__ . '/insurance_company_routes.php';
 
 /***
- * Dashboard Routes
+ * Admin  Routes
  * 
  */
 
@@ -807,16 +807,23 @@ Route::get('billed/trip/{id}/send/invoice', [TripPaymentController::class, 'bill
 // All Routes
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])
+    Route::get('/profile', [ProfileController::class, 'show'])
+        ->name('profile.show')
+        ->middleware('can:view dashboard');
+
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])
         ->name('profile.edit')
-        ->middleware('auth', 'can:edit profile');
+        ->middleware('can:view dashboard');
+
     Route::patch('/profile', [ProfileController::class, 'update'])
         ->name('profile.update')
-        ->middleware('auth', 'can:update profile');
+        ->middleware('can:view dashboard');
+
     Route::delete('/profile', [ProfileController::class, 'destroy'])
         ->name('profile.destroy')
-        ->middleware('auth', 'can:delete profile');
+        ->middleware('can:view dashboard');
 });
+
 
 /***
  * User Interfaces

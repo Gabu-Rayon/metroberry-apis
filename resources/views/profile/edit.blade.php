@@ -1,8 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Profile')
-@section('content')
+@section('title', 'Edit Profile')
 
+@section('content')
     <div class="wrapper">
         @include('components.preloader')
         @include('components.sidebar.sidebar')
@@ -11,79 +11,71 @@
                 @include('components.navbar')
                 <div class="body-content">
                     <div class="tile">
-
                         <div class="row justify-content-center">
                             <div class="col-md-8 col-xl-6">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h6 class="fs-17 fw-semi-bold mb-0">Profile</h6>
+                                        <h6 class="fs-17 fw-semi-bold mb-0">Edit Profile</h6>
                                     </div>
                                     <div class="card-body">
-                                        <div class="text-center">
-                                            <div class="media m-1 ">
-                                                <div class="align-left p-1">
-                                                    <a href="#" class="profile-image">
-                                                        <a href="#" class="profile-image">
-                                                            <img src="{{ url('storage/' . \Auth::user()->avatar) }}"
-                                                                class="avatar avatar-xl rounded-circle img-border height-100"
-                                                                alt="Profile Image">
-                                                        </a>
-                                                    </a>
-                                                </div>
-                                                <div class="media-body ms-3 mt-1">
-                                                    <h3 class="font-large-1 white">
-                                                        {{ Auth::user()->name }}
-                                                        <span class="font-medium-1 white">({{ Auth::user()->role }})</span>
-                                                    </h3>
-                                                    <div class="row justify-content-center">
+                                        <form action="{{ route('profile.update') }}" method="POST" enctype="multipart/form-data">
+                                            @csrf
+                                            @method('PATCH')
 
-                                                        <table class="table table-borderless table-responsive">
-
-                                                            <tbody>
-
-                                                                <tr>
-                                                                    <th class="white">
-                                                                        <i class="fas fa-map-marker-alt"></i>
-                                                                    </th>
-                                                                    <td class="white text-start">
-                                                                        {{ Auth::user()->address }}
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th class="white">
-                                                                        <i class="fas fa-phone"></i>
-                                                                    </th>
-                                                                    <td class="white text-start">
-                                                                        {{ Auth::user()->phone }}
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th class="white">
-                                                                        <i class="fas fa-envelope"></i>
-                                                                    </th>
-                                                                    <td class="white text-start">
-                                                                        {{ Auth::user()->email }}
-                                                                    </td>
-                                                                </tr>
-
-                                                                @if (Auth::user()->role == 'organisation')
-                                                                    <tr>
-                                                                        <th class="white">
-                                                                            <i class="fas fa-envelope"></i>
-                                                                        </th>
-                                                                        <td class="white text-start">
-                                                                            {{ Auth::user()->organisation->organisation_code }}
-                                                                        </td>
-                                                                    </tr>
-                                                                @endif
-
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-
+                                            <div class="mb-3">
+                                                <label for="name" class="form-label">Name</label>
+                                                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', Auth::user()->name) }}" required>
+                                                @error('name')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
                                             </div>
-                                        </div>
+
+                                            <div class="mb-3">
+                                                <label for="email" class="form-label">Email</label>
+                                                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', Auth::user()->email) }}" required>
+                                                @error('email')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="avatar" class="form-label">Profile Image</label>
+                                                <input type="file" class="form-control @error('avatar') is-invalid @enderror" id="avatar" name="avatar">
+                                                @if (Auth::user()->avatar)
+                                                    <img src="{{ asset('storage/' . Auth::user()->avatar) }}" alt="Profile Image" class="img-thumbnail mt-2" style="max-height: 150px;">
+                                                @endif
+                                                @error('avatar')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="address" class="form-label">Address</label>
+                                                <input type="text" class="form-control @error('address') is-invalid @enderror" id="address" name="address" value="{{ old('address', Auth::user()->address) }}">
+                                                @error('address')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label for="phone" class="form-label">Phone</label>
+                                                <input type="text" class="form-control @error('phone') is-invalid @enderror" id="phone" name="phone" value="{{ old('phone', Auth::user()->phone) }}">
+                                                @error('phone')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
+                                            </div>
+
+                                            <button type="submit" class="btn btn-success">Update Profile</button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -95,8 +87,4 @@
             @include('components.footer')
         </div>
     </div>
-    <!--end  vue page -->
-    </div>
-    <!-- END layout-wrapper -->
-
 @endsection
