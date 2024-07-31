@@ -1,56 +1,126 @@
 @extends('layouts.app')
 
 @section('title', 'Dashboard')
+
 @section('content')
-
     <body class="fixed sidebar-mini">
+    @include('components.preloader')
+    <!-- react page -->
+    <div id="app">
+        <!-- Begin page -->
+        <div class="wrapper">
+            <!-- start header -->
+            @include('components.sidebar.sidebar')
+            <!-- end header -->
+            <div class="content-wrapper">
+                <div class="main-content">
+                    @include('components.navbar')
 
-        @include('components.preloader')
-        <!-- react page -->
-        <div id="app">
-            <!-- Begin page -->
-            <div class="wrapper">
-                <!-- start header -->
-                @include('components.sidebar.sidebar')
-                <!-- end header -->
-                <div class="content-wrapper">
-                    <div class="main-content">
-                        @include('components.navbar')
+                    <div class="body-content">
+                        <div class="tile">
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <div class="d-flex justify-content-between align-items-center text-center gap-2">
+                                        <h6 class="fs-17 fw-semi-bold mb-0">
+                                            {{ Auth::user()->name }}
+                                            <span class="badge bg-primary badge-sm text-sm ml-3">
+                                                Billed {{ $station->payment_period }}
+                                            </span>
+                                        </h6>
+                                        <div class="text-end">
+                                            <a type="button" class="btn btn-success btn-sm" href="javascript:void(0);" onclick="axiosModal('{{ route('refueling.station.claim.payments') }}')">
+                                                <i class="fa-solid fa-circle-check"></i>
+                                                &nbsp;
+                                                Claim Payments
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
 
-                        <div class="body-content">
-                            Refuelling Station Dashboard
+                                <div class="card-body">
+                                    <h6 class="fs-17 fw-semi-bold mb-0">Today's Transactions</h6>
+
+                                    <div class="table-responsive mt-3">
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th>Attendant Name</th>
+                                                <th>Attendant Phone</th>
+                                                <th>Date</th>
+                                                <th>Volume</th>
+                                                <th>Cost</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            @php($total_cost = 0)
+                                            @foreach ($refuellings as $refuelling)
+                                                @php($total_cost += $refuelling->refuelling_cost)
+                                                <tr>
+                                                    <td>{{ $refuelling->attendant_name }}</td>
+                                                    <td>{{ $refuelling->attendant_phone }}</td>
+                                                    <td>{{ $refuelling->refuelling_date }}</td>
+                                                    <td>{{ $refuelling->refuelling_volume }}</td>
+                                                    <td>{{ $refuelling->refuelling_cost }}</td>
+                                                </tr>
+                                            @endforeach
+                                            <tr>
+                                                <td colspan="4" class="text-end"><strong>Total</strong></td>
+                                                <td><strong>KES {{ $total_cost }}</strong></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="card-body">
+                                    <h6 class="fs-17 fw-semi-bold mb-0">Past Unpaid Transactions</h6>
+
+                                    <div class="table-responsive mt-3">
+                                        <table class="table table-hover table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th>Attendant Name</th>
+                                                <th>Attendant Phone</th>
+                                                <th>Date</th>
+                                                <th>Volume</th>
+                                                <th>Cost</th>
+                                                <th>Balance</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            @php($total_unpaid_cost = 0)
+                                            @php($total_balance = 0)
+                                            @foreach ($pastUnpaidRefuellings as $refuelling)
+                                                @php ($total_unpaid_cost += $refuelling->refuelling_cost)
+                                                @php ($totalPayments = $refuelling->fuelPayments->sum('amount'))
+                                                @php ($balance = $refuelling->refuelling_cost - $totalPayments)
+                                                @php ($total_balance += $balance)
+                                            <tr>
+                                                <td>{{ $refuelling->attendant_name }}</td>
+                                                <td>{{ $refuelling->attendant_phone }}</td>
+                                                <td>{{ $refuelling->refuelling_date }}</td>
+                                                <td>{{ $refuelling->refuelling_volume }}</td>
+                                                <td>{{ $refuelling->refuelling_cost }}</td>
+                                                <td>{{ $balance }}</td>
+                                            </tr>
+                                        @endforeach
+                                        <tr>
+                                            <td colspan="4" class="text-end"><strong>Total</strong></td>
+                                            <td><strong>KES {{ $total_unpaid_cost }}</strong></td>
+                                            <td><strong>KES {{ $total_balance }}</strong></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="overlay"></div>
-                    @include('components.footer')
                 </div>
             </div>
-            <!--end  vue page -->
+            <div class="overlay"></div>
+            @include('components.footer')
         </div>
-        <!-- END layout-wrapper -->
-
-        <!-- Modal -->
-        <div class="modal fade" id="delete-modal" data-bs-keyboard="false" tabindex="-1" data-bs-backdrop="true"
-            aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Delete modal</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="javascript:void(0);" class="needs-validation" id="delete-modal-form">
-                            <div class="modal-body">
-                                <p>Are you sure you want to delete this item? you won t be able to revert this item back!
-                                </p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
-                                <button class="btn btn-danger" type="submit" id="delete_submit">Delete</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endsection
+    </div>
+</div>
+</body>
+@endsection

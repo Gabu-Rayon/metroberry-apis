@@ -7,6 +7,7 @@ use App\Models\Vehicle;
 use App\Models\VehicleRefueling;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -20,7 +21,13 @@ class VehicleRefuelingController extends Controller
     {
         $refuelings = VehicleRefueling::all();
         $vehicles = Vehicle::all();
-        $stations = RefuellingStation::where('status', 'active')->get();
+        $stations = null;
+
+        if (Auth::user()->role == 'admin') {
+            $stations = RefuellingStation::where('status', 'active')->get();
+        } else {
+            $stations = RefuellingStation::where('user_id', Auth::id())->where('status', 'active')->get();
+        }
         return view('refueling.index', compact('refuelings', 'vehicles', 'stations'));
     }
 

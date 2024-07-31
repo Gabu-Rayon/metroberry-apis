@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\VehicleRefueling;
 use Exception;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -18,8 +19,55 @@ class RefuellingStationController extends Controller
 
     public function dashboard()
     {
-        return view('refueling.station.home');
+        $station = RefuellingStation::where('user_id', auth()->id())->first();
+        $currentDate = now()->format('Y-m-d');
+
+        // Initialize date ranges
+        $startDate = null;
+        $endDate = null;
+
+        // Determine the date range for the current billing period
+        if ($station->payment_period == 'daily') {
+            $startDate = $currentDate;
+            $endDate = $currentDate;
+        } elseif ($station->payment_period == 'weekly') {
+            $startDate = now()->startOfWeek()->format('Y-m-d');
+            $endDate = now()->endOfWeek()->format('Y-m-d');
+        } elseif ($station->payment_period == 'monthly') {
+            $startDate = now()->startOfMonth()->format('Y-m-d');
+            $endDate = now()->endOfMonth()->format('Y-m-d');
+        } elseif ($station->payment_period == 'quarterly') {
+            $startDate = now()->startOfQuarter()->format('Y-m-d');
+            $endDate = now()->endOfQuarter()->format('Y-m-d');
+        } elseif ($station->payment_period == 'biannually') {
+            $startDate = now()->startOfYear()->format('Y-m-d');
+            $endDate = now()->addMonths(6)->endOfMonth()->format('Y-m-d');
+        } elseif ($station->payment_period == 'annually') {
+            $startDate = now()->startOfYear()->format('Y-m-d');
+            $endDate = now()->endOfYear()->format('Y-m-d');
+        }
+
+        // Query refuellings for the current billing period
+        $refuellings = VehicleRefueling::where('refuelling_station_id', $station->id)
+            ->where('status', 'billed')
+            ->whereBetween('refuelling_date', [$startDate, $endDate])
+            ->get();
+
+        // Query past unpaid refuellings before the current billing period
+        $pastUnpaidRefuellings = VehicleRefueling::where('refuelling_station_id', $station->id)
+            ->where('status', 'billed')
+            ->where('refuelling_date', '<', $startDate)
+            ->get()
+            ->filter(function($refuelling) {
+                // Sum the payments made for this refuelling
+                $totalPayments = $refuelling->fuelPayments->sum('amount');
+                // Check if payments do not cover the total cost
+                return $totalPayments < $refuelling->refuelling_cost;
+            });
+
+        return view('refueling.station.home', compact('station', 'refuellings', 'pastUnpaidRefuellings'));
     }
+
     /**
      * Display a listing of the resource.
      */
@@ -325,5 +373,9 @@ class RefuellingStationController extends Controller
             Log::error($e);
             return redirect()->back()->with('error', $e->getMessage());
         }
+    }
+
+    public function claimPayments() {
+        return view('refueling.station.claim-payments');
     }
 }

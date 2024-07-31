@@ -38,6 +38,7 @@ use App\Http\Controllers\MaintenanceServicePaymentController;
 use App\Http\Controllers\NTSAInspectionCertificateController;
 use LaravelLang\Routes\Facades\LocalizationRoute;
 use Illuminate\Support\Facades\Log;
+use LaravelLang\Routes\Middlewares\LocalizationByModel;
 use LaravelLang\Routes\Middlewares\LocalizationByParameter;
 
 Route::get('change/language/{lang}', function ($lang) {
@@ -1423,6 +1424,14 @@ LocalizationRoute::group(function () {
         ->name('refueling.station.destroy')
         ->middleware('auth', 'can:delete fuelling station');
 
+//    Claim Fuel Payments 
+
+    Route::get('refueling/station/claim/payments', [RefuellingStationController::class, 'claimPayments'])
+        ->name('refueling.station.claim.payments')
+        ->middleware('auth', 'can:claim fuelling payments');
+
+
+
 
     // /type/create
 
@@ -1696,4 +1705,4 @@ LocalizationRoute::group(function () {
 
     Route::get('/settings/site', [SettingsController::class, 'siteSetting'])->name('settings.site');
     Route::put('/settings/site/update', [SettingsController::class, 'siteSettingUpdate'])->name('settings.site.update');
-}, [LocalizationByParameter::class],);
+}, [LocalizationByModel::class],);

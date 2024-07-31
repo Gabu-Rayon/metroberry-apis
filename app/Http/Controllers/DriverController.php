@@ -50,9 +50,10 @@ class DriverController extends Controller
         }
     }
 
-    public function store(Request $request) {
-        DB::beginTransaction();
+    public function store(Request $request)
+    {
         try {
+        Log::info('REGISTERING DRAIVA');
 
 
             $data = $request->all();
@@ -164,7 +165,7 @@ class DriverController extends Controller
     {
         try {
             $driver = Driver::with('vehicle')->findOrFail($id);
-    
+
             return response()->json([
                 'driver' => $driver
             ], 200);
@@ -177,7 +178,7 @@ class DriverController extends Controller
             ], 500);
         }
     }
-    
+
 
     public function create()
     {
@@ -348,7 +349,7 @@ class DriverController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     * 
+     *
      */
     public function destroy($id)
     {
@@ -524,8 +525,8 @@ class DriverController extends Controller
 
 
     /**
-     * 
-     *Import Driver detials 
+     *
+     *Import Driver detials
 
      */
     // Display the import file view

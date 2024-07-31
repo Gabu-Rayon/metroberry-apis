@@ -1,4 +1,4 @@
-<form action="{{ route('permission.store') }}" method="POST" class="needs-validation modal-content"
+<form action="{{ route('refueling.station.claim.payments') }}" method="POST" class="needs-validation modal-content"
     enctype="multipart/form-data">
     @csrf
     <div class="card-header my-3 p-2 border-bottom">

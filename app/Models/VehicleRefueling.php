@@ -36,4 +36,9 @@ class VehicleRefueling extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function fuelPayments()
+    {
+        return $this->hasMany(FuelPayments::class, 'fuel_id');
+    }
 }

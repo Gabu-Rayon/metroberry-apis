@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Refueling List')
+@section('title', 'Refueling')
 @section('content')
 
     <!-- No need for the body tag here; it's handled by the layout -->
@@ -21,7 +21,7 @@
                             <div class="card mb-4">
                                 <div class="card-header">
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <h6 class="fs-17 fw-semi-bold mb-0">Refueling List</h6>
+                                        <h6 class="fs-17 fw-semi-bold mb-0">Refueling</h6>
                                         <div class="text-end">
 
                                             <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal"
@@ -211,21 +211,42 @@
 
                         <div class="col-md-12 col-lg-6">
 
-                            <div class="form-group row my-2">
-                                <label for="station" class="col-sm-5 col-form-label">
-                                    Station
-                                    <i class="text-danger">*</i>
-                                </label>
-                                <div class="col-sm-7">
-                                    <select name="station" class="form-control" id="station" required>
-                                        <option value="" disabled selected>Select a Fuel Station</option>
-                                        @foreach ($stations as $station)
-                                            <option value="{{ $station->id }}">{{ $station->user->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                            {{ Log::info(Auth::user()->role) }}
+
+                            @if (Auth::user()->role == 'admin')
+                                <div class="form-group row my-2">
+                                    <label for="station" class="col-sm-5 col-form-label">
+                                        Station
+                                        <i class="text-danger">*</i>
+                                    </label>
+                                    <div class="col-sm-7">
+                                        <select name="station" class="form-control" id="station" required>
+                                            <option value="" disabled selected>Select a Fuel Station</option>
+                                            @foreach ($stations as $station)
+                                                <option value="{{ $station->id }}">{{ $station->user->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
+                            @else
+                                <div class="form-group row my-2">
+                                    <label for="station" class="col-sm-5 col-form-label">
+                                        Station
+                                        <i class="text-danger">*</i>
+                                    </label>
+                                    <div class="col-sm-7">
+                                        <select name="station" class="form-control" id="station" required readonly>
+                                            @php
+                                                $station = $stations[0];
+                                            @endphp
+                                            <option value="{{ $station->id }}" selected>
+                                                {{ $station->user->name }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            @endif
 
                             <div class="form-group row my-2">
                                 <label for="time" class="col-sm-5 col-form-label">

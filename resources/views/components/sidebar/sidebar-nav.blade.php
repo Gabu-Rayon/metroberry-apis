@@ -159,8 +159,12 @@
                 'title' => 'Refueling',
                 'icon' => '<i class="fa-solid fa-gas-pump"></i>',
                 'subitems' => array_filter([
-                    ['label' => 'Fuel Requisition', 'route' => route('refueling.index')],
-                    ['label' => 'Fuel Stations', 'route' => route('refueling.station')],
+                    \Auth::user()->can('manage fuelling')
+                        ? ['label' => 'Refueling', 'route' => route('refueling.index')]
+                        : null,
+                    Auth::user()->can('manage fuelling stations')
+                        ? ['label' => 'Fuel Stations', 'route' => route('refueling.station')]
+                        : null,
                 ]),
             ])
         @endif

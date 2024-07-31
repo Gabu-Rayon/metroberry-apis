@@ -227,6 +227,7 @@ class PermissionsByActions
         'deactivate fuelling',
         'export fuelling',
         'import fuelling',
+        'claim fuelling payments',
     ];
 
     public const FUELLING_STATIONS_MANAGEMENT_PERMISSIONS = [
@@ -416,6 +417,7 @@ Permissions::$refueling_station_permissions = [
     'deactivate fuelling',
     'export fuelling',
     'import fuelling',
+    'claim fuelling payments'
 ];
 
 
