@@ -64,7 +64,7 @@
                                                                         <div class="form-check form-switch">
                                                                             <input class="form-check-input" type="checkbox"
                                                                                 role="switch" id="{{ $permission }}"
-                                                                                name="{{ $permission }}"
+                                                                                name="permissions[]"
                                                                                 value="{{ $permission }}">
                                                                             <label class="form-check-label"
                                                                                 for="{{ $permission }}">{{ $permission }}</label>
@@ -84,7 +84,7 @@
                                                                         <div class="form-check form-switch">
                                                                             <input class="form-check-input" type="checkbox"
                                                                                 role="switch" id="{{ $permission }}"
-                                                                                name="{{ $permission }}"
+                                                                                name="permissions[]"
                                                                                 value="{{ $permission }}">
                                                                             <label class="form-check-label"
                                                                                 for="{{ $permission }}">{{ $permission }}</label>
@@ -104,7 +104,7 @@
                                                                         <div class="form-check form-switch">
                                                                             <input class="form-check-input" type="checkbox"
                                                                                 role="switch" id="{{ $permission }}"
-                                                                                name="{{ $permission }}"
+                                                                                name="permissions[]"
                                                                                 value="{{ $permission }}">
                                                                             <label class="form-check-label"
                                                                                 for="{{ $permission }}">{{ $permission }}</label>
@@ -124,7 +124,7 @@
                                                                         <div class="form-check form-switch">
                                                                             <input class="form-check-input" type="checkbox"
                                                                                 role="switch" id="{{ $permission }}"
-                                                                                name="{{ $permission }}"
+                                                                                name="permissions[]"
                                                                                 value="{{ $permission }}">
                                                                             <label class="form-check-label"
                                                                                 for="{{ $permission }}">{{ $permission }}</label>
@@ -144,7 +144,7 @@
                                                                         <div class="form-check form-switch">
                                                                             <input class="form-check-input" type="checkbox"
                                                                                 role="switch" id="{{ $permission }}"
-                                                                                name="{{ $permission }}"
+                                                                                name="permissions[]"
                                                                                 value="{{ $permission }}">
                                                                             <label class="form-check-label"
                                                                                 for="{{ $permission }}">{{ $permission }}</label>
@@ -164,7 +164,7 @@
                                                                         <div class="form-check form-switch">
                                                                             <input class="form-check-input" type="checkbox"
                                                                                 role="switch" id="{{ $permission }}"
-                                                                                name="{{ $permission }}"
+                                                                                name="permissions[]"
                                                                                 value="{{ $permission }}">
                                                                             <label class="form-check-label"
                                                                                 for="{{ $permission }}">{{ $permission }}</label>
@@ -185,7 +185,7 @@
                                                                             <input class="form-check-input"
                                                                                 type="checkbox" role="switch"
                                                                                 id="{{ $permission }}"
-                                                                                name="{{ $permission }}"
+                                                                                name="permissions[]"
                                                                                 value="{{ $permission }}">
                                                                             <label class="form-check-label"
                                                                                 for="{{ $permission }}">{{ $permission }}</label>
@@ -206,7 +206,7 @@
                                                                             <input class="form-check-input"
                                                                                 type="checkbox" role="switch"
                                                                                 id="{{ $permission }}"
-                                                                                name="{{ $permission }}"
+                                                                                name="permissions[]"
                                                                                 value="{{ $permission }}">
                                                                             <label class="form-check-label"
                                                                                 for="{{ $permission }}">{{ $permission }}</label>
@@ -227,7 +227,7 @@
                                                                             <input class="form-check-input"
                                                                                 type="checkbox" role="switch"
                                                                                 id="{{ $permission }}"
-                                                                                name="{{ $permission }}"
+                                                                                name="permissions[]"
                                                                                 value="{{ $permission }}">
                                                                             <label class="form-check-label"
                                                                                 for="{{ $permission }}">{{ $permission }}</label>
@@ -248,7 +248,7 @@
                                                                             <input class="form-check-input"
                                                                                 type="checkbox" role="switch"
                                                                                 id="{{ $permission }}"
-                                                                                name="{{ $permission }}"
+                                                                                name="permissions[]"
                                                                                 value="{{ $permission }}">
                                                                             <label class="form-check-label"
                                                                                 for="{{ $permission }}">{{ $permission }}</label>
@@ -270,7 +270,315 @@
                                                                             <input class="form-check-input"
                                                                                 type="checkbox" role="switch"
                                                                                 id="{{ $permission }}"
-                                                                                name="{{ $permission }}"
+                                                                                name="permissions[]"
+                                                                                value="{{ $permission }}">
+                                                                            <label class="form-check-label"
+                                                                                for="{{ $permission }}">{{ $permission }}</label>
+                                                                        </div>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        </fieldset>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <fieldset>
+                                                            <legend>Route Management Permissions
+                                                            </legend>
+                                                            <div class="row py-3">
+                                                                @foreach ($routePermissions as $permission)
+                                                                    <div class="col-md-4 form-group">
+                                                                        <div class="form-check form-switch">
+                                                                            <input class="form-check-input"
+                                                                                type="checkbox" role="switch"
+                                                                                id="{{ $permission }}"
+                                                                                name="permissions[]"
+                                                                                value="{{ $permission }}">
+                                                                            <label class="form-check-label"
+                                                                                for="{{ $permission }}">{{ $permission }}</label>
+                                                                        </div>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        </fieldset>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <fieldset>
+                                                            <legend>Route Location Management Permissions
+                                                            </legend>
+                                                            <div class="row py-3">
+                                                                @foreach ($routeLocationPermissions as $permission)
+                                                                    <div class="col-md-4 form-group">
+                                                                        <div class="form-check form-switch">
+                                                                            <input class="form-check-input"
+                                                                                type="checkbox" role="switch"
+                                                                                id="{{ $permission }}"
+                                                                                name="permissions[]"
+                                                                                value="{{ $permission }}">
+                                                                            <label class="form-check-label"
+                                                                                for="{{ $permission }}">{{ $permission }}</label>
+                                                                        </div>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        </fieldset>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <fieldset>
+                                                            <legend>Trip Management Permissions
+                                                            </legend>
+                                                            <div class="row py-3">
+                                                                @foreach ($tripPermissions as $permission)
+                                                                    <div class="col-md-4 form-group">
+                                                                        <div class="form-check form-switch">
+                                                                            <input class="form-check-input"
+                                                                                type="checkbox" role="switch"
+                                                                                id="{{ $permission }}"
+                                                                                name="permissions[]"
+                                                                                value="{{ $permission }}">
+                                                                            <label class="form-check-label"
+                                                                                for="{{ $permission }}">{{ $permission }}</label>
+                                                                        </div>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        </fieldset>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <fieldset>
+                                                            <legend>Insurance Company Management Permissions
+                                                            </legend>
+                                                            <div class="row py-3">
+                                                                @foreach ($insuranceCompanyPermissions as $permission)
+                                                                    <div class="col-md-4 form-group">
+                                                                        <div class="form-check form-switch">
+                                                                            <input class="form-check-input"
+                                                                                type="checkbox" role="switch"
+                                                                                id="{{ $permission }}"
+                                                                                name="permissions[]"
+                                                                                value="{{ $permission }}">
+                                                                            <label class="form-check-label"
+                                                                                for="{{ $permission }}">{{ $permission }}</label>
+                                                                        </div>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        </fieldset>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <fieldset>
+                                                            <legend>Insurance Recurring Period Management Permissions
+                                                            </legend>
+                                                            <div class="row py-3">
+                                                                @foreach ($insuranceRecurringPeriodPermissions as $permission)
+                                                                    <div class="col-md-4 form-group">
+                                                                        <div class="form-check form-switch">
+                                                                            <input class="form-check-input"
+                                                                                type="checkbox" role="switch"
+                                                                                id="{{ $permission }}"
+                                                                                name="permissions[]"
+                                                                                value="{{ $permission }}">
+                                                                            <label class="form-check-label"
+                                                                                for="{{ $permission }}">{{ $permission }}</label>
+                                                                        </div>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        </fieldset>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <fieldset>
+                                                            <legend>Maintenance Management Permissions
+                                                            </legend>
+                                                            <div class="row py-3">
+                                                                @foreach ($maintenancePermissions as $permission)
+                                                                    <div class="col-md-4 form-group">
+                                                                        <div class="form-check form-switch">
+                                                                            <input class="form-check-input"
+                                                                                type="checkbox" role="switch"
+                                                                                id="{{ $permission }}"
+                                                                                name="permissions[]"
+                                                                                value="{{ $permission }}">
+                                                                            <label class="form-check-label"
+                                                                                for="{{ $permission }}">{{ $permission }}</label>
+                                                                        </div>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        </fieldset>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <fieldset>
+                                                            <legend>Refuelling Management Permissions
+                                                            </legend>
+                                                            <div class="row py-3">
+                                                                @foreach ($refuellingPermissions as $permission)
+                                                                    <div class="col-md-4 form-group">
+                                                                        <div class="form-check form-switch">
+                                                                            <input class="form-check-input"
+                                                                                type="checkbox" role="switch"
+                                                                                id="{{ $permission }}"
+                                                                                name="permissions[]"
+                                                                                value="{{ $permission }}">
+                                                                            <label class="form-check-label"
+                                                                                for="{{ $permission }}">{{ $permission }}</label>
+                                                                        </div>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        </fieldset>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <fieldset>
+                                                            <legend>Refuelling Station Management Permissions
+                                                            </legend>
+                                                            <div class="row py-3">
+                                                                @foreach ($refuellingStationPermissions as $permission)
+                                                                    <div class="col-md-4 form-group">
+                                                                        <div class="form-check form-switch">
+                                                                            <input class="form-check-input"
+                                                                                type="checkbox" role="switch"
+                                                                                id="{{ $permission }}"
+                                                                                name="permissions[]"
+                                                                                value="{{ $permission }}">
+                                                                            <label class="form-check-label"
+                                                                                for="{{ $permission }}">{{ $permission }}</label>
+                                                                        </div>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        </fieldset>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <fieldset>
+                                                            <legend>Report Management Permissions
+                                                            </legend>
+                                                            <div class="row py-3">
+                                                                @foreach ($reportPermissions as $permission)
+                                                                    <div class="col-md-4 form-group">
+                                                                        <div class="form-check form-switch">
+                                                                            <input class="form-check-input"
+                                                                                type="checkbox" role="switch"
+                                                                                id="{{ $permission }}"
+                                                                                name="permissions[]"
+                                                                                value="{{ $permission }}">
+                                                                            <label class="form-check-label"
+                                                                                for="{{ $permission }}">{{ $permission }}</label>
+                                                                        </div>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        </fieldset>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <fieldset>
+                                                            <legend>Report Management Permissions
+                                                            </legend>
+                                                            <div class="row py-3">
+                                                                @foreach ($reportPermissions as $permission)
+                                                                    <div class="col-md-4 form-group">
+                                                                        <div class="form-check form-switch">
+                                                                            <input class="form-check-input"
+                                                                                type="checkbox" role="switch"
+                                                                                id="{{ $permission }}"
+                                                                                name="permissions[]"
+                                                                                value="{{ $permission }}">
+                                                                            <label class="form-check-label"
+                                                                                for="{{ $permission }}">{{ $permission }}</label>
+                                                                        </div>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        </fieldset>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <fieldset>
+                                                            <legend>Role Management Permissions
+                                                            </legend>
+                                                            <div class="row py-3">
+                                                                @foreach ($rolePermissions as $permission)
+                                                                    <div class="col-md-4 form-group">
+                                                                        <div class="form-check form-switch">
+                                                                            <input class="form-check-input"
+                                                                                type="checkbox" role="switch"
+                                                                                id="{{ $permission }}"
+                                                                                name="permissions[]"
+                                                                                value="{{ $permission }}">
+                                                                            <label class="form-check-label"
+                                                                                for="{{ $permission }}">{{ $permission }}</label>
+                                                                        </div>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        </fieldset>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <fieldset>
+                                                            <legend>Permission Management Permissions
+                                                            </legend>
+                                                            <div class="row py-3">
+                                                                @foreach ($permissionPermissions as $permission)
+                                                                    <div class="col-md-4 form-group">
+                                                                        <div class="form-check form-switch">
+                                                                            <input class="form-check-input"
+                                                                                type="checkbox" role="switch"
+                                                                                id="{{ $permission }}"
+                                                                                name="permissions[]"
+                                                                                value="{{ $permission }}">
+                                                                            <label class="form-check-label"
+                                                                                for="{{ $permission }}">{{ $permission }}</label>
+                                                                        </div>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        </fieldset>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <fieldset>
+                                                            <legend>Settings Management Permissions
+                                                            </legend>
+                                                            <div class="row py-3">
+                                                                @foreach ($settingsPermissions as $permission)
+                                                                    <div class="col-md-4 form-group">
+                                                                        <div class="form-check form-switch">
+                                                                            <input class="form-check-input"
+                                                                                type="checkbox" role="switch"
+                                                                                id="{{ $permission }}"
+                                                                                name="permissions[]"
+                                                                                value="{{ $permission }}">
+                                                                            <label class="form-check-label"
+                                                                                for="{{ $permission }}">{{ $permission }}</label>
+                                                                        </div>
+                                                                    </div>
+                                                                @endforeach
+                                                            </div>
+                                                        </fieldset>
+                                                    </div>
+
+                                                    <div class="col-md-12">
+                                                        <fieldset>
+                                                            <legend>Bank Account Management Permissions
+                                                            </legend>
+                                                            <div class="row py-3">
+                                                                @foreach ($bankAccountPermissions as $permission)
+                                                                    <div class="col-md-4 form-group">
+                                                                        <div class="form-check form-switch">
+                                                                            <input class="form-check-input"
+                                                                                type="checkbox" role="switch"
+                                                                                id="{{ $permission }}"
+                                                                                name="permissions[]"
                                                                                 value="{{ $permission }}">
                                                                             <label class="form-check-label"
                                                                                 for="{{ $permission }}">{{ $permission }}</label>

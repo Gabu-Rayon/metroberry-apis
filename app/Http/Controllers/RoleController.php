@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\PermissionGroup;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
@@ -38,8 +39,19 @@ class RoleController extends Controller
         $vehiclePermissions = PermissionsByActions::VEHICLE_MANAGEMENT_PERMISSIONS;
         $vehicleInsurancePermissions = PermissionsByActions::VEHICLE_INSURANCE_MANAGEMENT_PERMISSIONS;
         $vehicleInspCertPermissions = PermissionsByActions::VEHICLE_INSPECTION_CERTIFICATE_MANAGEMENT_PERMISSIONS;
-        Log::info('DASHBOARD PERMISSIONS');
-        Log::info($dashboardPermissions);
+        $routePermissions = PermissionsByActions::ROUTE_MANAGEMENT_PERMISSIONS;
+        $routeLocationPermissions = PermissionsByActions::ROUTE_LOCATION_MANAGEMENT_PERMISSIONS;
+        $tripPermissions = PermissionsByActions::TRIP_MANAGEMENT_PERMISSIONS;
+        $insuranceCompanyPermissions = PermissionsByActions::INSURANCE_COMPANY_MANAGEMENT_PERMISSIONS;
+        $insuranceRecurringPeriodPermissions = PermissionsByActions::INSURANCE_COMPANY_RECURRING_PERIODS_MANAGEMENT_PERMISSIONS;
+        $maintenancePermissions = PermissionsByActions::MAINTENANCE_MANAGEMENT_PERMISSIONS;
+        $refuellingPermissions = PermissionsByActions::FUELLING_MANAGEMENT_PERMISSIONS;
+        $refuellingStationPermissions = PermissionsByActions::FUELLING_STATIONS_MANAGEMENT_PERMISSIONS;
+        $reportPermissions = PermissionsByActions::REPORTS_MANAGEMENT_PERMISSIONS;
+        $rolePermissions = PermissionsByActions::ROLE_MANAGEMENT_PERMISSIONS;
+        $permissionPermissions = PermissionsByActions::PERMISSION_MANAGEMENT_PERMISSIONS;
+        $settingsPermissions = PermissionsByActions::SETTINGS_MANAGEMENT_PERMISSIONS;
+        $bankAccountPermissions = PermissionsByActions::BANK_ACCOUNT_MANAGEMENT_PERMISSIONS;
         return view('role.create', compact(
             'dashboardPermissions',
             'profilePermissions',
@@ -51,7 +63,20 @@ class RoleController extends Controller
             'driverPerformancePermissions',
             'vehiclePermissions',
             'vehicleInsurancePermissions',
-            'vehicleInspCertPermissions'
+            'vehicleInspCertPermissions',
+            'routePermissions',
+            'routeLocationPermissions',
+            'tripPermissions',
+            'insuranceCompanyPermissions',
+            'insuranceRecurringPeriodPermissions',
+            'maintenancePermissions',
+            'refuellingPermissions',
+            'refuellingStationPermissions',
+            'reportPermissions',
+            'rolePermissions',
+            'permissionPermissions',
+            'settingsPermissions',
+            'bankAccountPermissions'
         ));
     }
 
@@ -60,6 +85,45 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+        try {
+            // Validate the request data
+            $data = $request->validate([
+                'name' => 'required|string|unique:user_roles,name',
+                'permissions' => 'required|array',
+            ]);
+
+            // Start a database transaction
+            DB::beginTransaction();
+
+            // Create a new role with guard_name set to 'web'
+            $role = Role::firstOrCreate([
+                'name' => $data['name'],
+            ]);
+
+            foreach ($data['permissions'] as $permissionId) {
+                $permission = Permission::find($permissionId);
+                if (!$permission) {
+                    \Spatie\Permission\Models\Permission::create([
+                        'name' => $permissionId,
+                        'guard_name' => 'web',
+                    ]);
+                }
+            }
+
+            // Attach permissions to the role
+            $role->permissions()->sync($data['permissions']);
+
+            // Commit the transaction
+            DB::commit();
+
+            return redirect()->route('roles.index')->with('success', 'Role created successfully');
+        } catch (Exception $e) {
+            // Rollback the transaction if something goes wrong
+            DB::rollBack();
+            Log::error('Error creating role: ');
+            Log::info($e);
+            return redirect()->back()->with('error', 'An error occurred while creating the role. Please try again.')->withInput();
+        }
     }
 
 
