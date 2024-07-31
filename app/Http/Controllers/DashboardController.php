@@ -16,27 +16,30 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 
 class DashboardController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
 
 
         $user = Auth::user();
+        $lang = Session::get('locale');
 
-        Log::info('USER');
-        Log::info($user);
+        Log::info('LANG');
+        Log::info($lang);
+
 
         if ($user->role == 'organisation') {
-            return redirect()->route('organisation.dashboard');
+            return redirect()->route('organisation.dashboard', ['lang' => $lang]);
         }
 
         if ($user->role == 'refueling_station') {
-            return redirect()->route('refueling.station.dashboard');
+            return redirect()->route('refueling.station.dashboard', ['lang' => $lang]);
         }
 
 
@@ -162,6 +165,8 @@ class DashboardController extends Controller
             'maintenanceCostReport',
             'expensePieChart',
             'venDiagram',
+            'totalExpenses',
+            'lang',
         ));
     }
 

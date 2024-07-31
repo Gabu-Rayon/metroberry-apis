@@ -1,1 +1,8 @@
-<?php return ['previous'=>'&laquo; Previous','next'=>'Next &raquo;',];
+<?php
+
+declare(strict_types=1);
+
+return [
+    'next'     => 'הבא &raquo;',
+    'previous' => '&laquo; הקודם',
+];

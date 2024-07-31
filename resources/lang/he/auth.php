@@ -1,4 +1,9 @@
-<?php return [
-    'failed' => 'These credentials do not match our records.',
-    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+<?php
+
+declare(strict_types=1);
+
+return [
+    'failed'   => 'פרטים אלה אינם תואמים את רישומינו.',
+    'password' => 'הסיסמה שגויה.',
+    'throttle' => 'ניסיונות כניסה רבים מדי. אנא נסו שוב בעוד :seconds שניות.',
 ];

@@ -1,10 +1,12 @@
-<?php return [
+<?php
 
-    'password' => 'Passwords must be at least eight characters and match the confirmation.',
-    'reset' => 'Your password has been reset!',
-    'sent' => 'We have e-mailed your password reset link!',
-    'token' => 'This password reset token is invalid.',
-    'user' => 'We can\'t find a user with that e-mail address.',
-    'throttled' => 'You have requested password reset recently, please check your email.',
+declare(strict_types=1);
 
+return [
+    'password'  => 'Passwords must be at least eight characters and match the confirmation.',
+    'reset'     => 'Parolanız sıfırlandı!',
+    'sent'      => 'Parola sıfırlama bağlantınız e-posta ile gönderildi!',
+    'throttled' => 'Tekrar denemeden önce lütfen bekleyin.',
+    'token'     => 'Parola sıfırlama kodu geçersiz.',
+    'user'      => 'Bu e-posta adresi ile kayıtlı bir üye bulunamadı.',
 ];

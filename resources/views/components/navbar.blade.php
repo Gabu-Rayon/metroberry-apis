@@ -10,14 +10,14 @@
                     <img src="" alt="Language Icon">
                 </a>
                 <div class="dropdown-menu language_dropdown">
-                    
-                    @foreach ($languages as $code => $language)
-                            <a href="{{ route('change.language', $code) }}"
-                               class="dropdown-item {{ $lang == $code ? 'text-primary' : '' }}">
-                                <span>{{ucFirst($language)}}</span>
-                            </a>
-                        @endforeach
+                    @foreach (config('app.languages') as $code => $language)
+                        <a href="/change/language/{{ $code }}"
+                            class="dropdown-item {{ session('locale', config('app.locale')) == $code ? 'text-primary' : '' }}">
+                            <span>{{ ucfirst($language) }}</span>
+                        </a>
+                    @endforeach
                 </div>
+
             </li>
 
             <li class="nav-item dropdown user_profile me-2">

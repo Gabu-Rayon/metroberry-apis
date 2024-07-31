@@ -1,4 +1,9 @@
-<?php return [
-    'failed' => 'These credentials do not match our records.',
-    'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
+<?php
+
+declare(strict_types=1);
+
+return [
+    'failed'   => 'Bu kimlik bilgileri kayıtlarımızla eşleşmiyor.',
+    'password' => 'Parola geçersiz.',
+    'throttle' => 'Çok fazla giriş denemesi. :seconds saniye sonra lütfen tekrar deneyin.',
 ];
