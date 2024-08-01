@@ -81,16 +81,18 @@
                                             </tr>
                                             </tfoot>
                                         </table>
-                                    </div>
+                                   </div>
+                                    <div id="page-axios-data" data-table-id="#driver-table"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    @include('components.footer')
                 </div>
+                <div class="overlay"></div>
+                @include('components.footer')
             </div>
-            <!-- End React page -->
         </div>
+        <!-- end vue page -->
     </div>
     <!-- END layout-wrapper -->
 

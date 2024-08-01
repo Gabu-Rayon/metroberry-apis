@@ -191,7 +191,7 @@
                     \Auth::user()->can('view reports')
                         ? ['label' => 'Fueling Report', 'route' => route('report.refueling')]
                         : null,
-                    \Auth::user()->can('manage expenses')
+                    \Auth::user()->can('view reports')
                     ? ['label' => 'Expenses', 'route' => route('expenses.index')]
                     : null,
                     \Auth::user()->can('view reports')
