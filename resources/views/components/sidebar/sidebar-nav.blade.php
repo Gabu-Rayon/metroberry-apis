@@ -191,27 +191,15 @@
                     \Auth::user()->can('view reports')
                         ? ['label' => 'Fueling Report', 'route' => route('report.refueling')]
                         : null,
+                    \Auth::user()->can('manage expenses')
+                    ? ['label' => 'Expenses', 'route' => route('expenses.index')]
+                    : null,
+                    \Auth::user()->can('view reports')
+                    ? ['label' => 'Incomes', 'route' => route('incomes.index')]
+                    : null,
                 ]),
             ])
         @endif
-
-            @if (\Auth::user()->can('manage expenses'))
-                @include('components.sidebar.sidebar-item', [
-                    'isActive' => request()->routeIs('expenses.*'),
-                    'route' => route('expenses.index'),
-                    'icon' => '<i class="fa-solid fa-credit-card"></i>',
-                    'label' => 'Expenses',
-                ])
-            @endif
-
-            @if (\Auth::user()->can('manage incomes'))
-                @include('components.sidebar.sidebar-item', [
-                    'isActive' => request()->routeIs('incomes.*'),
-                    'route' => route('incomes.index'),
-                    'icon' => '<i class="fa-solid fa-piggy-bank"></i>',
-                    'label' => 'Incomes',
-                ])
-            @endif
 
         @if (\Auth::user()->can('manage permissions'))
             @include('components.sidebar.sidebar-dropdown', [
