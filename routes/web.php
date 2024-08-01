@@ -1232,7 +1232,15 @@ Route::get('vehicle/maintenance/parts/{id}/edit', [VehiclePartController::class,
 
 Route::put('vehicle/maintenance/parts/{id}/edit', [VehiclePartController::class, 'update'])
     ->name('vehicle.maintenance.parts.update')
-    ->middleware('auth', 'can:create maintenance');
+    ->middleware('auth', 'can:edit maintenance');
+
+Route::get('vehicle/maintenance/parts/{id}/add', [VehiclePartController::class, 'add'])
+    ->name('vehicle.maintenance.parts.add')
+    ->middleware('auth', 'can:edit maintenance');
+
+Route::post('vehicle/maintenance/parts/{id}/add', [VehiclePartController::class, 'addPost'])
+    ->name('vehicle.maintenance.parts.add')
+    ->middleware('auth', 'can:edit maintenance');
 
 // delete vehicle parts
 

@@ -66,6 +66,11 @@
                                                                     class="btn btn-danger btn-sm">
                                                                     <i class="fa fa-trash"></i>
                                                                 </a>
+                                                                <a href="javascript:void(0);"
+                                                                   onclick="axiosModal('{{ route('vehicle.maintenance.parts.add', $part->id) }}')"
+                                                                   class="btn btn-info btn-sm" title="Increase Quantity">
+                                                                    <i class="fa fa-plus"></i>
+                                                                </a>
                                                             </td>
                                                         </tr>
                                                     @endforeach

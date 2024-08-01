@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Expense;
 use App\Models\VehiclePart;
 use App\Models\VehiclePartCategory;
 use Exception;
@@ -59,7 +60,7 @@ class VehiclePartController extends Controller
 
             DB::beginTransaction();
 
-            VehiclePart::create([
+            $vclprt = VehiclePart::create([
                 'name' => $data['name'],
                 'category_id' => $data['category_id'],
                 'model_number' => $data['model_number'],
@@ -70,6 +71,14 @@ class VehiclePartController extends Controller
                 'price' => $data['price'],
                 'condition' => $data['condition'],
                 'notes' => $data['notes'],
+            ]);
+
+            Expense::create([
+                'name' => 'Vehicle Part Purchase',
+                'amount' => $vclprt['price'] * $vclprt['quantity'],
+                'category' => 'vehicle_parts_purchase',
+                'entry_date' => now(),
+                'description' => 'Purchased ' . $vclprt['quantity'] . ' ' . $vclprt['name'] . ' vehicle parts',
             ]);
 
             DB::commit();
@@ -178,6 +187,50 @@ class VehiclePartController extends Controller
             Log::info('DELETE VEHICLE PART ERROR');
             Log::error($e);
             return redirect()->back()->with('error', 'Something Went Wrong');
+        }
+    }
+
+    public function add($id) {
+        $part = VehiclePart::find($id);
+        return view('vehicle.maintenance.parts.add', compact('part'));
+    }
+
+    public function addPost(Request $request, $id) {
+        try {
+
+            $data = $request->all();
+
+            $validator = Validator::make($data, [
+                'quantity' => 'required|integer',
+            ]);
+
+            if ($validator->fails()) {
+                Log::error('VALIDATION ERROR');
+                Log::error($validator->errors());
+                return redirect()->back()->with('error', 'Something Went Wrong')->withInput();
+            }
+
+            DB::beginTransaction();
+
+            $part = VehiclePart::find($id);
+            $part->quantity += $data['quantity'];
+            $part->save();
+
+            Expense::create([
+                'name' => 'Vehicle Part Purchase',
+                'amount' => $part['price'] * $data['quantity'],
+                'category' => 'vehicle_parts_purchase',
+                'entry_date' => now(),
+                'description' => 'Purchased ' . $data['quantity'] . ' ' . $part['name'] . ' vehicle parts',
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('vehicle.maintenance.parts')->with('success', 'Vehicle Part Added Successfully');
+        } catch (Exception $e) {
+            Log::info('ADD VEHICLE PART ERROR');
+            Log::error($e);
+            return redirect()->back()->with('error', 'Something Went Wrong')->withInput();
         }
     }
 }
