@@ -613,6 +613,16 @@ Route::get('vehicle/certificate/import', [NTSAInspectionCertificateController::c
     ->name('vehicle.certificate.import')
     ->middleware('auth', 'can:import vehicle inspection certificates');
 
+// Renew Inspection Certificate
+Route::get('vehicle/certificate/{id}/renew', [NTSAInspectionCertificateController::class, 'renew'])
+    ->name('vehicle.certificate.renew')
+    ->middleware('auth', 'can:edit vehicle inspection certificate');
+
+Route::post('vehicle/certificate/{id}/renew', [NTSAInspectionCertificateController::class, 'renewPost'])
+    ->name('vehicle.certificate.renew')
+    ->middleware('auth', 'can:edit vehicle inspection certificate');
+
+
 /**
  * 'Routes' Routes
  *

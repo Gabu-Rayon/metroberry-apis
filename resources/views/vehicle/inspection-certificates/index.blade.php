@@ -68,6 +68,7 @@
                                                         <th title="Address">Vehicle</th>
                                                         <th title="Email">Issue Date</th>
                                                         <th title="Phone">Expiry Date</th>
+                                                        <th title="Cost">Cost</th>
                                                         <th title="Status">Status</th>
                                                         <th title="Action" width="80">Action</th>
                                                     </tr>
@@ -83,6 +84,7 @@
                                                             </td>
                                                             <td>{{ $certificate->ntsa_inspection_certificate_date_of_expiry }}
                                                             </td>
+                                                            <td>{{ $certificate->cost  }}</td>
                                                             <td>
                                                                 @php
                                                                     $avatar =
@@ -98,7 +100,7 @@
                                                                         $today = \Carbon\Carbon::today();
 
                                                                         // Determine if the certificate has expired
-                                                                        $isExpired = $today->gt($expiryDate); // Changed to gt for correct comparison
+                                                                        $isExpired = \Carbon\Carbon::parse($certificate->ntsa_inspection_certificate_date_of_expiry)->isPast();
 
                                                                         // Calculate days until expiry if the certificate has not expired
                                                                         $daysUntilExpiry = $isExpired
@@ -132,7 +134,6 @@
                                                                 @endphp
                                                                 <span class="{{ $badgeClass }}">{{ $badgeText }}</span>
                                                             </td>
-
                                                             <td class="d-flex">
                                                                 @if (Auth::user()->can('edit vehicle inspection certificate'))
                                                                     <a href="javascript:void(0);"
@@ -171,6 +172,15 @@
                                                                         <i class="fas fa-trash"></i>
                                                                     </a>
                                                                 @endif
+                                                                <span class='m-1'></span>
+                                                                    @php($expired = \Carbon\Carbon::parse($certificate->ntsa_inspection_certificate_date_of_expiry)->isPast())
+                                                                    @if ($expired)
+                                                                        <span class="m-1"></span>
+                                                                        <a href="javascript:void(0);" class="btn btn-sm btn-warning"
+                                                                           onclick="axiosModal('{{ route('vehicle.certificate.renew', $certificate->id) }}')">
+                                                                            <i class="fas fa-sync"></i>
+                                                                        </a>
+                                                                    @endif
                                                             </td>
                                                         </tr>
                                                     @endforeach
@@ -241,6 +251,18 @@
                                             placeholder="Certificate No" id="ntsa_inspection_certificate_no" required />
                                     </div>
                                 </div>
+
+                                <div class="form-group row my-2">
+                                    <label for="cost" class="col-sm-5 col-form-label">
+                                        Cost (KES)
+                                        <i class="text-danger">*</i>
+                                    </label>
+                                    <div class="col-sm-7">
+                                        <input name="cost" class="form-control" type="number"
+                                               placeholder="Cost" id="cost" required />
+                                    </div>
+                                </div>
+
 
                             </div>
 

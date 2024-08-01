@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\NTSAInspectionCertificateExport;
+use App\Models\Expense;
 use App\Models\NTSAInspectionCertificate;
 use App\Models\Vehicle;
 use Exception;
@@ -46,6 +47,7 @@ class NTSAInspectionCertificateController extends Controller
                 'ntsa_inspection_certificate_no' => 'required|string|unique:ntsa_inspection_certificates,ntsa_inspection_certificate_no',
                 'ntsa_inspection_certificate_date_of_expiry' => 'required|date',
                 'avatar' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+                'cost' => 'required|numeric',
             ]);
 
             if ($validator->fails()) {
@@ -66,13 +68,22 @@ class NTSAInspectionCertificateController extends Controller
                 $avatarPath = $avatarFile->storeAs('uploads/ntsa-insp-cert-copies', $avatarFileName, 'public');
             }
 
-            NTSAInspectionCertificate::create([
+            $cert = NTSAInspectionCertificate::create([
                 'vehicle_id' => $data['vehicle'],
                 'creator_id' => auth()->id(),
                 'ntsa_inspection_certificate_no' => $certNo,
                 'ntsa_inspection_certificate_date_of_issue' => $data['ntsa_inspection_certificate_date_of_issue'],
                 'ntsa_inspection_certificate_date_of_expiry' => $data['ntsa_inspection_certificate_date_of_expiry'],
                 'ntsa_inspection_certificate_avatar' => $avatarPath,
+                'cost' => $data['cost'],
+            ]);
+
+            Expense::create([
+                'name' => 'NTSA Inspection Certificate',
+                'amount' => $cert->cost,
+                'category' => 'ntsa_inspection_certificate',
+                'entry_date' => now(),
+                'description' => 'Add NTSA Inspection Certificate for ' . $cert->vehicle->plate_number,
             ]);
 
             DB::commit();
@@ -149,12 +160,16 @@ class NTSAInspectionCertificateController extends Controller
                 'verified' => false,
             ]);
 
+            $certificate->vehicle->status = 'inactive';
+
             $certificate->save();
+            $certificate->vehicle->save();
 
             DB::commit();
 
             return redirect()->route('vehicle.inspection.certificate')->with('success', 'Inspection Certificate updated successfully.');
         } catch (Exception $e) {
+            DB::rollBack();
             Log::error('UPDATE INSPECTION CERTIFICATE ERROR');
             Log::error($e);
             return back()->with('error', 'Something went wrong.');
@@ -220,7 +235,10 @@ class NTSAInspectionCertificateController extends Controller
                 'verified' => false,
             ]);
 
+            $certificate->vehicle->status = 'inactive';
+
             $certificate->save();
+            $certificate->vehicle->save();
 
             DB::commit();
 
@@ -249,6 +267,9 @@ class NTSAInspectionCertificateController extends Controller
 
             DB::beginTransaction();
 
+            $certificate->vehicle->status = 'inactive';
+
+            $certificate->vehicle->save();
             $certificate->delete();
 
             DB::commit();
@@ -264,5 +285,61 @@ class NTSAInspectionCertificateController extends Controller
     public function export()
     {
         return Excel::download(new NTSAInspectionCertificateExport, 'ntsa-inspection-certificates.xlsx');
+    }
+    public function renew ($id)
+    {
+        $certificate = NTSAInspectionCertificate::findOrFail($id);
+        return view('vehicle.inspection-certificates.renew', compact('certificate'));
+    }
+
+    public function renewPost($id) {
+        try {
+            $certificate = NTSAInspectionCertificate::findOrFail($id);
+
+            $data = request()->all();
+
+            $validator = Validator::make($data, [
+                'issue_date' => 'required|date',
+                'certificate_copy' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+                'expiry_date' => 'required|date',
+            ]);
+
+            if ($validator->fails()) {
+                Log::error('VALIDATION ERROR');
+                Log::error($validator->errors());
+                return back()->with('error', $validator->errors()->first());
+            }
+
+            DB::beginTransaction();
+
+            $certificate->update([
+                'ntsa_inspection_certificate_date_of_issue' => $data['issue_date'],
+                'ntsa_inspection_certificate_date_of_expiry' => $data['expiry_date'],
+                'ntsa_inspection_certificate_avatar' => $data['certificate_copy'],
+                'verified' => false,
+            ]);
+
+            $certificate->vehicle->status = 'inactive';
+
+            $certificate->save();
+            $certificate->vehicle->save();
+
+            Expense::create([
+                'name' => 'NTSA Inspection Certificate',
+                'amount' => $certificate->cost,
+                'category' => 'ntsa_inspection_certificate',
+                'entry_date' => now(),
+                'description' => 'Renew NTSA Inspection Certificate for ' . $certificate->vehicle->plate_number,
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('vehicle.inspection.certificate')->with('success', 'Inspection Certificate renewed successfully.');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('RENEW INSPECTION CERTIFICATE ERROR');
+            Log::error($e);
+            return back()->with('error', 'Something went wrong.');
+        }
     }
 }
