@@ -294,6 +294,17 @@ class PermissionsByActions
         'export bank accounts',
         'import bank accounts',
     ];
+
+    public const EXPENSE_MANAGEMENT_PERMISSIONS = [
+        'manage expenses',
+        'view expenses',
+        'show expense',
+        'create expense',
+        'edit expense',
+        'delete expense',
+        'export expenses',
+        'import expenses',
+    ];
 }
 
 class Permissions
@@ -329,7 +340,8 @@ Permissions::$admin_permissions = array_merge(
     PermissionsByActions::ROLE_MANAGEMENT_PERMISSIONS,
     PermissionsByActions::PERMISSION_MANAGEMENT_PERMISSIONS,
     PermissionsByActions::SETTINGS_MANAGEMENT_PERMISSIONS,
-    PermissionsByActions::BANK_ACCOUNT_MANAGEMENT_PERMISSIONS
+    PermissionsByActions::BANK_ACCOUNT_MANAGEMENT_PERMISSIONS,
+    PermissionsByActions::EXPENSE_MANAGEMENT_PERMISSIONS
 );
 
 Permissions::$organisation_permissions = [
@@ -466,7 +478,8 @@ class RoleAndPermissionSeeder extends Seeder
             PermissionsByActions::ROLE_MANAGEMENT_PERMISSIONS,
             PermissionsByActions::PERMISSION_MANAGEMENT_PERMISSIONS,
             PermissionsByActions::SETTINGS_MANAGEMENT_PERMISSIONS,
-            PermissionsByActions::BANK_ACCOUNT_MANAGEMENT_PERMISSIONS
+            PermissionsByActions::BANK_ACCOUNT_MANAGEMENT_PERMISSIONS,
+            PermissionsByActions::EXPENSE_MANAGEMENT_PERMISSIONS
         );
 
         /**

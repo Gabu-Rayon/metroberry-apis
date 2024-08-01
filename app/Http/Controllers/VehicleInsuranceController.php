@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\VehicleInsuranceExport;
+use App\Models\Expense;
 use Exception;
 use App\Models\Vehicle;
 use Illuminate\Http\Request;
@@ -71,8 +72,8 @@ class VehicleInsuranceController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     * 
-     * 
+     *
+     *
      */
     public function store(Request $request)
     {
@@ -105,13 +106,15 @@ class VehicleInsuranceController extends Controller
                 return redirect()->back()->with('error', $validator->errors()->first())->withInput();
             }
 
+            DB::beginTransaction();
+
             // Log the request data
             Log::info('Vehicle Insurance store request data:', $request->all());
 
             // Handle the file upload
             if ($request->hasFile('policy_document')) {
-                $policyDocumnet = time() . '.' . $request->policy_document->extension();
-                $request->policy_document->move(public_path('images'), $policyDocumnet);
+                $policyDocument = time() . '.' . $request->policy_document->extension();
+                $request->policy_document->move(public_path('images'), $policyDocument);
             }
 
             // Create a new vehicle insurance record
@@ -128,16 +131,25 @@ class VehicleInsuranceController extends Controller
             $vehicleInsurance->deductible = $request->deductible;
             $vehicleInsurance->status = $request->status;
             $vehicleInsurance->remark = $request->remark;
-            $vehicleInsurance->policy_document = $policyDocumnet;
+            $vehicleInsurance->policy_document = $policyDocument;
             $vehicleInsurance->created_by = Auth::user()->id;
 
             $vehicleInsurance->save();
 
+            Expense::create([
+                'name' => 'Vehicle Insurance',
+                'amount' => $request->charges_payable,
+                'category' => 'vehicle_insurance',
+                'entry_date' => now(),
+                'description' => 'New Vehicle Insurance for ' . $vehicleInsurance->vehicle->plate_number,
+            ]);
+
+            DB::commit();
+
             return redirect()->route('vehicle.insurance.index')->with('success', 'Vehicle Insurance added successfully.');
         } catch (Exception $e) {
-            // Log the error message
+            DB::rollBack();
             Log::error('Error adding vehicle Insurance: ' . $e->getMessage());
-
             return back()->with('error', 'An error occurred while adding the vehicle Insurance. Please try again.');
         }
     }
@@ -172,8 +184,8 @@ class VehicleInsuranceController extends Controller
 
     /**
      * Update the specified resource in storage.
-     * 
-     * 
+     *
+     *
      */
     public function update(Request $request, $id)
     {
@@ -203,6 +215,7 @@ class VehicleInsuranceController extends Controller
         }
 
         try {
+            DB::beginTransaction();
             $vehicleInsurance = VehicleInsurance::findOrFail($id);
 
             // Handle file upload if provided
@@ -237,8 +250,15 @@ class VehicleInsuranceController extends Controller
                 'policy_document' => $vehicleInsurance->policy_document ?? $vehicleInsurance->policy_document,
             ]);
 
+            $vehicleInsurance->vehicle->status = 'inactive';
+            $vehicleInsurance->vehicle->driver->status = 'inactive';
+            $vehicleInsurance->vehicle->save();
+            $vehicleInsurance->vehicle->driver->save();
+
+            DB::commit();
             return redirect()->route('vehicle.insurance.index')->with('success', 'Vehicle Insurance updated successfully.');
         } catch (Exception $e) {
+            DB::rollBack();
             Log::error('Error updating vehicle Insurance: ' . $e->getMessage());
             return back()->with('error', 'An error occurred while updating the Insurance. Please try again.');
         }
@@ -253,7 +273,6 @@ class VehicleInsuranceController extends Controller
      */
     public function delete($id)
     {
-        Log::info('HAPA');
         try {
             $insurance = VehicleInsurance::findOrFail($id);
             return view('vehicle.insurance.delete', compact('insurance'));
@@ -281,7 +300,10 @@ class VehicleInsuranceController extends Controller
             }
 
             DB::beginTransaction();
-
+            $insurance->vehicle->status = 'inactive';
+            $insurance->vehicle->driver->status = 'inactive';
+            $insurance->vehicle->save();
+            $insurance->vehicle->driver->save();
             $insurance->delete();
 
             DB::commit();
@@ -297,5 +319,65 @@ class VehicleInsuranceController extends Controller
     public function export()
     {
         return Excel::download(new VehicleInsuranceExport, 'vehicle_insurances.xlsx');
+    }
+
+    public function renew($id) {
+        $insurance = VehicleInsurance::findOrFail($id);
+        return view('vehicle.insurance.renew', compact('insurance'));
+    }
+
+    public function renewPost($id, Request $request) {
+        try {
+            $insurance = VehicleInsurance::findOrFail($id);
+
+            $data = $request->all();
+
+            $validator = Validator::make($data, [
+                'issue_date' => 'required|date',
+                'expiry_date' => 'required|date|after:issue_date|after:today',
+                'policy_document' => 'required|file|mimes:pdf|max:2048',
+            ]);
+
+            if ($validator->fails()) {
+                return redirect()->back()->with('error', $validator->errors()->first())->withInput();
+            }
+
+            DB::beginTransaction();
+
+            $insurance->update([
+                'insurance_date_of_issue' => $data['issue_date'],
+                'insurance_date_of_expiry' => $data['expiry_date'],
+                'status' => true,
+            ]);
+
+            $policyDocument = null;
+
+            // handle file upload
+            if ($request->hasFile('policy_document')) {
+                $policyDocument = time() . '.' . $request->policy_document->extension();
+                $request->policy_document->move(public_path('images'), $policyDocument);
+            }
+
+            $insurance->policy_document = $policyDocument;
+
+            $insurance->save();
+
+            Expense::create([
+                'name' => 'Vehicle Insurance',
+                'amount' => $insurance->charges_payable,
+                'category' => 'vehicle_insurance',
+                'entry_date' => now(),
+                'description' => 'Renewed Vehicle Insurance for ' . $insurance->vehicle->plate_number,
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('vehicle.insurance.index')->with('success', 'Vehicle Insurance renewed successfully.');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('RENEW VEHICLE INSURANCE ERROR ');
+            Log::error($e);
+            return back()->with('error', 'Something went wrong.');
+        }
     }
 }

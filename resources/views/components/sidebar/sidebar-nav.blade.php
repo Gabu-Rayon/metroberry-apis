@@ -195,6 +195,15 @@
             ])
         @endif
 
+            @if (\Auth::user()->can('manage expenses'))
+                @include('components.sidebar.sidebar-item', [
+                    'isActive' => request()->routeIs('expenses.*'),
+                    'route' => route('expenses.index'),
+                    'icon' => '<i class="fa-solid fa-credit-card"></i>',
+                    'label' => 'Expenses',
+                ])
+            @endif
+
         @if (\Auth::user()->can('manage permissions'))
             @include('components.sidebar.sidebar-dropdown', [
                 'title' => 'Access Management',
@@ -231,7 +240,7 @@
         @endif
 
 
-        
+
 
     </ul>
 </nav>

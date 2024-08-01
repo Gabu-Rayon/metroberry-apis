@@ -18,7 +18,8 @@ class NTSAInspectionCertificate extends Model
         'ntsa_inspection_certificate_date_of_issue',
         'ntsa_inspection_certificate_date_of_expiry',
         'ntsa_inspection_certificate_avatar',
-        'verified'
+        'verified',
+        'cost'
     ];
 
     protected $with = ['vehicle'];

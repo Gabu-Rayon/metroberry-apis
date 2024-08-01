@@ -43,6 +43,14 @@
                                 <i class="fas fa-trash"></i>
                             </a>
                         @endif
+                        @php($expired = \Carbon\Carbon::parse($insurance->insurance_date_of_expiry)->isPast())
+                        @if ($expired)
+                            <span class="m-1"></span>
+                            <a href="javascript:void(0);" class="btn btn-sm btn-warning"
+                                onclick="axiosModal('/vehicle/insurance/{{ $insurance->id }}/renew')">
+                                <i class="fas fa-sync"></i>
+                            </a>
+                        @endif
                     </td>
                 </tr>
             @endforeach

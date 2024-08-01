@@ -38,6 +38,7 @@ use App\Http\Controllers\VehiclePartCategoryController;
 use App\Http\Controllers\MaintenanceRepairPaymentController;
 use App\Http\Controllers\MaintenanceServicePaymentController;
 use App\Http\Controllers\NTSAInspectionCertificateController;
+use App\Http\Controllers\ExpenseController;
 
 // All Routes
 
@@ -46,7 +47,7 @@ require __DIR__ . '/insurance_company_routes.php';
 
 /***
  * Admin  Routes
- * 
+ *
  */
 
 // Admin Dashboard
@@ -71,7 +72,7 @@ Route::get('refueling/station/dashboard', [RefuellingStationController::class, '
 
 /**
  * Employees Routes
- * 
+ *
  */
 
 // View Employees
@@ -210,7 +211,7 @@ Route::post('organisation/import/store', [OrganisationController::class, 'import
 
 /**
  * Drivers Routes
- * 
+ *
  */
 
 // View Drivers
@@ -414,7 +415,7 @@ Route::get('driver/psvbadge/import', [PSVBadgeController::class, 'import'])
 
 /**
  * Driver Performance Routes
- * 
+ *
  */
 
 Route::get('driver/performance', [DriverController::class, 'driverPerformance'])
@@ -425,7 +426,7 @@ Route::get('driver/performance', [DriverController::class, 'driverPerformance'])
 
 /**
  * vehicle Routes
- * 
+ *
  */
 
 //  View Vehicles
@@ -457,7 +458,7 @@ Route::put('/vehicle/{id}/assign/driver', [VehicleController::class, 'assignDriv
     ->name('vehicle.assign.driver')
     ->middleware('auth', 'can:assign driver');
 
-// Activate Vehicle 
+// Activate Vehicle
 Route::get('vehicle/{id}/activate', [VehicleController::class, 'activateForm'])
     ->name('vehicle.activate')
     ->middleware('auth', 'can:activate vehicle');
@@ -542,6 +543,15 @@ Route::get('vehicle/insurance/import', [VehicleInsuranceController::class, 'impo
     ->name('vehicle.insurance.import')
     ->middleware('auth', 'can:import vehicle insurances');
 
+// Renew Insurance
+Route::get('vehicle/insurance/{id}/renew', [VehicleInsuranceController::class, 'renew'])
+    ->name('vehicle.insurance.renew')
+    ->middleware('auth', 'can:edit vehicle insurance');
+
+Route::post('vehicle/insurance/{id}/renew', [VehicleInsuranceController::class, 'renewPost'])
+    ->name('vehicle.insurance.renew')
+    ->middleware('auth', 'can:edit vehicle insurance');
+
 
 /**
  * NTSA Inspection Certificate Routes
@@ -605,7 +615,7 @@ Route::get('vehicle/certificate/import', [NTSAInspectionCertificateController::c
 
 /**
  * 'Routes' Routes
- * 
+ *
  */
 
 // View Routes
@@ -650,7 +660,7 @@ Route::get('route/import', [RouteController::class, 'import'])
 
 /**
  * Route Location Routes
- * 
+ *
  */
 
 // View Route Locations
@@ -691,7 +701,7 @@ Route::get('route/location/import', [RouteLocationsController::class, 'import'])
 
 /**
  * Tripes Routes
- * 
+ *
  */
 
 Route::get('/trip/create', [TripController::class, 'create'])
@@ -804,6 +814,17 @@ Route::get('billed/trip/{id}/send/invoice', [TripPaymentController::class, 'bill
     ->name('billed.trip.send.invoice')
     ->middleware('auth', 'can:send trip invoice');
 
+Route::resource('expenses', ExpenseController::class)
+    ->middleware('auth', 'can:manage expenses');
+
+Route::get('expenses/export', [ExpenseController::class, 'export'])
+    ->middleware('auth', 'can:export expenses')
+    ->name('expenses.export');
+
+Route::get('expenses/import', [ExpenseController::class, 'import'])
+    ->middleware('auth', 'can:import expenses')
+    ->name('expenses.import');
+
 // All Routes
 
 Route::middleware('auth')->group(function () {
@@ -827,7 +848,7 @@ Route::middleware('auth')->group(function () {
 
 /***
  * User Interfaces
- * 
+ *
  */
 Route::get('/admin/user', [UserController::class, 'index'])
     ->name('user.index')
@@ -859,17 +880,17 @@ Route::post('/admin/user/{id}/destroy', [UserController::class, 'destory'])
 
 /***
  * Import Employee
- * 
+ *
  */
 
 /****
  * Exports and Imports
- * 
+ *
  */
 
 /**
  * Trip Payment Routes
- * 
+ *
  */
 
 
@@ -948,7 +969,7 @@ Route::get('maintenance/repair/{id}/payment/checkout', [MaintenanceRepairControl
 
 /**
  * MaintenanceService Payment Routes
- * 
+ *
  */
 
 Route::get('maintenance/repair/{id}/receive/payment', [MaintenanceRepairPaymentController::class, 'billedVehicleRepairMaintenanceRecievePayment'])
@@ -1025,7 +1046,7 @@ Route::get('maintenance/service/{id}/payment/checkout', [MaintenanceServiceContr
 
 /**
  * MaintenanceService Payment Routes
- * 
+ *
  */
 
 Route::get('maintenance/service/{id}/receive/payment', [MaintenanceServicePaymentController::class, 'billedVehiclmaintenance/repaireServiceMaintenanceRecievePayment'])
@@ -1286,12 +1307,12 @@ Route::delete('vehicle/maintenance/repairs/categories/{id}/delete', [RepairCateg
 
 
 /****
- * 
- *Manage Driver License 
+ *
+ *Manage Driver License
  */
 
 /***
- * 
+ *
  * Manage Vehicle Refueling
  */
 
@@ -1360,7 +1381,7 @@ Route::delete('/refueling/{id}/delete', [VehicleRefuelingController::class, 'des
     ->middleware('auth', 'can:delete fuelling');
 
 /***
- * 
+ *
  * Manage Vehicle Refueling Stations
  */
 
@@ -1422,10 +1443,10 @@ Route::get('/type/create', [VehicleRefuelingController::class, 'typeCreate'])
     ->middleware('auth', 'can:create fuelling');
 
 /***
- * 
+ *
  * Manage Inventory
- * 
- * 
+ *
+ *
  */
 Route::get('/inventory/expense', [InventoryController::class, 'InventoryExpense'])
     ->name('inventory.expense.index')
@@ -1456,8 +1477,8 @@ Route::get('/inventory/trip-type', [InventoryController::class, 'InventoryTripTy
     ->middleware('auth', 'can:view inventory trip type');
 
 /***
- * Purchase Routes 
- * 
+ * Purchase Routes
+ *
  */
 Route::get('/purchase', [PurchaseController::class, 'index'])
     ->name('purchase.index')
@@ -1519,9 +1540,9 @@ Route::get('report/maintenance', [ReportController::class, 'maintenanceReport'])
     ->name('report.maintenance')
     ->middleware('auth', 'can:view reports');
 /***
- * 
+ *
  * Settings Routes
- * 
+ *
  */
 
 //  Update Settings
@@ -1535,9 +1556,9 @@ Route::get('/settings/site', [SettingsController::class, 'site'])
     ->middleware('auth', 'can:view settings');
 
 /**
- * 
- * Permissions and Role Routes 
- * 
+ *
+ * Permissions and Role Routes
+ *
  */
 
 // View Permissions
@@ -1588,7 +1609,7 @@ Route::post('/admin/role/store', [RoleController::class, 'store'])->name('permis
 
 /***
  * Route for metro Berry Accounting Settings
- * 
+ *
  */
 
 Route::get('/metro-berry/accounting-setting', [AccountingSettingController::class, 'index'])
@@ -1620,11 +1641,11 @@ Route::delete('/accounting-setting/{id}/destroy', [AccountingSettingController::
     ->middleware('auth', 'can:delete bank account');
 
 /**
- * 
- * For checking out the invoice blade template 
- * 
- * 
- * 
+ *
+ * For checking out the invoice blade template
+ *
+ *
+ *
  */
 Route::get('invoice', [TripController::class, 'invoice'])
     ->name('metro.berry.invoice.template')
@@ -1644,9 +1665,9 @@ Route::get('billed/trip/{id}/download/invoice', [TripPaymentController::class, '
 
 
 /***
- * 
+ *
  * Settings Routes
- * 
+ *
  */
 
 //  Update Settings
