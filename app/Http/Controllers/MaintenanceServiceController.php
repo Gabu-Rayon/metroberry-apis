@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Expense;
+use App\Models\ServiceTypeCategory;
 use Exception;
 use App\Models\Vehicle;
 use App\Models\ServiceType;
@@ -59,7 +61,7 @@ class MaintenanceServiceController extends Controller
 
             DB::beginTransaction();
 
-            MaintenanceService::create([
+            $service = MaintenanceService::create([
                 'vehicle_id' => $data['vehicle'],
                 'creator_id' => auth()->id(),
                 'service_type_id' => $data['service_type_id'],
@@ -167,6 +169,17 @@ class MaintenanceServiceController extends Controller
 
             $service->update([
                 'service_status' => 'billed',
+            ]);
+
+            $service_type = ServiceType::find($service['service_type_id']);
+            $service_category = ServiceTypeCategory::find($service['service_category_id']);
+
+            Expense::create([
+                'name' => $service_type->name . ' - ' . $service_category->name,
+                'amount' => $service->service_cost,
+                'category' => 'vehicle_service',
+                'entry_date' => now(),
+                'description' => $service_type->name . ' - ' . $service_category->name . ' Service for ' . $service->vehicle->plate_number,
             ]);
 
             DB::commit();
