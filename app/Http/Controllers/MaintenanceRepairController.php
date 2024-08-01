@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Expense;
+use App\Models\ServiceType;
+use App\Models\ServiceTypeCategory;
 use Exception;
 use App\Models\Vehicle;
 use App\Models\VehiclePart;
@@ -283,6 +286,16 @@ class MaintenanceRepairController extends Controller
             $maintenanceRepair->part->save();
 
             $maintenanceRepair->save();
+
+            $vehprt = VehiclePart::where('id', $maintenanceRepair->part_id)->first();
+
+            Expense::create([
+                'name' => 'Vehicle Repair',
+                'amount' => $maintenanceRepair->repair_cost,
+                'category' => 'vehicle_repairs',
+                'entry_date' => now(),
+                'description' => $maintenanceRepair->repair_type . ' Repair for part ' . $vehprt->name . ' For Vehicle ' . $maintenanceRepair->vehicle->plate_number,
+            ]);
 
             DB::commit();
 

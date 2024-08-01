@@ -73,6 +73,13 @@
                                                 </tr>
                                             @endforeach
                                             </tbody>
+                                            <tfoot>
+                                            <tr>
+                                                <td class="text-right font-weight-bold"><strong>Total Amount:</strong></td>
+                                                <td class="font-weight-bold"><strong>KES {{ $totalAmount }}</strong></td>
+                                                <td colspan="4"></td>
+                                            </tr>
+                                            </tfoot>
                                         </table>
                                     </div>
                                 </div>

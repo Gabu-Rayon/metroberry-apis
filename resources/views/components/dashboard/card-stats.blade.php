@@ -194,7 +194,7 @@
             <div class="card-body px-3">
                 <div class="d-flex flex-column gap-2">
                     @php
-                        $isLoss = $totalExpense > $totalIncome;
+                        $isLoss = $totalAmount > $totalIncome;
                         $textClass = $isLoss ? 'text-danger' : 'text-success';
                     @endphp
 
@@ -213,7 +213,7 @@
                         <a class="{{ $textClass }}" href="#">
                             Total Expenses
                             <span class="float-end {{ $textClass }}">
-                                <strong>KES {{ $totalExpense }}</strong>
+                                <strong>KES {{ $totalAmount }}</strong>
                             </span>
                         </a>
                     </div>
