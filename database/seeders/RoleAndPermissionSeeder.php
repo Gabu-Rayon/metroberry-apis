@@ -305,6 +305,17 @@ class PermissionsByActions
         'export expenses',
         'import expenses',
     ];
+
+    public const INCOME_MANAGEMENT_PERMISSIONS = [
+        'manage incomes',
+        'view incomes',
+        'show income',
+        'create income',
+        'edit income',
+        'delete income',
+        'export incomes',
+        'import incomes',
+    ];
 }
 
 class Permissions
@@ -341,7 +352,8 @@ Permissions::$admin_permissions = array_merge(
     PermissionsByActions::PERMISSION_MANAGEMENT_PERMISSIONS,
     PermissionsByActions::SETTINGS_MANAGEMENT_PERMISSIONS,
     PermissionsByActions::BANK_ACCOUNT_MANAGEMENT_PERMISSIONS,
-    PermissionsByActions::EXPENSE_MANAGEMENT_PERMISSIONS
+    PermissionsByActions::EXPENSE_MANAGEMENT_PERMISSIONS,
+    PermissionsByActions::INCOME_MANAGEMENT_PERMISSIONS,
 );
 
 Permissions::$organisation_permissions = [
@@ -479,7 +491,8 @@ class RoleAndPermissionSeeder extends Seeder
             PermissionsByActions::PERMISSION_MANAGEMENT_PERMISSIONS,
             PermissionsByActions::SETTINGS_MANAGEMENT_PERMISSIONS,
             PermissionsByActions::BANK_ACCOUNT_MANAGEMENT_PERMISSIONS,
-            PermissionsByActions::EXPENSE_MANAGEMENT_PERMISSIONS
+            PermissionsByActions::EXPENSE_MANAGEMENT_PERMISSIONS,
+            PermissionsByActions::INCOME_MANAGEMENT_PERMISSIONS,
         );
 
         /**

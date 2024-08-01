@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Expense;
 use App\Models\RefuellingStation;
 use App\Models\Vehicle;
 use App\Models\VehicleRefueling;
@@ -199,6 +200,14 @@ class VehicleRefuelingController extends Controller
 
             $refueling->update([
                 'status' => 'billed',
+            ]);
+
+            Expense::create([
+                'name' => 'Refuelling Vehicle',
+                'amount' => $refueling->refuelling_cost,
+                'category' => 'fuel',
+                'entry_date' => now(),
+                'description' => 'Refuelling vehicle ' . $refueling->vehicle->plate_number . ' with ' . $refueling->refuelling_volume . ' litres of fuel',
             ]);
 
             DB::commit();

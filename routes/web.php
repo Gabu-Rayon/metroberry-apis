@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\UserController;
@@ -834,6 +835,17 @@ Route::get('expenses/export', [ExpenseController::class, 'export'])
 Route::get('expenses/import', [ExpenseController::class, 'import'])
     ->middleware('auth', 'can:import expenses')
     ->name('expenses.import');
+
+Route::resource('incomes', IncomeController::class)
+    ->middleware('auth', 'can:manage incomes');
+
+Route::get('incomes/export', [IncomeController::class, 'export'])
+    ->middleware('auth', 'can:export incomes')
+    ->name('incomes.export');
+
+Route::get('incomes/import', [IncomeController::class, 'import'])
+    ->middleware('auth', 'can:import incomes')
+    ->name('incomes.import');
 
 // All Routes
 

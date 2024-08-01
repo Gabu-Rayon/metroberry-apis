@@ -204,6 +204,15 @@
                 ])
             @endif
 
+            @if (\Auth::user()->can('manage incomes'))
+                @include('components.sidebar.sidebar-item', [
+                    'isActive' => request()->routeIs('incomes.*'),
+                    'route' => route('incomes.index'),
+                    'icon' => '<i class="fa-solid fa-piggy-bank"></i>',
+                    'label' => 'Incomes',
+                ])
+            @endif
+
         @if (\Auth::user()->can('manage permissions'))
             @include('components.sidebar.sidebar-dropdown', [
                 'title' => 'Access Management',

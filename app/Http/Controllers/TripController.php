@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Income;
 use Exception;
 use Carbon\Carbon;
 use App\Models\Trip;
@@ -42,7 +43,7 @@ class TripController extends Controller
     //         });
 
     //         Log::info('SCHEDULED TRIPS');
-    //         Log::info($scheduledTrips);            
+    //         Log::info($scheduledTrips);
 
     //         return view('trips.scheduled', compact('scheduledTrips'));
     // }
@@ -123,7 +124,7 @@ class TripController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     * 
+     *
      */
 
 
@@ -191,17 +192,17 @@ class TripController extends Controller
             }
 
             //For pick_up_time will be the  shift_end_time
-            // drop_off_or_pick_up_date will be trip date 
-            //then if user select 'pick_up_location' => 'Home', and vice versa for Home 
-            //  we then get there home address from the table of users  by referencing using the customer_id 
+            // drop_off_or_pick_up_date will be trip date
+            //then if user select 'pick_up_location' => 'Home', and vice versa for Home
+            //  we then get there home address from the table of users  by referencing using the customer_id
             //then we will get the lat and long of the address and store it in the database
 
             //then if user select 'dropOffLocation' => 'Office', and vice verse for Home
             //   we will get there organisation address by referecing using their customer_id then
-            //     we get organisation address using the models relationship where the data for organisation is also in the users table 
+            //     we get organisation address using the models relationship where the data for organisation is also in the users table
 
-            //then 
-            // if user select  'drop_off_location' => '4',  which in this case will came id we will get the  
+            //then
+            // if user select  'drop_off_location' => '4',  which in this case will came id we will get the
 
             DB::beginTransaction();
 
@@ -842,6 +843,16 @@ class TripController extends Controller
             $trip->status = 'billed';
 
             $trip->save();
+
+            $organisation = Organisation::where('organisation_code', $trip->customer->customer_organisation_code)->first();
+
+            Income::create([
+                'name'=> 'Trip Payment',
+                'amount' => $trip->total_price,
+                'category' => 'trips',
+                'entry_date' => now(),
+                'description' => 'Trip Payment from ' . $trip->customer->user->name . ' for organisation ' . $organisation->user->name
+            ]);
 
             DB::commit();
 

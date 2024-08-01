@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Charts\MaintenanceCostReport;
 use App\Models\DriversLicenses;
 use App\Models\Expense;
+use App\Models\Income;
 use App\Models\MaintenanceRepair;
 use App\Models\MaintenanceService;
 use App\Models\NTSAInspectionCertificate;
@@ -148,6 +149,8 @@ class DashboardController extends Controller
 
         $expenses = Expense::all();
         $totalAmount = $expenses->sum('amount');
+        $incomes = Income::all();
+        $totalIncomes = $incomes->sum('amount');
 
         return view('dashboard', compact(
             'activeVehicles',
@@ -166,7 +169,8 @@ class DashboardController extends Controller
             'maintenanceCostReport',
             'expensePieChart',
             'venDiagram',
-            'totalAmount'
+            'totalAmount',
+            'totalIncomes'
         ));
     }
 
