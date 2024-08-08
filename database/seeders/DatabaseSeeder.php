@@ -22,9 +22,8 @@ class DatabaseSeeder extends Seeder
         $this->call([RepairSeeder::class]);
         $this->call([RepairCategorySeeder::class]);
         $this->call([VehiclePartCategorySeeder::class]);
-        $this->call([VehiclePartSeeder::class]);
+        // $this->call([VehiclePartSeeder::class]);
         $this->call([VehicleClassSeeder::class]);
         $this->call(LanguagesTableSeeder::class);
-
     }
 }

@@ -45,7 +45,8 @@ class PermissionsByActions
         'activate organisation',
         'deactivate organisation',
         'export organisations',
-        'import organisations'
+        'import organisations',
+        'show organisation',
     ];
 
     public const DRIVER_MANAGEMENT_PERMISSIONS = [

@@ -50,6 +50,7 @@
 
     <link rel="stylesheet"href="{{ asset('admin-assets/css/dashboard.min.css?v=1') }}">
     <link href="{{ asset('admin-assets/css/logout.css?v=1') }}" rel="stylesheet">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjAxAszIxcGy7sHQxpFh0c1EDs-3AO76Q"></script>
 </head>
 
 <body class="fixed sidebar-mini">
