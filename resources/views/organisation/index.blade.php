@@ -113,7 +113,7 @@
                                                                         <a href="javascript:void(0);"
                                                                             class="btn btn-sm btn-success"
                                                                             onclick="axiosModal('organisation/{{ $organisation->id }}/deactivate')"
-                                                                            title="Dectivate Organisation">
+                                                                            title="Deactivate Organisation">
                                                                             <i class="fas fa-toggle-on"></i>
                                                                         </a>
                                                                     @endif
@@ -131,7 +131,7 @@
                                                                 @if (\Auth::user()->can('delete organisation'))
                                                                     <a href="javascript:void(0);"
                                                                         class="btn btn-sm btn-danger"
-                                                                        onclick="axiosModal('organisation/{{ $organisation->id }}/delete')">
+                                                                        onclick="deleteOrganisation('{{ $organisation->id }}')">
                                                                         <i class="fas fa-trash"></i>
                                                                     </a>
                                                                 @endif
@@ -152,6 +152,7 @@
             </div>
         </div>
 
+        <!-- Organisation Modal -->
         <div class="modal fade" id="organisationModal" data-bs-keyboard="false" tabindex="-1" data-bs-backdrop="true"
             aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -164,7 +165,6 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="col-md-12 col-lg-6">
-
                                 <div class="form-group row my-2">
                                     <label for="name" class="col-sm-5 col-form-label">
                                         Name
@@ -235,25 +235,24 @@
                                 <div class="form-group row my-2">
                                     <label for="organisation_certificate" class="col-sm-5 col-form-label">
                                         Certificate of Organisation
-                                        <i class="text-danger">*</i>
                                     </label>
                                     <div class="col-sm-7">
                                         <input name="organisation_certificate" class="form-control" type="file"
                                             placeholder="Certificate of Organisation" id="organisation_certificate"
-                                            required value="{{ old('organisation_certificate') }}" />
+                                            value="{{ old('organisation_certificate') }}" />
                                     </div>
                                 </div>
 
-                                <div class="form-group row my-2">
-                                    <label for="password" class="col-sm-5 col-form-label">
+                                <div class="form-group row my-3">
+                                    <label for="password" class="col-sm-4 col-form-label">
                                         Password
                                         <i class="text-danger">*</i>
                                     </label>
-                                    <div class="col-sm-7 position-relative">
+                                    <div class="col-sm-8 position-relative">
                                         <input name="password" class="form-control" type="password"
                                             placeholder="Password" id="password" readonly required />
-                                        <div class="generate-btn-container">
-                                            <span class="input-group-text generate-btn" onclick="generatePassword()"
+                                        <div class="generate-btn-container" onclick="generatePassword()">
+                                            <span class="input-group-text generate-btn"
                                                 style="font-size: smaller;">Generate</span>
                                         </div>
                                     </div>
@@ -261,59 +260,132 @@
 
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
-                                Close
-                            </button>
-                            <button class="btn btn-success" type="submit">Save</button>
-                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
                 </form>
             </div>
         </div>
 
-        <!-- Delete Modal -->
-        <div class="modal fade" id="delete-modal" data-bs-keyboard="false" tabindex="-1" data-bs-backdrop="true"
-            aria-hidden="true">
+        <!-- Map Modal -->
+        <div class="modal fade" id="mapModal" tabindex="-1" aria-labelledby="mapModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title">Delete Organisation</h5>
+                        <h5 class="modal-title" id="mapModalLabel">Select Location</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="javascript:void(0);" class="needs-validation" id="delete-modal-form"
-                            method="POST">
-                            @csrf
-                            <div class="modal-body">
-                                <p>Are you sure you want to delete this organisation? This action cannot be undone.</p>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-danger" onclick="confirmDelete()">Delete</button>
-                            </div>
-                        </form>
+                        <div id="map" style="height: 400px;"></div>
+                        <div class="input-group mt-3">
+                            <input id="location-search" class="form-control" type="text"
+                                placeholder="Search for a location" />
+                            <button class="btn btn-primary" onclick="saveLocation()">Save Location</button>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- JavaScript -->
+
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjAxAszIxcGy7sHQxpFh0c1EDs-3AO76Q&libraries=places" async
+            defer></script>
         <script>
-            function deleteOrganisation(organisationId) {
-                // Set the delete form action dynamically
-                var form = document.getElementById('delete-modal-form');
-                form.action = '/organisation/' + organisationId + '/delete';
+            document.addEventListener('DOMContentLoaded', function() {
+                const addressInput = document.getElementById("address");
+                const mapModal = new bootstrap.Modal(document.getElementById("mapModal"));
+                const mapElement = document.getElementById("map");
 
-                // Open the delete modal
-                var modal = new bootstrap.Modal(document.getElementById('delete-modal'));
-                modal.show();
-            }
+                addressInput.addEventListener("focus", function() {
+                    mapModal.show();
+                    initMap();
+                });
 
-            function confirmDelete() {
-                // Submit the delete form
-                var form = document.getElementById('delete-modal-form');
-                form.submit();
-            }
+                let map, marker;
+
+                function initMap() {
+                    map = new google.maps.Map(mapElement, {
+                        zoom: 12,
+                    });
+
+                    marker = new google.maps.Marker({
+                        map: map,
+                    });
+
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(
+                            function(position) {
+                                const userLatLng = {
+                                    lat: position.coords.latitude,
+                                    lng: position.coords.longitude
+                                };
+
+                                map.setCenter(userLatLng);
+                                marker.setPosition(userLatLng);
+
+                                const searchBox = new google.maps.places.SearchBox(document.getElementById(
+                                    'location-search'));
+                                map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById(
+                                    'location-search'));
+
+                                searchBox.addListener('places_changed', function() {
+                                    const places = searchBox.getPlaces();
+                                    if (places.length === 0) {
+                                        return;
+                                    }
+
+                                    marker.setMap(null);
+
+                                    const bounds = new google.maps.LatLngBounds();
+                                    places.forEach(function(place) {
+                                        if (!place.geometry) {
+                                            console.log("Returned place contains no geometry");
+                                            return;
+                                        }
+
+                                        marker = new google.maps.Marker({
+                                            map: map,
+                                            position: place.geometry.location,
+                                        });
+
+                                        bounds.extend(place.geometry.location);
+                                    });
+
+                                    map.fitBounds(bounds);
+                                });
+                            },
+                            function() {
+                                handleLocationError(true, map.getCenter());
+                            }
+                        );
+                    } else {
+                        handleLocationError(false, map.getCenter());
+                    }
+                }
+
+                function handleLocationError(browserHasGeolocation, pos) {
+                    const infoWindow = new google.maps.InfoWindow({
+                        map: map,
+                    });
+                    infoWindow.setPosition(pos);
+                    infoWindow.setContent(
+                        browserHasGeolocation ?
+                        'Error: The Geolocation service failed.' :
+                        'Error: Your browser doesn\'t support geolocation.'
+                    );
+                }
+
+                window.saveLocation = function() {
+                    const position = marker.getPosition();
+                    addressInput.value = `${position.lat()}, ${position.lng()}`;
+                    mapModal.hide();
+                }
+            });
 
             function generatePassword() {
                 var length = 12,
@@ -325,7 +397,5 @@
                 document.getElementById("password").value = password;
             }
         </script>
-
     </body>
-
 @endsection

@@ -224,25 +224,11 @@ class OrganisationController extends Controller
      */
     public function show(string $id)
     {
-        try {
-            $organisation = Organisation::where('id', $id)->first();
-            if (!$organisation) {
-                return response()->json([
-                    'message' => 'Organisation not found'
-                ], 404);
-            }
-            $organisation->load('user');
-            return response()->json([
-                'organisation' => $organisation
-            ], 200);
-        } catch (Exception $e) {
-            Log::error('ERROR FETCHING Organisation');
-            Log::error($e);
-            return response()->json([
-                'message' => 'An error occurred while fetching organisation',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        Log::info('Fetching Organisation');
+        $organisation = Organisation::where('id', $id)->first();
+        Log::info('Organisation Fetched');
+        Log::info($organisation);
+        return view('organisation.show', compact('organisation'));
     }
 
     /**
@@ -482,10 +468,10 @@ class OrganisationController extends Controller
 
 
     /**
-    * 
-    *Import organisation detials 
+     * 
+     *Import organisation detials 
 
-    */
+     */
     public function importFile()
     {
         return view('organisation.importOrganisation');

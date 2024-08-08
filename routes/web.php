@@ -159,6 +159,11 @@ Route::post('organisation', [OrganisationController::class, 'store'])
     ->name('organisation.create')
     ->middleware('auth', 'can:create organisation');
 
+// Show Organisation Details
+Route::get('organisation/{id}/show', [OrganisationController::class, 'show'])
+    ->name('organisation.show')
+    ->middleware('auth', 'can:show organisation');
+
 // Edit Organisation Details
 Route::get('organisation/{id}/edit', [OrganisationController::class, 'edit'])
     ->name('organisation.edit')
