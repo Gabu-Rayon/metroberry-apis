@@ -51,6 +51,14 @@
     <link rel="stylesheet"href="{{ asset('admin-assets/css/dashboard.min.css?v=1') }}">
     <link href="{{ asset('admin-assets/css/logout.css?v=1') }}" rel="stylesheet">
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjAxAszIxcGy7sHQxpFh0c1EDs-3AO76Q"></script>
+    <style>
+        .emp-avatar {
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            object-fit: cover
+        }
+    </style>
 </head>
 
 <body class="fixed sidebar-mini">

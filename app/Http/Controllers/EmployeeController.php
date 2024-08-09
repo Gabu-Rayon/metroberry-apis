@@ -217,61 +217,10 @@ class EmployeeController extends Controller
 
 
 
-    public function show(string $id)
+    public function show($id)
     {
-        try {
-            // Retrieve the customer with the user, creator, and organisation details
-            $customer = Customer::with([
-                'user',
-                'creator',
-                'organisation.user'
-            ])->findOrFail($id);
-
-            // Prepare the response data
-            $response = [
-                'id' => $customer->id,
-                'created_by' => [
-                    'id' => $customer->creator->id,
-                    'name' => $customer->creator->name,
-                    'email' => $customer->creator->email,
-                    "phone" => $customer->creator->phone,
-                    "address" => $customer->creator->address,
-                    "avatar" => $customer->creator->avatar,
-                    "organisation" => $customer->creator->organisation
-                ],
-                'user' => [
-                    'id' => $customer->user->id,
-                    'name' => $customer->user->name,
-                    'email' => $customer->user->email,
-                    "phone" => $customer->user->phone,
-                    "address" => $customer->user->address,
-                    "avatar" => $customer->user->avatar,
-                    "organisation" => $customer->user->organisation
-                ],
-                'organisation' => [
-                    'id' => $customer->organisation->id,
-                    'name' => $customer->organisation->user->name,
-                    "phone" => $customer->organisation->user->phone,
-                    "address" => $customer->organisation->user->address,
-                    "avatar" => $customer->organisation->user->avatar,
-                    "organisation" => $customer->organisation->user->organisation
-                ],
-                'organisation_id' => $customer->organisation_id,
-                'customer_organisation_code' => $customer->customer_organisation_code
-            ];
-
-            return response()->json([
-                'message' => 'Customer retrieved successfully',
-                'customer' => $response
-            ], 200);
-        } catch (Exception $e) {
-            Log::error('RETRIEVE CUSTOMER ERROR');
-            Log::error($e);
-            return response()->json([
-                'message' => 'An error occurred while fetching customer',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        $customer = Customer::findOrFail($id);
+        return view('employee.show', compact('customer'));
     }
 
 

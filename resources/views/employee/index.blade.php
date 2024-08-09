@@ -77,7 +77,6 @@
                                                         <th title="Name">Name</th>
                                                         <th title="Email">Email</th>
                                                         <th title="Phone">Phone</th>
-                                                        <th title="Address">Address</th>
                                                         <th title="Organisation">Organisation</th>
                                                         <th title="Status">Status</th>
                                                         <th title="Action" width="80">Action</th>
@@ -90,7 +89,6 @@
                                                             <td>{{ $customer->user->name }}</td>
                                                             <td>{{ $customer->user->email }}</td>
                                                             <td>{{ $customer->user->phone }}</td>
-                                                            <td>{{ $customer->user->address }}</td>
                                                             <td>{{ $customer->organisation->user->name }}</td>
                                                             <td>
                                                                 @if ($customer->status == 'active')
@@ -99,7 +97,15 @@
                                                                     <span class="badge bg-danger">Inactive</span>
                                                                 @endif
                                                             </td>
-                                                            <td class="text-center">
+                                                            <td class="d-flex">
+                                                                @if (\Auth::user()->can('show customer'))
+                                                                    <a href="javascript:void(0);"
+                                                                        class="btn btn-sm btn-info"
+                                                                        onclick="axiosModal('{{ route('employee.show', $customer->id) }}')">
+                                                                        <i class="fas fa-binoculars"></i>
+                                                                    </a>
+                                                                @endif
+                                                                <span class='m-1'></span>
                                                                 @if (\Auth::user()->can('edit customer'))
                                                                     <a href="javascript:void(0);"
                                                                         class="btn btn-sm btn-primary"
@@ -263,14 +269,14 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group row my-3">
-                                    <label for="address" class="col-sm-4 col-form-label">
+                                <div class="form-group row my-2">
+                                    <label for="address" class="col-sm-5 col-form-label">
                                         Address
                                         <i class="text-danger">*</i>
                                     </label>
-                                    <div class="col-sm-8">
+                                    <div class="col-sm-7">
                                         <input name="address" class="form-control" type="text" placeholder="Address"
-                                            id="address" required value="{{ old('address') }}" />
+                                            id="address" value="{{ old('address') }}" required />
                                     </div>
                                 </div>
 
@@ -351,23 +357,121 @@
             </div>
         </div>
 
-        <!-- JavaScript -->
+        <div class="modal fade" id="mapModal" tabindex="-1" aria-labelledby="mapModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="mapModalLabel">Select Location</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="map" style="height: 400px;"></div>
+                        <div class="input-group mt-3">
+                            <input id="location-search" class="form-control" type="text"
+                                placeholder="Search for a location" />
+                            <button class="btn btn-primary" onclick="saveLocation()">Save Location</button>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjAxAszIxcGy7sHQxpFh0c1EDs-3AO76Q&libraries=places" async
+            defer></script>
         <script>
-            function deleteCustomer(customerId) {
-                // Set the delete form action dynamically
-                var form = document.getElementById('delete-modal-form');
-                form.action = '/employee/' + customerId + '/delete';
+            document.addEventListener('DOMContentLoaded', function() {
+                const addressInput = document.getElementById("address");
+                const mapModal = new bootstrap.Modal(document.getElementById("mapModal"));
+                const mapElement = document.getElementById("map");
 
-                // Open the delete modal
-                var modal = new bootstrap.Modal(document.getElementById('delete-modal'));
-                modal.show();
-            }
+                addressInput.addEventListener("focus", function() {
+                    mapModal.show();
+                    initMap();
+                });
 
-            function confirmDelete() {
-                // Submit the delete form
-                var form = document.getElementById('delete-modal-form');
-                form.submit();
-            }
+                let map, marker;
+
+                function initMap() {
+                    map = new google.maps.Map(mapElement, {
+                        zoom: 12,
+                    });
+
+                    marker = new google.maps.Marker({
+                        map: map,
+                    });
+
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(
+                            function(position) {
+                                const userLatLng = {
+                                    lat: position.coords.latitude,
+                                    lng: position.coords.longitude
+                                };
+
+                                map.setCenter(userLatLng);
+                                marker.setPosition(userLatLng);
+
+                                const searchBox = new google.maps.places.SearchBox(document.getElementById(
+                                    'location-search'));
+                                map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById(
+                                    'location-search'));
+
+                                searchBox.addListener('places_changed', function() {
+                                    const places = searchBox.getPlaces();
+                                    if (places.length === 0) {
+                                        return;
+                                    }
+
+                                    marker.setMap(null);
+
+                                    const bounds = new google.maps.LatLngBounds();
+                                    places.forEach(function(place) {
+                                        if (!place.geometry) {
+                                            console.log("Returned place contains no geometry");
+                                            return;
+                                        }
+
+                                        marker = new google.maps.Marker({
+                                            map: map,
+                                            position: place.geometry.location,
+                                        });
+
+                                        bounds.extend(place.geometry.location);
+                                    });
+
+                                    map.fitBounds(bounds);
+                                });
+                            },
+                            function() {
+                                handleLocationError(true, map.getCenter());
+                            }
+                        );
+                    } else {
+                        handleLocationError(false, map.getCenter());
+                    }
+                }
+
+                function handleLocationError(browserHasGeolocation, pos) {
+                    const infoWindow = new google.maps.InfoWindow({
+                        map: map,
+                    });
+                    infoWindow.setPosition(pos);
+                    infoWindow.setContent(
+                        browserHasGeolocation ?
+                        'Error: The Geolocation service failed.' :
+                        'Error: Your browser doesn\'t support geolocation.'
+                    );
+                }
+
+                window.saveLocation = function() {
+                    const position = marker.getPosition();
+                    addressInput.value = `${position.lat()}, ${position.lng()}`;
+                    mapModal.hide();
+                }
+            });
 
             function generatePassword() {
                 var length = 12,

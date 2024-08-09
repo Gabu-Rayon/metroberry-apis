@@ -90,6 +90,11 @@ Route::post('employee', [EmployeeController::class, 'store'])
     ->name('employee.create')
     ->middleware('auth', 'can:create customer');
 
+// Show Employee Details
+Route::get('employee/{id}', [EmployeeController::class, 'show'])
+    ->name('employee.show')
+    ->middleware('auth', 'can:show customer');
+
 // Edit Employee Details
 Route::get('employee/{id}/edit', [EmployeeController::class, 'edit'])
     ->name('employee.edit')

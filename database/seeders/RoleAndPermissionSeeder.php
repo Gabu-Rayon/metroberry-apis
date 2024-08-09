@@ -23,6 +23,7 @@ class PermissionsByActions
     public const EMPLOYEE_MANAGEMENT_PERMISSIONS = [
         'manage customers',
         'view customers',
+        'show customer',
         'create customer',
         'edit customer',
         'delete customer',
