@@ -78,7 +78,6 @@
                                                         <th title="Name">Name</th>
                                                         <th title="Email">Email</th>
                                                         <th title="Phone">Phone</th>
-                                                        <th title="Address">Address</th>
                                                         <th title="Organisation">Code</th>
                                                         <th title="Status">Status</th>
                                                         <th title="Action" width="80">Action</th>
@@ -90,7 +89,6 @@
                                                             <td>{{ $organisation->user->name }}</td>
                                                             <td>{{ $organisation->user->email }}</td>
                                                             <td>{{ $organisation->user->phone }}</td>
-                                                            <td>{{ $organisation->user->address }}</td>
                                                             <td>{{ $organisation->organisation_code }}</td>
                                                             <td>
                                                                 @if ($organisation->status == 'active')
@@ -100,6 +98,14 @@
                                                                 @endif
                                                             </td>
                                                             <td class="d-flex">
+                                                                @if (\Auth::user()->can('show organisation'))
+                                                                    <a href="javascript:void(0);"
+                                                                        class="btn btn-sm btn-info"
+                                                                        onclick="axiosModal('{{ route('organisation.show', $organisation) }}')">
+                                                                        <i class="fas fa-binoculars"></i>
+                                                                    </a>
+                                                                @endif
+                                                                <span class='m-1'></span>
                                                                 @if (\Auth::user()->can('edit organisation'))
                                                                     <a href="javascript:void(0);"
                                                                         class="btn btn-sm btn-primary"

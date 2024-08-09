@@ -224,10 +224,7 @@ class OrganisationController extends Controller
      */
     public function show(string $id)
     {
-        Log::info('Fetching Organisation');
-        $organisation = Organisation::where('id', $id)->first();
-        Log::info('Organisation Fetched');
-        Log::info($organisation);
+        $organisation = Organisation::with('user')->where('id', $id)->first();
         return view('organisation.show', compact('organisation'));
     }
 
