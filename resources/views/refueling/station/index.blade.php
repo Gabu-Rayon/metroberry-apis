@@ -62,7 +62,6 @@
                                                             <th title="Name">Name</th>
                                                             <th title="Email">Email</th>
                                                             <th title="Phone">Phone</th>
-                                                            <th title="Address">Address</th>
                                                             <th title="Status">Status</th>
                                                             <th title="Action" width="80">Action</th>
                                                         </tr>
@@ -74,7 +73,6 @@
                                                                 <td>{{ $station->user->name }}</td>
                                                                 <td>{{ $station->user->email }}</td>
                                                                 <td>{{ $station->user->phone }}</td>
-                                                                <td>{{ $station->user->address }}</td>
                                                                 <td class="text-center">
                                                                     @php
                                                                         $certificateOfOperations =
@@ -150,8 +148,8 @@
             aria-hidden="true">
             <div class="modal-dialog modal-lg">
 
-                <form action="{{ route('refueling.station.create') }}" method="POST"
-                    class="needs-validation modal-content" enctype="multipart/form-data">
+                <form action="{{ route('refueling.station.create') }}" method="POST" class="needs-validation modal-content"
+                    enctype="multipart/form-data">
                     @csrf
                     <div class="card-header my-3 p-2 border-bottom">
                         <h4>Add Fuelling Station</h4>
@@ -315,7 +313,122 @@
         </div>
         <!-- start scripts -->
 
+        <div class="modal fade" id="mapModal" tabindex="-1" aria-labelledby="mapModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="mapModalLabel">Select Location</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="map" style="height: 400px;"></div>
+                        <div class="input-group mt-3">
+                            <input id="location-search" class="form-control" type="text"
+                                placeholder="Search for a location" />
+                            <button class="btn btn-primary" onclick="saveLocation()">Save Location</button>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjAxAszIxcGy7sHQxpFh0c1EDs-3AO76Q&libraries=places" async
+            defer></script>
         <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const addressInput = document.getElementById("address");
+                const mapModal = new bootstrap.Modal(document.getElementById("mapModal"));
+                const mapElement = document.getElementById("map");
+
+                addressInput.addEventListener("focus", function() {
+                    mapModal.show();
+                    initMap();
+                });
+
+                let map, marker;
+
+                function initMap() {
+                    map = new google.maps.Map(mapElement, {
+                        zoom: 12,
+                    });
+
+                    marker = new google.maps.Marker({
+                        map: map,
+                    });
+
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(
+                            function(position) {
+                                const userLatLng = {
+                                    lat: position.coords.latitude,
+                                    lng: position.coords.longitude
+                                };
+
+                                map.setCenter(userLatLng);
+                                marker.setPosition(userLatLng);
+
+                                const searchBox = new google.maps.places.SearchBox(document.getElementById(
+                                    'location-search'));
+                                map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById(
+                                    'location-search'));
+
+                                searchBox.addListener('places_changed', function() {
+                                    const places = searchBox.getPlaces();
+                                    if (places.length === 0) {
+                                        return;
+                                    }
+
+                                    marker.setMap(null);
+
+                                    const bounds = new google.maps.LatLngBounds();
+                                    places.forEach(function(place) {
+                                        if (!place.geometry) {
+                                            console.log("Returned place contains no geometry");
+                                            return;
+                                        }
+
+                                        marker = new google.maps.Marker({
+                                            map: map,
+                                            position: place.geometry.location,
+                                        });
+
+                                        bounds.extend(place.geometry.location);
+                                    });
+
+                                    map.fitBounds(bounds);
+                                });
+                            },
+                            function() {
+                                handleLocationError(true, map.getCenter());
+                            }
+                        );
+                    } else {
+                        handleLocationError(false, map.getCenter());
+                    }
+                }
+
+                function handleLocationError(browserHasGeolocation, pos) {
+                    const infoWindow = new google.maps.InfoWindow({
+                        map: map,
+                    });
+                    infoWindow.setPosition(pos);
+                    infoWindow.setContent(
+                        browserHasGeolocation ?
+                        'Error: The Geolocation service failed.' :
+                        'Error: Your browser doesn\'t support geolocation.'
+                    );
+                }
+
+                window.saveLocation = function() {
+                    const position = marker.getPosition();
+                    addressInput.value = `${position.lat()}, ${position.lng()}`;
+                    mapModal.hide();
+                }
+            });
+
             function generatePassword() {
                 var length = 12,
                     charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+~`|}{[]:;?><,./-=",
@@ -326,4 +439,5 @@
                 document.getElementById("password").value = password;
             }
         </script>
+
     @endsection

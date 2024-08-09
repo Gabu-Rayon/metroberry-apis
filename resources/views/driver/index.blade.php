@@ -41,18 +41,19 @@
                                                     <div class="accordion-header d-flex justify-content-end align-items-center"
                                                         id="flush-headingOne">
                                                         @if (\Auth::user()->can('export driver'))
-                                                        <a class="btn btn-success btn-sm" href="{{route('driver.export')}}"
-                                                            title="Export to xlsx excel file">
-                                                            <i class="fa-solid fa-file-export"></i>&nbsp; Export
-                                                        </a>
+                                                            <a class="btn btn-success btn-sm"
+                                                                href="{{ route('driver.export') }}"
+                                                                title="Export to xlsx excel file">
+                                                                <i class="fa-solid fa-file-export"></i>&nbsp; Export
+                                                            </a>
                                                         @endif
                                                         <span class='m-1'></span>
                                                         @if (\Auth::user()->can('import driver'))
-                                                        <a class="btn btn-success btn-sm" href="javascript:void(0);"
-                                                            onclick="axiosModal('driver/import')"
-                                                            title="Import From csv excel file">
-                                                            <i class="fa-solid fa-file-arrow-up"></i>&nbsp; Import
-                                                        </a>
+                                                            <a class="btn btn-success btn-sm" href="javascript:void(0);"
+                                                                onclick="axiosModal('driver/import')"
+                                                                title="Import From csv excel file">
+                                                                <i class="fa-solid fa-file-arrow-up"></i>&nbsp; Import
+                                                            </a>
                                                         @endif
                                                         <span class='m-1'></span>
                                                         @if (\Auth::user()->can('create driver'))
@@ -76,7 +77,6 @@
                                                         <th title="Name">Name</th>
                                                         <th title="Email">Email</th>
                                                         <th title="Phone">Phone</th>
-                                                        <th title="Address">Address</th>
                                                         <th title="Vehicle">Vehicle</th>
                                                         <th title="Status">Status</th>
                                                         @if (\Auth::user()->role == 'admin')
@@ -90,7 +90,6 @@
                                                             <td>{{ $driver->user->name }}</td>
                                                             <td>{{ $driver->user->email }}</td>
                                                             <td>{{ $driver->user->phone }}</td>
-                                                            <td>{{ $driver->user->address }}</td>
                                                             <td class="text-center">
                                                                 {{ $driver->vehicle ? $driver->vehicle->plate_number : '-' }}
                                                             </td>
@@ -389,7 +388,122 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="mapModal" tabindex="-1" aria-labelledby="mapModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="mapModalLabel">Select Location</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="map" style="height: 400px;"></div>
+                        <div class="input-group mt-3">
+                            <input id="location-search" class="form-control" type="text"
+                                placeholder="Search for a location" />
+                            <button class="btn btn-primary" onclick="saveLocation()">Save Location</button>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjAxAszIxcGy7sHQxpFh0c1EDs-3AO76Q&libraries=places" async
+            defer></script>
         <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const addressInput = document.getElementById("address");
+                const mapModal = new bootstrap.Modal(document.getElementById("mapModal"));
+                const mapElement = document.getElementById("map");
+
+                addressInput.addEventListener("focus", function() {
+                    mapModal.show();
+                    initMap();
+                });
+
+                let map, marker;
+
+                function initMap() {
+                    map = new google.maps.Map(mapElement, {
+                        zoom: 12,
+                    });
+
+                    marker = new google.maps.Marker({
+                        map: map,
+                    });
+
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(
+                            function(position) {
+                                const userLatLng = {
+                                    lat: position.coords.latitude,
+                                    lng: position.coords.longitude
+                                };
+
+                                map.setCenter(userLatLng);
+                                marker.setPosition(userLatLng);
+
+                                const searchBox = new google.maps.places.SearchBox(document.getElementById(
+                                    'location-search'));
+                                map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById(
+                                    'location-search'));
+
+                                searchBox.addListener('places_changed', function() {
+                                    const places = searchBox.getPlaces();
+                                    if (places.length === 0) {
+                                        return;
+                                    }
+
+                                    marker.setMap(null);
+
+                                    const bounds = new google.maps.LatLngBounds();
+                                    places.forEach(function(place) {
+                                        if (!place.geometry) {
+                                            console.log("Returned place contains no geometry");
+                                            return;
+                                        }
+
+                                        marker = new google.maps.Marker({
+                                            map: map,
+                                            position: place.geometry.location,
+                                        });
+
+                                        bounds.extend(place.geometry.location);
+                                    });
+
+                                    map.fitBounds(bounds);
+                                });
+                            },
+                            function() {
+                                handleLocationError(true, map.getCenter());
+                            }
+                        );
+                    } else {
+                        handleLocationError(false, map.getCenter());
+                    }
+                }
+
+                function handleLocationError(browserHasGeolocation, pos) {
+                    const infoWindow = new google.maps.InfoWindow({
+                        map: map,
+                    });
+                    infoWindow.setPosition(pos);
+                    infoWindow.setContent(
+                        browserHasGeolocation ?
+                        'Error: The Geolocation service failed.' :
+                        'Error: Your browser doesn\'t support geolocation.'
+                    );
+                }
+
+                window.saveLocation = function() {
+                    const position = marker.getPosition();
+                    addressInput.value = `${position.lat()}, ${position.lng()}`;
+                    mapModal.hide();
+                }
+            });
+
             function generatePassword() {
                 var length = 12,
                     charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+~`|}{[]:;?><,./-=",
@@ -400,5 +514,6 @@
                 document.getElementById("password").value = password;
             }
         </script>
+
     </body>
 @endsection
